@@ -59,6 +59,3 @@ async function importExcelToMongo() {
 }
 
 importExcelToMongo();
-
-mongodb+srv://jsmcrsvp_user:Jsmc1008@cluster0.taxyjsn.mongodb.net/JSMC_Members?retryWrites=true&w=majority
-mongodb+srv://jsgvolleyball25:Sports%401271@cluster0.hste0.mongodb.net/JSG-Volleyball?retryWrites=true&w=majority
