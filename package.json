@@ -1,0 +1,8 @@
+{
+    "dependencies": {
+        "dotenv": "^17.2.1",
+        "mongodb": "^6.19.0",
+        "mongoose": "^8.x.x",
+        "xlsx": "^0.18.x"
+    }
+}
