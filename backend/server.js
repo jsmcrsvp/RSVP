@@ -3,8 +3,8 @@ const axios = require("axios");
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+//const jwt = require('jsonwebtoken');
+//const bcrypt = require('bcryptjs');
 const { Console } = require('console');
 
 //=====================================================================================================
