@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import "../styles/SubmitForm.css";
 
 function SubmitForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [member_id, setMember_Id] = useState("");
+  //const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [passwordChange, setPasswordChange] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
+  //const [passwordChange, setPasswordChange] = useState(false);
+  //const [newPassword, setNewPassword] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,14 +21,14 @@ function SubmitForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!email || !password) {
-      setError("Email and password are required.");
+    if (!member_id) {
+      setError("Member ID is required.");
       return;
     }
 
     try {
       setIsLoading(true);
-      const response = await axios.post(`${SERVER_URL}/login`, { email, password });
+      const response = await axios.post(`${SERVER_URL}/search_member`, { member_id });
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
@@ -40,8 +40,6 @@ function SubmitForm() {
       }
     } catch (err) {
       if (err.response?.status === 403) {
-        setPasswordChange(true);
-        setError("Password change required. Please update your password.");
       } else {
         setError(err.response?.data?.message || "Invalid email or password.");
       }
