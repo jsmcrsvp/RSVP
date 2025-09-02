@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
-//import LoginForm from './components/LoginForm';
+import SubmitForm from './components/SubmitForm';
 //import TablePage from './components/TablePage';
 //import keepServerAlive from './components/KeepServerAlive';
 //import ReportPage from './components/ReportPage';
