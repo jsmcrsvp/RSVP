@@ -1,5 +1,5 @@
 //=================== Load Dependencies ===================
-require("dotenv").config(); // only load your .env
+require("dotenv").config(); // load only your .env
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -22,7 +22,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions)); // handle preflight
 
-// JSON parser
+// Body parser
 app.use(express.json());
 
 //=================== MongoDB Connection ===================
@@ -47,19 +47,15 @@ mongoose.connection.on("disconnected", async () => {
 });
 
 //=================== Routes ===================
-// Safe POST route — never uses full URLs
 app.post("/search_member", async (req, res) => {
   const { member_id } = req.body;
-  console.log("server.js/search_member: Member ID", member_id);
 
   try {
     const member = await Member.findOne({ member_id });
 
     if (!member) {
-      return res.status(401).json({ message: "Invalid Member ID..." });
+      return res.status(401).json({ message: "Invalid Member ID" });
     }
-
-    console.log(`Member Found! ${member.fullName}`);
 
     return res.json({
       message: "Member search successful",
@@ -69,16 +65,20 @@ app.post("/search_member", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("server.js/search_member: Internal server error", error);
+    console.error("Internal server error", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
+//=================== Health Check ===================
+app.get("/", (req, res) => res.send("✅ Server running"));
 
 //=================== Server Init ===================
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
 
 
 /*
