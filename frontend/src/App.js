@@ -9,9 +9,9 @@ import './styles/App.css';
 function App() {
   const [pollRefreshTrigger, setPollRefreshTrigger] = useState(0);
 
-  useEffect(() => {
+/*  useEffect(() => {
     keepServerAlive();
-  }, []);
+  }, []);*/
 
     return (
     <Router>
