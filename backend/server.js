@@ -2,9 +2,9 @@ require('dotenv').config();
 const axios = require("axios");
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');   // ✅ move this up
 const app = express();
-//const jwt = require('jsonwebtoken');
-//const bcrypt = require('bcryptjs');
+
 const { Console } = require('console');
 
 //=====================================================================================================
@@ -30,14 +30,12 @@ mongoose.connect(MONGODB_URI)
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 const Member = require('./models/Members_DB_Schema');
-//const GameDetails = require('./models/GameDetails');
-//const EventLog = require('./models/EventLog');
-const mongoose = require('mongoose');
 
+// Watch for disconnect and reconnect
 mongoose.connection.on("disconnected", async () => {
   console.log("🔄 MongoDB disconnected! Attempting to reconnect...");
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ MongoDB reconnected!");
   } catch (error) {
     console.error("❌ MongoDB reconnection failed:", error);
@@ -83,3 +81,5 @@ app.post("/search_member", async (req, res) => {
     return res.status(500).json({ message: "server.js/search_member: Internal server error" });
   }
 });
+
+
