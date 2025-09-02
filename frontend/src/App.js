@@ -16,7 +16,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginForm />} />
+        <Route path="/" element={<SubmitForm />} />
         <Route path="/data" element={<TablePage pollRefreshTrigger={pollRefreshTrigger} setPollRefreshTrigger={setPollRefreshTrigger} />} />
         <Route path="/report" element={<ReportPage />} />
       </Routes>
