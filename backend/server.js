@@ -10,16 +10,20 @@ const { Console } = require('console');
 //=====================================================================================================
 const corsOptions = {
   origin: [
-    'https://jsmcrsvp.onrender.com',
-    'http://localhost:3000'
+    "https://jsmcrsvp.onrender.com",   // your frontend
+    "http://localhost:3000"            // local dev
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
+  optionsSuccessStatus: 200,
 };
 
+// Apply CORS
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+
+// Handle preflight requests globally
+app.options("*", cors(corsOptions));
 app.use("/", express.json());
 
 //=====================================================================================================
