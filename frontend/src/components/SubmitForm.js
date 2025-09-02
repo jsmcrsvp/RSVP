@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { searchMember } from "../api";
 import "../styles/SubmitForm.css";
-import api from "../api";   // 👈 use shared axios instance
 
 function SubmitForm() {
   const [member_id, setMember_Id] = useState("");
@@ -11,6 +11,7 @@ function SubmitForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!member_id) {
       setError("Member ID is required.");
@@ -19,18 +20,17 @@ function SubmitForm() {
 
     try {
       setIsLoading(true);
-      setError("");
+      const data = await searchMember(member_id);
 
-      // 👇 call backend using shared axios instance
-      const response = await api.post("/search_member", { member_id });
+      // save info locally if needed
+      localStorage.setItem("name", data.name);
+      console.log("✅ Member found:", data);
 
-      if (response.data.token) {
-        localStorage.setItem("name", response.data.name);
-        // ✅ You can redirect here if needed
-        // navigate("/data");
-      }
+      // optionally navigate
+      // navigate("/somepage");
+
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid Member ID.");
+      setError(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -42,14 +42,18 @@ function SubmitForm() {
         <h2>JSMC RSVP</h2>
         <h3>Submit RSVP</h3>
       </div>
-
       <div className="input-half">
         {error && <p className="error-message">{error}</p>}
-
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Member ID:</label>
-            <input type="number" value={member_id} onChange={(e) => setMember_Id(e.target.value)} required autoFocus/>
+            <input
+              type="number"
+              value={member_id}
+              onChange={(e) => setMember_Id(e.target.value)}
+              required
+              autoFocus
+            />
           </div>
           <button className="button" type="submit" disabled={isLoading}>
             {isLoading ? "Searching..." : "Search"}
