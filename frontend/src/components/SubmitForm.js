@@ -5,10 +5,7 @@ import "../styles/SubmitForm.css";
 
 function SubmitForm() {
   const [member_id, setMember_Id] = useState("");
-  //const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  //const [passwordChange, setPasswordChange] = useState(false);
-  //const [newPassword, setNewPassword] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,7 +45,7 @@ function SubmitForm() {
     }
   };
   //===============================================================================================
-  const handlePasswordChangeSubmit = async (e) => {
+  /*const handlePasswordChangeSubmit = async (e) => {
     e.preventDefault();
 
     if (!newPassword) {
@@ -66,28 +63,28 @@ function SubmitForm() {
     } catch (err) {
       setError("Failed to change password. Please try again.");
     }
-  };
+  };*/
 
   return (
     <div className="login-container">
       <div className="top-half">
-        <h2>JSG Volleyball</h2>
-        <h3>Login</h3>
+        <h2>JSMC RSVP</h2>
+        <h3>Submit RSVP</h3>
       </div>
       <div className="input-half">
         {error && <p className="error-message">{error}</p>}
         {!passwordChange ? (
           <form>
             <div className="form-group">
-              <label>Email Address:</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus />
+              <label>Member ID:</label>
+              <input type="number" value={member_id} onChange={(e) => setMember_Id(e.target.value)} required autoFocus />
             </div>
             <div className="form-group">
               <label>Password:</label>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
             <button className="button" onClick={handleSubmit} disabled={isLoading}>
-            {isLoading ? "Logging..." : "Login"}
+            {isLoading ? "Searching..." : "Search"}
             </button>
           </form>
         ) : (

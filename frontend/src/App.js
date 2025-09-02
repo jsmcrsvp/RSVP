@@ -13,6 +13,14 @@ function App() {
     keepServerAlive();
   }, []);
 
+    return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<SubmitForm />} />
+      </Routes>
+    </Router>
+  );
+  /*
   return (
     <Router>
       <Routes>
@@ -21,7 +29,7 @@ function App() {
         <Route path="/report" element={<ReportPage />} />
       </Routes>
     </Router>
-  );
+  );*/
 }
 
 export default App;
