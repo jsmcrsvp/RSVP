@@ -1,3 +1,50 @@
+//=================== Load Dependencies ===================
+require("dotenv").config(); // load only your .env
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+
+const app = express();
+
+//=================== CORS Configuration ===================
+const corsOptions = {
+  origin: [
+    "https://jsmcrsvp.onrender.com", // frontend
+    "http://localhost:3000",         // local dev
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+// Apply CORS globally
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // handle preflight
+
+// Body parser
+app.use(express.json());
+
+//=================== MongoDB Connection ===================
+const MONGODB_URI = process.env.MONGO_URI;
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+const Member = require("./models/Members_DB_Schema");
+
+// Auto-reconnect on disconnect
+mongoose.connection.on("disconnected", async () => {
+  console.log("🔄 MongoDB disconnected! Attempting to reconnect...");
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log("✅ MongoDB reconnected!");
+  } catch (error) {
+    console.error("❌ MongoDB reconnection failed:", error);
+  }
+});
 //=================== Routes ===================
 app.post("/search_member", async (req, res) => {
   const { memberId, name, houseNumber } = req.body;
