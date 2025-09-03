@@ -10,6 +10,7 @@ const api = axios.create({
 
 export const searchMember = async (member_id) => {
   try {
+    console.log("✅ API Member Search:", member_id);
     const res = await api.post("/search_member", { member_id });
     return res.data;
   } catch (err) {
