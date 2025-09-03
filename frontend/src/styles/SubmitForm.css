@@ -102,7 +102,7 @@ input {
 }
 /* ================================================ */
 .search-container {
-  max-width: 1000px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 1rem;
   text-align: center;
@@ -126,7 +126,7 @@ input {
 
 .radio-label {
   display: flex;
-  align-items: center;
+  align-items: left;
   gap: 0.4rem;
   white-space: nowrap; /* ✅ keep radio + label together */
 }
