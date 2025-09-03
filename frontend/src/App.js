@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import SubmitForm from './components/SubmitForm';
+import AddProgramForm from "./components/AddProgramForm";
 //import TablePage from './components/TablePage';
 //import keepServerAlive from './components/KeepServerAlive';
 //import ReportPage from './components/ReportPage';
@@ -17,6 +18,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<SubmitForm />} />
+        <Route path="/add-program" element={<AddProgramForm />} />
       </Routes>
     </Router>
   );

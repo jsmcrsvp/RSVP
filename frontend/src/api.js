@@ -14,4 +14,14 @@ export const searchMember = async (payload) => {
   return res.data;
 };
 
+// Add Program API call
+export const addProgram = async (payload) => {
+  try {
+    const response = await axios.post(`${SERVER_URL}/api/programs`, payload);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "API Error");
+  }
+};
+
 export default api;
