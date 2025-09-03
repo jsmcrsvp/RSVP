@@ -8,10 +8,10 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export const searchMember = async (member_id) => {
+export const searchMember = async (memberId) => {
   try {
-    console.log("✅ API Member Search:", member_id);
-    const res = await api.post("/search_member", { member_id });
+    console.log("✅ API Member Search:", memberId);
+    const res = await api.post("/search_member", { memberId });
     return res.data;
   } catch (err) {
     if (err.response) throw new Error(err.response.data.message || "Server error");

@@ -4,7 +4,7 @@ import { searchMember } from "../api";
 import "../styles/SubmitForm.css";
 
 function SubmitForm() {
-  const [member_id, setMember_Id] = useState("");
+  const [memberId, setMemberId] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -13,15 +13,15 @@ function SubmitForm() {
     e.preventDefault();
     setError("");
 
-    if (!member_id) {
+    if (!memberId) {
       setError("Member ID is required.");
       return;
     }
 
     try {
       setIsLoading(true);
-      console.log("✅ Member Search:", member_id);
-      const data = await searchMember(member_id);
+      console.log("✅ Member Search:", memberId);
+      const data = await searchMember(memberId);
 
       // save info locally if needed
       localStorage.setItem("name", data.name);
@@ -50,8 +50,8 @@ function SubmitForm() {
             <label>Member ID:</label>
             <input
               type="number"
-              value={member_id}
-              onChange={(e) => setMember_Id(e.target.value)}
+              value={memberId}
+              onChange={(e) => setMemberId(e.target.value)}
               required
               autoFocus
             />
@@ -74,7 +74,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/SubmitForm.css";
 
 function SubmitForm() {
-  const [member_id, setMember_Id] = useState("");
+  const [memberId, setmemberId] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -84,14 +84,14 @@ function SubmitForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!member_id) {
+    if (!memberId) {
       setError("Member ID is required.");
       return;
     }
 
     try {
       setIsLoading(true);
-      const response = await axios.post(`${SERVER_URL}/search_member`, { member_id });
+      const response = await axios.post(`${SERVER_URL}/search_member`, { memberId });
 
       if (response.data.token) {
         localStorage.setItem("name", response.data.name);
@@ -121,7 +121,7 @@ function SubmitForm() {
           <form>
             <div className="form-group">
               <label>Member ID:</label>
-              <input type="number" value={member_id} onChange={(e) => setMember_Id(e.target.value)} required autoFocus />
+              <input type="number" value={memberId} onChange={(e) => setmemberId(e.target.value)} required autoFocus />
             </div>
             <button className="button" onClick={handleSubmit} disabled={isLoading}>
             {isLoading ? "Searching..." : "Search"}
