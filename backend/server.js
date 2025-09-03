@@ -45,6 +45,12 @@ mongoose.connection.on("disconnected", async () => {
     console.error("❌ MongoDB reconnection failed:", error);
   }
 });
+
+// Example test route
+app.get("/", (req, res) => {
+  res.send("Backend is running ✅");
+});
+
 //=================== Routes ===================
 app.post("/search_member", async (req, res) => {
   const { memberId, name, houseNumber } = req.body;
@@ -72,9 +78,10 @@ app.post("/search_member", async (req, res) => {
     }
 
     return res.json({
-      name: member.fullName,
-      address: member.address,
-      phone: member.phoneNumber
+        memberId: member.memberId,
+        name: member.fullName,
+        address: member.address,
+        phone: member.phoneNumber
     });
 
   } catch (error) {
@@ -83,6 +90,12 @@ app.post("/search_member", async (req, res) => {
   }
 });
 
+// ✅ Use Render’s PORT (fallback to 3001 locally)
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
 /*
 //=================== Load Dependencies ===================
 require("dotenv").config(); // load only your .env
