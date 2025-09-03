@@ -1,6 +1,6 @@
 // backend/routes/programs.js
 const express = require("express");
-const Program = require("../models/Program");
+const Program = require("../models/Programs_DB_Schema");
 const router = express.Router();
 
 // STEP 1: Add a new program with its first events
