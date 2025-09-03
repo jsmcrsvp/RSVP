@@ -72,7 +72,7 @@ function SubmitForm() {
               checked={searchMode === "nameHouse"}
               onChange={() => setSearchMode("nameHouse")}
             />
-            Name & House #
+            Name 
           </label>
           {searchMode === "nameHouse" && (
             <div className="inline-fields">
@@ -84,6 +84,7 @@ function SubmitForm() {
                 placeholder="Name"
                 required
               />
+              <label> & House # </label>
               <input
                 type="text"
                 className="small-input"
