@@ -16,20 +16,14 @@ function AddProgramForm() {
 
     try {
       const payload = {
-        progname: progName,  // ⚡ match backend
+        progname: progName,
         progevent: [
-          {
-            eventName,
-            eventDate,
-            eventDay,
-            eventStatus,
-          },
-        ],
+          { eventname: eventName, eventdate: eventDate, eventday: eventDay, eventstatus: eventStatus }
+        ]
       };
+      await addProgram(payload);
 
-      const res = await addProgram(payload);
       setMessage("✅ Program added successfully!");
-
       // Clear form
       setProgName("");
       setEventName("");
@@ -73,10 +67,7 @@ function AddProgramForm() {
           placeholder="Event Day (e.g. Monday)"
           required
         />
-        <select
-          value={eventStatus}
-          onChange={(e) => setEventStatus(e.target.value)}
-        >
+        <select value={eventStatus} onChange={(e) => setEventStatus(e.target.value)}>
           <option value="Open">Open</option>
           <option value="Closed">Closed</option>
           <option value="Completed">Completed</option>

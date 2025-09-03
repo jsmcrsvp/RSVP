@@ -16,12 +16,10 @@ export const searchMember = async (payload) => {
 
 // Add Program
 export const addProgram = async (payload) => {
-  try {
-    const response = await api.post("/api/programs", payload);
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || "API Error");
-  }
+  const res = await axios.post(`${SERVER_URL}/api/programs`, payload, {
+    headers: { "Content-Type": "application/json" }
+  });
+  return res.data;
 };
 
 export default api;
