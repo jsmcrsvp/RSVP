@@ -101,6 +101,68 @@ input {
     background-color: #1e8ae5;
 }
 
+/* ================================================ */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.result-table th,
+.result-table td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.result-table th {
+  background-color: #f4f6f8;
+  font-weight: bold;
+}
+
+/* --- Responsive (Mobile First) --- */
+@media screen and (max-width: 600px) {
+  .result-table thead {
+    display: none; /* hide headers */
+  }
+
+  .result-table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .result-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .result-table td:last-child {
+    border-bottom: none;
+  }
+
+  .result-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 8px;
+    color: #333;
+  }
+}
+/* ================================================ */
+
 /* Responsive adjustments */
 @media (max-width: 680px) { /* 580px to 680px */
     .login-container {
