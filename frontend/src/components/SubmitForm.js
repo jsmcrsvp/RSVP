@@ -20,6 +20,7 @@ function SubmitForm() {
 
     try {
       setIsLoading(true);
+      console.log("✅ Member Search:", member_id);
       const data = await searchMember(member_id);
 
       // save info locally if needed
