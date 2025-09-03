@@ -1,0 +1,629 @@
+import React, { useState } from "react";
+import { searchMember } from "../api";
+import "../styles/SubmitForm.css";
+
+function SubmitForm() {
+  const [searchMode, setSearchMode] = useState("memberId");
+  const [memberId, setMemberId] = useState("");
+  const [name, setName] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setResult(null);
+
+    try {
+      setIsLoading(true);
+      const payload =
+        searchMode === "memberId"
+          ? { memberId }
+          : { name, houseNumber };
+
+      const data = await searchMember(payload);
+      setResult(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="search-container">
+      <h2>JSMC RSVP</h2>
+      <h3>Search Member</h3>
+
+      {error && <p className="error-message">{error}</p>}
+
+      <form onSubmit={handleSubmit} className="search-form">
+        {/* Search by Member ID */}
+        <div className="form-row">
+          <label className="radio-label">
+            <input
+              type="radio"
+              value="memberId"
+              checked={searchMode === "memberId"}
+              onChange={() => setSearchMode("memberId")}
+            />
+            Member ID
+          </label>
+          {searchMode === "memberId" && (
+            <input
+              type="number"
+              className="small-input"
+              value={memberId}
+              onChange={(e) => setMemberId(e.target.value)}
+              placeholder="Enter Member ID"
+              required
+            />
+          )}
+        </div>
+
+        {/* Search by Name + House No */}
+        <div className="form-row">
+          <label className="radio-label">
+            <input
+              type="radio"
+              value="nameHouse"
+              checked={searchMode === "nameHouse"}
+              onChange={() => setSearchMode("nameHouse")}
+            />
+            Name 
+          </label>
+          {searchMode === "nameHouse" && (
+            <div className="inline-fields">
+              <input
+                type="text"
+                className="small-input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Name"
+                required
+              />
+              <label> & House # </label>
+              <input
+                type="text"
+                className="small-input"
+                value={houseNumber}
+                onChange={(e) => setHouseNumber(e.target.value)}
+                placeholder="House #"
+                required
+              />
+            </div>
+          )}
+        </div>
+
+        <button type="submit" className="button" disabled={isLoading}>
+          {isLoading ? "Searching..." : "Search"}
+        </button>
+      </form>
+
+      {/* Results Table */}
+      {result && (
+        <div className="result-table-wrapper">
+          <table className="result-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="nowrap">{result.name}</td>
+                <td>{result.address}</td>
+                <td className="nowrap">{result.phone}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default SubmitForm;
+
+
+/* =============== Working 090325 ====11;45am =========
+import React, { useState } from "react";
+import { searchMember } from "../api";
+import "../styles/SubmitForm.css";
+
+function SubmitForm() {
+  const [searchType, setSearchType] = useState("id"); // "id" or "name"
+  const [memberId, setMemberId] = useState("");
+  const [name, setName] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setResult(null);
+
+    try {
+      setIsLoading(true);
+      let payload = {};
+
+      if (searchType === "id") {
+        if (!memberId) return setError("Member ID is required.");
+        payload = { memberId };
+      } else {
+        if (!name || !houseNumber) return setError("Name and House Number are required.");
+        payload = { name, houseNumber };
+      }
+
+      console.log("✅ Searching:", payload);
+      const data = await searchMember(payload);
+
+      setResult(data);
+      localStorage.setItem("name", data.name);
+
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <div className="top-half">
+        <h2>JSMC</h2>
+        <h3>Submit RSVP</h3>
+      </div>
+
+      <div className="input-half">
+        {error && <p className="error-message">{error}</p>}
+
+        <div className="form-group">
+          <label>
+            <input
+              type="radio"
+              value="id"
+              checked={searchType === "id"}
+              onChange={() => setSearchType("id")}
+            />
+            Search by Member ID
+          </label>
+          <label style={{ marginLeft: "1rem" }}>
+            <input
+              type="radio"
+              value="name"
+              checked={searchType === "name"}
+              onChange={() => setSearchType("name")}
+            />
+            Search by Name + House Number
+          </label>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          {searchType === "id" && (
+            <div className="form-group">
+              <label>Member ID:</label>
+              <input
+                type="number"
+                value={memberId}
+                onChange={(e) => setMemberId(e.target.value)}
+                autoFocus
+              />
+            </div>
+          )}
+
+          {searchType === "name" && (
+            <>
+              <div className="form-group">
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label>House Number:</label>
+                <input
+                  type="text"
+                  value={houseNumber}
+                  onChange={(e) => setHouseNumber(e.target.value)}
+                />
+              </div>
+            </>
+          )}
+
+          <button className="button" type="submit" disabled={isLoading}>
+            {isLoading ? "Searching..." : "Search"}
+          </button>
+        </form>
+
+        {result && (
+        <div className="table-wrapper">
+            <table className="result-table">
+            <thead>
+                <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td data-label="Name">{result.name}</td>
+                <td data-label="Address">{result.address}</td>
+                <td data-label="Phone">{result.phone}</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default SubmitForm;
+*/
+
+/* ================ Working 090225 ======================
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { searchMember } from "../api";
+import "../styles/SubmitForm.css";
+
+function SubmitForm() {
+  const [memberId, setMemberId] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!memberId) {
+      setError("Member ID is required.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      console.log("✅ Member Search:", memberId);
+      const data = await searchMember(memberId);
+
+      // save info locally if needed
+      localStorage.setItem("name", data.name);
+      console.log("✅ Member found:", data);
+
+      // optionally navigate
+      // navigate("/somepage");
+
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <div className="top-half">
+        <h2>JSMC RSVP</h2>
+        <h3>Submit RSVP</h3>
+      </div>
+      <div className="input-half">
+        {error && <p className="error-message">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Member ID:</label>
+            <input
+              type="number"
+              value={memberId}
+              onChange={(e) => setMemberId(e.target.value)}
+              required
+              autoFocus
+            />
+          </div>
+          <button className="button" type="submit" disabled={isLoading}>
+            {isLoading ? "Searching..." : "Search"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default SubmitForm;
+*/
+
+
+
+
+/* Resetting margin and padding */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #e8f3f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container Styling */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #e4fde5;
+    width: 100%;
+    max-width: 400px;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Top section styling */
+.top-half {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Input section styling */
+.input-half {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Form Group */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 12px;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 100%;
+}
+
+input {
+    padding: 10px;
+    width: 100%;
+    max-width: 250px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Button Styling */
+.button {
+    background: #33afff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    width: 100%;
+    max-width: 200px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.button:hover {
+    background-color: #1e8ae5;
+}
+/* ================================================ */
+.search-container {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: nowrap;   /* ❌ prevent breaking into 2 lines */
+  min-width: 300px;    /* ✅ ensure enough space */
+}
+
+.radio-label {
+  display: flex;
+  align-items: left;
+  gap: 0.4rem;
+  white-space: nowrap; /* ✅ keep radio + label together */
+}
+
+.inline-fields {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.small-input {
+  width: 100px;     /* ✅ slightly smaller so it fits */
+  padding: 0.3rem 0.5rem;
+}
+
+.button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.result-table-wrapper {
+  overflow-x: auto;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.result-table th,
+.result-table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.result-table th {
+  background: #f4f4f4;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* ================================================
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.result-table th,
+.result-table td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.result-table th {
+  background-color: #f4f6f8;
+  font-weight: bold;
+}
+*/
+
+/* --- Responsive (Mobile First) --- */
+@media screen and (max-width: 600px) {
+  .result-table thead {
+    display: none; /* hide headers */
+  }
+
+  .result-table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .result-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .result-table td:last-child {
+    border-bottom: none;
+  }
+
+  .result-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 8px;
+    color: #333;
+  }
+}
+/* ================================================ */
+
+/* Responsive adjustments */
+@media (max-width: 680px) { /* 580px to 680px */
+    .login-container {
+        width: 100%; /* 95% to 100% */
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    h3 {
+        font-size: 14px; /* added to test */
+    }
+
+    input {
+        padding: 10px; /* added to test */
+        font-size: 12px;
+        max-width: 200px;
+    }
+
+    .button {
+        font-size: 12px;
+        max-width: 160px;
+        padding: 6px;
+    }
+}
+
+/* ✅ On small screens allow wrapping again */
+@media (max-width: 480px) {
+  .form-row {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .small-input {
+    width: 100%;  /* inputs stack on mobile */
+  }
+
+  .inline-fields {
+    flex-direction: column;
+    width: 100%;
+  }
+}

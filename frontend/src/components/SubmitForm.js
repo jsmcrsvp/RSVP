@@ -19,10 +19,7 @@ function SubmitForm() {
     try {
       setIsLoading(true);
       const payload =
-        searchMode === "memberId"
-          ? { memberId }
-          : { name, houseNumber };
-
+        searchMode === "memberId" ? { memberId } : { name, houseNumber };
       const data = await searchMember(payload);
       setResult(data);
     } catch (err) {
@@ -33,236 +30,95 @@ function SubmitForm() {
   };
 
   return (
-    <div className="search-container">
-      <h2>JSMC RSVP</h2>
-      <h3>Search Member</h3>
+    <div className="page-wrapper">
+      <div className="search-container">
+        <h2>JSMC RSVP</h2>
+        <h3>Search Member</h3>
 
-      {error && <p className="error-message">{error}</p>}
-
-      <form onSubmit={handleSubmit} className="search-form">
-        {/* Search by Member ID */}
-        <div className="form-row">
-          <label className="radio-label">
-            <input
-              type="radio"
-              value="memberId"
-              checked={searchMode === "memberId"}
-              onChange={() => setSearchMode("memberId")}
-            />
-            Member ID
-          </label>
-          {searchMode === "memberId" && (
-            <input
-              type="number"
-              className="small-input"
-              value={memberId}
-              onChange={(e) => setMemberId(e.target.value)}
-              placeholder="Enter Member ID"
-              required
-            />
-          )}
-        </div>
-
-        {/* Search by Name + House No */}
-        <div className="form-row">
-          <label className="radio-label">
-            <input
-              type="radio"
-              value="nameHouse"
-              checked={searchMode === "nameHouse"}
-              onChange={() => setSearchMode("nameHouse")}
-            />
-            Name 
-          </label>
-          {searchMode === "nameHouse" && (
-            <div className="inline-fields">
-              <input
-                type="text"
-                className="small-input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Name"
-                required
-              />
-              <label> & House # </label>
-              <input
-                type="text"
-                className="small-input"
-                value={houseNumber}
-                onChange={(e) => setHouseNumber(e.target.value)}
-                placeholder="House #"
-                required
-              />
-            </div>
-          )}
-        </div>
-
-        <button type="submit" className="button" disabled={isLoading}>
-          {isLoading ? "Searching..." : "Search"}
-        </button>
-      </form>
-
-      {/* Results Table */}
-      {result && (
-        <div className="result-table-wrapper">
-          <table className="result-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Phone</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="nowrap">{result.name}</td>
-                <td>{result.address}</td>
-                <td className="nowrap">{result.phone}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default SubmitForm;
-
-
-/* =============== Working 090325 ====11;45am =========
-import React, { useState } from "react";
-import { searchMember } from "../api";
-import "../styles/SubmitForm.css";
-
-function SubmitForm() {
-  const [searchType, setSearchType] = useState("id"); // "id" or "name"
-  const [memberId, setMemberId] = useState("");
-  const [name, setName] = useState("");
-  const [houseNumber, setHouseNumber] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setResult(null);
-
-    try {
-      setIsLoading(true);
-      let payload = {};
-
-      if (searchType === "id") {
-        if (!memberId) return setError("Member ID is required.");
-        payload = { memberId };
-      } else {
-        if (!name || !houseNumber) return setError("Name and House Number are required.");
-        payload = { name, houseNumber };
-      }
-
-      console.log("✅ Searching:", payload);
-      const data = await searchMember(payload);
-
-      setResult(data);
-      localStorage.setItem("name", data.name);
-
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div className="login-container">
-      <div className="top-half">
-        <h2>JSMC</h2>
-        <h3>Submit RSVP</h3>
-      </div>
-
-      <div className="input-half">
         {error && <p className="error-message">{error}</p>}
 
-        <div className="form-group">
-          <label>
-            <input
-              type="radio"
-              value="id"
-              checked={searchType === "id"}
-              onChange={() => setSearchType("id")}
-            />
-            Search by Member ID
-          </label>
-          <label style={{ marginLeft: "1rem" }}>
-            <input
-              type="radio"
-              value="name"
-              checked={searchType === "name"}
-              onChange={() => setSearchType("name")}
-            />
-            Search by Name + House Number
-          </label>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          {searchType === "id" && (
-            <div className="form-group">
-              <label>Member ID:</label>
+        <form onSubmit={handleSubmit} className="search-form">
+          {/* Search by Member ID */}
+          <div className="form-row">
+            <label className="radio-label">
+              <input
+                type="radio"
+                value="memberId"
+                checked={searchMode === "memberId"}
+                onChange={() => setSearchMode("memberId")}
+              />
+              Member ID
+            </label>
+            {searchMode === "memberId" && (
               <input
                 type="number"
+                className="small-input"
                 value={memberId}
                 onChange={(e) => setMemberId(e.target.value)}
-                autoFocus
+                placeholder="Enter Member ID"
+                required
               />
-            </div>
-          )}
+            )}
+          </div>
 
-          {searchType === "name" && (
-            <>
-              <div className="form-group">
-                <label>Name:</label>
+          {/* Search by Name + House No */}
+          <div className="form-row">
+            <label className="radio-label">
+              <input
+                type="radio"
+                value="nameHouse"
+                checked={searchMode === "nameHouse"}
+                onChange={() => setSearchMode("nameHouse")}
+              />
+              Name
+            </label>
+            {searchMode === "nameHouse" && (
+              <div className="inline-fields">
                 <input
                   type="text"
+                  className="small-input"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  placeholder="Name"
+                  required
                 />
-              </div>
-              <div className="form-group">
-                <label>House Number:</label>
                 <input
                   type="text"
+                  className="small-input"
                   value={houseNumber}
                   onChange={(e) => setHouseNumber(e.target.value)}
+                  placeholder="House #"
+                  required
                 />
               </div>
-            </>
-          )}
+            )}
+          </div>
 
-          <button className="button" type="submit" disabled={isLoading}>
+          <button type="submit" className="button" disabled={isLoading}>
             {isLoading ? "Searching..." : "Search"}
           </button>
         </form>
 
+        {/* Results Table */}
         {result && (
-        <div className="table-wrapper">
+          <div className="result-table-wrapper">
             <table className="result-table">
-            <thead>
+              <thead>
                 <tr>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Phone</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Phone</th>
                 </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
                 <tr>
-                <td data-label="Name">{result.name}</td>
-                <td data-label="Address">{result.address}</td>
-                <td data-label="Phone">{result.phone}</td>
+                  <td className="nowrap">{result.name}</td>
+                  <td>{result.address}</td>
+                  <td className="nowrap">{result.phone}</td>
                 </tr>
-            </tbody>
+              </tbody>
             </table>
-        </div>
+          </div>
         )}
       </div>
     </div>
@@ -270,75 +126,3 @@ function SubmitForm() {
 }
 
 export default SubmitForm;
-*/
-
-/* ================ Working 090225 ======================
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { searchMember } from "../api";
-import "../styles/SubmitForm.css";
-
-function SubmitForm() {
-  const [memberId, setMemberId] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    if (!memberId) {
-      setError("Member ID is required.");
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      console.log("✅ Member Search:", memberId);
-      const data = await searchMember(memberId);
-
-      // save info locally if needed
-      localStorage.setItem("name", data.name);
-      console.log("✅ Member found:", data);
-
-      // optionally navigate
-      // navigate("/somepage");
-
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div className="login-container">
-      <div className="top-half">
-        <h2>JSMC RSVP</h2>
-        <h3>Submit RSVP</h3>
-      </div>
-      <div className="input-half">
-        {error && <p className="error-message">{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Member ID:</label>
-            <input
-              type="number"
-              value={memberId}
-              onChange={(e) => setMemberId(e.target.value)}
-              required
-              autoFocus
-            />
-          </div>
-          <button className="button" type="submit" disabled={isLoading}>
-            {isLoading ? "Searching..." : "Search"}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-export default SubmitForm;
-*/
