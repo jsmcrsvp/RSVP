@@ -59,7 +59,14 @@ h3 {
 
 .inline-fields {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
+}
+
+.inline-label {
+  font-size: 0.9rem;
+  color: #333;
+  white-space: nowrap;
 }
 
 .small-input {

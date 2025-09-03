@@ -62,37 +62,38 @@ function SubmitForm() {
           </div>
 
           {/* Search by Name + House No */}
-          <div className="form-row">
+            <div className="form-row">
             <label className="radio-label">
-              <input
+                <input
                 type="radio"
                 value="nameHouse"
                 checked={searchMode === "nameHouse"}
                 onChange={() => setSearchMode("nameHouse")}
-              />
-              Name
+                />
+                Name
             </label>
             {searchMode === "nameHouse" && (
-              <div className="inline-fields">
+                <div className="inline-fields">
                 <input
-                  type="text"
-                  className="small-input"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Name"
-                  required
+                    type="text"
+                    className="small-input"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Name"
+                    required
                 />
+                <span className="inline-label">House #</span>
                 <input
-                  type="text"
-                  className="small-input"
-                  value={houseNumber}
-                  onChange={(e) => setHouseNumber(e.target.value)}
-                  placeholder="House #"
-                  required
+                    type="text"
+                    className="small-input"
+                    value={houseNumber}
+                    onChange={(e) => setHouseNumber(e.target.value)}
+                    placeholder="House #"
+                    required
                 />
-              </div>
+                </div>
             )}
-          </div>
+            </div>
 
           <button type="submit" className="button" disabled={isLoading}>
             {isLoading ? "Searching..." : "Search"}
