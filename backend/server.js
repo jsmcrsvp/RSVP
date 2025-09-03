@@ -48,15 +48,16 @@ mongoose.connection.on("disconnected", async () => {
 //=================== Routes ===================
 app.post("/search_member", async (req, res) => {
   const { memberId, name, houseNumber } = req.body;
-
+    console.log("server.js/search_member: Member ", memberId, name, houseNumber);
   try {
     let member;
 
     if (memberId) {
-      console.log("🔍 Searching by Member ID:", memberId);
+        console.log("server.js/search_member: Searching by Member ID ", memberId);
+      //console.log("🔍 Searching by Member ID:", memberId);
       member = await Member.findOne({ memberId });
     } else if (name && houseNumber) {
-      console.log("🔍 Searching by Name + House Number:", name, houseNumber);
+      console.log("🔍 server.js/search_member:Searching by Name + House Number:", name, houseNumber);
       // Match name (case-insensitive) and address containing house number
       member = await Member.findOne({
         fullName: { $regex: new RegExp(name, "i") },

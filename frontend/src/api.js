@@ -9,6 +9,7 @@ const api = axios.create({
 });
 
 export const searchMember = async (payload) => {
+    console.log("✅ API Member Search:", payload);
   const res = await api.post("/search_member", payload);
   return res.data;
 };

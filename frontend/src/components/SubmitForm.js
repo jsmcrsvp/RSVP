@@ -44,7 +44,7 @@ function SubmitForm() {
   return (
     <div className="login-container">
       <div className="top-half">
-        <h2>JSMC RSVP</h2>
+        <h2>JSMC</h2>
         <h3>Submit RSVP</h3>
       </div>
 
