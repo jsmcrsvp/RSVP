@@ -4,7 +4,7 @@ const Program = require("../models/Programs_DB_Schema");
 const router = express.Router();
 
 // STEP 1: Add a new program with its first events
-router.post("/programs", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { progname, progevent } = req.body;
 
