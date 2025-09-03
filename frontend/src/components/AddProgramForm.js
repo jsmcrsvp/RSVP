@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addProgram } from "../api"; // we’ll create this in api.js
+import { addProgram } from "../api";
 import "../styles/AddProgramForm.css";
 
 function AddProgramForm() {
@@ -16,18 +16,20 @@ function AddProgramForm() {
 
     try {
       const payload = {
-        progName,
+        progname: progName,  // ⚡ match backend
         progevent: [
           {
             eventName,
             eventDate,
             eventDay,
-            eventStatus
-          }
-        ]
+            eventStatus,
+          },
+        ],
       };
-      await addProgram(payload);
+
+      const res = await addProgram(payload);
       setMessage("✅ Program added successfully!");
+
       // Clear form
       setProgName("");
       setEventName("");
