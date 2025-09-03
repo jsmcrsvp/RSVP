@@ -48,10 +48,11 @@ mongoose.connection.on("disconnected", async () => {
 
 //=================== Routes ===================
 app.post("/search_member", async (req, res) => {
-  const { member_id } = req.body;
+  const { memberId } = req.body;
+    console.log("server.js/search_member: Member ID ", memberId);
 
   try {
-    const member = await Member.findOne({ member_id });
+    const member = await Member.findOne({ memberId });
 
     if (!member) {
       return res.status(401).json({ message: "Invalid Member ID" });

@@ -6,7 +6,7 @@ const memberSchema = new mongoose.Schema({
   memberId: { type: String, required: true },
   fullName: { type: String, required: true },
   address: { type: String, required: true },
-  phoneNumber: { type: Number, default: 0 }
+  phoneNumber: { type: String, required: true }
 });
 
 // Create a model for the Member using the schema
