@@ -28,10 +28,13 @@ export const getOpenEvents = async () => {
 
 // Submit RSVP
 export const submitRSVP = async (payload) => {
-  const res = await api.post("/api/rsvp_response", payload);
-  return res.data;
+  try {
+    const response = await api.post("/rsvp_response", payload); // ✅ matches /api/rsvp_response
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "API Error");
+  }
 };
-
 
 
 /* ========= Working 090325 10pm ====================

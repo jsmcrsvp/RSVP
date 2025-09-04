@@ -86,12 +86,13 @@ app.post("/search_member", async (req, res) => {
 });
 
 //=================== Program Routes ===================
+// Import routes
 const programRoutes = require("./routes/programs");
-app.use("/api/programs", programRoutes);
-
 const rsvpRoutes = require("./routes/rsvp");
-app.use("/api/rsvp", rsvpRoutes);
 
+// Mount routes
+app.use("/api/programs", programRoutes);
+app.use("/api/rsvp_response", rsvpRoutes);  // ✅ MUST exist
 //=================== Server Init ===================
 const PORT = process.env.PORT || 3001;
 
