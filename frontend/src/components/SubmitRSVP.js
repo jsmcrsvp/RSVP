@@ -1,7 +1,7 @@
+// frontend/src/components/SubmitRSVP.js ======= Working 090425 - 10:00am =======
 import React, { useEffect, useMemo, useState } from "react";
 import { getOpenEvents, searchMember, submitRSVP } from "../api";
 import "../styles/SubmitRSVP.css"; // keep the casing exactly the same as your file
-
 
 export default function SubmitRSVP() {
   // Events
@@ -147,14 +147,14 @@ export default function SubmitRSVP() {
   return (
     <div className="page-wrapper">
       <div className="rsvp-container">
-        <h2>Submit RSVP</h2>
+        <h2>Welcome to JSMC RSVP Portal</h2>
 
         {message && <div className="message">{message}</div>}
         {error && <div className="error-message">{error}</div>}
 
         {/* Event selection */}
         <div className="form-section">
-          <h3>Select Event</h3>
+          <h3>Select an available event to RSVP</h3>
           <select
             value={selectedIndex}
             onChange={(e) => {
@@ -166,7 +166,7 @@ export default function SubmitRSVP() {
             disabled={loadingEvents}
           >
             <option value={-1} disabled>
-              {loadingEvents ? "Loading open events..." : "-- Choose an Open Event --"}
+              {loadingEvents ? "Loading available events..." : "Select an Event"}
             </option>
             {events.map((ev, idx) => (
               <option key={`${ev.programname}-${ev.eventname}-${idx}`} value={idx}>
@@ -178,7 +178,7 @@ export default function SubmitRSVP() {
 
         {/* Member search */}
         <form className="search-form" onSubmit={handleSearch}>
-          <h3>Search Member</h3>
+          <h3>Retrieve membership detail by entering Member ID or First Name & House Number</h3>
 
           <div className="form-row">
             <label className="radio-label">
@@ -198,7 +198,7 @@ export default function SubmitRSVP() {
                 checked={searchMode === "nameHouse"}
                 onChange={() => setSearchMode("nameHouse")}
               />
-              Name &amp; House #
+              First Name &amp; House #
             </label>
           </div>
 
@@ -276,7 +276,7 @@ export default function SubmitRSVP() {
                 onChange={(e) => setRsvpCount(e.target.value)}
                 required
               />
-
+            {/*
               <label className="inline-label">Conf #</label>
               <input
                 className="small-input"
@@ -285,8 +285,8 @@ export default function SubmitRSVP() {
                 readOnly
                 title="Auto-generated confirmation #"
               />
-            </div>
-
+            </div> */}
+              
             <button className="button" type="submit" disabled={submitting}>
               {submitting ? "Submitting..." : "Submit RSVP"}
             </button>
@@ -297,8 +297,9 @@ export default function SubmitRSVP() {
   );
 }
 
+{/* frontend/src/components/SubmitRSVP.js ======= Working 090425 - 10:00am =======*/}
 
-/*import React, { useState, useEffect } from "react";
+{/*import React, { useState, useEffect } from "react";
 import { searchMember, getOpenEvents, submitRSVP } from "../api";
 import "../styles/SubmitRSVP.css";
 
@@ -522,4 +523,4 @@ function SubmitRSVP() {
 }
 
 export default SubmitRSVP;
-*/
+*/}
