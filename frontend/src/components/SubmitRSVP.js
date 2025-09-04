@@ -1,224 +1,198 @@
 import React, { useState, useEffect } from "react";
-import { searchMember, getOpenEvents, submitRSVP } from "../api";
-import "../styles/SubmitRSVP.css";
+import { getOpenEvents, searchMember, submitRSVP } from "../api";
+import "./submitrsvp.css";
 
-function SubmitRSVP() {
+export default function SubmitRSVP() {
   const [events, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [searchMode, setSearchMode] = useState("memberId");
-  const [memberId, setMemberId] = useState("");
-  const [name, setName] = useState("");
-  const [houseNumber, setHouseNumber] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState("");
+  const [searchType, setSearchType] = useState("memID");
+  const [searchValue, setSearchValue] = useState("");
   const [member, setMember] = useState(null);
-  const [rsvpCount, setRsvpCount] = useState("");
-  const [confNumber, setConfNumber] = useState("");
+  const [rsvpCount, setRsvpCount] = useState(1);
   const [message, setMessage] = useState("");
-  const [lastRSVP, setLastRSVP] = useState(null); // store last submitted RSVP
+  const [error, setError] = useState("");
 
+  // Fetch open events on load
   useEffect(() => {
-    async function fetchEvents() {
-      const openEvents = await getOpenEvents();
-      setEvents(openEvents);
-    }
+    const fetchEvents = async () => {
+      try {
+        const data = await getOpenEvents();
+        setEvents(data || []);
+      } catch (err) {
+        setError("Failed to load open events.");
+      }
+    };
     fetchEvents();
   }, []);
 
+  // Handle member search
   const handleSearch = async (e) => {
     e.preventDefault();
+    setError("");
     setMessage("");
     setMember(null);
+
     try {
       const payload =
-        searchMode === "memberId"
-          ? { memberId }
-          : { name, houseNumber };
-      const data = await searchMember(payload);
-      setMember(data);
+        searchType === "memID"
+          ? { memID: searchValue }
+          : { nameHouse: searchValue };
+
+      const result = await searchMember(payload);
+      if (result && result.length > 0) {
+        setMember(result[0]);
+      } else {
+        setError("No member found.");
+      }
     } catch (err) {
-      setMessage(err.message || "Member not found");
+      setError("Error searching member.");
     }
   };
 
-  const handleRSVP = async (e) => {
+  // Handle RSVP submit
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
-    const conf = Math.floor(100000 + Math.random() * 900000).toString();
-    setConfNumber(conf);
-
-    const payload = {
-      eventdate: selectedEvent.eventdate,
-      eventday: selectedEvent.eventday,
-      programname: selectedEvent.programname,
-      eventname: selectedEvent.eventname,
-      memname: member.name,
-      memaddress: member.address,
-      memphonenumber: member.phone,
-      rsvpcount: rsvpCount,
-      rsvpconfnumber: conf,
-    };
+    if (!selectedEvent || !member) {
+      setError("Please select an event and search for a member.");
+      return;
+    }
 
     try {
-      await submitRSVP(payload);
-      setMessage(`✅ RSVP submitted! Confirmation #: ${conf}`);
-      setLastRSVP(payload); // save last RSVP to display
+      const confNumber = Math.floor(100000 + Math.random() * 900000);
 
-      // Reset search and RSVP fields
+      const payload = {
+        eventdate: selectedEvent.eventdate,
+        eventday: selectedEvent.eventday,
+        memname: member.memname,
+        memaddress: member.memaddress,
+        memphonenumber: member.memphonenumber,
+        rsvpcount: rsvpCount,
+        rsvpconfnumber: confNumber,
+        eventname: selectedEvent.eventname,
+        programname: selectedEvent.programname,
+      };
+
+      await submitRSVP(payload);
+      setMessage(`RSVP submitted successfully! Confirmation #: ${confNumber}`);
       setMember(null);
-      setMemberId("");
-      setName("");
-      setHouseNumber("");
-      setRsvpCount("");
-      setSelectedEvent(null);
+      setSearchValue("");
+      setRsvpCount(1);
     } catch (err) {
-      setMessage(err.message || "❌ Failed to submit RSVP");
+      setError("Error submitting RSVP.");
     }
   };
 
   return (
-    <div className="rsvp-container">
-      <h2>Submit RSVP</h2>
-      {message && <p className="message">{message}</p>}
+    <div className="page-wrapper">
+      <div className="rsvp-container">
+        <h2>Submit RSVP</h2>
 
-      <div className="form-section">
-        <label>Open Event:</label>
-        <select
-          value={selectedEvent ? selectedEvent.eventname : ""}
-          onChange={(e) =>
-            setSelectedEvent(events.find((ev) => ev.eventname === e.target.value))
-          }
-        >
-          <option value="">-- Select Event --</option>
-          {events.map((ev, idx) => (
-            <option key={idx} value={ev.eventname}>
-              {ev.programname} - {ev.eventname} ({ev.eventdate})
-            </option>
-          ))}
-        </select>
-      </div>
+        {message && <div className="message">{message}</div>}
+        {error && <div className="error-message">{error}</div>}
 
-      {selectedEvent && (
-        <>
-          <form onSubmit={handleSearch} className="search-form">
-            <div className="form-row">
-              <label className="radio-label">
-                <input
-                  type="radio"
-                  value="memberId"
-                  checked={searchMode === "memberId"}
-                  onChange={() => setSearchMode("memberId")}
-                />
-                Member ID
-              </label>
-              {searchMode === "memberId" && (
-                <input
-                  type="number"
-                  value={memberId}
-                  onChange={(e) => setMemberId(e.target.value)}
-                  placeholder="Enter Member ID"
-                  required
-                />
-              )}
-            </div>
-
-            <div className="form-row">
-              <label className="radio-label">
-                <input
-                  type="radio"
-                  value="nameHouse"
-                  checked={searchMode === "nameHouse"}
-                  onChange={() => setSearchMode("nameHouse")}
-                />
-                Name
-              </label>
-              {searchMode === "nameHouse" && (
-                <div className="inline-fields">
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Name"
-                    required
-                  />
-                  <label> & House # </label>
-                  <input
-                    type="text"
-                    value={houseNumber}
-                    onChange={(e) => setHouseNumber(e.target.value)}
-                    placeholder="House #"
-                    required
-                  />
-                </div>
-              )}
-            </div>
-            <button type="submit">Search Member</button>
-          </form>
-        </>
-      )}
-
-      {member && (
-        <form onSubmit={handleRSVP} className="rsvp-form">
-          <p>
-            Member: {member.name}, {member.address}, {member.phone}
-          </p>
-          <input
-            type="number"
-            value={rsvpCount}
-            onChange={(e) => setRsvpCount(e.target.value)}
-            placeholder="RSVP Count"
-            required
-          />
-          <button type="submit">Submit RSVP</button>
-        </form>
-      )}
-
-      {/* Last submitted RSVP table */}
-      {lastRSVP && (
-        <div className="last-rsvp">
-          <h3>Last Submitted RSVP</h3>
-          <table>
-            <tbody>
-              <tr>
-                <th>Program</th>
-                <td>{lastRSVP.programname}</td>
-              </tr>
-              <tr>
-                <th>Event</th>
-                <td>{lastRSVP.eventname}</td>
-              </tr>
-              <tr>
-                <th>Date</th>
-                <td>{lastRSVP.eventdate}</td>
-              </tr>
-              <tr>
-                <th>Day</th>
-                <td>{lastRSVP.eventday}</td>
-              </tr>
-              <tr>
-                <th>Member Name</th>
-                <td>{lastRSVP.memname}</td>
-              </tr>
-              <tr>
-                <th>Address</th>
-                <td>{lastRSVP.memaddress}</td>
-              </tr>
-              <tr>
-                <th>Phone</th>
-                <td>{lastRSVP.memphonenumber}</td>
-              </tr>
-              <tr>
-                <th>RSVP Count</th>
-                <td>{lastRSVP.rsvpcount}</td>
-              </tr>
-              <tr>
-                <th>Confirmation #</th>
-                <td>{lastRSVP.rsvpconfnumber}</td>
-              </tr>
-            </tbody>
-          </table>
+        {/* Event selection */}
+        <div className="form-section">
+          <h3>Select Event</h3>
+          <select
+            value={selectedEvent ? selectedEvent.eventname : ""}
+            onChange={(e) => {
+              const event = events.find((ev) => ev.eventname === e.target.value);
+              setSelectedEvent(event || "");
+              setMember(null);
+              setMessage("");
+              setError("");
+            }}
+          >
+            <option value="">-- Choose an Open Event --</option>
+            {events.map((ev, idx) => (
+              <option key={idx} value={ev.eventname}>
+                {ev.programname} - {ev.eventname} ({ev.eventday}, {ev.eventdate})
+              </option>
+            ))}
+          </select>
         </div>
-      )}
+
+        {/* Member Search */}
+        <form className="search-form" onSubmit={handleSearch}>
+          <h3>Search Member</h3>
+          <div className="form-row">
+            <label className="radio-label">
+              <input
+                type="radio"
+                value="memID"
+                checked={searchType === "memID"}
+                onChange={() => setSearchType("memID")}
+              />
+              Member ID
+            </label>
+            <label className="radio-label">
+              <input
+                type="radio"
+                value="nameHouse"
+                checked={searchType === "nameHouse"}
+                onChange={() => setSearchType("nameHouse")}
+              />
+              Name & House #
+            </label>
+          </div>
+
+          <div className="inline-fields">
+            <input
+              type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder={
+                searchType === "memID" ? "Enter Member ID" : "Enter Name & House #"
+              }
+              required
+              className="small-input"
+            />
+            <button type="submit" className="button">
+              Search
+            </button>
+          </div>
+        </form>
+
+        {/* Member + RSVP Form */}
+        {member && (
+          <form className="rsvp-form" onSubmit={handleSubmit}>
+            <h3>Member Found</h3>
+            <div className="result-table-wrapper">
+              <table className="result-table">
+                <tbody>
+                  <tr>
+                    <th>Name</th>
+                    <td>{member.memname}</td>
+                  </tr>
+                  <tr>
+                    <th>Address</th>
+                    <td>{member.memaddress}</td>
+                  </tr>
+                  <tr>
+                    <th>Phone</th>
+                    <td>{member.memphonenumber}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="form-section">
+              <label className="inline-label">RSVP Count:</label>
+              <input
+                type="number"
+                min="1"
+                value={rsvpCount}
+                onChange={(e) => setRsvpCount(e.target.value)}
+                required
+              />
+            </div>
+
+            <button type="submit" className="button">
+              Submit RSVP
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }
-
-export default SubmitRSVP;
