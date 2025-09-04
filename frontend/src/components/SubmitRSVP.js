@@ -284,8 +284,8 @@ export default function SubmitRSVP() {
                 value={confNumber}
                 readOnly
                 title="Auto-generated confirmation #"
-              />
-            </div> */}
+              /> */}
+            </div>
               
             <button className="button" type="submit" disabled={submitting}>
               {submitting ? "Submitting..." : "Submit RSVP"}
