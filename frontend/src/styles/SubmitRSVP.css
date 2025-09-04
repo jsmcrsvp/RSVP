@@ -1,71 +1,108 @@
-/* Center vertically */
-body, html {
+body {
   margin: 0;
   padding: 0;
-  height: 100%;
   font-family: Arial, sans-serif;
-  background-color: #e8f3f9;
+  background: #e8f3f9;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .rsvp-container {
-  background: #e4fde5;
-  padding: 25px;
+  background: #fff;
+  padding: 20px 25px;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 450px;
-  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 400px;
 }
 
 h2 {
+  text-align: center;
   margin-bottom: 15px;
+}
+
+.message {
+  text-align: center;
+  color: green;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.form-section {
+  margin-bottom: 15px;
+}
+
+.form-section select {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+}
+
+.search-form, .rsvp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .form-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  gap: 6px;
 }
 
-input, select {
-  padding: 6px 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  flex: 1;
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .inline-fields {
   display: flex;
-  gap: 0.5rem;
+  gap: 6px;
   align-items: center;
 }
 
+input[type="text"], input[type="number"], select {
+  padding: 6px;
+  font-size: 14px;
+  width: 100%;
+}
+
 button {
+  padding: 8px;
+  font-size: 14px;
   background: #33afff;
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  width: 100%;
-  max-width: 200px;
-  margin-top: 10px;
 }
 
 button:hover {
-  background-color: #1e8ae5;
+  background: #1e8ae5;
 }
 
-.message {
-  color: green;
-  margin-bottom: 12px;
+.last-rsvp {
+  margin-top: 20px;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.last-rsvp table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.last-rsvp th,
+.last-rsvp td {
+  text-align: left;
+  padding: 4px 6px;
+  border-bottom: 1px solid #ccc;
+}
+
+.last-rsvp th {
+  width: 40%;
+  color: #333;
 }
