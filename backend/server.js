@@ -89,6 +89,9 @@ app.post("/search_member", async (req, res) => {
 const programRoutes = require("./routes/programs");
 app.use("/api/programs", programRoutes);
 
+const rsvpRoutes = require("./routes/rsvp");
+app.use("/api/rsvp", rsvpRoutes);
+
 //=================== Server Init ===================
 const PORT = process.env.PORT || 3001;
 
