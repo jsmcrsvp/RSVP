@@ -1,7 +1,7 @@
 const express = require("express");
 const Program = require("../models/Programs_DB_Schema");
 const Member = require("../models/Members_DB_Schema");
-const RsvpResponse = require("../models/RsvpResponse");
+const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 
 const router = express.Router();
 
