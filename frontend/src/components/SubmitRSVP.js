@@ -324,7 +324,7 @@ export default function SubmitRSVP() {
             </div>
 
             <div className="inline-fields">
-              <label>
+              <label>Email Address </label>
                 <input
                   className="small-input"
                   type="email"
@@ -332,7 +332,7 @@ export default function SubmitRSVP() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email Address"
                 />
-                Email Address</label>
+                
             {Object.keys(selectedEvents).length > 0 && (
               <button className="button" type="submit" disabled={submitting}>
                 {submitting ? "Submitting..." : "Submit RSVP"}
