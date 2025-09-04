@@ -227,47 +227,48 @@ export default function SubmitRSVP() {
         </form>
 
         {/* Member result + RSVP */}
-        {member && (
-          <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-            <h4>Membership Details</h4>
+{member && (
+  <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
+    <h4>Membership Details</h4>
 
-            <div className="result-table-wrapper">
-              <table className="result-table">
-                <tbody>
-                  <tr>
-                    <th>Name</th>
-                    <td className="nowrap">{member.name}</td>
-                  </tr>
-                  <tr>
-                    <th>Address</th>
-                    <td>{member.address}</td>
-                  </tr>
-                  <tr>
-                    <th>Phone</th>
-                    <td className="nowrap">{member.phone}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+    <div className="last-rsvp">
+      <table>
+        <tbody>
+          <tr>
+            <th>Name</th>
+            <td>{member.name}</td>
+          </tr>
+          <tr>
+            <th>Address</th>
+            <td>{member.address}</td>
+          </tr>
+          <tr>
+            <th>Phone</th>
+            <td>{member.phone}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-            <div className="form-row" style={{ marginTop: "0.5rem" }}>
-              <label className="inline-label">RSVP Count</label>
-              <input
-                className="small-input rsvp-count-input"
-                type="number"
-                min="1"
-                max="99"
-                value={rsvpCount}
-                onChange={(e) => setRsvpCount(e.target.value)}
-                required
-              />
+    <div className="form-row" style={{ marginTop: "0.5rem" }}>
+      <label className="inline-label">RSVP Count</label>
+      <input
+        className="small-input rsvp-count-input"
+        type="number"
+        min="1"
+        max="99"
+        value={rsvpCount}
+        onChange={(e) => setRsvpCount(e.target.value)}
+        required
+      />
 
-              <button className="button" type="submit" disabled={submitting}>
-                {submitting ? "Submitting..." : "Submit RSVP"}
-              </button>
-            </div>
-          </form>
-        )}
+      <button className="button" type="submit" disabled={submitting}>
+        {submitting ? "Submitting..." : "Submit RSVP"}
+      </button>
+    </div>
+  </form>
+)}
+
 
         {/* RSVP Confirmation Table */}
         {lastRSVP && (
