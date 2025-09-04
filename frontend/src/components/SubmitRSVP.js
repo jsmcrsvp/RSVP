@@ -1,85 +1,87 @@
 import React, { useState, useEffect } from "react";
-import api, { searchMember } from "../api";
-import "../styles/SubmitRSVP.css";
+import { getOpenEvents, searchMember, submitRSVP } from "../api";
+import "../styles/SubmitRSVPForm.css";
 
 function SubmitRSVP() {
-  const [openEvents, setOpenEvents] = useState([]);
-  const [selectedEventIndex, setSelectedEventIndex] = useState("");
+  const [events, setEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
   const [searchMode, setSearchMode] = useState("memberId");
   const [memberId, setMemberId] = useState("");
   const [name, setName] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
   const [member, setMember] = useState(null);
+
   const [rsvpCount, setRsvpCount] = useState("");
   const [confirmationNumber, setConfirmationNumber] = useState("");
   const [message, setMessage] = useState("");
 
-  // Fetch open events
+  // Load open events on mount
   useEffect(() => {
-    const fetchOpenEvents = async () => {
+    async function fetchEvents() {
       try {
-        const res = await api.get("/api/programs/open-events");
-        setOpenEvents(res.data);
+        const openEvents = await getOpenEvents();
+        setEvents(openEvents);
       } catch (err) {
-        console.error("❌ Error fetching open events:", err);
+        console.error(err);
       }
-    };
-    fetchOpenEvents();
+    }
+    fetchEvents();
   }, []);
 
-  // Generate 6-digit confirmation number
+  // Generate a 6-digit confirmation number
   const generateConfirmationNumber = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
   };
 
-  // Search member
-  const handleSearch = async () => {
-    setMessage("");
+  // Member search
+  const handleSearchMember = async (e) => {
+    e.preventDefault();
     setMember(null);
+    setMessage("");
+
     try {
-      let payload = {};
-      if (searchMode === "memberId") {
-        payload = { memberId };
-      } else {
-        payload = { name, houseNumber };
-      }
-      const res = await searchMember(payload);
-      setMember(res);
+      const payload =
+        searchMode === "memberId"
+          ? { memberId }
+          : { name, houseNumber };
+      const data = await searchMember(payload);
+      setMember(data);
+      setConfirmationNumber(generateConfirmationNumber());
     } catch (err) {
-      setMessage("❌ Member not found");
+      setMessage(err.message || "Member not found");
     }
   };
 
   // Submit RSVP
-  const handleSubmit = async (e) => {
+  const handleSubmitRSVP = async (e) => {
     e.preventDefault();
-    if (!member || !selectedEventIndex || !rsvpCount) {
-      setMessage("❌ Please complete all fields");
-      return;
-    }
-
-    const event = openEvents[selectedEventIndex];
-    const confNum = generateConfirmationNumber();
+    if (!member || !selectedEvent) return;
 
     const payload = {
-      eventdate: event.eventdate,
-      eventday: event.eventday,
-      eventname: event.eventname,
-      programname: event.programname,
+      programname: selectedEvent.progname,
+      eventname: selectedEvent.eventname,
+      eventdate: selectedEvent.eventdate,
+      eventday: selectedEvent.eventday,
       memname: member.name,
       memaddress: member.address,
       memphonenumber: member.phone,
       rsvpcount: rsvpCount,
-      rsvpconfnumber: confNum,
+      rsvpconfnumber: confirmationNumber,
     };
 
     try {
-      await api.post("/api/rsvp", payload);
-      setConfirmationNumber(confNum);
-      setMessage("✅ RSVP submitted successfully!");
+      await submitRSVP(payload);
+      setMessage(`✅ RSVP submitted! Confirmation #: ${confirmationNumber}`);
+      // Clear fields
+      setMemberId("");
+      setName("");
+      setHouseNumber("");
+      setMember(null);
       setRsvpCount("");
+      setConfirmationNumber("");
     } catch (err) {
-      setMessage("❌ Failed to submit RSVP");
+      setMessage(err.message || "❌ Failed to submit RSVP");
     }
   };
 
@@ -87,106 +89,109 @@ function SubmitRSVP() {
     <div className="rsvp-container">
       <h2>Submit RSVP</h2>
 
-      {/* Event selection */}
-      <label>Select Open Event:</label>
-      <select
-        value={selectedEventIndex}
-        onChange={(e) => setSelectedEventIndex(e.target.value)}
-      >
-        <option value="">-- Select Event --</option>
-        {openEvents.map((ev, idx) => (
-          <option key={idx} value={idx}>
-            {ev.programname} - {ev.eventname} ({ev.eventdate})
-          </option>
-        ))}
-      </select>
-
-      {/* Member Search */}
+      {/* Step 1: Select Event */}
       <div className="search-section">
-        <div>
-          <input
-            type="radio"
-            id="searchById"
-            name="searchMode"
-            value="memberId"
-            checked={searchMode === "memberId"}
-            onChange={() => setSearchMode("memberId")}
-          />
-          <label htmlFor="searchById">Member ID</label>
-          {searchMode === "memberId" && (
-            <input
-              type="text"
-              value={memberId}
-              onChange={(e) => setMemberId(e.target.value)}
-            />
-          )}
-        </div>
-
-        <div>
-          <input
-            type="radio"
-            id="searchByName"
-            name="searchMode"
-            value="name"
-            checked={searchMode === "name"}
-            onChange={() => setSearchMode("name")}
-          />
-          <label htmlFor="searchByName">Name + House #</label>
-          {searchMode === "name" && (
-            <>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Name"
-              />
-              <span>House #</span>
-              <input
-                type="text"
-                value={houseNumber}
-                onChange={(e) => setHouseNumber(e.target.value)}
-                placeholder="House #"
-              />
-            </>
-          )}
-        </div>
-
-        <button type="button" onClick={handleSearch}>
-          Search
-        </button>
+        <label>Select Open Event:</label>
+        <select
+          value={selectedEvent ? selectedEvent._id : ""}
+          onChange={(e) =>
+            setSelectedEvent(events.find((ev) => ev._id === e.target.value))
+          }
+        >
+          <option value="">-- Select Event --</option>
+          {events.map((ev) => (
+            <option key={ev._id} value={ev._id}>
+              {ev.progname} - {ev.eventname} ({ev.eventdate})
+            </option>
+          ))}
+        </select>
       </div>
 
-      {/* Show member info */}
-      {member && (
-        <div className="member-info">
-          <p>
-            <strong>Name:</strong> {member.name}
-          </p>
-          <p>
-            <strong>Address:</strong> {member.address}
-          </p>
-          <p>
-            <strong>Phone:</strong> {member.phone}
-          </p>
+      {/* Step 2: Search Member */}
+      {selectedEvent && (
+        <form onSubmit={handleSearchMember} className="search-section">
+          <label>Search Member:</label>
+          <div>
+            <input
+              type="radio"
+              id="byId"
+              name="searchMode"
+              value="memberId"
+              checked={searchMode === "memberId"}
+              onChange={() => setSearchMode("memberId")}
+            />
+            <span>Member ID</span>
+            {searchMode === "memberId" && (
+              <input
+                type="number"
+                value={memberId}
+                onChange={(e) => setMemberId(e.target.value)}
+                placeholder="Enter Member ID"
+                required
+              />
+            )}
+          </div>
+          <div>
+            <input
+              type="radio"
+              id="byNameHouse"
+              name="searchMode"
+              value="nameHouse"
+              checked={searchMode === "nameHouse"}
+              onChange={() => setSearchMode("nameHouse")}
+            />
+            <span>Name & House #</span>
+            {searchMode === "nameHouse" && (
+              <>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Name"
+                  required
+                />
+                <span>House #</span>
+                <input
+                  type="text"
+                  value={houseNumber}
+                  onChange={(e) => setHouseNumber(e.target.value)}
+                  placeholder="House #"
+                  required
+                />
+              </>
+            )}
+          </div>
+          <button type="submit">Search Member</button>
+        </form>
+      )}
 
+      {/* Step 3: RSVP Input */}
+      {member && (
+        <form onSubmit={handleSubmitRSVP} className="search-section">
+          <div className="member-info">
+            <p><strong>Member:</strong> {member.name}</p>
+            <p><strong>Address:</strong> {member.address}</p>
+            <p><strong>Phone:</strong> {member.phone}</p>
+            <p><strong>Event:</strong> {selectedEvent.eventname}</p>
+          </div>
+
+          <label>RSVP Count:</label>
           <input
             type="number"
             value={rsvpCount}
             onChange={(e) => setRsvpCount(e.target.value)}
-            placeholder="RSVP Count"
             min="1"
+            required
           />
-          <button onClick={handleSubmit}>Submit RSVP</button>
-        </div>
+
+          <label>Confirmation Number:</label>
+          <input type="text" value={confirmationNumber} readOnly />
+
+          <button type="submit">Submit RSVP</button>
+        </form>
       )}
 
-      {/* Confirmation */}
-      {confirmationNumber && (
-        <p className="confirmation">
-          ✅ Your confirmation number: <strong>{confirmationNumber}</strong>
-        </p>
-      )}
-
+      {/* Messages */}
       {message && <p className="message">{message}</p>}
     </div>
   );
