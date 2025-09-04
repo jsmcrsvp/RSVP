@@ -93,6 +93,9 @@ const rsvpRoutes = require("./routes/rsvp");
 // Mount routes
 app.use("/api/programs", programRoutes);
 app.use("/api/rsvp_response", rsvpRoutes);  // ✅ MUST exist
+
+// Health check
+app.get("/", (req, res) => res.send("Backend is running ✅"));
 //=================== Server Init ===================
 const PORT = process.env.PORT || 3001;
 

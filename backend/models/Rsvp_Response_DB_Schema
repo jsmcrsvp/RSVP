@@ -1,15 +1,25 @@
+// backend/models/Rsvp_Response_DB_Schema.js
 const mongoose = require("mongoose");
 
-const rsvpResponseSchema = new mongoose.Schema({
-  eventdate: { type: String, required: true },
-  eventday: { type: String, required: true },
-  eventname: { type: String, required: true },
-  programname: { type: String, required: true },
-  memname: { type: String, required: true },
-  memaddress: { type: String, required: true },
-  memphonenumber: { type: String },
-  rsvpcount: { type: Number, required: true },
-  rsvpconfnumber: { type: String, required: true, unique: true }
-});
+const rsvpResponseSchema = new mongoose.Schema(
+  {
+    eventdate: { type: String, required: true },       // e.g. "2025-09-15"
+    eventday: { type: String, required: true },        // e.g. "Monday"
+    memname: { type: String, required: true },         // member name
+    memaddress: { type: String, required: false },     // optional
+    memphonenumber: { type: String, required: false }, // optional
+    rsvpcount: { type: Number, required: true },       // e.g. 2
+    rsvpconfnumber: { type: String, required: true },  // unique 6-digit confirmation
+    eventname: { type: String, required: true },       // e.g. "Navkarsi"
+    programname: { type: String, required: true },     // e.g. "Anniversary"
+  },
+  { timestamps: true } // adds createdAt and updatedAt
+);
 
-module.exports = mongoose.model("RsvpResponse", rsvpResponseSchema);
+const RsvpResponse = mongoose.model(
+  "RsvpResponse",     // model name
+  rsvpResponseSchema, // schema
+  "rsvp_response"     // collection name (forces exact name)
+);
+
+module.exports = RsvpResponse;
