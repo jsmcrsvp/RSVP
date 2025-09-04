@@ -168,3 +168,24 @@ button:hover,
     width: 100%;
   }
 }
+
+/* make membership table title sit closer and match confirmation */
+.last-rsvp h4,
+.rsvp-container h4 {
+  margin-bottom: 0.4rem;
+}
+
+/* smaller RSVP count input for 2 digits */
+.rsvp-count-input {
+  max-width: 56px;
+  padding: 0.35rem;
+  text-align: center;
+}
+
+/* ensure membership details has same padding/background as confirmation */
+.last-rsvp {
+  margin-top: 0.3rem;
+  background: #f9f9f9;
+  padding: 0.6rem;
+  border-radius: 6px;
+}
