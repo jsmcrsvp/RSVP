@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getOpenEvents, searchMember, submitRSVP } from "../api";
-import "./submitrsvp.css";
+import { searchMember, getOpenEvents, submitRSVP } from "../api";
+import "../styles/SubmitRSVP.css";
 
 export default function SubmitRSVP() {
   const [events, setEvents] = useState([]);
