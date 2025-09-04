@@ -1,38 +1,34 @@
 // frontend/src/components/SubmitRSVP.js ======= Working 090425 - 10:00am =======
 import React, { useEffect, useMemo, useState } from "react";
 import { getOpenEvents, searchMember, submitRSVP } from "../api";
-import "../styles/SubmitRSVP.css"; // keep the casing exactly the same as your file
+import "../styles/SubmitRSVP.css";
 
 export default function SubmitRSVP() {
-  // Events
   const [events, setEvents] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState(-1); // index into events[]
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
-  // Search state
-  const [searchMode, setSearchMode] = useState("memberId"); // "memberId" | "nameHouse"
+  const [searchMode, setSearchMode] = useState("memberId");
   const [memberId, setMemberId] = useState("");
   const [name, setName] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
 
-  // Results & RSVP
-  const [member, setMember] = useState(null); // { memberId, name, address, phone }
+  const [member, setMember] = useState(null);
   const [rsvpCount, setRsvpCount] = useState(1);
   const [confNumber, setConfNumber] = useState("");
 
-  // UI state
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [searching, setSearching] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  // Derived selected event
+  const [lastRSVP, setLastRSVP] = useState(null); // store last submitted RSVP for confirmation table
+
   const selectedEvent = useMemo(
     () => (selectedIndex >= 0 ? events[selectedIndex] : null),
     [events, selectedIndex]
   );
 
-  // Load open events on mount
   useEffect(() => {
     (async () => {
       setLoadingEvents(true);
@@ -48,24 +44,12 @@ export default function SubmitRSVP() {
     })();
   }, []);
 
-  // Generate a 6-digit confirmation number whenever both event & member are present
-  useEffect(() => {
-    if (selectedEvent && member) {
-      const conf = Math.floor(100000 + Math.random() * 900000).toString();
-      setConfNumber(conf);
-    } else {
-      setConfNumber("");
-    }
-  }, [selectedEvent, member]);
-
-  // Member search handler
   const handleSearch = async (e) => {
     e.preventDefault();
     setError("");
     setMessage("");
     setMember(null);
 
-    // Validate inputs
     if (searchMode === "memberId" && !memberId.trim()) {
       setError("Member ID is required.");
       return;
@@ -82,7 +66,7 @@ export default function SubmitRSVP() {
           ? { memberId: memberId.trim() }
           : { name: name.trim(), houseNumber: houseNumber.trim() };
 
-      const result = await searchMember(payload); // expected: { memberId, name, address, phone }
+      const result = await searchMember(payload);
       if (result && result.name) {
         setMember(result);
       } else {
@@ -95,7 +79,6 @@ export default function SubmitRSVP() {
     }
   };
 
-  // RSVP submit handler
   const handleSubmitRSVP = async (e) => {
     e.preventDefault();
     setError("");
@@ -109,10 +92,10 @@ export default function SubmitRSVP() {
       setError("Please search and select a member first.");
       return;
     }
-    if (!confNumber) {
-      setError("Could not generate confirmation number. Try searching again.");
-      return;
-    }
+
+    // generate confirmation number upon submit
+    const conf = Math.floor(100000 + Math.random() * 900000).toString();
+    setConfNumber(conf);
 
     const payload = {
       eventdate: selectedEvent.eventdate,
@@ -121,7 +104,7 @@ export default function SubmitRSVP() {
       memaddress: member.address,
       memphonenumber: member.phone,
       rsvpcount: Number(rsvpCount) || 1,
-      rsvpconfnumber: confNumber,
+      rsvpconfnumber: conf,
       eventname: selectedEvent.eventname,
       programname: selectedEvent.programname,
     };
@@ -129,14 +112,15 @@ export default function SubmitRSVP() {
     setSubmitting(true);
     try {
       await submitRSVP(payload);
-      setMessage(`RSVP submitted! Confirmation #: ${confNumber}`);
-      // Reset only RSVP-related fields; keep event selection
+      setLastRSVP(payload); // store for confirmation table
+      setMessage("RSVP submitted successfully!");
+      // reset member search & RSVP fields
       setMember(null);
       setMemberId("");
       setName("");
       setHouseNumber("");
       setRsvpCount(1);
-      // confNumber will be cleared by effect since member becomes null
+      setConfNumber(""); // will regenerate on next submission
     } catch (err) {
       setError(err.message || "Error submitting RSVP.");
     } finally {
@@ -178,7 +162,7 @@ export default function SubmitRSVP() {
 
         {/* Member search */}
         <form className="search-form" onSubmit={handleSearch}>
-          <h4>Retrieve membership by entering Member ID or First Name & House Number</h4>
+          <h4>Retrieve member by entering Member ID or First Name & House #</h4>
 
           <div className="form-row">
             <label className="radio-label">
@@ -198,7 +182,7 @@ export default function SubmitRSVP() {
                 checked={searchMode === "nameHouse"}
                 onChange={() => setSearchMode("nameHouse")}
               />
-              First Name &amp; House #
+              First Name & House #
             </label>
           </div>
 
@@ -266,36 +250,68 @@ export default function SubmitRSVP() {
               </table>
             </div>
 
-            <div className="form-row" style={{ marginTop: "0.75rem" }}>
+            <div className="form-row" style={{ marginTop: "0.5rem" }}>
               <label className="inline-label">RSVP Count</label>
               <input
-                className="small-input"
+                className="small-input rsvp-count-input"
                 type="number"
                 min="1"
+                max="99"
                 value={rsvpCount}
                 onChange={(e) => setRsvpCount(e.target.value)}
                 required
               />
 
-              <label className="inline-label">Conf #</label>
-              <input
-                className="small-input"
-                type="text"
-                value={confNumber}
-                readOnly
-                title="Auto-generated confirmation #"
-              />
+              <button className="button" type="submit" disabled={submitting}>
+                {submitting ? "Submitting..." : "Submit RSVP"}
+              </button>
             </div>
-              
-            <button className="button" type="submit" disabled={submitting}>
-              {submitting ? "Submitting..." : "Submit RSVP"}
-            </button>
           </form>
+        )}
+
+        {/* RSVP Confirmation Table */}
+        {lastRSVP && (
+          <div className="last-rsvp">
+            <h4>RSVP Confirmation</h4>
+            <table>
+              <tbody>
+                <tr>
+                  <th>Member</th>
+                  <td>{lastRSVP.memname}</td>
+                </tr>
+                <tr>
+                  <th>Address</th>
+                  <td>{lastRSVP.memaddress}</td>
+                </tr>
+                <tr>
+                  <th>Phone</th>
+                  <td>{lastRSVP.memphonenumber}</td>
+                </tr>
+                <tr>
+                  <th>Event</th>
+                  <td>{lastRSVP.eventname} — {lastRSVP.programname}</td>
+                </tr>
+                <tr>
+                  <th>Event Date</th>
+                  <td>{lastRSVP.eventday}, {lastRSVP.eventdate}</td>
+                </tr>
+                <tr>
+                  <th>RSVP Count</th>
+                  <td>{lastRSVP.rsvpcount}</td>
+                </tr>
+                <tr>
+                  <th>Conf #</th>
+                  <td>{lastRSVP.rsvpconfnumber}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
   );
 }
+
 
 {/* frontend/src/components/SubmitRSVP.js ======= Working 090425 - 10:00am =======*/}
 
