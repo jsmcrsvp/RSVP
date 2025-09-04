@@ -300,7 +300,7 @@ export default function SubmitRSVP() {
                           <input
                             type="number"
                             className="small-input"
-                            style={{ maxWidth: "60px" }}
+                            style={{ maxWidth: "30px" }}
                             min="0"
                             max="99"
                             value={selectedEvents[idx]}
@@ -334,14 +334,14 @@ export default function SubmitRSVP() {
                   <th>Confirmation #</th>
                   <td>{confirmation.confNumber}</td>
                 </tr>
-                <tr>
+                {/*<tr>
                   <th>Name</th>
                   <td>{member?.name}</td>
                 </tr>
                 <tr>
                   <th>Phone</th>
                   <td>{member?.phone}</td>
-                </tr>
+                </tr> */}
               </tbody>
             </table>
           </div>
