@@ -1,4 +1,284 @@
-// frontend/src/components/SubmitRSVP.js ======= Working 090425 - 10:00am =======
+
+import React, { useState, useEffect } from "react";
+import { searchMember, getOpenEvents, submitRSVP } from "../api";
+import "../styles/SubmitRSVP.css";
+
+const SubmitRSVP = () => {
+  const [isLifeMember, setIsLifeMember] = useState(null); // Yes/No
+  const [searchOption, setSearchOption] = useState(""); // memberId | nameHouse
+  const [searchInput, setSearchInput] = useState({ memberId: "", firstName: "", house: "" });
+  const [member, setMember] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [selectedEvents, setSelectedEvents] = useState({});
+  const [confirmation, setConfirmation] = useState(null);
+  const [error, setError] = useState("");
+
+  // fetch open events on mount
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const res = await getOpenEvents();
+        setEvents(res || []);
+      } catch (err) {
+        console.error("Failed to fetch events", err);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  const handleSearch = async () => {
+    try {
+      let payload = {};
+      if (searchOption === "memberId") {
+        payload = { memberId: searchInput.memberId };
+      } else if (searchOption === "nameHouse") {
+        payload = {
+          firstName: searchInput.firstName,
+          house: searchInput.house,
+        };
+      }
+      const res = await searchMember(payload);
+      setMember(res);
+      setError("");
+    } catch (err) {
+      setError("No member found.");
+      setMember(null);
+    }
+  };
+
+  const handleEventSelect = (eventId) => {
+    setSelectedEvents((prev) => {
+      const updated = { ...prev };
+      if (updated[eventId]) {
+        delete updated[eventId]; // unselect if already selected
+      } else {
+        updated[eventId] = 0; // default RSVP count
+      }
+      return updated;
+    });
+  };
+
+  const handleRSVPCountChange = (eventId, count) => {
+    setSelectedEvents((prev) => ({
+      ...prev,
+      [eventId]: count,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        memberId: member?.memberId,
+        name: member?.name,
+        address: member?.address,
+        phone: member?.phone,
+        responses: Object.keys(selectedEvents).map((eventId) => ({
+          eventId,
+          count: selectedEvents[eventId],
+        })),
+      };
+      const res = await submitRSVP(payload);
+      setConfirmation(res);
+      setSelectedEvents({});
+    } catch (err) {
+      setError("RSVP submission failed.");
+    }
+  };
+
+  return (
+    <div className="page-wrapper">
+      <div className="search-container">
+        <h2>RSVP Submission</h2>
+
+        {/* Step 1 - Life Member */}
+        <div className="form-section">
+          <h3>Are you JSMC Life Member?</h3>
+          <label className="radio-label">
+            <input
+              type="radio"
+              value="yes"
+              checked={isLifeMember === "yes"}
+              onChange={() => setIsLifeMember("yes")}
+            />
+            Yes
+          </label>
+          <label className="radio-label">
+            <input
+              type="radio"
+              value="no"
+              checked={isLifeMember === "no"}
+              onChange={() => setIsLifeMember("no")}
+            />
+            No
+          </label>
+        </div>
+
+        {/* Step 2 - Show search options if Yes */}
+        {isLifeMember === "yes" && (
+          <div className="form-section">
+            <h3>Search Membership</h3>
+            <label className="radio-label">
+              <input
+                type="radio"
+                value="memberId"
+                checked={searchOption === "memberId"}
+                onChange={() => setSearchOption("memberId")}
+              />
+              By Member ID
+            </label>
+            <label className="radio-label">
+              <input
+                type="radio"
+                value="nameHouse"
+                checked={searchOption === "nameHouse"}
+                onChange={() => setSearchOption("nameHouse")}
+              />
+              By First Name & House #
+            </label>
+
+            {/* Step 3 - Show fields only when a search option is selected */}
+            {searchOption && (
+              <div className="search-form">
+                {searchOption === "memberId" && (
+                  <input
+                    type="text"
+                    placeholder="Enter Member ID"
+                    value={searchInput.memberId}
+                    onChange={(e) =>
+                      setSearchInput({ ...searchInput, memberId: e.target.value })
+                    }
+                  />
+                )}
+                {searchOption === "nameHouse" && (
+                  <>
+                    <input
+                      type="text"
+                      placeholder="Enter First Name"
+                      value={searchInput.firstName}
+                      onChange={(e) =>
+                        setSearchInput({ ...searchInput, firstName: e.target.value })
+                      }
+                    />
+                    <input
+                      type="text"
+                      placeholder="Enter House #"
+                      value={searchInput.house}
+                      onChange={(e) =>
+                        setSearchInput({ ...searchInput, house: e.target.value })
+                      }
+                    />
+                  </>
+                )}
+                <button onClick={handleSearch}>Search</button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Step 4 - Member details table */}
+        {member && (
+          <div className="last-rsvp">
+            <h4 style={{ marginBottom: "0.5rem" }}>Membership Details</h4>
+            <table>
+              <tbody>
+                <tr>
+                  <th>Name</th>
+                  <td>{member.name}</td>
+                </tr>
+                <tr>
+                  <th>Address</th>
+                  <td>{member.address}</td>
+                </tr>
+                <tr>
+                  <th>Phone</th>
+                  <td>{member.phone}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Step 5 & 6 - Open Events with RSVP input */}
+        {member && events.length > 0 && (
+          <div className="form-section">
+            <h3>Select Event(s)</h3>
+            {events.map((event) => (
+              <div key={event._id} className="form-row">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedEvents.hasOwnProperty(event._id)}
+                    onChange={() => handleEventSelect(event._id)}
+                  />
+                  {event.name} — {event.date}
+                </label>
+                {selectedEvents.hasOwnProperty(event._id) && (
+                  <input
+                    type="number"
+                    min="0"
+                    max="99"
+                    value={selectedEvents[event._id]}
+                    onChange={(e) => handleRSVPCountChange(event._id, e.target.value)}
+                    style={{ width: "50px" }}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Step 7 - Show submit only when at least one event is selected */}
+        {Object.keys(selectedEvents).length > 0 && (
+          <button onClick={handleSubmit}>Submit RSVP</button>
+        )}
+
+        {/* Confirmation Table */}
+        {confirmation && (
+          <div className="last-rsvp" style={{ marginTop: "1rem" }}>
+            <h4 style={{ marginBottom: "0.5rem" }}>RSVP Confirmation</h4>
+            <table>
+              <tbody>
+                <tr>
+                  <th>Member</th>
+                  <td>{confirmation.name}</td>
+                </tr>
+                <tr>
+                  <th>Address</th>
+                  <td>{confirmation.address}</td>
+                </tr>
+                <tr>
+                  <th>Phone</th>
+                  <td>{confirmation.phone}</td>
+                </tr>
+                <tr>
+                  <th>Events</th>
+                  <td>
+                    {confirmation.responses?.map(
+                      (r) =>
+                        `${events.find((ev) => ev._id === r.eventId)?.name || ""} (${r.count})`
+                    ).join(", ")}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Conf #</th>
+                  <td>{confirmation.confirmationNumber}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {error && <div className="error-message">{error}</div>}
+      </div>
+    </div>
+  );
+};
+
+export default SubmitRSVP;
+
+
+
+/* frontend/src/components/SubmitRSVP.js ======= Working 090425 - 10:00am =======
 import React, { useEffect, useMemo, useState } from "react";
 import { getOpenEvents, searchMember, submitRSVP } from "../api";
 import "../styles/SubmitRSVP.css";
@@ -136,7 +416,7 @@ export default function SubmitRSVP() {
         {message && <div className="message">{message}</div>}
         {error && <div className="error-message">{error}</div>}
 
-        {/* Event selection */}
+        {/* Event selection }
         <div className="form-section">
           <h3>Select an available event to RSVP</h3>
           <select
@@ -160,7 +440,7 @@ export default function SubmitRSVP() {
           </select>
         </div>
 
-        {/* Member search */}
+        {/* Member search }
         <form className="search-form" onSubmit={handleSearch}>
           <h4>Retrieve member by entering Member ID or First Name & House #</h4>
 
@@ -226,10 +506,10 @@ export default function SubmitRSVP() {
           )}
         </form>
 
-        {/* Member result + RSVP */}
+        {/* Member result + RSVP }
 {member && (
   <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-    <h4 style={{ marginBottom: "0.5rem" }}>Membership Details</h4>
+    <h4>Membership Details</h4>
 
     <div className="last-rsvp">
       <table>
@@ -270,7 +550,7 @@ export default function SubmitRSVP() {
 )}
 
 
-        {/* RSVP Confirmation Table */}
+        {/* RSVP Confirmation Table }
         {lastRSVP && (
           <div className="last-rsvp">
             <h4>RSVP Confirmation</h4>
@@ -314,9 +594,9 @@ export default function SubmitRSVP() {
 }
 
 
-{/* frontend/src/components/SubmitRSVP.js ======= Working 090425 - 10:00am =======*/}
+frontend/src/components/SubmitRSVP.js ======= Working 090425 - 10:00am =======*/
 
-{/*import React, { useState, useEffect } from "react";
+/*import React, { useState, useEffect } from "react";
 import { searchMember, getOpenEvents, submitRSVP } from "../api";
 import "../styles/SubmitRSVP.css";
 
@@ -540,4 +820,4 @@ function SubmitRSVP() {
 }
 
 export default SubmitRSVP;
-*/}
+*/
