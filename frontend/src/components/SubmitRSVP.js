@@ -229,7 +229,7 @@ export default function SubmitRSVP() {
         {/* Member result + RSVP */}
 {member && (
   <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-    <h4>Membership Details</h4>
+    <h4 style={{ marginBottom: "0.5rem" }}>Membership Details</h4>
 
     <div className="last-rsvp">
       <table>
