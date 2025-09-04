@@ -178,7 +178,7 @@ export default function SubmitRSVP() {
 
         {/* Member search */}
         <form className="search-form" onSubmit={handleSearch}>
-          <h3>Retrieve membership detail by entering Member ID or First Name & House Number</h3>
+          <h4>Retrieve membership by entering Member ID or First Name & House Number</h4>
 
           <div className="form-row">
             <label className="radio-label">
@@ -245,7 +245,7 @@ export default function SubmitRSVP() {
         {/* Member result + RSVP */}
         {member && (
           <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-            <h3>Member</h3>
+            <h4>Membership Details</h4>
 
             <div className="result-table-wrapper">
               <table className="result-table">
@@ -276,7 +276,7 @@ export default function SubmitRSVP() {
                 onChange={(e) => setRsvpCount(e.target.value)}
                 required
               />
-            {/*
+
               <label className="inline-label">Conf #</label>
               <input
                 className="small-input"
@@ -284,7 +284,7 @@ export default function SubmitRSVP() {
                 value={confNumber}
                 readOnly
                 title="Auto-generated confirmation #"
-              /> */}
+              />
             </div>
               
             <button className="button" type="submit" disabled={submitting}>
