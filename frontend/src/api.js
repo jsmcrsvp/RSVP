@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const SERVER_URL =
-  process.env.REACT_APP_BACKEND_SERVER_URL || "https://rsvp-bgol.onrender.com";
+const SERVER_URL = process.env.REACT_APP_BACKEND_SERVER_URL || "https://jsmcrsvp.onrender.com";
 
 const api = axios.create({
   baseURL: SERVER_URL,
@@ -9,29 +8,38 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Existing API calls
-export const searchMember = async (payload) => {
-  const res = await api.post("/search_member", payload);
-  return res.data;
-};
-
-export const addProgram = async (payload) => {
-  const res = await api.post("/api/programs", payload);
-  return res.data;
-};
-
-export const submitRSVP = async (payload) => {
-  const res = await api.post("/api/rsvp", payload);
-  return res.data;
-};
-
-// ✅ NEW: Get Open Events
+// Fetch all open events
 export const getOpenEvents = async () => {
-  const res = await api.get("/api/programs/open");
-  return res.data; // should return array of events with eventstatus = "Open"
+  try {
+    const res = await api.get("/api/programs/open");
+    return res.data; // should return an array of open events
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to fetch open events");
+  }
+};
+
+// Search member by memberId or name + houseNumber
+export const searchMember = async (payload) => {
+  try {
+    const res = await api.post("/search_member", payload);
+    return res.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Member not found");
+  }
+};
+
+// Submit RSVP
+export const submitRSVP = async (payload) => {
+  try {
+    const res = await api.post("/api/rsvp", payload);
+    return res.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to submit RSVP");
+  }
 };
 
 export default api;
+
 
 
 

@@ -3,69 +3,71 @@ import { getOpenEvents, searchMember, submitRSVP } from "../api";
 import "../styles/SubmitRSVP.css";
 
 function SubmitRSVP() {
-  const [events, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
+  const [openEvents, setOpenEvents] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState("");
   const [searchMode, setSearchMode] = useState("memberId");
   const [memberId, setMemberId] = useState("");
   const [name, setName] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
-  const [member, setMember] = useState(null);
-
+  const [memberData, setMemberData] = useState(null);
   const [rsvpCount, setRsvpCount] = useState("");
   const [confirmationNumber, setConfirmationNumber] = useState("");
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Load open events on mount
+  // Load open events
   useEffect(() => {
-    async function fetchEvents() {
+    async function fetchOpenEvents() {
       try {
-        const openEvents = await getOpenEvents();
-        setEvents(openEvents);
+        const events = await getOpenEvents();
+        setOpenEvents(events);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching open events:", err);
       }
     }
-    fetchEvents();
+    fetchOpenEvents();
   }, []);
 
-  // Generate a 6-digit confirmation number
-  const generateConfirmationNumber = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  };
-
-  // Member search
-  const handleSearchMember = async (e) => {
+  const handleMemberSearch = async (e) => {
     e.preventDefault();
-    setMember(null);
     setMessage("");
+    setMemberData(null);
 
     try {
+      setIsLoading(true);
       const payload =
         searchMode === "memberId"
           ? { memberId }
           : { name, houseNumber };
+
       const data = await searchMember(payload);
-      setMember(data);
-      setConfirmationNumber(generateConfirmationNumber());
+      setMemberData(data);
+
+      // generate unique 6-digit confirmation number
+      const confNumber = Math.floor(100000 + Math.random() * 900000);
+      setConfirmationNumber(confNumber);
     } catch (err) {
-      setMessage(err.message || "Member not found");
+      setMessage(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Submit RSVP
-  const handleSubmitRSVP = async (e) => {
+  const handleRSVPSubmit = async (e) => {
     e.preventDefault();
-    if (!member || !selectedEvent) return;
+    if (!selectedEvent || !memberData || !rsvpCount) {
+      setMessage("Please select event, search member, and enter RSVP count.");
+      return;
+    }
 
     const payload = {
-      programname: selectedEvent.progname,
+      programname: selectedEvent.programname,
       eventname: selectedEvent.eventname,
       eventdate: selectedEvent.eventdate,
       eventday: selectedEvent.eventday,
-      memname: member.name,
-      memaddress: member.address,
-      memphonenumber: member.phone,
+      memname: memberData.name,
+      memaddress: memberData.address,
+      memphonenumber: memberData.phone,
       rsvpcount: rsvpCount,
       rsvpconfnumber: confirmationNumber,
     };
@@ -73,11 +75,12 @@ function SubmitRSVP() {
     try {
       await submitRSVP(payload);
       setMessage(`✅ RSVP submitted! Confirmation #: ${confirmationNumber}`);
-      // Clear fields
+      // reset form
+      setSelectedEvent("");
       setMemberId("");
       setName("");
       setHouseNumber("");
-      setMember(null);
+      setMemberData(null);
       setRsvpCount("");
       setConfirmationNumber("");
     } catch (err) {
@@ -87,40 +90,39 @@ function SubmitRSVP() {
 
   return (
     <div className="rsvp-container">
-      <h2>Submit RSVP</h2>
+      <h2>RSVP Submission</h2>
 
-      {/* Step 1: Select Event */}
-      <div className="search-section">
+      {message && <p className="message">{message}</p>}
+
+      {/* Event Selection */}
+      <div className="form-row">
         <label>Select Open Event:</label>
         <select
-          value={selectedEvent ? selectedEvent._id : ""}
-          onChange={(e) =>
-            setSelectedEvent(events.find((ev) => ev._id === e.target.value))
-          }
+          value={selectedEvent ? JSON.stringify(selectedEvent) : ""}
+          onChange={(e) => setSelectedEvent(JSON.parse(e.target.value))}
         >
           <option value="">-- Select Event --</option>
-          {events.map((ev) => (
-            <option key={ev._id} value={ev._id}>
-              {ev.progname} - {ev.eventname} ({ev.eventdate})
+          {openEvents.map((event, idx) => (
+            <option key={idx} value={JSON.stringify(event)}>
+              {event.programname} - {event.eventname} ({event.eventdate})
             </option>
           ))}
         </select>
       </div>
 
-      {/* Step 2: Search Member */}
+      {/* Member Search */}
       {selectedEvent && (
-        <form onSubmit={handleSearchMember} className="search-section">
-          <label>Search Member:</label>
-          <div>
-            <input
-              type="radio"
-              id="byId"
-              name="searchMode"
-              value="memberId"
-              checked={searchMode === "memberId"}
-              onChange={() => setSearchMode("memberId")}
-            />
-            <span>Member ID</span>
+        <form onSubmit={handleMemberSearch} className="search-member-form">
+          <div className="form-row">
+            <label>
+              <input
+                type="radio"
+                value="memberId"
+                checked={searchMode === "memberId"}
+                onChange={() => setSearchMode("memberId")}
+              />
+              Member ID
+            </label>
             {searchMode === "memberId" && (
               <input
                 type="number"
@@ -131,18 +133,19 @@ function SubmitRSVP() {
               />
             )}
           </div>
-          <div>
-            <input
-              type="radio"
-              id="byNameHouse"
-              name="searchMode"
-              value="nameHouse"
-              checked={searchMode === "nameHouse"}
-              onChange={() => setSearchMode("nameHouse")}
-            />
-            <span>Name & House #</span>
+
+          <div className="form-row">
+            <label>
+              <input
+                type="radio"
+                value="nameHouse"
+                checked={searchMode === "nameHouse"}
+                onChange={() => setSearchMode("nameHouse")}
+              />
+              Name & House #
+            </label>
             {searchMode === "nameHouse" && (
-              <>
+              <div className="inline-fields">
                 <input
                   type="text"
                   value={name}
@@ -158,41 +161,47 @@ function SubmitRSVP() {
                   placeholder="House #"
                   required
                 />
-              </>
+              </div>
             )}
           </div>
-          <button type="submit">Search Member</button>
+
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? "Searching..." : "Search Member"}
+          </button>
         </form>
       )}
 
-      {/* Step 3: RSVP Input */}
-      {member && (
-        <form onSubmit={handleSubmitRSVP} className="search-section">
-          <div className="member-info">
-            <p><strong>Member:</strong> {member.name}</p>
-            <p><strong>Address:</strong> {member.address}</p>
-            <p><strong>Phone:</strong> {member.phone}</p>
-            <p><strong>Event:</strong> {selectedEvent.eventname}</p>
+      {/* Member Details & RSVP */}
+      {memberData && (
+        <form onSubmit={handleRSVPSubmit} className="rsvp-form">
+          <div className="form-row">
+            <label>Name:</label>
+            <input type="text" value={memberData.name} readOnly />
           </div>
-
-          <label>RSVP Count:</label>
-          <input
-            type="number"
-            value={rsvpCount}
-            onChange={(e) => setRsvpCount(e.target.value)}
-            min="1"
-            required
-          />
-
-          <label>Confirmation Number:</label>
-          <input type="text" value={confirmationNumber} readOnly />
-
+          <div className="form-row">
+            <label>Address:</label>
+            <input type="text" value={memberData.address} readOnly />
+          </div>
+          <div className="form-row">
+            <label>Phone:</label>
+            <input type="text" value={memberData.phone} readOnly />
+          </div>
+          <div className="form-row">
+            <label>RSVP Count:</label>
+            <input
+              type="number"
+              value={rsvpCount}
+              onChange={(e) => setRsvpCount(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-row">
+            <label>Confirmation #:</label>
+            <input type="text" value={confirmationNumber} readOnly />
+          </div>
           <button type="submit">Submit RSVP</button>
         </form>
       )}
-
-      {/* Messages */}
-      {message && <p className="message">{message}</p>}
     </div>
   );
 }
