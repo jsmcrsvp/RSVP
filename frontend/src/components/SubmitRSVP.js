@@ -26,6 +26,8 @@ export default function SubmitRSVP() {
   const [error, setError] = useState("");
   const [confirmation, setConfirmation] = useState(null); // store response after submit
 
+  const [email, setEmail] = useState("");
+
   // Load open events
   useEffect(() => {
     (async () => {
@@ -227,7 +229,7 @@ export default function SubmitRSVP() {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Full Name"
+                  placeholder="First Name"
                 />
                 <input
                   className="small-input"
@@ -272,7 +274,7 @@ export default function SubmitRSVP() {
             {/*<h4 style={{ marginTop: "1rem" }}>Select Events</h4>
             <div className="result-table-wrapper"style={{ marginTop: "0.5rem" }}>*/}
               <div className="result-table-wrapper">
-              <h4>Select Events</h4>
+              <h4>Select Events to RSVP</h4>
               <table className="result-table">
                 <thead>
                   <tr>
@@ -321,11 +323,22 @@ export default function SubmitRSVP() {
               </table>
             </div>
 
+            <div className="inline-fields">
+              <label>
+                <input
+                  className="small-input"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email Address"
+                />
+                Email Address</label>
             {Object.keys(selectedEvents).length > 0 && (
               <button className="button" type="submit" disabled={submitting}>
                 {submitting ? "Submitting..." : "Submit RSVP"}
               </button>
             )}
+            </div>
           </form>
         )}
 
