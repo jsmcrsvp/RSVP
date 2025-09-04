@@ -182,7 +182,7 @@ export default function SubmitRSVP() {
         {/* Step 2: Member Search */}
         {isLifeMember === "yes" && !member && (
           <form className="search-form" onSubmit={handleSearch}>
-            <h4>Retrieve membership</h4>
+            <h4>Retrieve membership using</h4>
             <div className="form-row">
               <label>
                 <input
@@ -193,6 +193,7 @@ export default function SubmitRSVP() {
                 />
                 Member ID
               </label>
+              <label style={{ marginLeft: "1rem" }}> OR </label>
               <label style={{ marginLeft: "1rem" }}>
                 <input
                   type="radio"
@@ -300,7 +301,7 @@ export default function SubmitRSVP() {
                           <input
                             type="number"
                             className="small-input"
-                            style={{ maxWidth: "30px" }}
+                            style={{ maxWidth: "40px" }}
                             min="0"
                             max="99"
                             value={selectedEvents[idx]}
