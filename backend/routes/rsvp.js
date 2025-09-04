@@ -1,7 +1,7 @@
 // backend/routes/rsvp.js
 const express = require("express");
 const router = express.Router();
-const RSVP = require("../models/rsvp"); // Mongoose schema for RSVP collection
+const RSVP = require("../models/Rsvp_Response_DB_Schema");
 
 // POST /api/rsvp
 router.post("/", async (req, res) => {
