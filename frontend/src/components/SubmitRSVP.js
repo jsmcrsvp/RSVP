@@ -887,4 +887,4 @@ function SubmitRSVP() {
 }
 
 export default SubmitRSVP;
-*/}
+*/
