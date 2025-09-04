@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const SERVER_URL = process.env.REACT_APP_BACKEND_SERVER_URL || "http://localhost:3001";
+const SERVER_URL =
+  process.env.REACT_APP_BACKEND_SERVER_URL || "http://localhost:3001";
 
 const api = axios.create({
   baseURL: SERVER_URL,
@@ -29,12 +30,16 @@ export const getOpenEvents = async () => {
 // Submit RSVP
 export const submitRSVP = async (payload) => {
   try {
-    const response = await api.post("/rsvp_response", payload); // ✅ matches /api/rsvp_response
+    // ✅ corrected path
+    const response = await api.post("/api/rsvp_response", payload);
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "API Error");
   }
 };
+
+export default api;
+
 
 
 /* ========= Working 090325 10pm ====================
