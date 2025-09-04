@@ -129,7 +129,7 @@ button:hover,
 .last-rsvp {
   margin-top: 0.5rem;
   overflow-x: auto;
-  background: #f9f9f9;
+  background: #f9f9f9e4;
   padding: 0.6rem;
   border-radius: 6px;
 }

@@ -247,8 +247,9 @@ export default function SubmitRSVP() {
         {/* Step 3: Membership Details + Event Selection */}
         {member && (
           <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-            {/*<h4>Membership Details</h4>*/}
-            <div className="result-table-wrapper" style={{ marginTop: "0.5rem" }}>
+            {/*<h4>Membership Details</h4>
+            <div className="result-table-wrapper" style={{ marginTop: "0.5rem" }}>*/}
+            <div className="result-table-wrapper">
               <h4>Membership Details</h4>
               <table className="result-table">
                 <tbody>
@@ -268,8 +269,9 @@ export default function SubmitRSVP() {
               </table>
             </div>
 
-            {/*<h4 style={{ marginTop: "1rem" }}>Select Events</h4>*/}
-            <div className="result-table-wrapper"style={{ marginTop: "0.5rem" }}>
+            {/*<h4 style={{ marginTop: "1rem" }}>Select Events</h4>
+            <div className="result-table-wrapper"style={{ marginTop: "0.5rem" }}>*/}
+              <div className="result-table-wrapper">
               <h4>Select Events</h4>
               <table className="result-table">
                 <thead>
@@ -329,7 +331,7 @@ export default function SubmitRSVP() {
 
         {/* Step 4: Confirmation Table */}
         {confirmation && (
-          <div className="result-table-wrapper" style={{ marginTop: "0.5rem" }}>
+          <div className="result-table-wrapper">
             <h4>RSVP Confirmation</h4>
             <table className="result-table">
               <tbody>
