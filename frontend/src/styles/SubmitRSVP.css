@@ -211,12 +211,12 @@ button:hover,
 }
 
 .tab:hover {
-  background-color: #748ee43a;
-  color: white;
+  background-color: #7496e4;
+  color: black;
 }
 
 .tab.active {
-  background-color: #007bff56;
+  background-color: #007bff;
   color: white;
-  border-color: #007bff56;
+  border-color: #007bff;
 }
