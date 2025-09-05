@@ -162,6 +162,10 @@ export default function SubmitRSVP() {
     try {
       const data = await verifyRSVP(verifyConfNumber.trim());
       // backend returns { message, rsvps: [...] }
+
+      console.log("SubmitRSVP.js: RSVP verification result:", data);
+      //setVerifyResult(data);
+
       setVerifyResult(data.rsvps || []);
     } catch (err) {
       console.error("❌ Error verifying RSVP:", err);
@@ -461,9 +465,7 @@ export default function SubmitRSVP() {
                       <tr key={idx}>
                         <td>{ev.programname}</td>
                         <td>{ev.eventname}</td>
-                        <td>
-                          {ev.eventday}, {ev.eventdate}
-                        </td>
+                        <td>{ev.eventday}, {ev.eventdate}</td>
                         <td>{ev.rsvpcount}</td>
                       </tr>
                     ))}
