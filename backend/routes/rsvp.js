@@ -112,7 +112,7 @@ router.put("/update_rsvp/:id", async (req, res) => {
 
     try {
         console.log("Updating RSVP ID:", id, "with count:", rsvpcount);
-        const updated = await RSVP.findByIdAndUpdate(
+        const updated = await RsvpResponse.findByIdAndUpdate(
             id,
             { rsvpcount: parseInt(rsvpcount, 10) },
             { new: true }
