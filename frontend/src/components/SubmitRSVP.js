@@ -449,9 +449,6 @@ export default function SubmitRSVP() {
               <div className="result-table-wrapper">
                 <h4>RSVP Details</h4>
 
-                {updateMessage && <div style={{ color: "green", marginBottom: "10px" }}>{updateMessage}</div>}
-                {updateError && <div style={{ color: "red", marginBottom: "10px" }}>{updateError}</div>}
-
                 {/* Member details from first RSVP doc */}
                 {verifyResult.rsvps.length > 0 && (
                   <table className="result-table" style={{ marginBottom: 10 }}>
@@ -525,6 +522,8 @@ export default function SubmitRSVP() {
                 </table>
               </div>
             )}
+            {updateMessage && <div style={{ color: "green", marginBottom: "10px" }}>{updateMessage}</div>}
+            {updateError && <div style={{ color: "red", marginBottom: "10px" }}>{updateError}</div>}
           </form>
         )}
       </div>
