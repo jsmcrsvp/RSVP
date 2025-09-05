@@ -191,3 +191,30 @@ button:hover,
   padding: 0.6rem;
   border-radius: 6px;
 }
+
+
+.tab-header {
+  display: flex;
+  gap: 12px; /* Adds space between buttons */
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.tab:hover {
+  background-color: #e0e0e0;
+}
+
+.tab.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
