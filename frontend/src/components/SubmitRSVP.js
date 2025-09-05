@@ -163,8 +163,13 @@ export default function SubmitRSVP() {
       const data = await verifyRSVP(verifyConfNumber.trim());
       // backend returns { message, rsvps: [...] }
 
-      console.log("SubmitRSVP.js: RSVP verification result:", data);
-      //setVerifyResult(data);
+      console.log("✅ RSVP verification response:", data);
+
+      if (Array.isArray(data.rsvps) && data.rsvps.length > 0) {
+        console.log(`✅ Loaded ${data.rsvps.length} RSVP record(s).`);
+      } else {
+        console.warn("⚠️ No RSVP records found or rsvps is not an array.");
+      }
 
       setVerifyResult(data.rsvps || []);
     } catch (err) {
