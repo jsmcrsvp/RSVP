@@ -30,7 +30,6 @@ export const getOpenEvents = async () => {
 // Submit RSVP
 export const submitRSVP = async (payload) => {
   try {
-    // ✅ corrected path
     const response = await api.post("/api/rsvp_response", payload);
     return response.data;
   } catch (error) {
@@ -38,7 +37,14 @@ export const submitRSVP = async (payload) => {
   }
 };
 
+// ✅ Verify RSVP by confirmation number
+export const verifyRSVP = async (confNumber) => {
+  const res = await api.get(`/api/rsvp_response/${confNumber}`);
+  return res.data;
+};
+
 export default api;
+
 
 
 

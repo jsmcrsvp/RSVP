@@ -8,13 +8,16 @@ router.post("/", async (req, res) => {
   try {
     console.log("📥 Incoming RSVP submission:", JSON.stringify(req.body, null, 2));
 
-    const {
+    let {
       memname,
       memaddress,
       memphonenumber,
       rsvpconfnumber,
-      events, // expecting array of events with { eventdate, eventday, eventname, programname, rsvpcount }
+      events,
     } = req.body;
+
+    // ✅ Ensure confirmation number is stored as string
+    rsvpconfnumber = String(rsvpconfnumber);
 
     // Validate required fields
     if (!memname || !rsvpconfnumber || !Array.isArray(events) || events.length === 0) {
@@ -63,12 +66,16 @@ router.post("/", async (req, res) => {
 // GET: Retrieve RSVP(s) by confirmation number
 router.get("/:confNumber", async (req, res) => {
   try {
-    const { confNumber } = req.params;
+    let { confNumber } = req.params;
     console.log(`🔎 Looking up RSVP for confirmation number: ${confNumber}`);
+    console.log("📌 Type of confNumber param:", typeof confNumber);
 
     if (!confNumber) {
       return res.status(400).json({ message: "Confirmation number required" });
     }
+
+    // ✅ Force to string for consistent lookup
+    confNumber = String(confNumber);
 
     const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
 
