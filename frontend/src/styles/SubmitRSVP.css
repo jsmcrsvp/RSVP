@@ -195,13 +195,14 @@ button:hover,
 
 .tab-header {
   display: flex;
-  gap: 12px; /* Adds space between buttons */
+  justify-content: center; /* Centers the buttons horizontally */
+  gap: 10px; /* Adds spacing between buttons */
   margin-bottom: 20px;
 }
 
 .tab {
   padding: 10px 20px;
-  background-color: #f0f0f0;
+  background-color: #9dc5e8;
   border: 1px solid #ccc;
   border-radius: 6px;
   cursor: pointer;
@@ -210,7 +211,7 @@ button:hover,
 }
 
 .tab:hover {
-  background-color: #e0e0e0;
+  background-color: #7da5c0;
 }
 
 .tab.active {
