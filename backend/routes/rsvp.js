@@ -6,7 +6,7 @@ const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 // POST: Save RSVP(s)
 router.post("/", async (req, res) => {
   try {
-    console.log("📥 Incoming RSVP submission:", JSON.stringify(req.body, null, 2));
+    console.log("backend/routes/rsvp.js 📥 Incoming RSVP submission:", JSON.stringify(req.body, null, 2));
 
     let {
       memname,
@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
 
     const savedRsvps = await RsvpResponse.insertMany(newRsvps);
 
-    console.log("✅ RSVP saved successfully:", savedRsvps);
+    console.log("backend/routes/rsvp.js ✅ RSVP saved successfully:", savedRsvps);
 
     res.status(201).json({
       message: "RSVP(s) saved successfully",
@@ -67,8 +67,8 @@ router.post("/", async (req, res) => {
 router.get("/:confNumber", async (req, res) => {
   try {
     let { confNumber } = req.params;
-    console.log(`🔎 Looking up RSVP for confirmation number: ${confNumber}`);
-    console.log("📌 Type of confNumber param:", typeof confNumber);
+    console.log("backend/routes/rsvp.js 🔎 Looking up RSVP for confirmation number: ${confNumber}");
+    console.log("backend/routes/rsvp.js 📌 Type of confNumber param:", typeof confNumber);
 
     if (!confNumber) {
       return res.status(400).json({ message: "Confirmation number required" });
@@ -84,7 +84,7 @@ router.get("/:confNumber", async (req, res) => {
       return res.status(404).json({ message: "No RSVP found for this confirmation number" });
     }
 
-    console.log(`✅ Found ${rsvps.length} RSVP(s) for confirmation number: ${confNumber}`);
+    console.log("backend/routes/rsvp.js ✅ Found ${rsvps.length} RSVP(s) for confirmation number: ${confNumber}");
 
     res.status(200).json({
       message: "RSVP(s) retrieved successfully",

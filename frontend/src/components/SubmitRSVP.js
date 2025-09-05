@@ -148,7 +148,7 @@ export default function SubmitRSVP() {
   };
 
   // ---- Verify RSVP Handlers ----
-const handleVerifyRSVP = async (e) => {
+  const handleVerifyRSVP = async (e) => {
     e.preventDefault();
     setError("");
     setVerifyResult(null);
@@ -179,7 +179,7 @@ const handleVerifyRSVP = async (e) => {
 
         {/* Tabs */}
         <div className="tab-header">
-            <button
+          <button
             className={activeTab === "home" ? "tab active" : "tab"}
             onClick={() => setActiveTab("home")}
           >
@@ -200,14 +200,14 @@ const handleVerifyRSVP = async (e) => {
         </div>
 
         {error && <div className="error-message">{error}</div>}
-        
+
         {/* ----- TAB: Home ----- */}
         {activeTab === "home" && (
           <>
-          <form className="home">
-            <h3>Welcome to JSMC RSVP Portal</h3>
-            <h4>Please select Submit RSVP or Verify / Modify RSVP</h4>
-          </form>
+            <form className="home">
+              <h3>Welcome to JSMC RSVP Portal</h3>
+              <h4>Please select Submit RSVP or Verify / Modify RSVP</h4>
+            </form>
           </>
         )}
 
@@ -444,13 +444,12 @@ const handleVerifyRSVP = async (e) => {
               </button>
             </div>
 
-            {verifyResult && verifyResult.length > 0 && (
+            {verifyResult && (
               <div className="result-table-wrapper">
                 <h4>RSVP Details</h4>
                 <table className="result-table">
                   <thead>
                     <tr>
-                      <th>Member</th>
                       <th>Program</th>
                       <th>Event</th>
                       <th>Date</th>
@@ -458,19 +457,16 @@ const handleVerifyRSVP = async (e) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {verifyResult.map((rsvp, idx) =>
-                      rsvp.events.map((ev, evIdx) => (
-                        <tr key={`${idx}-${evIdx}`}>
-                          <td>{rsvp.memname}</td>
-                          <td>{ev.programname}</td>
-                          <td>{ev.eventname}</td>
-                          <td>
-                            {ev.eventday}, {ev.eventdate}
-                          </td>
-                          <td>{ev.rsvpcount}</td>
-                        </tr>
-                      ))
-                    )}
+                    {verifyResult.rsvps?.map((ev, idx) => (
+                      <tr key={idx}>
+                        <td>{ev.programname}</td>
+                        <td>{ev.eventname}</td>
+                        <td>
+                          {ev.eventday}, {ev.eventdate}
+                        </td>
+                        <td>{ev.rsvpcount}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
