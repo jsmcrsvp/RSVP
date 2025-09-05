@@ -4,7 +4,7 @@ import { getOpenEvents, searchMember, submitRSVP } from "../api";
 import "../styles/SubmitRSVP.css";
 
 export default function SubmitRSVP() {
-  const [activeTab, setActiveTab] = useState("submit"); // "submit" | "verify"
+  const [activeTab, setActiveTab] = useState("home"); // "home" | "submit" | "verify"
 
   // -------- Shared State --------
   const [events, setEvents] = useState([]);
@@ -207,7 +207,7 @@ export default function SubmitRSVP() {
         {/* ----- TAB: Home ----- */}
         {activeTab === "home" && (
           <>
-          <form className="home" onSubmit={handleHome}>
+          <form className="home">
             <h3>Welcome to JSMC RSVP Portal</h3>
             <h4>Please select Submit RSVP or Verify / Modify RSVP</h4>
           </form>
