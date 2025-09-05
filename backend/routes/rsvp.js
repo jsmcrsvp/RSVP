@@ -67,7 +67,7 @@ router.post("/", async (req, res) => {
 router.get("/:confNumber", async (req, res) => {
   try {
     let { confNumber } = req.params;
-    console.log("backend/routes/rsvp.js 🔎 Looking up RSVP for confirmation number: ${confNumber}");
+    console.log(`backend/routes/rsvp.js 🔎 Looking up RSVP for confirmation number: ${confNumber}`);
     console.log("backend/routes/rsvp.js 📌 Type of confNumber param:", typeof confNumber);
 
     if (!confNumber) {
@@ -84,7 +84,7 @@ router.get("/:confNumber", async (req, res) => {
       return res.status(404).json({ message: "No RSVP found for this confirmation number" });
     }
 
-    console.log("backend/routes/rsvp.js ✅ Found ${rsvps.length} RSVP(s) for confirmation number: ${confNumber}");
+    console.log(`backend/routes/rsvp.js ✅ Found ${rsvps.length} RSVP(s) for confirmation number: ${confNumber}`);
 
     res.status(200).json({
       message: "RSVP(s) retrieved successfully",
