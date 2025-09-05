@@ -193,28 +193,28 @@ export default function SubmitRSVP() {
   };
 
   const handleUpdateRSVP = async (rsvpId, newCount) => {
-  try {
-    const response = await fetch(`/api/rsvp_response/update_rsvp/${rsvpId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ rsvpcount: parseInt(newCount, 10) }),
-    });
+    try {
+      const response = await fetch(`/api/rsvp_response/update_rsvp/${rsvpId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rsvpcount: parseInt(newCount, 10) }),
+      });
 
-    if (!response.ok) throw new Error("Failed to update RSVP.");
+      if (!response.ok) throw new Error("Failed to update RSVP.");
 
-    const updated = await response.json();
-    console.log("✅ RSVP updated:", updated);
+      const text = await response.text(); // Read raw response
+      const updated = text ? JSON.parse(text) : {}; // Parse only if not empty
 
-    // Refresh the data by re-verifying the confirmation number
-    await handleVerifyRSVP({ preventDefault: () => {} });
-    setEditIndex(null); // Reset edit mode
-  } catch (err) {
-    console.error("❌ Error updating RSVP:", err);
-    setError(err.message || "Error updating RSVP.");
-  }
-};
+      console.log("✅ RSVP updated:", updated);
+
+      await handleVerifyRSVP({ preventDefault: () => { } });
+      setEditIndex(null);
+    } catch (err) {
+      console.error("❌ Error updating RSVP:", err);
+      setError(err.message || "Error updating RSVP.");
+    }
+  };
+
 
   // -------- UI --------
   return (
