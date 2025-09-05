@@ -46,6 +46,15 @@ export default function SubmitRSVP() {
     })();
   }, []);
 
+
+  useEffect(() => {
+    if (verifyResult) {
+      console.log("✅ verifyResult updated:", verifyResult);
+      console.log("📦 RSVP records:", verifyResult.rsvps);
+    }
+  }, [verifyResult]);
+
+
   // ---- Submit RSVP Handlers ----
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -170,8 +179,8 @@ export default function SubmitRSVP() {
       } else {
         console.warn("⚠️ No RSVP records found or rsvps is not an array.");
       }
-
-      setVerifyResult(data.rsvps || []);
+      setVerifyResult(data);
+      //setVerifyResult(data.rsvps || []);
     } catch (err) {
       console.error("❌ Error verifying RSVP:", err);
       setError(err.response?.data?.message || err.message || "Error verifying RSVP.");
