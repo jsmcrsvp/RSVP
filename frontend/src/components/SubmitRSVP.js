@@ -206,10 +206,12 @@ export default function SubmitRSVP() {
         
         {/* ----- TAB: Home ----- */}
         {activeTab === "home" && (
+          <>
           <form className="home" onSubmit={handleHome}>
             <h3>Welcome to JSMC RSVP Portal</h3>
             <h4>Please select Submit RSVP or Verify / Modify RSVP</h4>
           </form>
+          </>
         )}
 
         {/* ----- TAB: Submit RSVP ----- */}
