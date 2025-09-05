@@ -1,6 +1,6 @@
 // frontend/src/components/SubmitRSVP.js ======= Submit Working 090425 ====10:00pm =====
 import React, { useEffect, useState } from "react";
-import { getOpenEvents, searchMember, submitRSVP, verifyRSVP } from "../api";
+import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP } from "../api";
 import "../styles/SubmitRSVP.css";
 
 export default function SubmitRSVP() {
