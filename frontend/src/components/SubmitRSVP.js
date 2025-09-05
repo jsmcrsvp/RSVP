@@ -461,14 +461,19 @@ export default function SubmitRSVP() {
                     </tr>
                   </thead>
                   <tbody>
-                    {verifyResult.rsvps?.map((ev, idx) => (
-                      <tr key={idx}>
-                        <td>{ev.programname}</td>
-                        <td>{ev.eventname}</td>
-                        <td>{ev.eventday}, {ev.eventdate}</td>
-                        <td>{ev.rsvpcount}</td>
-                      </tr>
-                    ))}
+
+                    {verifyResult.rsvps?.map((ev, idx) => {
+                      console.log("RSVP row:", ev); // 👈 Check field names here
+                      return (
+                        <tr key={idx}>
+                          <td>{ev.programname}</td>
+                          <td>{ev.eventname}</td>
+                          <td>{ev.eventday}, {ev.eventdate}</td>
+                          <td>{ev.rsvpcount}</td>
+                        </tr>
+                      );
+                    })}
+
                   </tbody>
                 </table>
               </div>
