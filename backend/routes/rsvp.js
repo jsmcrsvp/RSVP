@@ -5,130 +5,129 @@ const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 
 // POST: Save RSVP(s)
 router.post("/", async (req, res) => {
-  try {
-    console.log("backend/routes/rsvp.js 📥 Incoming RSVP submission:", JSON.stringify(req.body, null, 2));
+    try {
+        console.log("backend/routes/rsvp.js 📥 Incoming RSVP submission:", JSON.stringify(req.body, null, 2));
 
-    let {
-      memname,
-      memaddress,
-      memphonenumber,
-      rsvpconfnumber,
-      events,
-    } = req.body;
+        let {
+            memname,
+            memaddress,
+            memphonenumber,
+            rsvpconfnumber,
+            events,
+        } = req.body;
 
-    // ✅ Ensure confirmation number is stored as string
-    rsvpconfnumber = String(rsvpconfnumber);
+        // ✅ Ensure confirmation number is stored as string
+        rsvpconfnumber = String(rsvpconfnumber);
 
-    // Validate required fields
-    if (!memname || !rsvpconfnumber || !Array.isArray(events) || events.length === 0) {
-      console.error("❌ Validation failed: Missing required fields");
-      return res.status(400).json({ message: "Missing required fields" });
+        // Validate required fields
+        if (!memname || !rsvpconfnumber || !Array.isArray(events) || events.length === 0) {
+            console.error("❌ Validation failed: Missing required fields");
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        // Insert one RSVP record per event
+        const newRsvps = events.map((ev) => {
+            if (
+                !ev.eventdate ||
+                !ev.eventday ||
+                !ev.eventname ||
+                !ev.programname ||
+                ev.rsvpcount === undefined
+            ) {
+                throw new Error("Missing required event fields");
+            }
+            return {
+                eventdate: ev.eventdate,
+                eventday: ev.eventday,
+                eventname: ev.eventname,
+                programname: ev.programname,
+                rsvpcount: ev.rsvpcount,
+                memname,
+                memaddress,
+                memphonenumber,
+                rsvpconfnumber,
+            };
+        });
+
+        const savedRsvps = await RsvpResponse.insertMany(newRsvps);
+
+        console.log("backend/routes/rsvp.js ✅ RSVP saved successfully:", savedRsvps);
+
+        res.status(201).json({
+            message: "RSVP(s) saved successfully",
+            rsvps: savedRsvps,
+        });
+    } catch (err) {
+        console.error("❌ Error saving RSVP:", err);
+        res.status(500).json({ message: "Error saving RSVP", error: err.message });
     }
-
-    // Insert one RSVP record per event
-    const newRsvps = events.map((ev) => {
-      if (
-        !ev.eventdate ||
-        !ev.eventday ||
-        !ev.eventname ||
-        !ev.programname ||
-        ev.rsvpcount === undefined
-      ) {
-        throw new Error("Missing required event fields");
-      }
-      return {
-        eventdate: ev.eventdate,
-        eventday: ev.eventday,
-        eventname: ev.eventname,
-        programname: ev.programname,
-        rsvpcount: ev.rsvpcount,
-        memname,
-        memaddress,
-        memphonenumber,
-        rsvpconfnumber,
-      };
-    });
-
-    const savedRsvps = await RsvpResponse.insertMany(newRsvps);
-
-    console.log("backend/routes/rsvp.js ✅ RSVP saved successfully:", savedRsvps);
-
-    res.status(201).json({
-      message: "RSVP(s) saved successfully",
-      rsvps: savedRsvps,
-    });
-  } catch (err) {
-    console.error("❌ Error saving RSVP:", err);
-    res.status(500).json({ message: "Error saving RSVP", error: err.message });
-  }
 });
 
 // GET: Retrieve RSVP(s) by confirmation number
 router.get("/:confNumber", async (req, res) => {
-  try {
-    let { confNumber } = req.params;
-    console.log(`backend/routes/rsvp.js 🔎 Looking up RSVP for confirmation number: ${confNumber}`);
-    console.log("backend/routes/rsvp.js 📌 Type of confNumber param:", typeof confNumber);
+    try {
+        let { confNumber } = req.params;
+        console.log(`backend/routes/rsvp.js 🔎 Looking up RSVP for confirmation number: ${confNumber}`);
+        console.log("backend/routes/rsvp.js 📌 Type of confNumber param:", typeof confNumber);
 
-    if (!confNumber) {
-      return res.status(400).json({ message: "Confirmation number required" });
+        if (!confNumber) {
+            return res.status(400).json({ message: "Confirmation number required" });
+        }
+
+        // ✅ Force to string for consistent lookup
+        confNumber = String(confNumber);
+
+        const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
+
+        if (!rsvps || rsvps.length === 0) {
+            console.warn(`⚠️ No RSVP found for confirmation number: ${confNumber}`);
+            return res.status(404).json({ message: "No RSVP found for this confirmation number" });
+        }
+
+        console.log(`backend/routes/rsvp.js ✅ Found ${rsvps.length} RSVP(s) for confirmation number: ${confNumber}`);
+
+        res.status(200).json({
+            message: "RSVP(s) retrieved successfully",
+            rsvps,
+        });
+    } catch (err) {
+        console.error("❌ Error retrieving RSVP:", err);
+        res.status(500).json({ message: "Error retrieving RSVP", error: err.message });
     }
-
-    // ✅ Force to string for consistent lookup
-    confNumber = String(confNumber);
-
-    const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
-
-    if (!rsvps || rsvps.length === 0) {
-      console.warn(`⚠️ No RSVP found for confirmation number: ${confNumber}`);
-      return res.status(404).json({ message: "No RSVP found for this confirmation number" });
-    }
-
-    console.log(`backend/routes/rsvp.js ✅ Found ${rsvps.length} RSVP(s) for confirmation number: ${confNumber}`);
-
-    res.status(200).json({
-      message: "RSVP(s) retrieved successfully",
-      rsvps,
-    });
-  } catch (err) {
-    console.error("❌ Error retrieving RSVP:", err);
-    res.status(500).json({ message: "Error retrieving RSVP", error: err.message });
-  }
 });
 
 
 // PUT /api/update_rsvp/:id
 router.put("/update_rsvp/:id", async (req, res) => {
-  const { id } = req.params;
-  const { rsvpcount } = req.body;
+    const { id } = req.params;
+    const { rsvpcount } = req.body;
 
 
-  console.log("🔧 Received update request for RSVP ID:", id);
-  console.log("🔢 New RSVP count:", rsvpcount);
+    console.log("🔧 Received update request for RSVP ID:", id);
+    console.log("🔢 New RSVP count:", rsvpcount);
 
-  if (!rsvpcount || isNaN(rsvpcount)) {
-    return res.status(400).json({ message: "Invalid RSVP count." });
-  }
-
-
-  try {
-    console.log("Updating RSVP ID:", id, "with count:", rsvpcount);
-    const updated = await RSVP.findByIdAndUpdate(
-      id,
-      { rsvpcount: parseInt(rsvpcount, 10) },
-      { new: true }
-    );
-
-    if (!updated) {
-      return res.status(404).json({ message: "RSVP record not found." });
+    if (rsvpcount === undefined || isNaN(rsvpcount)) {
+        return res.status(400).json({ message: "Invalid RSVP count." });
     }
 
-    console.log("Updated RSVP:", updated);
-    res.json({ message: "RSVP updated successfully.", updated });
-  } catch (err) {
-    console.error("Error updating RSVP:", err);
-    res.status(500).json({ message: "Server error." });
-  }
+    try {
+        console.log("Updating RSVP ID:", id, "with count:", rsvpcount);
+        const updated = await RSVP.findByIdAndUpdate(
+            id,
+            { rsvpcount: parseInt(rsvpcount, 10) },
+            { new: true }
+        );
+
+        if (!updated) {
+            return res.status(404).json({ message: "RSVP record not found." });
+        }
+
+        console.log("Updated RSVP:", updated);
+        res.json({ message: "RSVP updated successfully.", updated });
+    } catch (err) {
+        console.error("Error updating RSVP:", err);
+        res.status(500).json({ message: "Server error." });
+    }
 });
 
 module.exports = router;

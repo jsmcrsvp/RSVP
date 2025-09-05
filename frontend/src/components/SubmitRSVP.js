@@ -35,6 +35,9 @@ export default function SubmitRSVP() {
   const [editIndex, setEditIndex] = useState(null);
   const [modifiedCount, setModifiedCount] = useState("");
 
+  const [updateMessage, setUpdateMessage] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
+
   // Load open events once
   useEffect(() => {
     (async () => {
@@ -194,27 +197,32 @@ export default function SubmitRSVP() {
 
   const handleUpdateRSVP = async (rsvpId, newCount) => {
     try {
-      const response = await fetch(`/api/rsvp_response/update_rsvp/${rsvpId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rsvpcount: parseInt(newCount, 10) }),
-      });
+      console.log("🔧 Sending update for RSVP:", rsvpId, "→", newCount);
 
-      if (!response.ok) throw new Error("Failed to update RSVP.");
+      const result = await updateRSVP(rsvpId, parseInt(newCount, 10));
 
-      const text = await response.text(); // Read raw response
-      const updated = text ? JSON.parse(text) : {}; // Parse only if not empty
+      console.log("✅ RSVP updated:", result);
 
-      console.log("✅ RSVP updated:", updated);
+      setUpdateMessage("RSVP updated successfully!");
+      setUpdateError(null);
 
+      // Refresh the verify results
       await handleVerifyRSVP({ preventDefault: () => { } });
+
       setEditIndex(null);
+
+      // Clear success message after 3s
+      setTimeout(() => setUpdateMessage(null), 3000);
     } catch (err) {
       console.error("❌ Error updating RSVP:", err);
-      setError(err.message || "Error updating RSVP.");
+
+      setUpdateError(err.message || "Error updating RSVP.");
+      setUpdateMessage(null);
+
+      // Clear error message after 5s
+      setTimeout(() => setUpdateError(null), 5000);
     }
   };
-
 
   // -------- UI --------
   return (
@@ -491,6 +499,16 @@ export default function SubmitRSVP() {
             {verifyResult && (
               <div className="result-table-wrapper">
                 <h4>RSVP Details</h4>
+                {updateMessage && (
+                  <div style={{ color: "green", marginBottom: "10px" }}>
+                    ✅ {updateMessage}
+                  </div>
+                )}
+                {updateError && (
+                  <div style={{ color: "red", marginBottom: "10px" }}>
+                    ❌ {updateError}
+                  </div>
+                )}
                 <table className="result-table">
                   <thead>
                     <tr>

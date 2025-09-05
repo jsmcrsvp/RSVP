@@ -46,8 +46,9 @@ export const verifyRSVP = async (confNumber) => {
 // Update RSVP count
 export const updateRSVP = async (id, rsvpcount) => {
   const res = await api.put(`/api/rsvp_response/update_rsvp/${id}`, { rsvpcount });
-  return res.data;
+  return res.data; // this will include { message, updated }
 };
+
 
 export default api;
 
