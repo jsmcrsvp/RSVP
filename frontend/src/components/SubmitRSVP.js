@@ -1,4 +1,4 @@
-// frontend/src/components/SubmitRSVP.js
+// frontend/src/components/SubmitRSVP.js ======= Submit Working 090425 ====10:00pm =====
 import React, { useEffect, useState } from "react";
 import { getOpenEvents, searchMember, submitRSVP } from "../api";
 import "../styles/SubmitRSVP.css";
@@ -178,10 +178,16 @@ export default function SubmitRSVP() {
   return (
     <div className="page-wrapper">
       <div className="rsvp-container">
-        <h2>Welcome to JSMC RSVP Portal</h2>
+        <h2>JSMC RSVP Portal</h2>
 
         {/* Tabs */}
         <div className="tab-header">
+            <button
+            className={activeTab === "home" ? "tab active" : "tab"}
+            onClick={() => setActiveTab("home")}
+          >
+            Home
+          </button>
           <button
             className={activeTab === "submit" ? "tab active" : "tab"}
             onClick={() => setActiveTab("submit")}
@@ -197,6 +203,14 @@ export default function SubmitRSVP() {
         </div>
 
         {error && <div className="error-message">{error}</div>}
+        
+        {/* ----- TAB: Home ----- */}
+        {activeTab === "home" && (
+          <form className="home" onSubmit={handleHome}>
+            <h3>Welcome to JSMC RSVP Portal</h3>
+            <h4>Please select Submit RSVP or Verify / Modify RSVP</h4>
+          </form>
+        )}
 
         {/* ----- TAB: Submit RSVP ----- */}
         {activeTab === "submit" && (
