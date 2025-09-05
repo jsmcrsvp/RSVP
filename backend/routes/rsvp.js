@@ -3,65 +3,36 @@ const express = require("express");
 const router = express.Router();
 const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 
-// ✅ POST: Save RSVP (multiple events, one confirmation #)
+// POST: Save RSVP(s)
 router.post("/", async (req, res) => {
   try {
-    const {
-      memname,
-      memaddress,
-      memphonenumber,
-      rsvpconfnumber,
-      events,
-    } = req.body;
+    const { memname, memaddress, memphonenumber, rsvpconfnumber, events } = req.body;
 
-    if (
-      !memname ||
-      !memaddress ||
-      !memphonenumber ||
-      !rsvpconfnumber ||
-      !Array.isArray(events) ||
-      events.length === 0
-    ) {
+    if (!memname || !rsvpconfnumber || !events || !Array.isArray(events)) {
+      console.log("❌ Missing fields:", req.body);
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // Force confirmation number to string
-    const confNumber = String(rsvpconfnumber);
-
-    // Build RSVP docs for each event
-    const newRsvps = events.map((ev) => {
-      if (
-        !ev.eventdate ||
-        !ev.eventday ||
-        !ev.eventname ||
-        !ev.programname ||
-        ev.rsvpcount === undefined
-      ) {
-        throw new Error("Missing required event fields");
-      }
-      return {
+    const savedResponses = [];
+    for (const ev of events) {
+      const newRSVP = new RsvpResponse({
         eventdate: ev.eventdate,
         eventday: ev.eventday,
-        eventname: ev.eventname,
-        programname: ev.programname,
-        rsvpcount: ev.rsvpcount,
         memname,
         memaddress,
         memphonenumber,
-        rsvpconfnumber: confNumber,
-      };
-    });
-
-    // Save to DB
-    const savedRsvps = await RsvpResponse.insertMany(newRsvps);
-
-    console.log("✅ Saved RSVP(s):", savedRsvps);
-    console.log("Saved RSVP confirmation # type:", typeof savedRsvps[0].rsvpconfnumber);
+        rsvpcount: ev.rsvpcount,
+        rsvpconfnumber,
+        eventname: ev.eventname,
+        programname: ev.programname,
+      });
+      await newRSVP.save();
+      savedResponses.push(newRSVP);
+    }
 
     res.status(201).json({
-      message: "RSVP saved successfully",
-      confNumber,
-      rsvps: savedRsvps,
+      message: "RSVP(s) saved successfully",
+      rsvp: savedResponses,
     });
   } catch (err) {
     console.error("❌ Error saving RSVP:", err);
@@ -69,21 +40,20 @@ router.post("/", async (req, res) => {
   }
 });
 
-// ✅ GET: Verify RSVP by confirmation number
+// GET: Verify RSVP(s) by confirmation number
 router.get("/:confNumber", async (req, res) => {
   try {
-    const confNumber = String(req.params.confNumber);
-
+    const { confNumber } = req.params;
     const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
 
     if (!rsvps || rsvps.length === 0) {
       return res.status(404).json({ message: "RSVP not found" });
     }
 
-    res.json({ confNumber, rsvps });
+    res.status(200).json({ rsvps });
   } catch (err) {
-    console.error("❌ Error retrieving RSVP:", err);
-    res.status(500).json({ message: "Error retrieving RSVP", error: err.message });
+    console.error("❌ Error fetching RSVP:", err);
+    res.status(500).json({ message: "Error fetching RSVP", error: err.message });
   }
 });
 
