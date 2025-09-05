@@ -3,26 +3,32 @@ const express = require("express");
 const router = express.Router();
 const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 
-// POST: Save RSVP(s)
+// ✅ POST: Save RSVP (multiple events, one confirmation #)
 router.post("/", async (req, res) => {
   try {
-    console.log("📥 Incoming RSVP submission:", JSON.stringify(req.body, null, 2));
-
     const {
       memname,
       memaddress,
       memphonenumber,
       rsvpconfnumber,
-      events, // expecting array of events with { eventdate, eventday, eventname, programname, rsvpcount }
+      events,
     } = req.body;
 
-    // Validate required fields
-    if (!memname || !rsvpconfnumber || !Array.isArray(events) || events.length === 0) {
-      console.error("❌ Validation failed: Missing required fields");
+    if (
+      !memname ||
+      !memaddress ||
+      !memphonenumber ||
+      !rsvpconfnumber ||
+      !Array.isArray(events) ||
+      events.length === 0
+    ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // Insert one RSVP record per event
+    // Force confirmation number to string
+    const confNumber = String(rsvpconfnumber);
+
+    // Build RSVP docs for each event
     const newRsvps = events.map((ev) => {
       if (
         !ev.eventdate ||
@@ -42,16 +48,19 @@ router.post("/", async (req, res) => {
         memname,
         memaddress,
         memphonenumber,
-        rsvpconfnumber,
+        rsvpconfnumber: confNumber,
       };
     });
 
+    // Save to DB
     const savedRsvps = await RsvpResponse.insertMany(newRsvps);
 
-    console.log("✅ RSVP saved successfully:", savedRsvps);
+    console.log("✅ Saved RSVP(s):", savedRsvps);
+    console.log("Saved RSVP confirmation # type:", typeof savedRsvps[0].rsvpconfnumber);
 
     res.status(201).json({
-      message: "RSVP(s) saved successfully",
+      message: "RSVP saved successfully",
+      confNumber,
       rsvps: savedRsvps,
     });
   } catch (err) {
@@ -60,29 +69,18 @@ router.post("/", async (req, res) => {
   }
 });
 
-// GET: Retrieve RSVP(s) by confirmation number
+// ✅ GET: Verify RSVP by confirmation number
 router.get("/:confNumber", async (req, res) => {
   try {
-    const { confNumber } = req.params;
-    console.log(`🔎 Looking up RSVP for confirmation number: ${confNumber}`);
-
-    if (!confNumber) {
-      return res.status(400).json({ message: "Confirmation number required" });
-    }
+    const confNumber = String(req.params.confNumber);
 
     const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
 
     if (!rsvps || rsvps.length === 0) {
-      console.warn(`⚠️ No RSVP found for confirmation number: ${confNumber}`);
-      return res.status(404).json({ message: "No RSVP found for this confirmation number" });
+      return res.status(404).json({ message: "RSVP not found" });
     }
 
-    console.log(`✅ Found ${rsvps.length} RSVP(s) for confirmation number: ${confNumber}`);
-
-    res.status(200).json({
-      message: "RSVP(s) retrieved successfully",
-      rsvps,
-    });
+    res.json({ confNumber, rsvps });
   } catch (err) {
     console.error("❌ Error retrieving RSVP:", err);
     res.status(500).json({ message: "Error retrieving RSVP", error: err.message });
@@ -90,6 +88,7 @@ router.get("/:confNumber", async (req, res) => {
 });
 
 module.exports = router;
+
 
 
 /* backend/routes/rsvp.js
