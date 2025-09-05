@@ -102,11 +102,17 @@ router.put("/update_rsvp/:id", async (req, res) => {
   const { id } = req.params;
   const { rsvpcount } = req.body;
 
+
+  console.log("🔧 Received update request for RSVP ID:", id);
+  console.log("🔢 New RSVP count:", rsvpcount);
+
   if (!rsvpcount || isNaN(rsvpcount)) {
     return res.status(400).json({ message: "Invalid RSVP count." });
   }
 
+
   try {
+    console.log("Updating RSVP ID:", id, "with count:", rsvpcount);
     const updated = await RSVP.findByIdAndUpdate(
       id,
       { rsvpcount: parseInt(rsvpcount, 10) },
@@ -117,6 +123,7 @@ router.put("/update_rsvp/:id", async (req, res) => {
       return res.status(404).json({ message: "RSVP record not found." });
     }
 
+    console.log("Updated RSVP:", updated);
     res.json({ message: "RSVP updated successfully.", updated });
   } catch (err) {
     console.error("Error updating RSVP:", err);
