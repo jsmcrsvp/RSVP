@@ -96,6 +96,34 @@ router.get("/:confNumber", async (req, res) => {
   }
 });
 
+
+// PUT /api/update_rsvp/:id
+router.put("/update_rsvp/:id", async (req, res) => {
+  const { id } = req.params;
+  const { rsvpcount } = req.body;
+
+  if (!rsvpcount || isNaN(rsvpcount)) {
+    return res.status(400).json({ message: "Invalid RSVP count." });
+  }
+
+  try {
+    const updated = await RSVP.findByIdAndUpdate(
+      id,
+      { rsvpcount: parseInt(rsvpcount, 10) },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "RSVP record not found." });
+    }
+
+    res.json({ message: "RSVP updated successfully.", updated });
+  } catch (err) {
+    console.error("Error updating RSVP:", err);
+    res.status(500).json({ message: "Server error." });
+  }
+});
+
 module.exports = router;
 
 

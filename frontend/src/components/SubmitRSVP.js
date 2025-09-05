@@ -31,6 +31,10 @@ export default function SubmitRSVP() {
   const [verifyResult, setVerifyResult] = useState(null);
   const [verifying, setVerifying] = useState(false);
 
+  // -------- Modify RSVP Count --------
+  const [editIndex, setEditIndex] = useState(null);
+  const [modifiedCount, setModifiedCount] = useState("");
+
   // Load open events once
   useEffect(() => {
     (async () => {
@@ -46,14 +50,14 @@ export default function SubmitRSVP() {
     })();
   }, []);
 
-
-  useEffect(() => {
-    if (verifyResult) {
-      console.log("✅ verifyResult updated:", verifyResult);
-      console.log("📦 RSVP records:", verifyResult.rsvps);
-    }
-  }, [verifyResult]);
-
+  /* ======= Temporary addition to verifyResult ======
+    useEffect(() => {
+      if (verifyResult) {
+        console.log("✅ verifyResult updated:", verifyResult);
+        console.log("📦 RSVP records:", verifyResult.rsvps);
+      }
+    }, [verifyResult]);
+  */
 
   // ---- Submit RSVP Handlers ----
   const handleSearch = async (e) => {
@@ -170,12 +174,11 @@ export default function SubmitRSVP() {
     setVerifying(true);
     try {
       const data = await verifyRSVP(verifyConfNumber.trim());
-      // backend returns { message, rsvps: [...] }
 
-      console.log("✅ RSVP verification response:", data);
+      //console.log("✅ RSVP verification response:", data);
 
       if (Array.isArray(data.rsvps) && data.rsvps.length > 0) {
-        console.log(`✅ Loaded ${data.rsvps.length} RSVP record(s).`);
+        //console.log(`✅ Loaded ${data.rsvps.length} RSVP record(s).`);
       } else {
         console.warn("⚠️ No RSVP records found or rsvps is not an array.");
       }
@@ -188,6 +191,30 @@ export default function SubmitRSVP() {
       setVerifying(false);
     }
   };
+
+  const handleUpdateRSVP = async (rsvpId, newCount) => {
+  try {
+    const response = await fetch(`/api/rsvp_response/update_rsvp/${rsvpId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ rsvpcount: parseInt(newCount, 10) }),
+    });
+
+    if (!response.ok) throw new Error("Failed to update RSVP.");
+
+    const updated = await response.json();
+    console.log("✅ RSVP updated:", updated);
+
+    // Refresh the data by re-verifying the confirmation number
+    await handleVerifyRSVP({ preventDefault: () => {} });
+    setEditIndex(null); // Reset edit mode
+  } catch (err) {
+    console.error("❌ Error updating RSVP:", err);
+    setError(err.message || "Error updating RSVP.");
+  }
+};
 
   // -------- UI --------
   return (
@@ -461,7 +488,71 @@ export default function SubmitRSVP() {
                 {verifying ? "Verifying..." : "Verify"}
               </button>
             </div>
+            {verifyResult && (
+              <div className="result-table-wrapper">
+                <h4>RSVP Details</h4>
+                <table className="result-table">
+                  <thead>
+                    <tr>
+                      <th>Program</th>
+                      <th>Event</th>
+                      <th>Date</th>
+                      <th>RSVP Count</th>
+                      <th>Modify</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {verifyResult.rsvps?.length === 0 && (
+                      <tr>
+                        <td colSpan="5" style={{ textAlign: "center", color: "#888", fontStyle: "italic" }}>
+                          No RSVP records found for this confirmation number.
+                        </td>
+                      </tr>
+                    )}
 
+                    {verifyResult.rsvps?.map((ev, idx) => (
+                      <tr key={ev._id}>
+                        <td>{ev.programname}</td>
+                        <td>{ev.eventname}</td>
+                        <td>{ev.eventday}, {ev.eventdate}</td>
+                        <td>
+                          {editIndex === idx ? (
+                            <input
+                              type="number"
+                              min="1"
+                              value={modifiedCount}
+                              onChange={(e) => setModifiedCount(e.target.value)}
+                              style={{ width: "60px" }}
+                            />
+                          ) : (
+                            ev.rsvpcount
+                          )}
+                        </td>
+                        <td>
+                          {editIndex === idx ? (
+                            <button onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}>
+                              Save
+                            </button>
+                          ) : (
+                            <label>
+                              <input
+                                type="checkbox"
+                                onChange={() => {
+                                  setEditIndex(idx);
+                                  setModifiedCount(ev.rsvpcount);
+                                }}
+                              />
+                              Modify
+                            </label>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {/*
             {verifyResult && (
               <div className="result-table-wrapper">
                 <h4>RSVP Details</h4>
@@ -476,7 +567,7 @@ export default function SubmitRSVP() {
                   </thead>
                   <tbody>
                     {verifyResult.rsvps?.map((ev, idx) => {
-                      console.log("RSVP row:", ev);
+                      //console.log("RSVP row:", ev);
                       return (
                         <tr key={idx}>
                           <td>{ev.programname}</td>
@@ -489,7 +580,8 @@ export default function SubmitRSVP() {
                   </tbody>
                 </table>
               </div>
-            )}
+            )}*/}
+
           </form>
         )}
       </div>
