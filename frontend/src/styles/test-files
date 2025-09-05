@@ -35,6 +35,9 @@ export default function SubmitRSVP() {
   const [editIndex, setEditIndex] = useState(null);
   const [modifiedCount, setModifiedCount] = useState("");
 
+  const [submitMessage, setSubmitMessage] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
+
   const [updateMessage, setUpdateMessage] = useState(null);
   const [updateError, setUpdateError] = useState(null);
 
@@ -52,15 +55,6 @@ export default function SubmitRSVP() {
       }
     })();
   }, []);
-
-  /* ======= Temporary addition to verifyResult ======
-    useEffect(() => {
-      if (verifyResult) {
-        console.log("✅ verifyResult updated:", verifyResult);
-        console.log("📦 RSVP records:", verifyResult.rsvps);
-      }
-    }, [verifyResult]);
-  */
 
   // ---- Submit RSVP Handlers ----
   const handleSearch = async (e) => {
@@ -156,8 +150,12 @@ export default function SubmitRSVP() {
       const res = await submitRSVP(payload);
       setConfirmation({ confNumber, ...res });
       setSelectedEvents({});
+      setSubmitMessage("RSVP submitted successfully!");
+      setSubmitError(null);
     } catch (err) {
       setError(err.message || "Error submitting RSVP.");
+      setSubmitError(err.message || "Error submitting RSVP.");
+      setSubmitMessage(null);
     } finally {
       setSubmitting(false);
     }
@@ -460,6 +458,16 @@ export default function SubmitRSVP() {
                       {submitting ? "Submitting..." : "Submit RSVP"}
                     </button>
                   )}
+                  {submitMessage && (
+                    <div style={{ color: "green", marginBottom: "10px" }}>
+                      ✅ {submitMessage}
+                    </div>
+                  )}
+                  {submitError && (
+                    <div style={{ color: "red", marginBottom: "10px" }}>
+                      ❌ {submitError}
+                    </div>
+                  )}
                 </div>
               </form>
             )}
@@ -570,36 +578,6 @@ export default function SubmitRSVP() {
                 </table>
               </div>
             )}
-            {/*
-            {verifyResult && (
-              <div className="result-table-wrapper">
-                <h4>RSVP Details</h4>
-                <table className="result-table">
-                  <thead>
-                    <tr>
-                      <th>Program</th>
-                      <th>Event</th>
-                      <th>Date</th>
-                      <th>RSVP Count</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {verifyResult.rsvps?.map((ev, idx) => {
-                      //console.log("RSVP row:", ev);
-                      return (
-                        <tr key={idx}>
-                          <td>{ev.programname}</td>
-                          <td>{ev.eventname}</td>
-                          <td>{ev.eventday}, {ev.eventdate}</td>
-                          <td>{ev.rsvpcount}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}*/}
-
           </form>
         )}
       </div>
