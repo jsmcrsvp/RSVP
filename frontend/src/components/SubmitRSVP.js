@@ -35,6 +35,9 @@ export default function SubmitRSVP() {
   const [editIndex, setEditIndex] = useState(null);
   const [modifiedCount, setModifiedCount] = useState("");
 
+  const [submitMessage, setSubmitMessage] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
+
   const [updateMessage, setUpdateMessage] = useState(null);
   const [updateError, setUpdateError] = useState(null);
 
@@ -147,8 +150,12 @@ export default function SubmitRSVP() {
       const res = await submitRSVP(payload);
       setConfirmation({ confNumber, ...res });
       setSelectedEvents({});
+      setSubmitMessage("RSVP submitted successfully!");
+      setSubmitError(null);
     } catch (err) {
       setError(err.message || "Error submitting RSVP.");
+      setSubmitError(err.message || "Error submitting RSVP.");
+      setSubmitMessage(null);
     } finally {
       setSubmitting(false);
     }
@@ -450,6 +457,16 @@ export default function SubmitRSVP() {
                     >
                       {submitting ? "Submitting..." : "Submit RSVP"}
                     </button>
+                  )}
+                  {submitMessage && (
+                    <div style={{ color: "green", marginBottom: "10px" }}>
+                      ✅ {submitMessage}
+                    </div>
+                  )}
+                  {submitError && (
+                    <div style={{ color: "red", marginBottom: "10px" }}>
+                      ❌ {submitError}
+                    </div>
                   )}
                 </div>
               </form>
