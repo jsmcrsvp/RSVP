@@ -461,9 +461,9 @@ export default function SubmitRSVP() {
                     </tr>
                   </thead>
                   <tbody>
-
+                    console.log("In Result table RSVPs array:", verifyResult.rsvps);
                     {verifyResult.rsvps?.map((ev, idx) => {
-                      console.log("RSVP row:", ev); // 👈 Check field names here
+                      console.log("RSVP row:", ev);
                       return (
                         <tr key={idx}>
                           <td>{ev.programname}</td>
@@ -473,7 +473,6 @@ export default function SubmitRSVP() {
                         </tr>
                       );
                     })}
-
                   </tbody>
                 </table>
               </div>
