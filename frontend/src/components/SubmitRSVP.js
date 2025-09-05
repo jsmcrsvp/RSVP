@@ -161,12 +161,12 @@ export default function SubmitRSVP() {
         .map((ev, idx) =>
           selectedEvents[idx] && Number(selectedEvents[idx]) > 0
             ? {
-                programname: ev.programname,
-                eventname: ev.eventname,
-                eventday: ev.eventday,
-                eventdate: ev.eventdate,
-                rsvpcount: Number(selectedEvents[idx]),
-              }
+              programname: ev.programname,
+              eventname: ev.eventname,
+              eventday: ev.eventday,
+              eventdate: ev.eventdate,
+              rsvpcount: Number(selectedEvents[idx]),
+            }
             : null
         )
         .filter(Boolean),
@@ -182,8 +182,8 @@ export default function SubmitRSVP() {
       setSubmitMessage("RSVP submitted successfully!");
       setSubmitSuccess(true);
 
-      // auto-clear after 15 seconds and return to Home
       setTimeout(() => {
+        // Reset all submit tab states
         setSubmitMessage(null);
         setSubmitSuccess(false);
         setConfirmation(null);
@@ -195,8 +195,11 @@ export default function SubmitRSVP() {
         setMemberId("");
         setName("");
         setHouseNumber("");
+
+        // Switch to Home
         setActiveTab("home");
       }, 15000);
+
     } catch (err) {
       console.error("Error submitting RSVP:", err);
       setSubmitMessage("Error submitting RSVP: " + (err.message || "Unknown"));
@@ -245,7 +248,7 @@ export default function SubmitRSVP() {
       console.log("Update result:", result);
       setUpdateMessage("RSVP updated successfully!");
       // Refresh verify results
-      await handleVerifyRSVP({ preventDefault: () => {} });
+      await handleVerifyRSVP({ preventDefault: () => { } });
 
       // auto-clear after 15s and return to Home
       setTimeout(() => {
@@ -254,8 +257,11 @@ export default function SubmitRSVP() {
         setModifiedCount("");
         setVerifyConfNumber("");
         setVerifyResult({ rsvps: [] });
+
+        // Switch to Home
         setActiveTab("home");
       }, 15000);
+
     } catch (err) {
       console.error("Error updating RSVP:", err);
       setUpdateError(err.response?.data?.message || err.message || "Error updating RSVP.");
@@ -414,11 +420,7 @@ export default function SubmitRSVP() {
                   <label>Email Address</label>
                   <input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />
 
-                  <button
-                    className="button"
-                    type="submit"
-                    disabled={submitting || !email || !hasValidSelection()}
-                  >
+                  <button className="button" type="submit" disabled={submitting || email.trim() === "" || !hasValidSelection()}>
                     {submitting ? "Submitting..." : "Submit RSVP"}
                   </button>
                 </div>
