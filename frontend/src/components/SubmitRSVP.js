@@ -441,34 +441,42 @@ export default function SubmitRSVP() {
           <form className="verify-form" onSubmit={handleVerifyRSVP}>
             <h3>Verify / Modify RSVP</h3>
             <div className="inline-fields">
-              <input className="small-input" type="text" value={verifyConfNumber} onChange={(e) => setVerifyConfNumber(e.target.value)} placeholder="Enter Confirmation #" />
-              <button className="button" type="submit" disabled={verifying}>{verifying ? "Verifying..." : "Verify"}</button>
+              <input
+                className="small-input"
+                type="text"
+                value={verifyConfNumber}
+                onChange={(e) => setVerifyConfNumber(e.target.value)}
+                placeholder="Enter Confirmation #"
+              />
+              <button className="button" type="submit" disabled={verifying}>
+                {verifying ? "Verifying..." : "Verify"}
+              </button>
             </div>
 
-            {verifyResult && Array.isArray(verifyResult.rsvps) && (
+            {/* Show only when rsvps is returned */}
+            {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
               <div className="result-table-wrapper">
                 <h4>RSVP Details</h4>
 
                 {/* Member details from first RSVP doc */}
-                {verifyResult.rsvps.length > 0 && (
-                  <table className="result-table" style={{ marginBottom: 10 }}>
-                    <tbody>
-                      <tr>
-                        <th>Name</th>
-                        <td>{verifyMemberFromResult()?.name}</td>
-                      </tr>
-                      <tr>
-                        <th>Address</th>
-                        <td>{verifyMemberFromResult()?.address}</td>
-                      </tr>
-                      <tr>
-                        <th>Phone</th>
-                        <td>{verifyMemberFromResult()?.phone}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                )}
+                <table className="result-table" style={{ marginBottom: 10 }}>
+                  <tbody>
+                    <tr>
+                      <th>Name</th>
+                      <td>{verifyMemberFromResult()?.name}</td>
+                    </tr>
+                    <tr>
+                      <th>Address</th>
+                      <td>{verifyMemberFromResult()?.address}</td>
+                    </tr>
+                    <tr>
+                      <th>Phone</th>
+                      <td>{verifyMemberFromResult()?.phone}</td>
+                    </tr>
+                  </tbody>
+                </table>
 
+                {/* RSVP Events */}
                 <table className="result-table">
                   <thead>
                     <tr>
@@ -480,14 +488,6 @@ export default function SubmitRSVP() {
                     </tr>
                   </thead>
                   <tbody>
-                    {verifyResult.rsvps.length === 0 && (
-                      <tr>
-                        <td colSpan="5" style={{ textAlign: "center", color: "#888", fontStyle: "italic" }}>
-                          No RSVP records found for this confirmation number.
-                        </td>
-                      </tr>
-                    )}
-
                     {verifyResult.rsvps.map((ev, idx) => (
                       <tr key={ev._id || idx}>
                         <td>{ev.programname}</td>
@@ -495,14 +495,25 @@ export default function SubmitRSVP() {
                         <td>{ev.eventday}, {ev.eventdate}</td>
                         <td>
                           {editIndex === idx ? (
-                            <input type="number" min="0" value={modifiedCount} onChange={(e) => setModifiedCount(e.target.value)} style={{ width: "60px" }} />
+                            <input
+                              type="number"
+                              min="0"
+                              value={modifiedCount}
+                              onChange={(e) => setModifiedCount(e.target.value)}
+                              style={{ width: "60px" }}
+                            />
                           ) : (
                             ev.rsvpcount
                           )}
                         </td>
                         <td>
                           {editIndex === idx ? (
-                            <button type="button" onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}>Save</button>
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}
+                            >
+                              Save
+                            </button>
                           ) : (
                             <label>
                               <input
@@ -522,8 +533,25 @@ export default function SubmitRSVP() {
                 </table>
               </div>
             )}
-            {updateMessage && <div style={{ color: "green", marginBottom: "10px" }}>{updateMessage}</div>}
-            {updateError && <div style={{ color: "red", marginBottom: "10px" }}>{updateError}</div>}
+
+            {/* No results case */}
+            {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
+              <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
+                No RSVP records found for this confirmation number.
+              </div>
+            )}
+
+            {/* Success / error messages at bottom */}
+            {updateMessage && (
+              <div style={{ color: "green", marginTop: "10px" }}>
+                ✅ {updateMessage}
+              </div>
+            )}
+            {updateError && (
+              <div style={{ color: "red", marginTop: "10px" }}>
+                ❌ {updateError}
+              </div>
+            )}
           </form>
         )}
       </div>
