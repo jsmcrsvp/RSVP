@@ -337,238 +337,316 @@ export default function SubmitRSVP() {
 
                 <div className="form-row">
                   <label>
-                    <input type="radio" value="memberId" checked={searchMode === "memberId"} onChange={() => setSearchMode("memberId")} />
+                    <input
+                      type="radio"
+                      value="memberId"
+                      checked={searchMode === "memberId"}
+                      onChange={() => setSearchMode("memberId")}
+                    />
                     Member ID
                   </label>
                   <label style={{ marginLeft: "1rem" }}> OR </label>
                   <label style={{ marginLeft: "1rem" }}>
-                    <input type="radio" value="nameHouse" checked={searchMode === "nameHouse"} onChange={() => setSearchMode("nameHouse")} />
+                    <input
+                      type="radio"
+                      value="nameHouse"
+                      checked={searchMode === "nameHouse"}
+                      onChange={() => setSearchMode("nameHouse")}
+                    />
                     First Name &amp; House #
                   </label>
                 </div>
 
+                {/* ---- Member ID Search ---- */}
                 {searchMode === "memberId" && (
                   <div className="inline-fields">
-                    <input className="small-input" type="number" value={memberId} onChange={(e) => setMemberId(e.target.value)} placeholder="Enter Member ID" />
-                    <button className="button" type="submit" disabled={searching}>{searching ? "Searching..." : "Search"}</button>
+                    <input
+                      className="small-input"
+                      type="number"
+                      value={memberId}
+                      onChange={(e) => setMemberId(e.target.value)}
+                      placeholder="Enter Member ID"
+                    />
+                    <button
+                      className="button"
+                      type="submit"
+                      disabled={searching || memberId.trim() === ""}
+                      style={{
+                        backgroundColor:
+                          searching || memberId.trim() === "" ? "lightgray" : "#007bff",
+                        color: searching || memberId.trim() === "" ? "#666" : "white",
+                        cursor:
+                          searching || memberId.trim() === "" ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {searching ? "Searching..." : "Search"}
+                    </button>
                   </div>
                 )}
 
+                {/* ---- Name + House Search ---- */}
                 {searchMode === "nameHouse" && (
                   <div className="inline-fields">
-                    <input className="small-input" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="First Name" />
+                    <input
+                      className="small-input"
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="First Name"
+                    />
                     <span className="inline-label">House #</span>
-                    <input className="small-input" type="text" value={houseNumber} onChange={(e) => setHouseNumber(e.target.value)} placeholder="e.g. 123" />
-                    <button className="button" type="submit" disabled={searching}>{searching ? "Searching..." : "Search"}</button>
+                    <input
+                      className="small-input"
+                      type="text"
+                      value={houseNumber}
+                      onChange={(e) => setHouseNumber(e.target.value)}
+                      placeholder="e.g. 123"
+                    />
+                    <button
+                      className="button"
+                      type="submit"
+                      disabled={
+                        searching || name.trim() === "" || houseNumber.trim() === ""
+                      }
+                      style={{
+                        backgroundColor:
+                          searching || name.trim() === "" || houseNumber.trim() === ""
+                            ? "lightgray"
+                            : "#007bff",
+                        color:
+                          searching || name.trim() === "" || houseNumber.trim() === ""
+                            ? "#666"
+                            : "white",
+                        cursor:
+                          searching || name.trim() === "" || houseNumber.trim() === ""
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      {searching ? "Searching..." : "Search"}
+                    </button>
+                  </div>
+                )}
+
+                {member && (
+                  <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
+                    <div className="result-table-wrapper">
+                      <h4>Membership Details</h4>
+                      <table className="result-table">
+                        <tbody>
+                          <tr>
+                            <th>Name</th>
+                            <td>{member.name}</td>
+                          </tr>
+                          <tr>
+                            <th>Address</th>
+                            <td>{member.address}</td>
+                          </tr>
+                          <tr>
+                            <th>Phone</th>
+                            <td>{member.phone}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="result-table-wrapper">
+                      <h4>Select Events to RSVP</h4>
+                      <table className="result-table">
+                        <thead>
+                          <tr>
+                            <th>Select</th>
+                            <th>Program</th>
+                            <th>Event</th>
+                            <th>Date</th>
+                            <th>RSVP Count</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {events.map((ev, idx) => (
+                            <tr key={idx}>
+                              <td>
+                                <input type="checkbox" checked={selectedEvents[idx] !== undefined} onChange={(e) => toggleEventSelection(idx, e.target.checked)} />
+                              </td>
+                              <td>{ev.programname}</td>
+                              <td>{ev.eventname}</td>
+                              <td>{ev.eventday}, {ev.eventdate}</td>
+                              <td>
+                                {selectedEvents[idx] !== undefined ? (
+                                  <input type="number" className="small-input" style={{ maxWidth: "60px" }} min="0" max="99" value={selectedEvents[idx]} onChange={(e) => updateEventCount(idx, e.target.value)} />
+                                ) : (
+                                  "-"
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="inline-fields">
+                      <label>Email Address</label>
+                      <input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />
+
+                      <button
+                        className="button"
+                        type="submit"
+                        disabled={email.trim() === "" || rsvpCount === "" || isNaN(rsvpCount)}
+                        style={{
+                          backgroundColor: email.trim() === "" || rsvpCount === "" || isNaN(rsvpCount)
+                            ? "lightgray"
+                            : "#007bff",
+                          color: email.trim() === "" || rsvpCount === "" || isNaN(rsvpCount)
+                            ? "#666"
+                            : "white",
+                          cursor: email.trim() === "" || rsvpCount === "" || isNaN(rsvpCount)
+                            ? "not-allowed"
+                            : "pointer",
+                        }}
+                      >
+                        Submit RSVP
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Success / error messages at bottom */}
+                {submitSuccess && submitMessage && (
+                  <div style={{ color: "green", marginTop: "10px" }}>
+                    ✅ {submitMessage}
+                    {confirmation && (
+                      <div>Confirmation #: {confirmation.confNumber || confirmation?.confNumber}</div>
+                    )}
+                  </div>
+                )}
+
+                {!submitSuccess && submitMessage && (
+                  <div style={{ color: "red", marginTop: "10px" }}>
+                    ❌ {submitMessage}
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* VERIFY */}
+            {activeTab === "verify" && (
+              <form className="verify-form" onSubmit={handleVerifyRSVP}>
+                <h3>Verify / Modify RSVP</h3>
+                <div className="inline-fields">
+                  <input
+                    className="small-input"
+                    type="text"
+                    value={verifyConfNumber}
+                    onChange={(e) => setVerifyConfNumber(e.target.value)}
+                    placeholder="Enter Confirmation #"
+                  />
+                  <button className="button" type="submit" disabled={verifying}>
+                    {verifying ? "Verifying..." : "Verify"}
+                  </button>
+                </div>
+
+                {/* Show only when rsvps is returned */}
+                {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
+                  <div className="result-table-wrapper">
+                    <h4>RSVP Details</h4>
+
+                    {/* Member details from first RSVP doc */}
+                    <table className="result-table" style={{ marginBottom: 10 }}>
+                      <tbody>
+                        <tr>
+                          <th>Name</th>
+                          <td>{verifyMemberFromResult()?.name}</td>
+                        </tr>
+                        <tr>
+                          <th>Address</th>
+                          <td>{verifyMemberFromResult()?.address}</td>
+                        </tr>
+                        <tr>
+                          <th>Phone</th>
+                          <td>{verifyMemberFromResult()?.phone}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    {/* RSVP Events */}
+                    <table className="result-table">
+                      <thead>
+                        <tr>
+                          <th>Program</th>
+                          <th>Event</th>
+                          <th>Date</th>
+                          <th>RSVP Count</th>
+                          <th>Modify</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {verifyResult.rsvps.map((ev, idx) => (
+                          <tr key={ev._id || idx}>
+                            <td>{ev.programname}</td>
+                            <td>{ev.eventname}</td>
+                            <td>{ev.eventday}, {ev.eventdate}</td>
+                            <td>
+                              {editIndex === idx ? (
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={modifiedCount}
+                                  onChange={(e) => setModifiedCount(e.target.value)}
+                                  style={{ width: "60px" }}
+                                />
+                              ) : (
+                                ev.rsvpcount
+                              )}
+                            </td>
+                            <td>
+                              {editIndex === idx ? (
+                                <button
+                                  type="button"
+                                  onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}
+                                >
+                                  Save
+                                </button>
+                              ) : (
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    onChange={() => {
+                                      setEditIndex(idx);
+                                      setModifiedCount(ev.rsvpcount);
+                                    }}
+                                  />
+                                  Modify
+                                </label>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* No results case */}
+                {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
+                  <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
+                    No RSVP records found for this confirmation number.
+                  </div>
+                )}
+
+                {/* Success / error messages at bottom */}
+                {updateMessage && (
+                  <div style={{ color: "green", marginTop: "10px" }}>
+                    ✅ {updateMessage}
+                  </div>
+                )}
+                {updateError && (
+                  <div style={{ color: "red", marginTop: "10px" }}>
+                    ❌ {updateError}
                   </div>
                 )}
               </form>
             )}
-
-            {member && (
-              <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-                <div className="result-table-wrapper">
-                  <h4>Membership Details</h4>
-                  <table className="result-table">
-                    <tbody>
-                      <tr>
-                        <th>Name</th>
-                        <td>{member.name}</td>
-                      </tr>
-                      <tr>
-                        <th>Address</th>
-                        <td>{member.address}</td>
-                      </tr>
-                      <tr>
-                        <th>Phone</th>
-                        <td>{member.phone}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="result-table-wrapper">
-                  <h4>Select Events to RSVP</h4>
-                  <table className="result-table">
-                    <thead>
-                      <tr>
-                        <th>Select</th>
-                        <th>Program</th>
-                        <th>Event</th>
-                        <th>Date</th>
-                        <th>RSVP Count</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {events.map((ev, idx) => (
-                        <tr key={idx}>
-                          <td>
-                            <input type="checkbox" checked={selectedEvents[idx] !== undefined} onChange={(e) => toggleEventSelection(idx, e.target.checked)} />
-                          </td>
-                          <td>{ev.programname}</td>
-                          <td>{ev.eventname}</td>
-                          <td>{ev.eventday}, {ev.eventdate}</td>
-                          <td>
-                            {selectedEvents[idx] !== undefined ? (
-                              <input type="number" className="small-input" style={{ maxWidth: "60px" }} min="0" max="99" value={selectedEvents[idx]} onChange={(e) => updateEventCount(idx, e.target.value)} />
-                            ) : (
-                              "-"
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="inline-fields">
-                  <label>Email Address</label>
-                  <input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />
-
-                  <button className="button" type="submit" disabled={submitting || email.trim() === "" || !hasValidSelection()}>
-                    {submitting ? "Submitting..." : "Submit RSVP"}
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* Success / error messages at bottom */}
-            {submitSuccess && submitMessage && (
-              <div style={{ color: "green", marginTop: "10px" }}>
-                ✅ {submitMessage}
-                {confirmation && (
-                  <div>Confirmation #: {confirmation.confNumber || confirmation?.confNumber}</div>
-                )}
-              </div>
-            )}
-
-            {!submitSuccess && submitMessage && (
-              <div style={{ color: "red", marginTop: "10px" }}>
-                ❌ {submitMessage}
-              </div>
-            )}
-          </>
-        )}
-
-        {/* VERIFY */}
-        {activeTab === "verify" && (
-          <form className="verify-form" onSubmit={handleVerifyRSVP}>
-            <h3>Verify / Modify RSVP</h3>
-            <div className="inline-fields">
-              <input
-                className="small-input"
-                type="text"
-                value={verifyConfNumber}
-                onChange={(e) => setVerifyConfNumber(e.target.value)}
-                placeholder="Enter Confirmation #"
-              />
-              <button className="button" type="submit" disabled={verifying}>
-                {verifying ? "Verifying..." : "Verify"}
-              </button>
-            </div>
-
-            {/* Show only when rsvps is returned */}
-            {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
-              <div className="result-table-wrapper">
-                <h4>RSVP Details</h4>
-
-                {/* Member details from first RSVP doc */}
-                <table className="result-table" style={{ marginBottom: 10 }}>
-                  <tbody>
-                    <tr>
-                      <th>Name</th>
-                      <td>{verifyMemberFromResult()?.name}</td>
-                    </tr>
-                    <tr>
-                      <th>Address</th>
-                      <td>{verifyMemberFromResult()?.address}</td>
-                    </tr>
-                    <tr>
-                      <th>Phone</th>
-                      <td>{verifyMemberFromResult()?.phone}</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                {/* RSVP Events */}
-                <table className="result-table">
-                  <thead>
-                    <tr>
-                      <th>Program</th>
-                      <th>Event</th>
-                      <th>Date</th>
-                      <th>RSVP Count</th>
-                      <th>Modify</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {verifyResult.rsvps.map((ev, idx) => (
-                      <tr key={ev._id || idx}>
-                        <td>{ev.programname}</td>
-                        <td>{ev.eventname}</td>
-                        <td>{ev.eventday}, {ev.eventdate}</td>
-                        <td>
-                          {editIndex === idx ? (
-                            <input
-                              type="number"
-                              min="0"
-                              value={modifiedCount}
-                              onChange={(e) => setModifiedCount(e.target.value)}
-                              style={{ width: "60px" }}
-                            />
-                          ) : (
-                            ev.rsvpcount
-                          )}
-                        </td>
-                        <td>
-                          {editIndex === idx ? (
-                            <button
-                              type="button"
-                              onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}
-                            >
-                              Save
-                            </button>
-                          ) : (
-                            <label>
-                              <input
-                                type="checkbox"
-                                onChange={() => {
-                                  setEditIndex(idx);
-                                  setModifiedCount(ev.rsvpcount);
-                                }}
-                              />
-                              Modify
-                            </label>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-
-            {/* No results case */}
-            {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
-              <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
-                No RSVP records found for this confirmation number.
-              </div>
-            )}
-
-            {/* Success / error messages at bottom */}
-            {updateMessage && (
-              <div style={{ color: "green", marginTop: "10px" }}>
-                ✅ {updateMessage}
-              </div>
-            )}
-            {updateError && (
-              <div style={{ color: "red", marginTop: "10px" }}>
-                ❌ {updateError}
-              </div>
-            )}
-          </form>
-        )}
+          </div>
       </div>
-    </div>
-  );
+      );
 }
