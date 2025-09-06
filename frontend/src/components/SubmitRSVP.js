@@ -240,31 +240,36 @@ export default function SubmitRSVP() {
   };
 
   const handleUpdateRSVP = async (rsvpId, newCount) => {
-    setUpdateMessage(null);
-    setUpdateError(null);
     try {
-      console.log("Updating RSVP:", rsvpId, newCount);
-      const result = await updateRSVP(rsvpId, Number(newCount));
-      console.log("Update result:", result);
-      setUpdateMessage("RSVP updated successfully!");
+      console.log("🔧 Sending update for RSVP:", rsvpId, "→", newCount);
+      const result = await updateRSVP(rsvpId, parseInt(newCount, 10));
+      console.log("✅ RSVP updated:", result);
+
+      const successMsg = "RSVP updated successfully!";
+
       // Refresh verify results
       await handleVerifyRSVP({ preventDefault: () => { } });
+      setEditIndex(null);
 
-      // auto-clear after 15s and return to Home
+      // Show success AFTER refresh
+      setUpdateMessage(successMsg);
+      setUpdateError(null);
+
+      // After 15s clear everything and return to Home
       setTimeout(() => {
-        setUpdateMessage(null);
+        setVerifyConfNumber("");
+        setVerifyResult(null);
         setEditIndex(null);
         setModifiedCount("");
-        setVerifyConfNumber("");
-        setVerifyResult({ rsvps: [] });
-
-        // Switch to Home
+        setUpdateMessage(null);
         setActiveTab("home");
       }, 15000);
-
     } catch (err) {
-      console.error("Error updating RSVP:", err);
-      setUpdateError(err.response?.data?.message || err.message || "Error updating RSVP.");
+      console.error("❌ Error updating RSVP:", err);
+      setUpdateError(err.message || "Error updating RSVP.");
+      setUpdateMessage(null);
+
+      setTimeout(() => setUpdateError(null), 5000);
     }
   };
 
@@ -535,7 +540,7 @@ export default function SubmitRSVP() {
             )}
 
             {/* No results case */}
-            {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
+            {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
               <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
                 No RSVP records found for this confirmation number.
               </div>
