@@ -26,6 +26,7 @@ export default function SubmitRSVP() {
 
   const [selectedEvents, setSelectedEvents] = useState({}); // { idx: count }
   const [email, setEmail] = useState("");
+  const [rsvpCount, setRsvpCount] = useState("");   // RSVP count (0 or more)
   const [confirmation, setConfirmation] = useState(null);
 
   const [loadingEvents, setLoadingEvents] = useState(true);
@@ -46,6 +47,7 @@ export default function SubmitRSVP() {
   const [modifiedCount, setModifiedCount] = useState("");
   const [updateMessage, setUpdateMessage] = useState(null);
   const [updateError, setUpdateError] = useState(null);
+
 
   // Load open events once
   useEffect(() => {
@@ -335,98 +337,98 @@ export default function SubmitRSVP() {
               <form className="search-form" onSubmit={handleSearch}>
                 <h4>Retrieve membership using</h4>
 
-<div className="form-row">
-  <label>
-    <input
-      type="radio"
-      value="memberId"
-      checked={searchMode === "memberId"}
-      onChange={() => setSearchMode("memberId")}
-    />
-    Member ID
-  </label>
-  <label style={{ marginLeft: "1rem" }}> OR </label>
-  <label style={{ marginLeft: "1rem" }}>
-    <input
-      type="radio"
-      value="nameHouse"
-      checked={searchMode === "nameHouse"}
-      onChange={() => setSearchMode("nameHouse")}
-    />
-    First Name &amp; House #
-  </label>
-</div>
+                <div className="form-row">
+                  <label>
+                    <input
+                      type="radio"
+                      value="memberId"
+                      checked={searchMode === "memberId"}
+                      onChange={() => setSearchMode("memberId")}
+                    />
+                    Member ID
+                  </label>
+                  <label style={{ marginLeft: "1rem" }}> OR </label>
+                  <label style={{ marginLeft: "1rem" }}>
+                    <input
+                      type="radio"
+                      value="nameHouse"
+                      checked={searchMode === "nameHouse"}
+                      onChange={() => setSearchMode("nameHouse")}
+                    />
+                    First Name &amp; House #
+                  </label>
+                </div>
 
-{/* ---- Member ID Search ---- */}
-{searchMode === "memberId" && (
-  <div className="inline-fields">
-    <input
-      className="small-input"
-      type="number"
-      value={memberId}
-      onChange={(e) => setMemberId(e.target.value)}
-      placeholder="Enter Member ID"
-    />
-    <button
-      className="button"
-      type="submit"
-      disabled={searching || memberId.trim() === ""}
-      style={{
-        backgroundColor:
-          searching || memberId.trim() === "" ? "lightgray" : "#007bff",
-        color: searching || memberId.trim() === "" ? "#666" : "white",
-        cursor:
-          searching || memberId.trim() === "" ? "not-allowed" : "pointer",
-      }}
-    >
-      {searching ? "Searching..." : "Search"}
-    </button>
-  </div>
-)}
+                {/* ---- Member ID Search ---- */}
+                {searchMode === "memberId" && (
+                  <div className="inline-fields">
+                    <input
+                      className="small-input"
+                      type="number"
+                      value={memberId}
+                      onChange={(e) => setMemberId(e.target.value)}
+                      placeholder="Enter Member ID"
+                    />
+                    <button
+                      className="button"
+                      type="submit"
+                      disabled={searching || memberId.trim() === ""}
+                      style={{
+                        backgroundColor:
+                          searching || memberId.trim() === "" ? "lightgray" : "#007bff",
+                        color: searching || memberId.trim() === "" ? "#666" : "white",
+                        cursor:
+                          searching || memberId.trim() === "" ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {searching ? "Searching..." : "Search"}
+                    </button>
+                  </div>
+                )}
 
-{/* ---- Name + House Search ---- */}
-{searchMode === "nameHouse" && (
-  <div className="inline-fields">
-    <input
-      className="small-input"
-      type="text"
-      value={name}
-      onChange={(e) => setName(e.target.value)}
-      placeholder="First Name"
-    />
-    <span className="inline-label">House #</span>
-    <input
-      className="small-input"
-      type="text"
-      value={houseNumber}
-      onChange={(e) => setHouseNumber(e.target.value)}
-      placeholder="e.g. 123"
-    />
-    <button
-      className="button"
-      type="submit"
-      disabled={
-        searching || name.trim() === "" || houseNumber.trim() === ""
-      }
-      style={{
-        backgroundColor:
-          searching || name.trim() === "" || houseNumber.trim() === ""
-            ? "lightgray"
-            : "#007bff",
-        color:
-          searching || name.trim() === "" || houseNumber.trim() === ""
-            ? "#666"
-            : "white",
-        cursor:
-          searching || name.trim() === "" || houseNumber.trim() === ""
-            ? "not-allowed"
-            : "pointer",
-      }}
-    >
-      {searching ? "Searching..." : "Search"}
-    </button>
-  </div>
-)}
+                {/* ---- Name + House Search ---- */}
+                {searchMode === "nameHouse" && (
+                  <div className="inline-fields">
+                    <input
+                      className="small-input"
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="First Name"
+                    />
+                    <span className="inline-label">House #</span>
+                    <input
+                      className="small-input"
+                      type="text"
+                      value={houseNumber}
+                      onChange={(e) => setHouseNumber(e.target.value)}
+                      placeholder="e.g. 123"
+                    />
+                    <button
+                      className="button"
+                      type="submit"
+                      disabled={
+                        searching || name.trim() === "" || houseNumber.trim() === ""
+                      }
+                      style={{
+                        backgroundColor:
+                          searching || name.trim() === "" || houseNumber.trim() === ""
+                            ? "lightgray"
+                            : "#007bff",
+                        color:
+                          searching || name.trim() === "" || houseNumber.trim() === ""
+                            ? "#666"
+                            : "white",
+                        cursor:
+                          searching || name.trim() === "" || houseNumber.trim() === ""
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      {searching ? "Searching..." : "Search"}
+                    </button>
+                  </div>
+                )}
               </form>
             )}
 
@@ -475,7 +477,8 @@ export default function SubmitRSVP() {
                           <td>{ev.eventday}, {ev.eventdate}</td>
                           <td>
                             {selectedEvents[idx] !== undefined ? (
-                              <input type="number" className="small-input" style={{ maxWidth: "60px" }} min="0" max="99" value={selectedEvents[idx]} onChange={(e) => updateEventCount(idx, e.target.value)} />
+                              <input type="number" min="0" value={rsvpCount} onChange={(e) => setRsvpCount(e.target.value)} placeholder="Enter RSVP count"/>
+                              //<input type="number" className="small-input" style={{ maxWidth: "60px" }} min="0" max="99" value={selectedEvents[idx]} onChange={(e) => updateEventCount(idx, e.target.value)} />
                             ) : (
                               "-"
                             )}
@@ -488,9 +491,9 @@ export default function SubmitRSVP() {
 
                 <div className="inline-fields">
                   <label>Email Address</label>
-                  <input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />
-
-                  <button
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address"/>
+                  {/*<input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />*/}
+                  {/*<button
                     className="button"
                     type="submit"
                     disabled={email.trim() === "" || rsvpCount === "" || isNaN(rsvpCount)}
@@ -507,7 +510,18 @@ export default function SubmitRSVP() {
                     }}
                   >
                     Submit RSVP
-                  </button>
+                  </button>*/}
+                  <button
+  className="button"
+  type="submit"
+  disabled={rsvpCount === "" || email === ""}
+  style={{
+    backgroundColor: rsvpCount === "" || email === "" ? "grey" : "#007bff",
+    cursor: rsvpCount === "" || email === "" ? "not-allowed" : "pointer",
+  }}
+>
+  Submit RSVP
+</button>
                 </div>
               </form>
             )}
