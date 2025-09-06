@@ -432,10 +432,19 @@ export default function SubmitRSVP() {
               </form>
             )}
 
-            {submitMessage && (
-              <div style={{ marginTop: "10px", color: submitSuccess ? "green" : "red", fontWeight: "bold" }}>
-                {submitMessage}
-                {submitSuccess && confirmation && <div>Confirmation #: {confirmation.confNumber || confirmation?.confNumber}</div>}
+            {/* Success / error messages at bottom */}
+            {submitSuccess && submitMessage && (
+              <div style={{ color: "green", marginTop: "10px" }}>
+                ✅ {submitMessage}
+                {confirmation && (
+                  <div>Confirmation #: {confirmation.confNumber || confirmation?.confNumber}</div>
+                )}
+              </div>
+            )}
+
+            {!submitSuccess && submitMessage && (
+              <div style={{ color: "red", marginTop: "10px" }}>
+                ❌ {submitMessage}
               </div>
             )}
           </>
