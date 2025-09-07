@@ -294,7 +294,7 @@ export default function SubmitRSVP() {
         <h2>JSMC RSVP</h2>
 
         {/* Tabs */}
-        <div className="tab-header">
+        {/*<div className="tab-header">
           <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => setActiveTab("home")}>
             Home
           </button>
@@ -304,7 +304,7 @@ export default function SubmitRSVP() {
           <button className={activeTab === "verify" ? "tab active" : "tab"} onClick={() => setActiveTab("verify")}>
             Verify / Modify RSVP
           </button>
-        </div>
+        </div>*/}
 
         {error && <div className="error-message">{error}</div>}
 
@@ -317,7 +317,7 @@ export default function SubmitRSVP() {
     <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
       <h4>Current Open Events to Submit or Modify RSVP</h4>
 
-      {Array.isArray(events) && events.length > 0 ? (
+      {Array.isArray(events) && events.length > 0 ? ( 
         <table className="result-table" style={{ marginBottom: "15px" }}>
           <thead>
             <tr>
@@ -348,7 +348,16 @@ export default function SubmitRSVP() {
     <h4>Please select Submit RSVP or Verify / Modify RSVP Tab</h4>
   </div>
 )}
-
+        {/* Tabs */}
+        <div className="tab-header">
+          className={activeTab === "home" ? "tab active" : "tab"}
+          <button className={activeTab === "submit" ? "tab active" : "tab"} onClick={() => setActiveTab("submit")}>
+            Submit RSVP
+          </button>
+          <button className={activeTab === "verify" ? "tab active" : "tab"} onClick={() => setActiveTab("verify")}>
+            Verify / Modify RSVP
+          </button>
+        </div>
 
         {/* SUBMIT */}
         {activeTab === "submit" && (
