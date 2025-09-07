@@ -308,44 +308,47 @@ export default function SubmitRSVP() {
 
         {error && <div className="error-message">{error}</div>}
 
-   {/* HOME */}
+{/* HOME */}
 {activeTab === "home" && (
-  <form className="home">
+  <div className="home">
     <h4>Welcome to JSMC RSVP Portal</h4>
 
     {/* Open Events Table */}
-  <div className="result-table-wrapper">
-    <h4>Current Open Events to submit or modify RSVP </h4>
-    {openEvents && openEvents.length > 0 ? (
-      <table className="result-table" style={{ marginBottom: "15px" }}>
-        <thead>
-          <tr>
-            <th>Program</th>
-            <th>Event</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {openEvents.map((ev, idx) => (
-            <tr key={ev._id || idx}>
-              <td>{ev.programname}</td>
-              <td>{ev.eventname}</td>
-              <td>
-                {ev.eventday}, {ev.eventdate}
-              </td>
+    <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
+      <h4>Current Open Events to Submit or Modify RSVP</h4>
+
+      {Array.isArray(openEvents) && openEvents.length > 0 ? (
+        <table className="result-table" style={{ marginBottom: "15px" }}>
+          <thead>
+            <tr>
+              <th>Program</th>
+              <th>Event</th>
+              <th>Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    ) : (
-      <p style={{ fontStyle: "italic", color: "#666" }}>
-        No open events available at this time.
-      </p>
-    )}
-</div>
+          </thead>
+          <tbody>
+            {openEvents.map((ev, idx) => (
+              <tr key={ev._id || idx}>
+                <td>{ev.programname}</td>
+                <td>{ev.eventname}</td>
+                <td>
+                  {ev.eventday}, {ev.eventdate}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p style={{ fontStyle: "italic", color: "#666" }}>
+          No open events available at this time.
+        </p>
+      )}
+    </div>
+
     <h4>Please select Submit RSVP or Verify / Modify RSVP Tab</h4>
-  </form>
+  </div>
 )}
+
 
         {/* SUBMIT */}
         {activeTab === "submit" && (
