@@ -462,8 +462,8 @@ export default function SubmitRSVP() {
                         <th>Program</th>
                         <th>Event Name</th>
                         <th>Event Date</th>
-                        <th>Select Event</th>
-                        <th>Enter RSVP</th>
+                        <th>Select</th>
+                        <th>RSVP</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -589,9 +589,9 @@ export default function SubmitRSVP() {
                   <thead>
                     <tr>
                       <th>Program</th>
-                      <th>Event</th>
-                      <th>Date</th>
-                      <th>RSVP Count</th>
+                      <th>Event Name</th>
+                      <th>Event Date</th>
+                      <th>RSVP</th>
                       <th>Modify</th>
                     </tr>
                   </thead>
