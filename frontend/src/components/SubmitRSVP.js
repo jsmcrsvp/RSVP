@@ -350,7 +350,9 @@ export default function SubmitRSVP() {
 )}
         {/* Tabs */}
         <div className="tab-header">
-          className={activeTab === "home" ? "tab active" : "tab"}
+          <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => setActiveTab("home")}>
+            Home
+          </button>
           <button className={activeTab === "submit" ? "tab active" : "tab"} onClick={() => setActiveTab("submit")}>
             Submit RSVP
           </button>
