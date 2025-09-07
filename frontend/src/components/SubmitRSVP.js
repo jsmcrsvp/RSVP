@@ -317,7 +317,7 @@ export default function SubmitRSVP() {
     <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
       <h4>Current Open Events to Submit or Modify RSVP</h4>
 
-      {Array.isArray(openEvents) && openEvents.length > 0 ? (
+      {Array.isArray(events) && events.length > 0 ? (
         <table className="result-table" style={{ marginBottom: "15px" }}>
           <thead>
             <tr>
@@ -327,7 +327,7 @@ export default function SubmitRSVP() {
             </tr>
           </thead>
           <tbody>
-            {openEvents.map((ev, idx) => (
+            {events.map((ev, idx) => (
               <tr key={ev._id || idx}>
                 <td>{ev.programname}</td>
                 <td>{ev.eventname}</td>
