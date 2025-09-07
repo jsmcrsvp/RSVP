@@ -477,10 +477,10 @@ export default function SubmitRSVP() {
                           </td>
                           <td>
                             {selectedEvents[idx] !== undefined ? (
-                              <input type="number" min="0" value={rsvpCount} onChange={(e) => setRsvpCount(e.target.value)} placeholder="RSVP count"/>
+                              <input type="number" min="0" value={rsvpCount} onChange={(e) => setRsvpCount(e.target.value)} placeholder="Count" style={{ width: "60px" }}/>
                               //<input type="number" className="small-input" style={{ maxWidth: "60px" }} min="0" max="99" value={selectedEvents[idx]} onChange={(e) => updateEventCount(idx, e.target.value)} />
                             ) : (
-                              "-"
+
                             )}
                           </td>
                         </tr>
