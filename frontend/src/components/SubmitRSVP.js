@@ -459,25 +459,25 @@ export default function SubmitRSVP() {
                   <table className="result-table">
                     <thead>
                       <tr>
-                        <th>Select</th>
                         <th>Program</th>
-                        <th>Event</th>
-                        <th>Date</th>
-                        <th>RSVP Count</th>
+                        <th>Event Name</th>
+                        <th>Event Date</th>
+                        <th>Select Event</th>
+                        <th>Enter RSVP</th>
                       </tr>
                     </thead>
                     <tbody>
                       {events.map((ev, idx) => (
                         <tr key={idx}>
-                          <td>
-                            <input type="checkbox" checked={selectedEvents[idx] !== undefined} onChange={(e) => toggleEventSelection(idx, e.target.checked)} />
-                          </td>
                           <td>{ev.programname}</td>
                           <td>{ev.eventname}</td>
                           <td>{ev.eventday}, {ev.eventdate}</td>
                           <td>
+                            <input type="checkbox" checked={selectedEvents[idx] !== undefined} onChange={(e) => toggleEventSelection(idx, e.target.checked)} />
+                          </td>
+                          <td>
                             {selectedEvents[idx] !== undefined ? (
-                              <input type="number" min="0" value={rsvpCount} onChange={(e) => setRsvpCount(e.target.value)} placeholder="Enter RSVP count"/>
+                              <input type="number" min="0" value={rsvpCount} onChange={(e) => setRsvpCount(e.target.value)} placeholder="RSVP count"/>
                               //<input type="number" className="small-input" style={{ maxWidth: "60px" }} min="0" max="99" value={selectedEvents[idx]} onChange={(e) => updateEventCount(idx, e.target.value)} />
                             ) : (
                               "-"
