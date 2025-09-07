@@ -36,6 +36,7 @@ h3 {
 }
 
 h4 {
+  margin-top: 0;
   margin-bottom: 1rem;
   font-size: 1.1rem;
   color: #5d8cdf;

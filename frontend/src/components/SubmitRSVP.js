@@ -308,13 +308,44 @@ export default function SubmitRSVP() {
 
         {error && <div className="error-message">{error}</div>}
 
-        {/* HOME */}
-        {activeTab === "home" && (
-          <form className="home">
-            <h3>Welcome to JSMC RSVP Portal</h3>
-            <h4>Please select Submit RSVP or Verify / Modify RSVP</h4>
-          </form>
-        )}
+   {/* HOME */}
+{activeTab === "home" && (
+  <form className="home">
+    <h4>Welcome to JSMC RSVP Portal</h4>
+
+    {/* Open Events Table */}
+  <div className="result-table-wrapper">
+    <h4>Current Open Events to submit or modify RSVP </h4>
+    {openEvents && openEvents.length > 0 ? (
+      <table className="result-table" style={{ marginBottom: "15px" }}>
+        <thead>
+          <tr>
+            <th>Program</th>
+            <th>Event</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {openEvents.map((ev, idx) => (
+            <tr key={ev._id || idx}>
+              <td>{ev.programname}</td>
+              <td>{ev.eventname}</td>
+              <td>
+                {ev.eventday}, {ev.eventdate}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ) : (
+      <p style={{ fontStyle: "italic", color: "#666" }}>
+        No open events available at this time.
+      </p>
+    )}
+</div>
+    <h4>Please select Submit RSVP or Verify / Modify RSVP Tab</h4>
+  </form>
+)}
 
         {/* SUBMIT */}
         {activeTab === "submit" && (
@@ -436,7 +467,7 @@ export default function SubmitRSVP() {
               <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
                 <div className="result-table-wrapper">
                   <h4>Membership Details</h4>
-                  <table className="result-table">
+                  <table className="result-table" style={{ marginBottom: 10 }}>
                     <tbody>
                       <tr>
                         <th>Name</th>
@@ -491,7 +522,7 @@ export default function SubmitRSVP() {
 
                 <div className="inline-fields">
                   <label>Email Address</label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address"/>
+                  <input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address"/>
                   {/*<input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />*/}
                   {/*<button
                     className="button"
