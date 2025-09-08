@@ -1,12 +1,6 @@
 // frontend/src/components/SubmitRSVP.js
 import React, { useEffect, useState } from "react";
-import {
-  getOpenEvents,
-  searchMember,
-  submitRSVP,
-  verifyRSVP,
-  updateRSVP,
-} from "../api";
+import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import "../styles/SubmitRSVP.css";
 
 export default function SubmitRSVP() {
@@ -308,46 +302,46 @@ export default function SubmitRSVP() {
 
         {error && <div className="error-message">{error}</div>}
 
-{/* HOME */}
-{activeTab === "home" && (
-  <div className="home">
-    <h4>Welcome to JSMC RSVP Portal</h4>
+        {/* HOME */}
+        {activeTab === "home" && (
+          <div className="home">
+            <h4>Welcome to JSMC RSVP Portal</h4>
 
-    {/* Open Events Table */}
-    <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
-      <h4>Current Open Events to Submit or Modify RSVP</h4>
+            {/* Open Events Table */}
+            <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
+              <h4>Current Open Events to Submit or Modify RSVP</h4>
 
-      {Array.isArray(events) && events.length > 0 ? ( 
-        <table className="result-table" style={{ marginBottom: "15px" }}>
-          <thead>
-            <tr>
-              <th>Program</th>
-              <th>Event</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {events.map((ev, idx) => (
-              <tr key={ev._id || idx}>
-                <td>{ev.programname}</td>
-                <td>{ev.eventname}</td>
-                <td>
-                  {ev.eventday}, {ev.eventdate}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p style={{ fontStyle: "italic", color: "#666" }}>
-          No open events available at this time.
-        </p>
-      )}
-    </div>
+              {Array.isArray(events) && events.length > 0 ? (
+                <table className="result-table" style={{ marginBottom: "15px" }}>
+                  <thead>
+                    <tr>
+                      <th>Program</th>
+                      <th>Event</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {events.map((ev, idx) => (
+                      <tr key={ev._id || idx}>
+                        <td>{ev.programname}</td>
+                        <td>{ev.eventname}</td>
+                        <td>
+                          {ev.eventday}, {ev.eventdate}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p style={{ fontStyle: "italic", color: "#666" }}>
+                  No open events available at this time.
+                </p>
+              )}
+            </div>
 
-    <h4>Please select Submit RSVP or Verify / Modify RSVP Tab</h4>
-  </div>
-)}
+            <h4>Please select Submit RSVP or Verify / Modify RSVP Tab</h4>
+          </div>
+        )}
         {/* Tabs */}
         <div className="tab-header">
           <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => setActiveTab("home")}>
@@ -522,7 +516,7 @@ export default function SubmitRSVP() {
                           </td>
                           <td>
                             {selectedEvents[idx] !== undefined ? (
-                              <input type="number" min="0" value={rsvpCount} onChange={(e) => setRsvpCount(e.target.value)} placeholder="Count" style={{ width: "60px" }}/>
+                              <input type="number" min="0" value={rsvpCount} onChange={(e) => setRsvpCount(e.target.value)} placeholder="Count" style={{ width: "60px" }} />
                               //<input type="number" className="small-input" style={{ maxWidth: "60px" }} min="0" max="99" value={selectedEvents[idx]} onChange={(e) => updateEventCount(idx, e.target.value)} />
                             ) : (
                               "-"
@@ -536,7 +530,7 @@ export default function SubmitRSVP() {
 
                 <div className="inline-fields">
                   <label>Email Address</label>
-                  <input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address"/>
+                  <input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address" />
                   {/*<input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" required />*/}
                   {/*<button
                     className="button"
@@ -557,16 +551,16 @@ export default function SubmitRSVP() {
                     Submit RSVP
                   </button>*/}
                   <button
-  className="button"
-  type="submit"
-  disabled={rsvpCount === "" || email === ""}
-  style={{
-    backgroundColor: rsvpCount === "" || email === "" ? "grey" : "#007bff",
-    cursor: rsvpCount === "" || email === "" ? "not-allowed" : "pointer",
-  }}
->
-  Submit RSVP
-</button>
+                    className="button"
+                    type="submit"
+                    disabled={rsvpCount === "" || email === ""}
+                    style={{
+                      backgroundColor: rsvpCount === "" || email === "" ? "grey" : "#007bff",
+                      cursor: rsvpCount === "" || email === "" ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    Submit RSVP
+                  </button>
                 </div>
               </form>
             )}
