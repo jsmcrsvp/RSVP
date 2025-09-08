@@ -104,9 +104,10 @@ app.listen(PORT, "0.0.0.0", () => {
 });
 
 //=====================================================================================================
-async function logEvent(action, details = '') {
+/*async function logEvent(action, details = '') {
   const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
-  const logMessage = `[${timestamp}] ${action} - ${details}`;
+  console.log ();
+  //const logMessage = `[${timestamp}] ${action} - ${details}`;
   await EventLog.create({ logEntry: logMessage });
 }
 //=====================================================================================================
@@ -114,7 +115,7 @@ app.get("/server-keep-alive", async (req, res) => {
   console.log("✅ Server auto keep-alive triggered");
   await logEvent('Keep-Alive', `Server`);
   res.status(200).json({ success: true, message: "Server is alive!" });
-});
+});*/
 
 
 /* ==============Working 090325 - 3:45pm ==============
