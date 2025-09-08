@@ -104,6 +104,12 @@ app.listen(PORT, "0.0.0.0", () => {
 });
 
 //=====================================================================================================
+async function logEvent(action, details = '') {
+  const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
+  const logMessage = `[${timestamp}] ${action} - ${details}`;
+  await EventLog.create({ logEntry: logMessage });
+}
+//=====================================================================================================
 app.get("/server-keep-alive", async (req, res) => {
   console.log("✅ Server auto keep-alive triggered");
   await logEvent('Keep-Alive', `Server`);
