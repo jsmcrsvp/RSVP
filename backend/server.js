@@ -103,7 +103,12 @@ app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
-
+//=====================================================================================================
+app.get("/server-keep-alive", async (req, res) => {
+  console.log("✅ Server auto keep-alive triggered");
+  await logEvent('Keep-Alive', `Server`);
+  res.status(200).json({ success: true, message: "Server is alive!" });
+});
 
 
 /* ==============Working 090325 - 3:45pm ==============
