@@ -630,8 +630,8 @@ export default function SubmitRSVP() {
               <th>Program</th>
               <th>Event Name</th>
               <th>Event Date</th>
-              <th>RSVP</th>
               <th>Status</th>
+              <th>RSVP</th>
               <th>Modify</th>
             </tr>
           </thead>
@@ -641,6 +641,7 @@ export default function SubmitRSVP() {
                 <td>{ev.programname}</td>
                 <td>{ev.eventname}</td>
                 <td>{ev.eventday}, {ev.eventdate}</td>
+                <td>{ev.eventstatus}</td>
                 <td>
                   {editIndex === idx ? (
                     <input
@@ -654,7 +655,6 @@ export default function SubmitRSVP() {
                     ev.rsvpcount
                   )}
                 </td>
-                <td>{ev.eventstatus}</td>
                 <td>
                   {ev.eventstatus === "Open" ? (
                     editIndex === idx ? (
