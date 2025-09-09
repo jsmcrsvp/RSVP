@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Dashboard from "./Dashboard";
 import AddProgramForm from "./AddProgramForm";
+import Dashboard from "./Dashboard";
 import "../styles/Admin.css";
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("home");
 
+  // set browser tab title
   useEffect(() => {
     document.title = "JSMC RSVP Admin Portal";
   }, []);
@@ -15,21 +16,54 @@ export default function Admin() {
       <div className="admin-container">
         <h2>JSMC RSVP Admin Portal</h2>
 
-        {/* Navigation Tabs */}
-        <div className="admin-tabs">
-          <button onClick={() => setActiveTab("home")}>Home</button>
-          <button onClick={() => setActiveTab("dashboard")}>RSVP Dashboard</button>
-          <button onClick={() => setActiveTab("addProgram")}>Add Program</button>
-          <button onClick={() => setActiveTab("report")}>Report</button>
+        {/* Tab buttons */}
+        <div className="tab-buttons">
+          <button
+            className={activeTab === "home" ? "active" : ""}
+            onClick={() => setActiveTab("home")}
+          >
+            Home
+          </button>
+          <button
+            className={activeTab === "dashboard" ? "active" : ""}
+            onClick={() => setActiveTab("dashboard")}
+          >
+            RSVP Dashboard
+          </button>
+          <button
+            className={activeTab === "addProgram" ? "active" : ""}
+            onClick={() => setActiveTab("addProgram")}
+          >
+            Add Program
+          </button>
+          <button
+            className={activeTab === "report" ? "active" : ""}
+            onClick={() => setActiveTab("report")}
+          >
+            Report
+          </button>
         </div>
 
-        {/* Tab Content */}
-        <div className="admin-content">
-          {activeTab === "home" && <h4>Welcome to JSMC RSVP Admin Portal</h4>}
-          {activeTab === "dashboard" && <Dashboard />}
-          {activeTab === "addProgram" && <AddProgramForm />}
-          {activeTab === "report" && <h4>Report section coming soon...</h4>}
-        </div>
+        {/* HOME */}
+        {activeTab === "home" && (
+          <div className="home">
+            <h4>Welcome to JSMC RSVP Admin Portal</h4>
+            <p>Select a tab to manage RSVP programs and events.</p>
+          </div>
+        )}
+
+        {/* DASHBOARD */}
+        {activeTab === "dashboard" && <Dashboard />}
+
+        {/* ADD PROGRAM */}
+        {activeTab === "addProgram" && <AddProgramForm />}
+
+        {/* REPORT */}
+        {activeTab === "report" && (
+          <div className="report">
+            <h4>Reports Coming Soon...</h4>
+          </div>
+        )}
       </div>
     </div>
   );

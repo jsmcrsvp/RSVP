@@ -29,28 +29,27 @@ h4 {
   color: #5d8cdf;
 }
 
-/* Tabs navigation */
-.tab-nav {
+.tab-buttons {
   display: flex;
-  justify-content: center;
+  gap: 0.5rem;
   margin-bottom: 1rem;
-  gap: 1rem;
 }
 
-.tab-nav button {
+.tab-buttons button {
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 6px;
-  background: #ccc;
+  background: #ddd;
   cursor: pointer;
-  font-weight: bold;
+  border-radius: 4px;
+  transition: background 0.2s;
 }
 
-.tab-nav button.active {
+.tab-buttons button:hover {
+  background: #ccc;
+}
+
+.tab-buttons button.active {
   background: #4c6daf;
   color: white;
-}
-
-.tab-content {
-  margin-top: 1rem;
+  font-weight: bold;
 }

@@ -49,10 +49,9 @@ export const updateRSVP = async (id, rsvpcount) => {
   return res.data; // this will include { message, updated }
 };
 
-
-
+// Dashboard
 export async function getDashboardStats() {
-  const res = await axios.get("/api/dashboard-stats");
+  const res = await axios.get("/api/dashboard/stats"); // ✅ matches new route
   return res.data;
 }
 
