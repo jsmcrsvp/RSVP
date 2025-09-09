@@ -1,4 +1,63 @@
 .page-wrapper {
+  padding: 20px;
+}
+
+.add-program-container {
+  max-width: 600px;
+  margin: auto;
+  background: #fdfdfd;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.add-program-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-message {
+  text-align: center;
+  margin-bottom: 15px;
+  color: green;
+  font-weight: bold;
+}
+
+.program-form .form-group {
+  margin-bottom: 15px;
+}
+
+.program-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.program-form select,
+.program-form input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+
+/*.page-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,7 +68,7 @@
 }
 
 
-/* Center the form vertically and horizontally */
+/* Center the form vertically and horizontally
 .add-program-container {
   /*display: flex;
   flex-direction: column;
@@ -17,7 +76,7 @@
   justify-content: center;
   min-height: 100vh; /* full screen
   padding: 1rem;
-  background-color: #e8f3f9;*/
+  background-color: #e8f3f9;
 
   width: 100%;
   max-width: 700px;
@@ -33,7 +92,7 @@
   color: #333;
 }
 
-/* Form Styling */
+/* Form Styling
 .add-program-container form {
   display: flex;
   flex-direction: column;
@@ -46,7 +105,7 @@
   max-width: 400px;
 }
 
-/* Input fields */
+/* Input fields
 .add-program-container input,
 .add-program-container select {
   padding: 0.5rem;
@@ -57,7 +116,7 @@
   box-sizing: border-box;
 }
 
-/* Button styling */
+/* Button styling
 .add-program-container button {
   background: #33afff;
   color: white;
@@ -74,7 +133,7 @@
   background-color: #1e8ae5;
 }
 
-/* Message styling */
+/* Message styling
 .add-program-container p {
   text-align: center;
   font-weight: bold;
@@ -82,7 +141,7 @@
   color: #333;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments
 @media (max-width: 480px) {
   .add-program-container form {
     padding: 15px;
@@ -100,7 +159,7 @@
   }
 }
 
-/* Results Table */
+/* Results Table
 .result-table-wrapper,
 .last-rsvp {
   margin-top: 0.2rem;
@@ -130,3 +189,4 @@
   background: #f4f4f4;
   color: #333;
 }
+  */
