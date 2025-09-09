@@ -686,6 +686,26 @@ export default function SubmitRSVP() {
         </table>
       </div>
     )}
+
+            {/* No results case */}
+            {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
+              <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
+                No RSVP records found for this confirmation number or Event RSVP may be closed.
+              </div>
+            )}
+
+            {/* Success / error messages at bottom */}
+            {updateMessage && (
+              <div style={{ color: "green", marginTop: "10px" }}>
+                ✅ {updateMessage}
+              </div>
+            )}
+            {updateError && (
+              <div style={{ color: "red", marginTop: "10px" }}>
+                ❌ {updateError}
+              </div>
+            )}
+
   </form>
 )}
 
