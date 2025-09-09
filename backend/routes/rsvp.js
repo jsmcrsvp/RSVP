@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
+const Program = require("../models/Program_DB_Schema"); // 👈 import Program schema
 
 // POST: Save RSVP(s)
 router.post("/", async (req, res) => {
@@ -63,8 +64,43 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.get("/verify/:confNumber", async (req, res) => {
+  try {
+    const { confNumber } = req.params;
+
+    // Find RSVPs for this confirmation number
+    const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
+    if (!rsvps || rsvps.length === 0) {
+      return res.status(404).json({ message: "No RSVP records found" });
+    }
+
+    // Load all programs/events
+    const programs = await Program.find({});
+    const programMap = {};
+    programs.forEach((prog) => {
+      prog.progevent.forEach((ev) => {
+        programMap[`${prog.progname}-${ev.eventname}-${ev.eventdate}`] =
+          ev.eventstatus;
+      });
+    });
+
+    // Attach eventstatus to each RSVP
+    const enrichedRsvps = rsvps.map((r) => ({
+      ...r.toObject(),
+      eventstatus:
+        programMap[`${r.programname}-${r.eventname}-${r.eventdate}`] || "Closed",
+    }));
+
+    res.json({ rsvps: enrichedRsvps });
+  } catch (err) {
+    console.error("Error verifying RSVP:", err);
+    res.status(500).json({ message: "Error verifying RSVP" });
+  }
+});
+
 // GET: Retrieve RSVP(s) by confirmation number
-router.get("/:confNumber", async (req, res) => {
+
+/*router.get("/:confNumber", async (req, res) => {
     try {
         let { confNumber } = req.params;
         console.log(`backend/routes/rsvp.js 🔎 Looking up RSVP for confirmation number: ${confNumber}`);
@@ -95,7 +131,7 @@ router.get("/:confNumber", async (req, res) => {
         res.status(500).json({ message: "Error retrieving RSVP", error: err.message });
     }
 });
-
+*/
 
 // PUT /api/update_rsvp/:id
 router.put("/update_rsvp/:id", async (req, res) => {

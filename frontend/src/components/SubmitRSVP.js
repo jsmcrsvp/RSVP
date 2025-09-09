@@ -653,7 +653,36 @@ export default function SubmitRSVP() {
                             ev.rsvpcount
                           )}
                         </td>
-                        <td>
+
+<td>
+  {ev.eventstatus === "Open" ? (
+    editIndex === idx ? (
+      <button
+        type="button"
+        onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}
+      >
+        Save
+      </button>
+    ) : (
+      <label>
+        <input
+          type="checkbox"
+          onChange={() => {
+            setEditIndex(idx);
+            setModifiedCount(ev.rsvpcount);
+          }}
+        />
+        Modify
+      </label>
+    )
+  ) : (
+    <span style={{ color: "gray", fontStyle: "italic" }}>
+      {ev.eventstatus} {/* shows Closed / Completed */}
+    </span>
+  )}
+</td>
+
+                        {/*<td>
                           {editIndex === idx ? (
                             <button
                               type="button"
@@ -673,7 +702,7 @@ export default function SubmitRSVP() {
                               Modify
                             </label>
                           )}
-                        </td>
+                        </td>*/}
                       </tr>
                     ))}
                   </tbody>
@@ -684,7 +713,7 @@ export default function SubmitRSVP() {
             {/* No results case */}
             {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
               <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
-                No RSVP records found for this confirmation number.
+                No RSVP records found for this confirmation number or Event RSVP may be closed.
               </div>
             )}
 
