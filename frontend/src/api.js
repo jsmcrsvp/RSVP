@@ -27,6 +27,12 @@ export const getOpenEvents = async () => {
   return res.data;
 };
 
+// Get open events
+export const getClosedEvents = async () => {
+  const res = await api.get("/api/programs/closed");
+  return res.data;
+};
+
 // Submit RSVP
 export const submitRSVP = async (payload) => {
   try {

@@ -47,6 +47,36 @@ router.get("/open", async (req, res) => {
   }
 });
 
+// Get all closed events across programs
+router.get("/closed", async (req, res) => {
+  try {
+    const programs = await Program.find({
+      "progevent.eventstatus": "Closed"
+    });
+
+    // Flatten events with program name
+    const closedEvents = [];
+    programs.forEach((prog) => {
+      prog.progevent.forEach((ev) => {
+        if (ev.eventstatus === "Closed") {
+          closedEvents.push({
+            programname: prog.progname,
+            eventname: ev.eventname,
+            eventdate: ev.eventdate,
+            eventday: ev.eventday,
+            eventstatus: ev.eventstatus,
+          });
+        }
+      });
+    });
+
+    res.json(closedEvents);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching closed events" });
+  }
+});
+
 module.exports = router;
 
 
