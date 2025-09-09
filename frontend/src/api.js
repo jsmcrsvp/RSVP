@@ -45,7 +45,7 @@ export const submitRSVP = async (payload) => {
 
 // ✅ Verify RSVP by confirmation number
 export const verifyRSVP = async (confNumber) => {
-    const res = await api.get(`/api/rsvp_response/${verifyConfNumber}`);
+    const res = await api.get(`/api/rsvp_response/${confNumber}`);
     setVerifyResult(res.data);
     /*const res = await api.get(`/api/rsvp_response/${confNumber}`);
     return res.data;*/
