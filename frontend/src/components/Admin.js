@@ -16,30 +16,18 @@ export default function Admin() {
       <div className="admin-container">
         <h2>JSMC RSVP Admin Portal</h2>
 
-        {/* Tab buttons */}
-        <div className="tab-buttons">
-          <button
-            className={activeTab === "home" ? "active" : ""}
-            onClick={() => setActiveTab("home")}
-          >
+        {/* Tabs */}
+         <div className="tab-header">
+          <button className={activeTab === "home" ? "active" : ""} onClick={() => setActiveTab("home")}>
             Home
           </button>
-          <button
-            className={activeTab === "dashboard" ? "active" : ""}
-            onClick={() => setActiveTab("dashboard")}
-          >
+          <button className={activeTab === "dashboard" ? "active" : ""} onClick={() => setActiveTab("dashboard")}>
             RSVP Dashboard
           </button>
-          <button
-            className={activeTab === "addProgram" ? "active" : ""}
-            onClick={() => setActiveTab("addProgram")}
-          >
+          <button className={activeTab === "addProgram" ? "active" : ""} onClick={() => setActiveTab("addProgram")}>
             Add Program
           </button>
-          <button
-            className={activeTab === "report" ? "active" : ""}
-            onClick={() => setActiveTab("report")}
-          >
+          <button className={activeTab === "report" ? "active" : ""} onClick={() => setActiveTab("report")}>
             Report
           </button>
         </div>

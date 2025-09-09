@@ -78,7 +78,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <h3>Current RSVP Stats</h3>
+      {/*<h3>Current RSVP Stats</h3>*/}
 
       {(loading || loadingEvents) && <p>Loading dashboard...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -86,13 +86,14 @@ export default function Dashboard() {
       {/* Open Events Table */}
       {!loading && !loadingEvents && !error && (
         <>
-          <h4>Open Events</h4>
+          
           {openStats.length === 0 ? (
             <p style={{ fontStyle: "italic", color: "#666" }}>
               No RSVP responses for open events.
             </p>
           ) : (
             <div className="result-table-wrapper">
+                <h4>Open Events</h4>
               <table className="result-table">
                 <thead>
                   <tr>
@@ -119,13 +120,14 @@ export default function Dashboard() {
           )}
 
           {/* Closed Events Table */}
-          <h4 style={{ marginTop: "2rem" }}>Closed Events</h4>
+          {/*<h4 style={{ marginTop: "2rem" }}>Closed Events</h4>*/}
           {closedStats.length === 0 ? (
             <p style={{ fontStyle: "italic", color: "#666" }}>
               No RSVP responses for closed events.
             </p>
           ) : (
             <div className="result-table-wrapper">
+                <h4>Closed Events</h4>
               <table className="result-table">
                 <thead>
                   <tr>
