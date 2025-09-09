@@ -9,6 +9,7 @@ function AddProgramForm() {
   const [eventDay, setEventDay] = useState("");
   const [eventStatus, setEventStatus] = useState("Open");
   const [message, setMessage] = useState("");
+  const [programList, setProgramList] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +31,11 @@ function AddProgramForm() {
       await addProgram(payload);
 
       setMessage("✅ Program added successfully!");
+
+      // Add to local list
+      setProgramList((prevList) => [...prevList, payload]);
+
+      // Clear form
       setProgName("");
       setEventName("");
       setEventDate("");
@@ -102,6 +108,37 @@ function AddProgramForm() {
 
           <button type="submit">Add Program</button>
         </form>
+
+        {/* Program List Table */}
+        {programList.length > 0 && (
+          <div className="program-list-table">
+            <h3>Program & Event Details</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Program Name</th>
+                  <th>Event Name</th>
+                  <th>Event Date</th>
+                  <th>Event Day</th>
+                  <th>Event Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {programList.map((program, index) =>
+                  program.progevent.map((event, idx) => (
+                    <tr key={`${index}-${idx}`}>
+                      <td>{program.progname}</td>
+                      <td>{event.eventname}</td>
+                      <td>{event.eventdate}</td>
+                      <td>{event.eventday}</td>
+                      <td>{event.eventstatus}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
