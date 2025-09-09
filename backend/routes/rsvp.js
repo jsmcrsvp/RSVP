@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
-const Program = require("../models/Program_DB_Schema"); // 👈 import Program schema
+const Program = require("../models/Programs_DB_Schema"); // 👈 import Program schema
 
 // POST: Save RSVP(s)
 router.post("/", async (req, res) => {
