@@ -50,6 +50,12 @@ export const updateRSVP = async (id, rsvpcount) => {
 };
 
 
+
+export async function getDashboardStats() {
+  const res = await axios.get("/api/dashboard-stats");
+  return res.data;
+}
+
 export default api;
 
 
