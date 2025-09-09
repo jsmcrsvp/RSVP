@@ -583,8 +583,113 @@ export default function SubmitRSVP() {
           </>
         )}
 
-        {/* VERIFY */}
-        {activeTab === "verify" && (
+{/* VERIFY */}
+{activeTab === "verify" && (
+  <form className="verify-form" onSubmit={handleVerifyRSVP}>
+    <h3>Verify / Modify RSVP</h3>
+    <div className="inline-fields">
+      <input
+        className="small-input"
+        type="text"
+        value={verifyConfNumber}
+        onChange={(e) => setVerifyConfNumber(e.target.value)}
+        placeholder="Enter Confirmation #"
+      />
+      <button className="button" type="submit" disabled={verifying}>
+        {verifying ? "Verifying..." : "Verify"}
+      </button>
+    </div>
+
+    {/* Show only when rsvps are returned */}
+    {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
+      <div className="result-table-wrapper">
+        <h4>RSVP Details</h4>
+
+        {/* Member details from first RSVP doc */}
+        <table className="result-table" style={{ marginBottom: 10 }}>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <td>{verifyMemberFromResult()?.name}</td>
+            </tr>
+            <tr>
+              <th>Address</th>
+              <td>{verifyMemberFromResult()?.address}</td>
+            </tr>
+            <tr>
+              <th>Phone</th>
+              <td>{verifyMemberFromResult()?.phone}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* RSVP Events */}
+        <table className="result-table">
+          <thead>
+            <tr>
+              <th>Program</th>
+              <th>Event Name</th>
+              <th>Event Date</th>
+              <th>RSVP</th>
+              <th>Status</th>
+              <th>Modify</th>
+            </tr>
+          </thead>
+          <tbody>
+            {verifyResult.rsvps.map((ev, idx) => (
+              <tr key={ev._id || idx}>
+                <td>{ev.programname}</td>
+                <td>{ev.eventname}</td>
+                <td>{ev.eventday}, {ev.eventdate}</td>
+                <td>
+                  {editIndex === idx ? (
+                    <input
+                      type="number"
+                      min="0"
+                      value={modifiedCount}
+                      onChange={(e) => setModifiedCount(e.target.value)}
+                      style={{ width: "60px" }}
+                    />
+                  ) : (
+                    ev.rsvpcount
+                  )}
+                </td>
+                <td>{ev.eventstatus}</td>
+                <td>
+                  {ev.eventstatus === "Open" ? (
+                    editIndex === idx ? (
+                      <button
+                        type="button"
+                        onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <label>
+                        <input
+                          type="checkbox"
+                          onChange={() => {
+                            setEditIndex(idx);
+                            setModifiedCount(ev.rsvpcount);
+                          }}
+                        />
+                        Modify
+                      </label>
+                    )
+                  ) : (
+                    <span style={{ color: "gray" }}>Not Editable</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </form>
+)}
+
+        {/*{activeTab === "verify" && (
           <form className="verify-form" onSubmit={handleVerifyRSVP}>
             <h3>Verify / Modify RSVP</h3>
             <div className="inline-fields">
@@ -600,12 +705,12 @@ export default function SubmitRSVP() {
               </button>
             </div>
 
-            {/* Show only when rsvps is returned */}
+            {/* Show only when rsvps is returned
             {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
               <div className="result-table-wrapper">
                 <h4>RSVP Details</h4>
 
-                {/* Member details from first RSVP doc */}
+                {/* Member details from first RSVP doc
                 <table className="result-table" style={{ marginBottom: 10 }}>
                   <tbody>
                     <tr>
@@ -623,7 +728,7 @@ export default function SubmitRSVP() {
                   </tbody>
                 </table>
 
-                {/* RSVP Events */}
+                {/* RSVP Events
                 <table className="result-table">
                   <thead>
                     <tr>
@@ -653,36 +758,7 @@ export default function SubmitRSVP() {
                             ev.rsvpcount
                           )}
                         </td>
-
-<td>
-  {ev.eventstatus === "Open" ? (
-    editIndex === idx ? (
-      <button
-        type="button"
-        onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}
-      >
-        Save
-      </button>
-    ) : (
-      <label>
-        <input
-          type="checkbox"
-          onChange={() => {
-            setEditIndex(idx);
-            setModifiedCount(ev.rsvpcount);
-          }}
-        />
-        Modify
-      </label>
-    )
-  ) : (
-    <span style={{ color: "gray", fontStyle: "italic" }}>
-      {ev.eventstatus} {/* shows Closed / Completed */}
-    </span>
-  )}
-</td>
-
-                        {/*<td>
+                        <td>
                           {editIndex === idx ? (
                             <button
                               type="button"
@@ -702,7 +778,7 @@ export default function SubmitRSVP() {
                               Modify
                             </label>
                           )}
-                        </td>*/}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -710,14 +786,14 @@ export default function SubmitRSVP() {
               </div>
             )}
 
-            {/* No results case */}
+            {/* No results case
             {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
               <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
                 No RSVP records found for this confirmation number or Event RSVP may be closed.
               </div>
             )}
 
-            {/* Success / error messages at bottom */}
+            {/* Success / error messages at bottom
             {updateMessage && (
               <div style={{ color: "green", marginTop: "10px" }}>
                 ✅ {updateMessage}
@@ -729,7 +805,7 @@ export default function SubmitRSVP() {
               </div>
             )}
           </form>
-        )}
+        )}*/}
       </div>
     </div>
   );

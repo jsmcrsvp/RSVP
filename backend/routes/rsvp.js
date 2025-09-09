@@ -64,37 +64,48 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.get("/verify/:confNumber", async (req, res) => {
+// GET RSVP by confirmation number
+router.get("/:confNumber", async (req, res) => {
   try {
     const { confNumber } = req.params;
 
-    // Find RSVPs for this confirmation number
+    // Find RSVP entries
     const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
+
     if (!rsvps || rsvps.length === 0) {
-      return res.status(404).json({ message: "No RSVP records found" });
+      return res.status(404).json({ error: "RSVP not found" });
     }
 
-    // Load all programs/events
-    const programs = await Program.find({});
-    const programMap = {};
-    programs.forEach((prog) => {
-      prog.progevent.forEach((ev) => {
-        programMap[`${prog.progname}-${ev.eventname}-${ev.eventdate}`] =
-          ev.eventstatus;
-      });
-    });
+    // Enrich with eventstatus from Program collection
+    const enrichedRsvps = await Promise.all(
+      rsvps.map(async (rsvp) => {
+        const program = await Program.findOne(
+          { progname: rsvp.programname },
+          { progevent: 1 }
+        );
 
-    // Attach eventstatus to each RSVP
-    const enrichedRsvps = rsvps.map((r) => ({
-      ...r.toObject(),
-      eventstatus:
-        programMap[`${r.programname}-${r.eventname}-${r.eventdate}`] || "Closed",
-    }));
+        let status = "Unknown";
+        if (program) {
+          const ev = program.progevent.find(
+            (e) =>
+              e.eventname === rsvp.eventname &&
+              e.eventdate === rsvp.eventdate &&
+              e.eventday === rsvp.eventday
+          );
+          if (ev) status = ev.eventstatus;
+        }
+
+        return {
+          ...rsvp.toObject(),
+          eventstatus: status,
+        };
+      })
+    );
 
     res.json({ rsvps: enrichedRsvps });
   } catch (err) {
-    console.error("Error verifying RSVP:", err);
-    res.status(500).json({ message: "Error verifying RSVP" });
+    console.error("Error fetching RSVP:", err);
+    res.status(500).json({ error: "Server error fetching RSVP" });
   }
 });
 
