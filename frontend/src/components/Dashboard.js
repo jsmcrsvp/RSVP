@@ -1,55 +1,66 @@
+// frontend/src/components/Dashboard.js
 import React, { useEffect, useState } from "react";
-import { getDashboardStats } from "../api"; // 👈 backend API function
+import { getDashboardStats } from "../api";
+import "../styles/SubmitRSVP.css"; // or a dashboard-specific css if you prefer
 
-function Dashboard() {
+export default function Dashboard() {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function fetchStats() {
+    (async () => {
+      setLoading(true);
+      setError("");
       try {
-        const data = await getDashboardStats(); // call backend
-        setStats(data);
+        const data = await getDashboardStats();
+        setStats(Array.isArray(data) ? data : []);
       } catch (err) {
-        setError("Failed to load RSVP stats");
+        console.error("Failed to load RSVP stats:", err);
+        setError("Failed to load RSVP events");
       } finally {
         setLoading(false);
       }
-    }
-    fetchStats();
+    })();
   }, []);
-
-  if (loading) return <p>Loading dashboard...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div className="dashboard-container">
       <h3>Current RSVP Stats</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Event</th>
-            <th>Total RSVPs</th>
-            <th>Yes</th>
-            <th>No</th>
-            <th>Maybe</th>
-          </tr>
-        </thead>
-        <tbody>
-          {stats.map((row, idx) => (
-            <tr key={idx}>
-              <td>{row.eventname}</td>
-              <td>{row.total}</td>
-              <td>{row.yes}</td>
-              <td>{row.no}</td>
-              <td>{row.maybe}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+
+      {loading && <p>Loading dashboard...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {!loading && !error && stats.length === 0 && (
+        <p style={{ fontStyle: "italic", color: "#666" }}>No RSVP responses yet.</p>
+      )}
+
+      {!loading && !error && stats.length > 0 && (
+        <div className="result-table-wrapper">
+          <table className="result-table">
+            <thead>
+              <tr>
+                <th>Program</th>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Day</th>
+                <th>Total RSVP Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stats.map((row, idx) => (
+                <tr key={idx}>
+                  <td>{row.programname}</td>
+                  <td>{row.eventname}</td>
+                  <td>{row.eventdate}</td>
+                  <td>{row.eventday}</td>
+                  <td>{row.totalRSVPs}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
-
-export default Dashboard;
