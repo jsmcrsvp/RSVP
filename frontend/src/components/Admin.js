@@ -18,16 +18,16 @@ export default function Admin() {
 
         {/* Tabs */}
          <div className="tab-header">
-          <button className={activeTab === "home" ? "active" : ""} onClick={() => setActiveTab("home")}>
+          <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => setActiveTab("home")}>
             Home
           </button>
-          <button className={activeTab === "dashboard" ? "active" : ""} onClick={() => setActiveTab("dashboard")}>
+          <button className={activeTab === "dashboard" ? "tab active" : "tab"} onClick={() => setActiveTab("dashboard")}>
             RSVP Dashboard
           </button>
-          <button className={activeTab === "addProgram" ? "active" : ""} onClick={() => setActiveTab("addProgram")}>
+          <button className={activeTab === "addProgram" ? "tab active" : "tab"} onClick={() => setActiveTab("addProgram")}>
             Add Program
           </button>
-          <button className={activeTab === "report" ? "active" : ""} onClick={() => setActiveTab("report")}>
+          <button className={activeTab === "report" ? "tab active" : "tab"} onClick={() => setActiveTab("report")}>
             Report
           </button>
         </div>
