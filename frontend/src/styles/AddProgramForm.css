@@ -1,7 +1,7 @@
 .add-program-container {
-  max-width: 1100px; /* Adjust width to fit nicely */
+  max-width: 1200px; /* Adjust width to fit nicely */
   margin: 0 auto;
-  padding: 20px;
+  padding: 5px;
 }
 
 .program-form {
@@ -10,7 +10,7 @@
   gap: 16px;
   margin-bottom: 20px;
   background: #f9f9f9;
-  padding: 16px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
 }
