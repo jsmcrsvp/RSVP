@@ -77,6 +77,16 @@ router.get("/closed", async (req, res) => {
   }
 });
 
+// Get all events across programs
+router.get("/all", async (req, res) => {
+ try {
+    const events = await Program.find(); // ✅ fetch all, no filter
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;
 
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addProgram } from "../api";
+import { addProgram, getAllEvents } from "../api";
 import "../styles/AddProgramForm.css";
 
 function AddProgramForm() {
@@ -10,6 +10,21 @@ function AddProgramForm() {
   const [eventStatus, setEventStatus] = useState("Open");
   const [message, setMessage] = useState("");
   const [programList, setProgramList] = useState([]);
+
+  const [allEvents, setAllEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const res = await api.get("/api/programs/all");
+        setPrograms(res.data); // ✅ now contains all events
+      } catch (err) {
+        console.error("Error fetching programs:", err);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,35 +125,27 @@ function AddProgramForm() {
         </form>
 
         {/* Program List Table */}
-        {programList.length > 0 && (
-          <div className="program-list-table">
-            <h3>Program & Event Details</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Program Name</th>
-                  <th>Event Name</th>
-                  <th>Event Date</th>
-                  <th>Event Day</th>
-                  <th>Event Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {programList.map((program, index) =>
-                  program.progevent.map((event, idx) => (
-                    <tr key={`${index}-${idx}`}>
-                      <td>{program.progname}</td>
-                      <td>{event.eventname}</td>
-                      <td>{event.eventdate}</td>
-                      <td>{event.eventday}</td>
-                      <td>{event.eventstatus}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <h3>Existing Events</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Program Name</th>
+              <th>Event Name</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {programs.map((p) => (
+              <tr key={p._id}>
+                <td>{p.programname}</td>
+                <td>{p.eventname}</td>
+                <td>{p.eventdate}</td>
+                <td>{p.eventstatus}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

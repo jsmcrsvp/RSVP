@@ -27,9 +27,15 @@ export const getOpenEvents = async () => {
     return res.data;
 };
 
-// Get open events
+// Get closed events
 export const getClosedEvents = async () => {
     const res = await api.get("/api/programs/closed");
+    return res.data;
+};
+
+// Get all events
+export const getAllEvents = async () => {
+    const res = await api.get("/api/programs/all");
     return res.data;
 };
 
