@@ -88,6 +88,13 @@ const AddProgramForm = () => {
     }
   };
 
+  // Utility to format YYYY-MM-DD → MM/DD/YYYY
+  const displayDate = (dateStr) => {
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    return `${month}/${day}/${year}`;
+  };
+
   return (
     <div className="add-program-container">
       <h3>Activate Program & Event</h3>
@@ -199,7 +206,8 @@ const AddProgramForm = () => {
                       </td>
                     )}
                     <td>{event.eventname}</td>
-                    <td>{event.eventdate}</td>
+                    <td>{displayDate(event.eventdate)}</td>
+                    {/*<td>{event.eventdate}</td>*/}
                     <td>{event.eventday}</td>
                     <td>{event.eventstatus}</td>
                     <td>{event.closersvp}</td>
