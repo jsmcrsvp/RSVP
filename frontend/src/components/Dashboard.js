@@ -3,6 +3,13 @@ import React, { useEffect, useState, useCallback } from "react";
 import { getOpenEvents, getClosedEvents, getDashboardStats } from "../api";
 import "../styles/SubmitRSVP.css";
 
+// ✅ Utility to format YYYY-MM-DD → MM/DD/YYYY
+const displayDate = (dateStr) => {
+  if (!dateStr) return "";
+  const [year, month, day] = dateStr.split("-");
+  return `${month}/${day}/${year}`;
+};
+
 export default function Dashboard() {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -109,7 +116,7 @@ export default function Dashboard() {
                     <tr key={`open-${idx}`}>
                       <td>{row.programname}</td>
                       <td>{row.eventname}</td>
-                      <td>{row.eventdate}</td>
+                      <td>{displayDate(raw.eventdate)}</td>
                       <td>{row.eventday}</td>
                       <td>{row.totalRSVPs}</td>
                     </tr>
@@ -143,7 +150,7 @@ export default function Dashboard() {
                     <tr key={`closed-${idx}`}>
                       <td>{row.programname}</td>
                       <td>{row.eventname}</td>
-                      <td>{row.eventdate}</td>
+                      <td>{displayDate(raw.eventdate)}</td>
                       <td>{row.eventday}</td>
                       <td>{row.totalRSVPs}</td>
                     </tr>
