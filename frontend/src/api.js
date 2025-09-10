@@ -33,11 +33,12 @@ export const getClosedEvents = async () => {
     return res.data;
 };
 
-// Get all events
-export const getAllEvents = async () => {
-    const res = await api.get("/api/programs/all");
+// ✅ Get all programs with events
+export const getAllPrograms = async () => {
+    const res = await api.get("/api/programs");
     return res.data;
 };
+
 
 // Submit RSVP
 export const submitRSVP = async (payload) => {

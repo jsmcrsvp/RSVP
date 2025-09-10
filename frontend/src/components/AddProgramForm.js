@@ -1,3 +1,169 @@
+// frontend/src/components/AddProgramForm.js
+import React, { useState, useEffect } from "react";
+import { addProgram, getAllPrograms } from "../api";
+
+const AddProgramForm = () => {
+  const [progname, setProgname] = useState("");
+  const [eventname, setEventname] = useState("");
+  const [eventdate, setEventdate] = useState("");
+  const [eventday, setEventday] = useState("");
+  const [eventstatus, setEventstatus] = useState("Open");
+  const [programs, setPrograms] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // Fetch programs on mount
+  const fetchPrograms = async () => {
+    try {
+      setLoading(true);
+      const data = await getAllPrograms();
+      setPrograms(data);
+    } catch (err) {
+      console.error("Error fetching programs:", err);
+      setError("Failed to load programs");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPrograms();
+  }, []);
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (!progname || !eventname || !eventdate || !eventday) {
+      setError("All fields are required.");
+      return;
+    }
+
+    try {
+      const payload = {
+        progname,
+        progevent: [
+          {
+            eventname,
+            eventdate,
+            eventday,
+            eventstatus,
+          },
+        ],
+      };
+
+      await addProgram(payload);
+      setSuccess("Program & Event added successfully!");
+      setProgname("");
+      setEventname("");
+      setEventdate("");
+      setEventday("");
+      setEventstatus("Open");
+      fetchPrograms(); // Refresh list
+    } catch (err) {
+      console.error("Error adding program:", err);
+      setError("Failed to add program.");
+    }
+  };
+
+  return (
+    <div className="add-program">
+      <h2>Add Program & Event</h2>
+
+      <form onSubmit={handleSubmit} className="program-form">
+        <div>
+          <label>Program Name:</label>
+          <input
+            type="text"
+            value={progname}
+            onChange={(e) => setProgname(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Event Name:</label>
+          <input
+            type="text"
+            value={eventname}
+            onChange={(e) => setEventname(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Event Date:</label>
+          <input
+            type="date"
+            value={eventdate}
+            onChange={(e) => setEventdate(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Event Day:</label>
+          <input
+            type="text"
+            value={eventday}
+            onChange={(e) => setEventday(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Status:</label>
+          <select
+            value={eventstatus}
+            onChange={(e) => setEventstatus(e.target.value)}
+          >
+            <option value="Open">Open</option>
+            <option value="Closed">Closed</option>
+          </select>
+        </div>
+        <button type="submit">Add Program</button>
+      </form>
+
+      {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
+
+      <h3>Existing Programs & Events</h3>
+      <button onClick={fetchPrograms} disabled={loading}>
+        {loading ? "Refreshing..." : "Refresh"}
+      </button>
+
+      {programs.length === 0 ? (
+        <p>No programs added yet.</p>
+      ) : (
+        <table className="programs-table">
+          <thead>
+            <tr>
+              <th>Program</th>
+              <th>Event Name</th>
+              <th>Event Date</th>
+              <th>Event Day</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {programs.map((prog) =>
+              prog.progevent.map((ev, idx) => (
+                <tr key={`${prog._id}-${idx}`}>
+                  <td>{prog.progname}</td>
+                  <td>{ev.eventname}</td>
+                  <td>{ev.eventdate}</td>
+                  <td>{ev.eventday}</td>
+                  <td>{ev.eventstatus}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+};
+
+export default AddProgramForm;
+
+
+
+/*
 import React, { useState } from "react";
 import { addProgram, getAllEvents } from "../api";
 import "../styles/AddProgramForm.css";
@@ -124,7 +290,7 @@ function AddProgramForm() {
           <button type="submit">Add Program</button>
         </form>
 
-        {/* Program List Table */}
+        {/* Program List Table
         <h3>Existing Events</h3>
         <table>
           <thead>
@@ -152,7 +318,7 @@ function AddProgramForm() {
 }
 
 export default AddProgramForm;
-
+*/
 
 
 

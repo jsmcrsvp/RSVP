@@ -77,15 +77,17 @@ router.get("/closed", async (req, res) => {
   }
 });
 
-// Get all events across programs
-router.get("/all", async (req, res) => {
- try {
-    const events = await Program.find(); // ✅ fetch all, no filter
-    res.json(events);
+// Get all programs with their events
+router.get("/", async (req, res) => {
+  try {
+    const programs = await Program.find();
+    res.json(programs);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Error fetching programs:", err);
+    res.status(500).json({ message: "Failed to fetch programs" });
   }
 });
+
 
 module.exports = router;
 
