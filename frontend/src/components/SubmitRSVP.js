@@ -161,14 +161,15 @@ export default function SubmitRSVP() {
               eventname: ev.eventname,
               eventday: ev.eventday,
               eventdate: ev.eventdate,
-              rsvpcount: Number(selectedEvents[idx]),
+              rsvpcount: rsvpCount,
+              //rsvpcount: Number(selectedEvents[idx]),
             }
             : null
         )
         .filter(Boolean),
     };
 
-    console.log("Submitting RSVP payload:", payload);
+    console.log("Submitting RSVP Payload:", payload);
 
     setSubmitting(true);
     try {
