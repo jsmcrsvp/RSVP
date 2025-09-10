@@ -1,13 +1,14 @@
 .add-program-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 10px;
+  max-width: 1200px;
+  margin: 0;
+  padding: 1rem;
   background: #fdfdfd;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h2, h3 {
+h2,
+h3 {
   text-align: center;
   margin-top: 0;
   margin-bottom: 0.5rem;
@@ -47,6 +48,7 @@ h2, h3 {
 }
 
 .program-form label {
+  text-align: center;
   font-size: 14px;
   margin-bottom: 6px;
   color: #444;

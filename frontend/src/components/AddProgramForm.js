@@ -219,8 +219,8 @@ const AddProgramForm = () => {
                 <th>Event Name</th>
                 <th>Date</th>
                 <th>Day</th>
-                <th>Status</th>
                 <th>RSVP Close</th>
+                <th>Status</th>
                 <th>Modify</th>
               </tr>
             </thead>
@@ -240,6 +240,7 @@ const AddProgramForm = () => {
                       <td>{event.eventname}</td>
                       <td>{displayDate(event.eventdate)}</td>
                       <td>{event.eventday}</td>
+                      <td>{displayDate(event.closersvp)}</td>
                       <td>
                         {editRow === rowKey ? (
                           <select
@@ -254,7 +255,6 @@ const AddProgramForm = () => {
                           event.eventstatus
                         )}
                       </td>
-                      <td>{displayDate(event.closersvp)}</td>
                       <td>
                         {editRow === rowKey ? (
                           <button
