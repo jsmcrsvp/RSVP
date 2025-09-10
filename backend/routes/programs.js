@@ -65,7 +65,7 @@ router.get("/open", async (req, res) => {
             eventdate: ev.eventdate,
             eventday: ev.eventday,
             eventstatus: ev.eventstatus,
-            eventclosersvp: ev.closersvp,
+            closersvp: ev.closersvp,
           });
         }
       });
