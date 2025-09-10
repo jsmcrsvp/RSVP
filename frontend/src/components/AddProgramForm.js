@@ -3,6 +3,13 @@ import React, { useState, useEffect } from "react";
 import { addProgram, getAllPrograms } from "../api";
 import "../styles/AddProgramForm.css";
 
+// Utility to format YYYY-MM-DD → MM/DD/YYYY
+const displayDate = (dateStr) => {
+  if (!dateStr) return "";
+  const [year, month, day] = dateStr.split("-");
+  return `${month}/${day}/${year}`;
+};
+
 const AddProgramForm = () => {
   const [progname, setProgname] = useState("");
   const [eventname, setEventname] = useState("");
@@ -86,13 +93,6 @@ const AddProgramForm = () => {
       console.error("Error adding program:", err);
       setError("❌ Failed to add program.");
     }
-  };
-
-  // Utility to format YYYY-MM-DD → MM/DD/YYYY
-  const displayDate = (dateStr) => {
-    if (!dateStr) return "";
-    const [year, month, day] = dateStr.split("-");
-    return `${month}/${day}/${year}`;
   };
 
   return (
@@ -207,10 +207,10 @@ const AddProgramForm = () => {
                     )}
                     <td>{event.eventname}</td>
                     <td>{displayDate(event.eventdate)}</td>
-                    {/*<td>{event.eventdate}</td>*/}
                     <td>{event.eventday}</td>
                     <td>{event.eventstatus}</td>
                     <td>{event.closersvp}</td>
+                    <td>{displayDate(event.closersvp)}</td>
                   </tr>
                 ))
               )}
@@ -224,7 +224,13 @@ const AddProgramForm = () => {
 
 export default AddProgramForm;
 
-
+/*
+                    <td>{event.eventname}</td>
+                    <td>{displayDate(event.eventdate)}</td>
+                    <td>{event.eventdate}</td>
+                    <td>{event.eventday}</td>
+                    <td>{event.eventstatus}</td>
+                    <td>{event.closersvp}</td>*/
 
 /* frontend/src/components/AddProgramForm.js ===== Working 091025 === 8am
 import React, { useState, useEffect } from "react";
