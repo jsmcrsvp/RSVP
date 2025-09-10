@@ -282,6 +282,13 @@ export default function SubmitRSVP() {
     };
   };
 
+  // Utility to format YYYY-MM-DD → MM/DD/YYYY
+const displayDate = (dateStr) => {
+  if (!dateStr) return "";
+  const [year, month, day] = dateStr.split("-");
+  return `${month}/${day}/${year}`;
+};
+
   // -------- UI --------
   return (
     <div className="page-wrapper">
@@ -337,8 +344,8 @@ export default function SubmitRSVP() {
                 <td rowSpan={programCount}>{ev.programname}</td>
               )}
               <td>{ev.eventname}</td>
-              <td>{ev.eventday}, {ev.eventdate}</td>
-              <td>{ev.closersvp}</td>
+              <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
+              <td>{displayDate(ev.closersvp)}</td>
             </tr>
           );
         })}
@@ -531,7 +538,7 @@ export default function SubmitRSVP() {
             )}
             <td>{ev.eventname}</td>
             <td>
-              {ev.eventday}, {ev.eventdate}
+              {ev.eventday}, {displayDate(ev.eventdate)}
             </td>
             <td>
               <input
@@ -673,7 +680,7 @@ export default function SubmitRSVP() {
               <tr key={ev._id || idx}>
                 <td>{ev.programname}</td>
                 <td>{ev.eventname}</td>
-                <td>{ev.eventday}, {ev.eventdate}</td>
+                <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
                 <td>{ev.eventstatus}</td>
                 <td>
                   {editIndex === idx ? (

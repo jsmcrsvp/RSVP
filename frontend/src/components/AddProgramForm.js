@@ -166,7 +166,7 @@ const AddProgramForm = () => {
           <label>RSVP Close Date</label>
           <input
             type="date"
-            value={eventdate}
+            value={rsvpClosedate}
             onChange={(e) => setRsvpClosedate(e.target.value)}
             required
           />
