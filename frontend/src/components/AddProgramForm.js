@@ -15,17 +15,6 @@ const AddProgramForm = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-
-  // Auto-update eventDay when eventDate changes
-  useEffect(() => {
-    if (eventDate) {
-      const day = new Date(eventDate).toLocaleDateString("en-US", { weekday: "long" });
-      setEventDay(day);
-    } else {
-      setEventDay("");
-    }
-  }, [eventDate]);
-
   // Fetch programs on mount
   const fetchPrograms = async () => {
     try {
@@ -94,7 +83,11 @@ const AddProgramForm = () => {
       <form className="program-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Select Program</label>
-          <select value={progName} onChange={(e) => setProgName(e.target.value)} required>
+          <select
+            value={progname}
+            onChange={(e) => setProgname(e.target.value)}
+            required
+          >
             <option value="">-- Select Program --</option>
             <option value="Anniversary">Anniversary</option>
             <option value="Diwali">Diwali</option>
@@ -106,7 +99,11 @@ const AddProgramForm = () => {
 
         <div className="form-group">
           <label>Select Event</label>
-          <select value={eventName} onChange={(e) => setEventName(e.target.value)} required>
+          <select
+            value={eventname}
+            onChange={(e) => setEventname(e.target.value)}
+            required
+          >
             <option value="">-- Select Event --</option>
             <option value="Navkarsi">Navkarsi</option>
             <option value="Afternoon Swamivatsalya">Afternoon Swamivatsalya</option>
@@ -118,8 +115,8 @@ const AddProgramForm = () => {
           <label>Event Date</label>
           <input
             type="date"
-            value={eventDate}
-            onChange={(e) => setEventDate(e.target.value)}
+            value={eventdate}
+            onChange={(e) => setEventdate(e.target.value)}
             required
           />
         </div>
@@ -128,15 +125,20 @@ const AddProgramForm = () => {
           <label>Event Day</label>
           <input
             type="text"
-            value={eventDay}
-            readOnly
-            className="readonly-input"
+            value={eventday}
+            onChange={(e) => setEventday(e.target.value)}
+            placeholder="Event Day (e.g. Monday)"
+            required
           />
         </div>
 
         <div className="form-group">
           <label>Event Status</label>
-          <select value={eventStatus} onChange={(e) => setEventStatus(e.target.value)} required>
+          <select
+            value={eventstatus}
+            onChange={(e) => setEventstatus(e.target.value)}
+            required
+          >
             <option value="Open">Open</option>
             <option value="Closed">Closed</option>
             <option value="Completed">Completed</option>
@@ -145,7 +147,6 @@ const AddProgramForm = () => {
 
         <button type="submit">Add Program</button>
       </form>
-
 
       {/* Table */}
       {programs.length > 0 && (
