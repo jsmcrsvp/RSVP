@@ -9,6 +9,7 @@
 
 h2, h3 {
   text-align: center;
+  margin-top: 0;
   margin-bottom: 0.5rem;
   color: #333;
 }
