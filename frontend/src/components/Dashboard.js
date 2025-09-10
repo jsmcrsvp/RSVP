@@ -116,7 +116,7 @@ export default function Dashboard() {
                     <tr key={`open-${idx}`}>
                       <td>{row.programname}</td>
                       <td>{row.eventname}</td>
-                      <td>{displayDate(raw.eventdate)}</td>
+                      <td>{displayDate(row.eventdate)}</td>
                       <td>{row.eventday}</td>
                       <td>{row.totalRSVPs}</td>
                     </tr>
@@ -150,7 +150,7 @@ export default function Dashboard() {
                     <tr key={`closed-${idx}`}>
                       <td>{row.programname}</td>
                       <td>{row.eventname}</td>
-                      <td>{displayDate(raw.eventdate)}</td>
+                      <td>{displayDate(row.eventdate)}</td>
                       <td>{row.eventday}</td>
                       <td>{row.totalRSVPs}</td>
                     </tr>
