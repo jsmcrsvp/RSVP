@@ -1,7 +1,7 @@
 .add-program-container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
   background: #fdfdfd;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -104,4 +104,37 @@ button[type="submit"]:hover {
 
 .program-list-table tr:hover {
   background-color: #f1f7ff;
+}
+
+/* Shared table style (reusable everywhere) */
+.table-container {
+  max-width: 600px; /* or whatever matches dashboard width */
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container th,
+.table-container td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.table-container th {
+  background-color: #4c6daf; /* your dashboard header color */
+  color: white;
+  font-weight: bold;
+}
+
+.table-container tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
