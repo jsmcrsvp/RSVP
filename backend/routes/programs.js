@@ -71,6 +71,7 @@ router.get("/open", async (req, res) => {
       });
     });
 
+    console.log("Open events payload:", openEvents);
     res.json(openEvents);
   } catch (err) {
     console.error(err);

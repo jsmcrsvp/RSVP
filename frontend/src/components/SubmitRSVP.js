@@ -317,7 +317,7 @@ export default function SubmitRSVP() {
       <thead>
         <tr>
           <th>Program</th>
-          <th>Event</th>
+          <th>Event Name</th>
           <th>Event Date</th>
           <th>RSVP By</th>
         </tr>
