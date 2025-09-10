@@ -160,9 +160,9 @@ const AddProgramForm = () => {
 
       {/* Table */}
       {programs.length > 0 && (
-        <div className="table-container">
+        <div className="result-table-wrapper">
           <h3>Program & Event Details</h3>
-          <table>
+          <table className="result-table">
             <thead>
               <tr>
                 <th>Program Name</th>
