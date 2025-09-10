@@ -9,6 +9,7 @@ const AddProgramForm = () => {
   const [eventdate, setEventdate] = useState("");
   const [eventday, setEventday] = useState("");
   const [eventstatus, setEventstatus] = useState("Open");
+  const [rsvpclosedate, setRsvpClosedate] = useState("");
 
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -53,7 +54,7 @@ const AddProgramForm = () => {
     setError("");
     setSuccess("");
 
-    if (!progname || !eventname || !eventdate || !eventday) {
+    if (!progname || !eventname || !eventdate || !eventday || !closersvp) {
       setError("All fields are required.");
       return;
     }
@@ -67,6 +68,7 @@ const AddProgramForm = () => {
             eventdate,
             eventday,
             eventstatus,
+            closersvp,
           },
         ],
       };
@@ -78,6 +80,7 @@ const AddProgramForm = () => {
       setEventdate("");
       setEventday("");
       setEventstatus("Open");
+      setRsvpClosedate("");
       fetchPrograms(); // Refresh list
     } catch (err) {
       console.error("Error adding program:", err);
@@ -159,6 +162,15 @@ const AddProgramForm = () => {
           </select>
         </div>
 
+        <div className="form-group">
+          <label>RSVP Close Date</label>
+          <input
+            type="date"
+            value={eventdate}
+            onChange={(e) => setRsvpClosedate(e.target.value)}
+            required
+          />
+        </div>
         <button type="submit">Add Program</button>
       </form>
 
@@ -174,6 +186,7 @@ const AddProgramForm = () => {
                 <th>Date</th>
                 <th>Day</th>
                 <th>Status</th>
+                <th>RSVP By</th>
               </tr>
             </thead>
             <tbody>
@@ -189,6 +202,7 @@ const AddProgramForm = () => {
                     <td>{event.eventdate}</td>
                     <td>{event.eventday}</td>
                     <td>{event.eventstatus}</td>
+                    <td>{event.closersvp}</td>
                   </tr>
                 ))
               )}

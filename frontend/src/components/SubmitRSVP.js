@@ -318,7 +318,8 @@ export default function SubmitRSVP() {
         <tr>
           <th>Program</th>
           <th>Event</th>
-          <th>Date</th>
+          <th>Event Date</th>
+          <th>RSVP By</th>
         </tr>
       </thead>
       <tbody>
@@ -336,9 +337,8 @@ export default function SubmitRSVP() {
                 <td rowSpan={programCount}>{ev.programname}</td>
               )}
               <td>{ev.eventname}</td>
-              <td>
-                {ev.eventday}, {ev.eventdate}
-              </td>
+              <td>{ev.eventday}, {ev.eventdate}</td>
+              <td>{ev.closersvp}</td>
             </tr>
           );
         })}
