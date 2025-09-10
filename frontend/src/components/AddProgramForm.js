@@ -16,15 +16,15 @@ const AddProgramForm = () => {
   const [success, setSuccess] = useState("");
 
 
-  // Auto-update eventDay when eventDate changes
+  // Auto-update eventDay when eventdate changes
   useEffect(() => {
-    if (eventDate) {
-      const day = new Date(eventDate).toLocaleDateString("en-US", { weekday: "long" });
-      setEventDay(day);
+    if (eventdate) {
+      const day = new Date(eventdate).toLocaleDateString("en-US", { weekday: "long" });
+      setEventday(day);
     } else {
-      setEventDay("");
+      setEventday("");
     }
-  }, [eventDate]);
+  }, [eventdate]);
 
   // Fetch programs on mount
   const fetchPrograms = async () => {
@@ -138,7 +138,6 @@ const AddProgramForm = () => {
             type="text"
             value={eventday}
             readOnly
-            className="readonly-input"
           />
         </div>
 
