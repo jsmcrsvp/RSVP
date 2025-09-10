@@ -126,92 +126,87 @@ const AddProgramForm = () => {
       <h3>Activate Program & Event</h3>
 
       {/* Program Form */}
-<form className="program-form" onSubmit={handleSubmit}>
-  <div className="form-grid">
-    <div className="form-group">
-      <label>Select Program</label>
-      <select
-        value={progname}
-        onChange={(e) => setProgname(e.target.value)}
-        required
-      >
-        <option value="">-- Select Program --</option>
-        <option value="Anniversary">Anniversary</option>
-        <option value="Diwali">Diwali</option>
-        <option value="Mahavir Janma Kalyaanak">
-          Mahavir Janma Kalyaanak
-        </option>
-        <option value="Paryushan">Paryushan</option>
-        <option value="Pathshala">Pathshala</option>
-      </select>
-    </div>
+      <form className="program-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Select Program</label>
+          <select
+            value={progname}
+            onChange={(e) => setProgname(e.target.value)}
+            required
+          >
+            <option value="">-- Select Program --</option>
+            <option value="Anniversary">Anniversary</option>
+            <option value="Diwali">Diwali</option>
+            <option value="Mahavir Janma Kalyaanak">
+              Mahavir Janma Kalyaanak
+            </option>
+            <option value="Paryushan">Paryushan</option>
+            <option value="Pathshala">Pathshala</option>
+          </select>
+        </div>
 
-    <div className="form-group">
-      <label>Select Event</label>
-      <select
-        value={eventname}
-        onChange={(e) => setEventname(e.target.value)}
-        required
-      >
-        <option value="">-- Select Event --</option>
-        <option value="Navkarsi">Navkarsi</option>
-        <option value="Afternoon Swamivatsalya">
-          Afternoon Swamivatsalya
-        </option>
-        <option value="Evening Swamivatsalya">
-          Evening Swamivatsalya
-        </option>
-      </select>
-    </div>
+        <div className="form-group">
+          <label>Select Event</label>
+          <select
+            value={eventname}
+            onChange={(e) => setEventname(e.target.value)}
+            required
+          >
+            <option value="">-- Select Event --</option>
+            <option value="Navkarsi">Navkarsi</option>
+            <option value="Afternoon Swamivatsalya">
+              Afternoon Swamivatsalya
+            </option>
+            <option value="Evening Swamivatsalya">
+              Evening Swamivatsalya
+            </option>
+          </select>
+        </div>
 
-    <div className="form-group">
-      <label>Event Date</label>
-      <input
-        type="date"
-        value={eventdate}
-        onChange={(e) => setEventdate(e.target.value)}
-        required
-      />
-    </div>
+        <div className="form-group">
+          <label>Event Date</label>
+          <input
+            type="date"
+            value={eventdate}
+            onChange={(e) => setEventdate(e.target.value)}
+            required
+          />
+        </div>
 
-    <div className="form-group">
-      <label>Event Day</label>
-      <input type="text" value={eventday} readOnly />
-    </div>
+        <div className="form-group">
+          <label>Event Day</label>
+          <input type="text" value={eventday} readOnly />
+        </div>
 
-    <div className="form-group">
-      <label>RSVP Close Date</label>
-      <input
-        type="date"
-        value={rsvpClosedate}
-        onChange={(e) => setRsvpClosedate(e.target.value)}
-        required
-      />
-    </div>
+        <div className="form-group">
+          <label>RSVP Close Date</label>
+          <input
+            type="date"
+            value={rsvpClosedate}
+            onChange={(e) => setRsvpClosedate(e.target.value)}
+            required
+          />
+        </div>
 
-    <div className="form-group">
-      <label>Event Status</label>
-      <select
-        value={eventstatus}
-        onChange={(e) => setEventstatus(e.target.value)}
-        required
-      >
-        <option value="Open">Open</option>
-        <option value="Closed">Closed</option>
-        <option value="Completed">Completed</option>
-      </select>
-    </div>
-  </div>
+        <div className="form-group">
+          <label>Event Status</label>
+          <select
+            value={eventstatus}
+            onChange={(e) => setEventstatus(e.target.value)}
+            required
+          >
+            <option value="Open">Open</option>
+            <option value="Closed">Closed</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
 
-  <button type="submit" className="btn-submit">
-    Add Program
-  </button>
-</form>
-
-{/* Status messages */}
-{error && <p className="form-message error">{error}</p>}
-{success && <p className="form-message success">{success}</p>}
-
+        <button type="submit" className="btn-submit">Add Program</button>
+      </form>
+      
+      {/* Status messages */}
+      {error && <p className="form-message error">{error}</p>}
+      {success && <p className="form-message success">{success}</p>}
 
       {/* Programs & Events Table */}
       {programs.length > 0 && (
