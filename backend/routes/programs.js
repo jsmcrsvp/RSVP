@@ -121,6 +121,32 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Update event status
+router.put("/:progId/events/:evId/status", async (req, res) => {
+  const { progId, evId } = req.params;
+  const { eventstatus } = req.body;
+
+  try {
+    const program = await Program.findById(progId);
+    if (!program) {
+      return res.status(404).json({ message: "Program not found" });
+    }
+
+    const event = program.progevent.id(evId);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    event.eventstatus = eventstatus;
+    await program.save();
+
+    res.json({ message: "✅ Event status updated successfully", event });
+  } catch (err) {
+    console.error("Error updating event status:", err);
+    res.status(500).json({ message: "❌ Server error" });
+  }
+});
+
 
 module.exports = router;
 

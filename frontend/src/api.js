@@ -33,12 +33,11 @@ export const getClosedEvents = async () => {
     return res.data;
 };
 
-// ✅ Get all programs with events
+// Get all programs with events
 export const getAllPrograms = async () => {
     const res = await api.get("/api/programs");
     return res.data;
 };
-
 
 // Submit RSVP
 export const submitRSVP = async (payload) => {
@@ -50,7 +49,7 @@ export const submitRSVP = async (payload) => {
     }
 };
 
-// ✅ Verify RSVP by confirmation number
+// Verify RSVP by confirmation number
 export const verifyRSVP = async (confNumber) => {
     const res = await api.get(`/api/rsvp_response/${confNumber}`);
     return res.data;
@@ -68,9 +67,15 @@ export const getDashboardStats = async () => {
     return res.data;
 };
 
+// Update event status
+export const updateEventStatus = async (progId, evId, newStatus) => {
+  const res = await api.put(`/api/programs/${progId}/events/${evId}/status`, {
+    eventstatus: newStatus,
+  });
+  return res.data;
+};
+
 export default api;
-
-
 
 /* ========= Working 090325 10pm ====================
 import axios from "axios";

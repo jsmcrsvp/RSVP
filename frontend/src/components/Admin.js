@@ -25,7 +25,7 @@ export default function Admin() {
             RSVP Dashboard
           </button>
           <button className={activeTab === "addProgram" ? "tab active" : "tab"} onClick={() => setActiveTab("addProgram")}>
-            Add Program
+            Programs
           </button>
           <button className={activeTab === "report" ? "tab active" : "tab"} onClick={() => setActiveTab("report")}>
             Report
