@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { addProgram, getAllPrograms } from "../api";
 import "../styles/AddProgramForm.css";
 
-// Utility to format YYYY-MM-DD → MM/DD/YYYY
+// ✅ Utility to format YYYY-MM-DD → MM/DD/YYYY
 const displayDate = (dateStr) => {
   if (!dateStr) return "";
   const [year, month, day] = dateStr.split("-");
@@ -16,7 +16,7 @@ const AddProgramForm = () => {
   const [eventdate, setEventdate] = useState("");
   const [eventday, setEventday] = useState("");
   const [eventstatus, setEventstatus] = useState("Open");
-  const [rsvpclosedate, setRsvpClosedate] = useState("");
+  const [closersvp, setClosersvp] = useState("");
 
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ const AddProgramForm = () => {
   // Auto-update eventDay when eventdate changes
   useEffect(() => {
     if (eventdate) {
-      const date = new Date(eventdate + "T00:00:00Z"); // UTC interpretation
+      const date = new Date(eventdate + "T00:00:00Z");
       const day = date.toLocaleDateString("en-US", {
         weekday: "long",
         timeZone: "UTC",
@@ -37,7 +37,7 @@ const AddProgramForm = () => {
     }
   }, [eventdate]);
 
-  // Fetch programs
+  // Fetch programs on mount
   const fetchPrograms = async () => {
     try {
       setLoading(true);
@@ -87,7 +87,7 @@ const AddProgramForm = () => {
       setEventdate("");
       setEventday("");
       setEventstatus("Open");
-      setRsvpClosedate("");
+      setClosersvp("");
       fetchPrograms(); // Refresh list
     } catch (err) {
       console.error("Error adding program:", err);
@@ -115,9 +115,7 @@ const AddProgramForm = () => {
             <option value="">-- Select Program --</option>
             <option value="Anniversary">Anniversary</option>
             <option value="Diwali">Diwali</option>
-            <option value="Mahavir Janma Kalyaanak">
-              Mahavir Janma Kalyaanak
-            </option>
+            <option value="Mahavir Janma Kalyaanak">Mahavir Janma Kalyaanak</option>
             <option value="Paryushan">Paryushan</option>
             <option value="Pathshala">Pathshala</option>
           </select>
@@ -132,12 +130,8 @@ const AddProgramForm = () => {
           >
             <option value="">-- Select Event --</option>
             <option value="Navkarsi">Navkarsi</option>
-            <option value="Afternoon Swamivatsalya">
-              Afternoon Swamivatsalya
-            </option>
-            <option value="Evening Swamivatsalya">
-              Evening Swamivatsalya
-            </option>
+            <option value="Afternoon Swamivatsalya">Afternoon Swamivatsalya</option>
+            <option value="Evening Swamivatsalya">Evening Swamivatsalya</option>
           </select>
         </div>
 
@@ -173,11 +167,12 @@ const AddProgramForm = () => {
           <label>RSVP Close Date</label>
           <input
             type="date"
-            value={rsvpClosedate}
-            onChange={(e) => setRsvpClosedate(e.target.value)}
+            value={closersvp}
+            onChange={(e) => setClosersvp(e.target.value)}
             required
           />
         </div>
+
         <button type="submit">Add Program</button>
       </form>
 
@@ -193,7 +188,7 @@ const AddProgramForm = () => {
                 <th>Date</th>
                 <th>Day</th>
                 <th>Status</th>
-                <th>RSVP By</th>
+                <th>RSVP Close</th>
               </tr>
             </thead>
             <tbody>
@@ -209,7 +204,6 @@ const AddProgramForm = () => {
                     <td>{displayDate(event.eventdate)}</td>
                     <td>{event.eventday}</td>
                     <td>{event.eventstatus}</td>
-                    <td>{event.closersvp}</td>
                     <td>{displayDate(event.closersvp)}</td>
                   </tr>
                 ))
@@ -223,6 +217,7 @@ const AddProgramForm = () => {
 };
 
 export default AddProgramForm;
+
 
 /*
                     <td>{event.eventname}</td>
