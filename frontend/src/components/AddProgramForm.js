@@ -19,7 +19,7 @@ const AddProgramForm = () => {
   // Auto-update eventDay when eventdate changes
   useEffect(() => {
     if (eventdate) {
-      const date = new Date(eventDate + "T00:00:00Z"); // Ensures UTC interpretation
+      const date = new Date(eventdate + "T00:00:00Z"); // Ensures UTC interpretation
       const day = date.toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
       setEventday(day);
     } else {
