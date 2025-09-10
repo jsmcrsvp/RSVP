@@ -125,10 +125,6 @@ const AddProgramForm = () => {
     <div className="add-program-container">
       <h3>Activate Program & Event</h3>
 
-      {/* Status messages */}
-      {error && <p className="form-message error">{error}</p>}
-      {success && <p className="form-message success">{success}</p>}
-
       {/* Program Form */}
       <form className="program-form" onSubmit={handleSubmit}>
         <div className="form-group">
@@ -207,7 +203,10 @@ const AddProgramForm = () => {
 
         <button type="submit" className="btn-submit">Add Program</button>
       </form>
-
+      {/* Status messages */}
+      {error && <p className="form-message error">{error}</p>}
+      {success && <p className="form-message success">{success}</p>}
+      
       {/* Programs & Events Table */}
       {programs.length > 0 && (
         <div className="table-wrapper">
