@@ -2,7 +2,37 @@ const express = require("express");
 const Program = require("../models/Programs_DB_Schema");
 const router = express.Router();
 
-// Add a new program with its first event
+// Add or update program with events
+router.post("/", async (req, res) => {
+  try {
+    const { progname, progevent } = req.body;
+
+    if (!progname || !progevent || !progevent.length) {
+      return res.status(400).json({ message: "Program name and event are required" });
+    }
+
+    // Check if program already exists
+    let program = await Program.findOne({ progname });
+
+    if (program) {
+      // ✅ Push event into existing program’s progevent array
+      program.progevent.push(progevent[0]);
+      await program.save();
+      return res.status(200).json({ message: "Event added to existing program", program });
+    }
+
+    // ✅ If no program, create a new one
+    program = new Program({ progname, progevent });
+    await program.save();
+    res.status(201).json({ message: "New program created with event", program });
+
+  } catch (err) {
+    console.error("Error adding program:", err);
+    res.status(500).json({ message: "Server error adding program" });
+  }
+});
+
+/* Add a new program with its first event === working 091025 ==== 8am
 router.post("/", async (req, res) => {
   try {
     const { progname, progevent } = req.body;
@@ -15,7 +45,7 @@ router.post("/", async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Error adding program", error: err });
   }
-});
+});*/
 
 // Get all open events across programs
 router.get("/open", async (req, res) => {
