@@ -15,6 +15,17 @@ const AddProgramForm = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+
+  // Auto-update eventDay when eventDate changes
+  useEffect(() => {
+    if (eventDate) {
+      const day = new Date(eventDate).toLocaleDateString("en-US", { weekday: "long" });
+      setEventDay(day);
+    } else {
+      setEventDay("");
+    }
+  }, [eventDate]);
+
   // Fetch programs on mount
   const fetchPrograms = async () => {
     try {
@@ -126,9 +137,8 @@ const AddProgramForm = () => {
           <input
             type="text"
             value={eventday}
-            onChange={(e) => setEventday(e.target.value)}
-            placeholder="Event Day (e.g. Monday)"
-            required
+            readOnly
+            className="readonly-input"
           />
         </div>
 
