@@ -205,14 +205,14 @@ const AddProgramForm = () => {
           </select>
         </div>
 
-        <button type="submit">Add Program</button>
+        <button type="submit" className="btn-submit">Add Program</button>
       </form>
 
       {/* Programs & Events Table */}
       {programs.length > 0 && (
-        <div className="result-table-wrapper">
+        <div className="table-wrapper">
           <h3>Active Program & Event Details</h3>
-          <table className="result-table">
+          <table className="programs-table">
             <thead>
               <tr>
                 <th>Program Name</th>
@@ -257,7 +257,7 @@ const AddProgramForm = () => {
                       </td>
                       <td>
                         {editRow === rowKey ? (
-                          <button
+                          <button className="btn-save"
                             onClick={() =>
                               handleSaveStatus(program._id, event._id)
                             }

@@ -1,45 +1,18 @@
 .add-program-container {
-  max-width: 1200px;
-  margin: 0;
-  padding: 1rem;
-  background: #fdfdfd;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-h2,
-h3 {
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.form-message {
-  text-align: center;
-  padding: 8px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.form-message.success {
-  background: #e8f9e9;
-  color: #256029;
-  border: 1px solid #9fd89f;
-}
-
-.form-message.error {
-  background: #fbeaea;
-  color: #842029;
-  border: 1px solid #f5c2c7;
+  max-width: 1100px; /* Adjust width to fit nicely */
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .program-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px 20px;
-  margin-bottom: 25px;
+  gap: 16px;
+  margin-bottom: 20px;
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
 }
 
 .program-form .form-group {
@@ -47,115 +20,54 @@ h3 {
   flex-direction: column;
 }
 
-.program-form label {
-  text-align: center;
-  font-size: 14px;
-  margin-bottom: 6px;
-  color: #444;
-}
-
-.program-form input,
-.program-form select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-button[type="submit"] {
+.btn-submit {
   grid-column: span 2;
-  padding: 10px 15px;
+  justify-self: start;
+  padding: 8px 16px;
   background: #4c6daf;
   color: white;
-  font-size: 15px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
-button[type="submit"]:hover {
-  background: #3a5691;
+.table-wrapper {
+  overflow-x: auto; /* only scroll if really needed */
 }
 
-/* Table styles */
-.program-list-table {
-  margin-top: 25px;
-}
-
-.program-list-table table {
+.programs-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  background: white;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
 }
 
-.program-list-table th,
-.program-list-table td {
+.programs-table th,
+.programs-table td {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
 }
 
-.program-list-table th {
-  background-color: #4c6daf;
+.programs-table th {
+  background: #4c6daf;
   color: white;
 }
 
-.program-list-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.program-list-table tr:hover {
-  background-color: #f1f7ff;
-}
-
-/* Shared table style (reusable everywhere) */
-.table-container {
-  max-width: 1000px;
-  /* or whatever matches dashboard width */
-  margin: 20px auto;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.table-container table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table-container th,
-.table-container td {
-  padding: 10px 14px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-.table-container th {
-  background-color: #4c6daf;
-  /* your dashboard header color */
-  color: white;
-  font-weight: bold;
-}
-
-.table-container tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-/* Results Table */
-.result-table-wrapper,
-.last-rsvp {
-  margin-top: 0.1rem;
-  overflow-x: auto;
-  background: #f9f9f9e4;
-  padding: 0.2rem;
+.btn-edit,
+.btn-save {
+  padding: 6px 12px;
+  border: none;
   border-radius: 6px;
+  cursor: pointer;
 }
 
-.result-table,
-.last-rsvp table {
-  width: 100%;
-  border-collapse: collapse;
+.btn-edit {
+  background: #f0ad4e;
+  color: white;
+}
+
+.btn-save {
+  background: #5cb85c;
+  color: white;
 }
