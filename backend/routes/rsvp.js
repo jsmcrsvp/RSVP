@@ -45,17 +45,17 @@ router.post("/", async (req, res) => {
             .join("\n");
 
         const emailBody = `
-Dear ${memname},
+        Dear ${memname},
 
-Your RSVP has been successfully submitted.  
-Confirmation Number: ${rsvpconfnumber}
+        Your RSVP has been successfully submitted.  
+        Confirmation Number: ${rsvpconfnumber}
 
-Here are the event(s) you RSVP’d for:
-${eventDetails}
+        Here are the event(s) you RSVP’d for:
+        ${eventDetails}
 
-Thank you,
-JSMC RSVP Team
-`;
+        Thank you,
+        JSMC RSVP Team
+        `;
 
         // ✅ Setup nodemailer transporter (update with your SMTP creds)
         const transporter = nodemailer.createTransport({
@@ -263,17 +263,12 @@ router.put("/update_rsvp/:id", async (req, res) => {
                 auth: {
                     user: process.env.EMAIL_USER,
                     pass: process.env.EMAIL_PASS
-
-                    /*service: "gmail", // or SMTP settings
-                    auth: {
-                      user: process.env.EMAIL_USER,
-                      pass: process.env.EMAIL_PASS,*/
                 },
             });
 
             const mailOptions = {
                 from: `"JSMC RSVP" <admin@jsgvolleyball.com>`,
-                to: updated.email, // assumes email is in DB (if not, we’ll need to include in payload)
+                to: updated.mememail, // assumes email is in DB (if not, we’ll need to include in payload)
                 subject: "Your RSVP Has Been Updated",
                 html: `
                   <h2>RSVP Update Confirmation</h2>
