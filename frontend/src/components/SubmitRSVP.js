@@ -19,9 +19,9 @@ export default function SubmitRSVP() {
   const [houseNumber, setHouseNumber] = useState("");
   const [member, setMember] = useState(null);
 
-  const [selectedEvents, setSelectedEvents] = useState({}); // { idx: count }
+  const [selectedEvents, setSelectedEvents] = useState({}); // { idx: count/flag }
   const [email, setEmail] = useState("");
-  const [rsvpCount, setRsvpCount] = useState("");   // RSVP count (0 or more)
+  const [rsvpCount, setRsvpCount] = useState("");   // RSVP count (single field as in your code)
   const [confirmation, setConfirmation] = useState(null);
 
   const [loadingEvents, setLoadingEvents] = useState(true);
@@ -43,6 +43,42 @@ export default function SubmitRSVP() {
   const [updateMessage, setUpdateMessage] = useState(null);
   const [updateError, setUpdateError] = useState(null);
 
+  // ---------------- New: shared reset function ----------------
+  const resetAll = () => {
+    // Submit side
+    setIsLifeMember(null);
+    setSearchMode("");
+    setMemberId("");
+    setName("");
+    setHouseNumber("");
+    setMember(null);
+    setSelectedEvents({});
+    setEmail("");
+    setRsvpCount("");
+    setConfirmation(null);
+    setSubmitMessage(null);
+    setSubmitSuccess(false);
+    setError("");
+    setSearching(false);
+    setSubmitting(false);
+
+    // Verify side
+    setVerifyConfNumber("");
+    setVerifyResult({ rsvps: [] });
+    setVerifying(false);
+    setEditIndex(null);
+    setModifiedCount("");
+    setUpdateMessage(null);
+    setUpdateError(null);
+  };
+
+  const handleTabChange = (tab) => {
+    if (tab === "home") {
+      resetAll();
+    }
+    setActiveTab(tab);
+  };
+  // ------------------------------------------------------------
 
   // Load open events once
   useEffect(() => {
@@ -120,9 +156,9 @@ export default function SubmitRSVP() {
   };
 
   const hasValidSelection = () => {
-    // at least one event selected & count > 0
+    // at least one event selected & count > 0 (you already used this rule)
     return Object.keys(selectedEvents).some((k) => {
-      const v = Number(selectedEvents[k]);
+      const v = Number(selectedEvents[k] || rsvpCount);
       return !isNaN(v) && v > 0;
     });
   };
@@ -156,13 +192,13 @@ export default function SubmitRSVP() {
       rsvpconfnumber: confNumber,
       events: events
         .map((ev, idx) =>
-          selectedEvents[idx] && Number(selectedEvents[idx]) > 0
+          selectedEvents[idx] !== undefined && Number(rsvpCount) >= 0
             ? {
               programname: ev.programname,
               eventname: ev.eventname,
               eventday: ev.eventday,
               eventdate: ev.eventdate,
-              rsvpcount: rsvpCount,
+              rsvpcount: Number(rsvpCount),
             }
             : null
         )
@@ -179,6 +215,7 @@ export default function SubmitRSVP() {
       setSubmitMessage("RSVP submitted successfully!");
       setSubmitSuccess(true);
 
+      // keep success message visible then clear (as you requested previously)
       setTimeout(() => {
         // Reset all submit tab states
         setSubmitMessage(null);
@@ -192,6 +229,7 @@ export default function SubmitRSVP() {
         setMemberId("");
         setName("");
         setHouseNumber("");
+        setRsvpCount("");
 
         // Switch to Home
         setActiveTab("home");
@@ -255,7 +293,7 @@ export default function SubmitRSVP() {
       // After 15s clear everything and return to Home
       setTimeout(() => {
         setVerifyConfNumber("");
-        setVerifyResult(null);
+        setVerifyResult({ rsvps: [] });
         setEditIndex(null);
         setModifiedCount("");
         setUpdateMessage(null);
@@ -352,13 +390,13 @@ export default function SubmitRSVP() {
         )}
         {/* Tabs */}
         <div className="tab-header">
-          <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => setActiveTab("home")}>
+          <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => handleTabChange("home")}>
             Home
           </button>
-          <button className={activeTab === "submit" ? "tab active" : "tab"} onClick={() => setActiveTab("submit")}>
+          <button className={activeTab === "submit" ? "tab active" : "tab"} onClick={() => handleTabChange("submit")}>
             Submit RSVP
           </button>
-          <button className={activeTab === "verify" ? "tab active" : "tab"} onClick={() => setActiveTab("verify")}>
+          <button className={activeTab === "verify" ? "tab active" : "tab"} onClick={() => handleTabChange("verify")}>
             Verify / Modify RSVP
           </button>
         </div>

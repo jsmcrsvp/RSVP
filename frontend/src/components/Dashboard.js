@@ -139,10 +139,9 @@ export default function Dashboard() {
                 <thead>
                   <tr>
                     <th>Program</th>
-                    <th>Event</th>
-                    <th>Date</th>
-                    <th>Day</th>
-                    <th>Total RSVP Count</th>
+                    <th>Event Name</th>
+                    <th>Event Date</th>
+                    <th>Event RSVP</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -150,8 +149,7 @@ export default function Dashboard() {
                     <tr key={`closed-${idx}`}>
                       <td>{row.programname}</td>
                       <td>{row.eventname}</td>
-                      <td>{displayDate(row.eventdate)}</td>
-                      <td>{row.eventday}</td>
+                      <td>{row.eventday}, {displayDate(row.eventdate)}</td>
                       <td>{row.totalRSVPs}</td>
                     </tr>
                   ))}
