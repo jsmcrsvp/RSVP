@@ -7,43 +7,43 @@ const Program = require("../models/Programs_DB_Schema"); // 👈 import Program 
 
 // POST RSVP
 router.post("/", async (req, res) => {
-  try {
-    const {
-      memname,
-      memaddress,
-      memphonenumber,
-      email,
-      rsvpconfnumber,
-      events,
-    } = req.body;
+    try {
+        const {
+            memname,
+            memaddress,
+            memphonenumber,
+            email,
+            rsvpconfnumber,
+            events,
+        } = req.body;
 
-    // Save each event RSVP in DB (without email if not needed in schema)
-    const savedResponses = await Promise.all(
-      events.map(async (ev) => {
-        const newRSVP = new RsvpResponse({
-          memname,
-          memaddress,
-          memphonenumber,
-          rsvpcount: ev.rsvpcount,
-          rsvpconfnumber,
-          eventname: ev.eventname,
-          programname: ev.programname,
-          eventdate: ev.eventdate,
-          eventday: ev.eventday,
-        });
-        return await newRSVP.save();
-      })
-    );
+        // Save each event RSVP in DB (without email if not needed in schema)
+        const savedResponses = await Promise.all(
+            events.map(async (ev) => {
+                const newRSVP = new RsvpResponse({
+                    memname,
+                    memaddress,
+                    memphonenumber,
+                    rsvpcount: ev.rsvpcount,
+                    rsvpconfnumber,
+                    eventname: ev.eventname,
+                    programname: ev.programname,
+                    eventdate: ev.eventdate,
+                    eventday: ev.eventday,
+                });
+                return await newRSVP.save();
+            })
+        );
 
-    // ✅ Build email content (all events in one message)
-    let eventDetails = events
-      .map(
-        (ev) =>
-          `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Count: ${ev.rsvpcount})`
-      )
-      .join("\n");
+        // ✅ Build email content (all events in one message)
+        let eventDetails = events
+            .map(
+                (ev) =>
+                    `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Count: ${ev.rsvpcount})`
+            )
+            .join("\n");
 
-    const emailBody = `
+        const emailBody = `
 Dear ${memname},
 
 Your RSVP has been successfully submitted.  
@@ -56,27 +56,34 @@ Thank you,
 JSMC RSVP Team
 `;
 
-    // ✅ Setup nodemailer transporter (update with your SMTP creds)
-    const transporter = nodemailer.createTransport({
-      service: "gmail", // or SMTP settings
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+        // ✅ Setup nodemailer transporter (update with your SMTP creds)
+        const transporter = nodemailer.createTransport({
+            host: "smtp.ionos.com",
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
 
-    await transporter.sendMail({
-      from: `"JSMC RSVP" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: `RSVP Confirmation - #${rsvpconfnumber}`,
-      text: emailBody,
-    });
+                /*service: "gmail", // or SMTP settings
+                auth: {
+                  user: process.env.EMAIL_USER,
+                  pass: process.env.EMAIL_PASS,*/
+            },
+        });
 
-    res.status(201).json({ message: "RSVP submitted and email sent!" });
-  } catch (err) {
-    console.error("Error submitting RSVP:", err);
-    res.status(500).json({ message: "Error submitting RSVP" });
-  }
+        await transporter.sendMail({
+            from: `"JSMC RSVP" <admin@jsgvolleyball.com>`,
+            to: email,
+            subject: `RSVP Confirmation - #${rsvpconfnumber}`,
+            text: emailBody,
+        });
+
+        res.status(201).json({ message: "RSVP submitted and email sent!" });
+    } catch (err) {
+        console.error("Error submitting RSVP:", err);
+        res.status(500).json({ message: "Error submitting RSVP" });
+    }
 });
 
 
@@ -142,47 +149,47 @@ router.post("/", async (req, res) => {
 
 // GET RSVP by confirmation number
 router.get("/:confNumber", async (req, res) => {
-  try {
-    const { confNumber } = req.params;
+    try {
+        const { confNumber } = req.params;
 
-    // Find RSVP entries
-    const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
+        // Find RSVP entries
+        const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
 
-    if (!rsvps || rsvps.length === 0) {
-      return res.status(404).json({ error: "RSVP not found" });
-    }
-
-    // Enrich with eventstatus from Program collection
-    const enrichedRsvps = await Promise.all(
-      rsvps.map(async (rsvp) => {
-        const program = await Program.findOne(
-          { progname: rsvp.programname },
-          { progevent: 1 }
-        );
-
-        let status = "Unknown";
-        if (program) {
-          const ev = program.progevent.find(
-            (e) =>
-              e.eventname === rsvp.eventname &&
-              e.eventdate === rsvp.eventdate &&
-              e.eventday === rsvp.eventday
-          );
-          if (ev) status = ev.eventstatus;
+        if (!rsvps || rsvps.length === 0) {
+            return res.status(404).json({ error: "RSVP not found" });
         }
 
-        return {
-          ...rsvp.toObject(),
-          eventstatus: status,
-        };
-      })
-    );
+        // Enrich with eventstatus from Program collection
+        const enrichedRsvps = await Promise.all(
+            rsvps.map(async (rsvp) => {
+                const program = await Program.findOne(
+                    { progname: rsvp.programname },
+                    { progevent: 1 }
+                );
 
-    res.json({ rsvps: enrichedRsvps });
-  } catch (err) {
-    console.error("Error fetching RSVP:", err);
-    res.status(500).json({ error: "Server error fetching RSVP" });
-  }
+                let status = "Unknown";
+                if (program) {
+                    const ev = program.progevent.find(
+                        (e) =>
+                            e.eventname === rsvp.eventname &&
+                            e.eventdate === rsvp.eventdate &&
+                            e.eventday === rsvp.eventday
+                    );
+                    if (ev) status = ev.eventstatus;
+                }
+
+                return {
+                    ...rsvp.toObject(),
+                    eventstatus: status,
+                };
+            })
+        );
+
+        res.json({ rsvps: enrichedRsvps });
+    } catch (err) {
+        console.error("Error fetching RSVP:", err);
+        res.status(500).json({ error: "Server error fetching RSVP" });
+    }
 });
 
 // GET: Retrieve RSVP(s) by confirmation number

@@ -298,7 +298,7 @@ const displayDate = (dateStr) => {
       <div className="logo-wrapper">
         <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
       </div>
-        <h2>JSMC RSVP</h2>
+        {/*<h2>JSMC RSVP</h2>*/}
 
         {/* Tabs */}
         {/*<div className="tab-header">
