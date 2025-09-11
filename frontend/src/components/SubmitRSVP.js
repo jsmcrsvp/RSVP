@@ -1,4 +1,315 @@
 // frontend/src/components/SubmitRSVP.js
+import React, { useState } from "react";
+import axios from "axios";
+import logo from "../assets/jsmc_logo.png"; // adjust path if needed
+import { submitRSVP, verifyRSVP } from "../api";
+
+export default function SubmitRSVP({ activeTab, setActiveTab, onHomeClick }) {
+  // --- Shared state ---
+  const [member, setMember] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [selectedEvents, setSelectedEvents] = useState({});
+  const [rsvpCount, setRsvpCount] = useState(0);
+  const [email, setEmail] = useState("");
+  const [isLifeMember, setIsLifeMember] = useState(null);
+  const [searchMode, setSearchMode] = useState("");
+  const [memberId, setMemberId] = useState("");
+  const [name, setName] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [error, setError] = useState("");
+  const [confirmation, setConfirmation] = useState(null);
+  const [submitMessage, setSubmitMessage] = useState(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [verifyResult, setVerifyResult] = useState(null);
+  const [updating, setUpdating] = useState(false);
+
+  // --- RSVP Submit Handler ---
+  const handleSubmitRSVP = async (e) => {
+    e.preventDefault();
+    setError("");
+    setConfirmation(null);
+    setSubmitMessage(null);
+
+    if (!member) {
+      setError("Please search and select a member first.");
+      return;
+    }
+    if (!hasValidSelection()) {
+      setError("Please select at least one event and give it an RSVP count (>0).");
+      return;
+    }
+    if (!email.trim()) {
+      setError("Please enter an email address.");
+      return;
+    }
+
+    const confNumber = Math.floor(100000 + Math.random() * 900000).toString();
+
+    const payload = {
+      memname: member.name,
+      memaddress: member.address,
+      memphonenumber: member.phone,
+      email: email.trim(),
+      rsvpconfnumber: confNumber,
+      events: events
+        .map((ev, idx) =>
+          selectedEvents[idx] && Number(selectedEvents[idx]) > 0
+            ? {
+                programname: ev.programname,
+                eventname: ev.eventname,
+                eventday: ev.eventday,
+                eventdate: ev.eventdate,
+                rsvpcount: rsvpCount,
+              }
+            : null
+        )
+        .filter(Boolean),
+    };
+
+    try {
+      setSubmitting(true);
+      const res = await submitRSVP(payload);
+      setConfirmation({ confNumber, ...res });
+      setSubmitMessage("RSVP submitted successfully!");
+      setSubmitSuccess(true);
+
+      setTimeout(() => {
+        resetState();
+        setActiveTab("home");
+      }, 15000);
+    } catch (err) {
+      console.error("Error submitting RSVP:", err);
+      setSubmitMessage("Error submitting RSVP: " + (err.message || "Unknown"));
+      setSubmitSuccess(false);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // --- Verify Handler ---
+  const handleVerifyRSVP = async (e) => {
+    e.preventDefault();
+    setError("");
+    setVerifyResult(null);
+
+    try {
+      const res = await verifyRSVP({ memberId, name, houseNumber });
+      setVerifyResult(res);
+    } catch (err) {
+      console.error("Error verifying RSVP:", err);
+      setError("Error verifying RSVP: " + (err.message || "Unknown"));
+    }
+  };
+
+  // --- Modify/Update RSVP Handler ---
+  const handleUpdateRSVP = async (id, newCount, emailAddress) => {
+    if (!emailAddress) {
+      setError("Email address is required to update RSVP.");
+      return;
+    }
+
+    try {
+      setUpdating(true);
+      const res = await axios.put(`/api/rsvp/update_rsvp/${id}`, {
+        rsvpcount: newCount,
+        email: emailAddress,
+      });
+      console.log("RSVP updated:", res.data);
+
+      // Refresh verify list
+      const refreshed = await verifyRSVP({ memberId, name, houseNumber });
+      setVerifyResult(refreshed);
+    } catch (err) {
+      console.error("Error updating RSVP:", err);
+      setError("Error updating RSVP: " + (err.message || "Unknown"));
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const hasValidSelection = () =>
+    Object.values(selectedEvents).some((val) => Number(val) > 0);
+
+  // --- Shared reset ---
+  const resetState = () => {
+    setSubmitMessage(null);
+    setSubmitSuccess(false);
+    setConfirmation(null);
+    setMember(null);
+    setSelectedEvents({});
+    setEmail("");
+    setIsLifeMember(null);
+    setSearchMode("");
+    setMemberId("");
+    setName("");
+    setHouseNumber("");
+    setVerifyResult(null);
+  };
+
+  // --- UI ---
+  return (
+    <div className="page-wrapper">
+      <div className="rsvp-container">
+        {/* Logo */}
+        <div className="logo-wrapper">
+          <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
+        </div>
+
+        {error && <div className="error-message">{error}</div>}
+
+        {/* Tabs */}
+        <div className="tab-header">
+          <button
+            className={activeTab === "home" ? "tab active" : "tab"}
+            onClick={onHomeClick}
+          >
+            Home
+          </button>
+          <button
+            className={activeTab === "submit" ? "tab active" : "tab"}
+            onClick={() => setActiveTab("submit")}
+          >
+            Submit RSVP
+          </button>
+          <button
+            className={activeTab === "verify" ? "tab active" : "tab"}
+            onClick={() => setActiveTab("verify")}
+          >
+            Verify / Modify RSVP
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === "home" && (
+          <div className="home">
+            <h3>Welcome to RSVP</h3>
+            <p>Please choose Submit or Verify/Modify to continue.</p>
+          </div>
+        )}
+
+        {activeTab === "submit" && (
+          <form className="submit-form" onSubmit={handleSubmitRSVP}>
+            {/* Email */}
+            <div className="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" disabled={submitting}>
+              {submitting ? "Submitting..." : "Submit RSVP"}
+            </button>
+            {submitMessage && (
+              <p className={submitSuccess ? "success" : "error"}>
+                {submitMessage}
+              </p>
+            )}
+          </form>
+        )}
+
+        {activeTab === "verify" && (
+          <form className="verify-form" onSubmit={handleVerifyRSVP}>
+            <div className="form-group">
+              <label>Member ID</label>
+              <input
+                type="text"
+                value={memberId}
+                onChange={(e) => setMemberId(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>House Number</label>
+              <input
+                type="text"
+                value={houseNumber}
+                onChange={(e) => setHouseNumber(e.target.value)}
+              />
+            </div>
+            <button type="submit">Verify RSVP</button>
+
+            {verifyResult && (
+              <div className="verify-results">
+                <h4>Your RSVP Records</h4>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Program</th>
+                      <th>Event</th>
+                      <th>Date</th>
+                      <th>Day</th>
+                      <th>Count</th>
+                      <th>Email</th>
+                      <th>Update</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {verifyResult.map((rsvp) => (
+                      <tr key={rsvp._id}>
+                        <td>{rsvp.programname}</td>
+                        <td>{rsvp.eventname}</td>
+                        <td>{rsvp.eventdate}</td>
+                        <td>{rsvp.eventday}</td>
+                        <td>
+                          <input
+                            type="number"
+                            defaultValue={rsvp.rsvpcount}
+                            min="0"
+                            onChange={(e) =>
+                              (rsvp.newCount = e.target.value)
+                            }
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="email"
+                            defaultValue={rsvp.email || email}
+                            onChange={(e) =>
+                              (rsvp.newEmail = e.target.value)
+                            }
+                          />
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            disabled={updating}
+                            onClick={() =>
+                              handleUpdateRSVP(
+                                rsvp._id,
+                                rsvp.newCount || rsvp.rsvpcount,
+                                rsvp.newEmail || rsvp.email || email
+                              )
+                            }
+                          >
+                            {updating ? "Saving..." : "Save"}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+/* frontend/src/components/SubmitRSVP.js =============== Working 091125 ========= 3:45pm =========
 import React, { useEffect, useState } from "react";
 import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import "../styles/SubmitRSVP.css";
@@ -294,17 +605,17 @@ export default function SubmitRSVP() {
   return (
     <div className="page-wrapper">
       <div className="rsvp-container">
-        {/* ✅ Logo at the top */}
+        {/* ✅ Logo at the top
         <div className="logo-wrapper">
           <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
         </div>
         {error && <div className="error-message">{error}</div>}
-        {/* HOME */}
+        {/* HOME
         {activeTab === "home" && (
           <div className="home">
             <h4>Welcome to JSMC RSVP Portal</h4>
 
-            {/* Open Events Table */}
+            {/* Open Events Table
             <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
               <h4>Current Open Events to Submit or Modify RSVP</h4>
 
@@ -350,7 +661,7 @@ export default function SubmitRSVP() {
             <h4>Please select Submit RSVP or Verify / Modify RSVP Tab</h4>
           </div>
         )}
-        {/* Tabs */}
+        {/* Tabs
         <div className="tab-header">
           <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => setActiveTab("home")}>
             Home
@@ -363,7 +674,7 @@ export default function SubmitRSVP() {
           </button>
         </div>
 
-        {/* SUBMIT */}
+        {/* SUBMIT
         {activeTab === "submit" && (
           <>
             {isLifeMember === null && (
@@ -406,7 +717,7 @@ export default function SubmitRSVP() {
                   </label>
                 </div>
 
-                {/* ---- Member ID Search ---- */}
+                {/* ---- Member ID Search ----
                 {searchMode === "memberId" && (
                   <div className="inline-fields">
                     <input
@@ -433,7 +744,7 @@ export default function SubmitRSVP() {
                   </div>
                 )}
 
-                {/* ---- Name + House Search ---- */}
+                {/* ---- Name + House Search ----
                 {searchMode === "nameHouse" && (
                   <div className="inline-fields">
                     <input
@@ -575,7 +886,7 @@ export default function SubmitRSVP() {
               </form>
             )}
 
-            {/* Success / error messages at bottom */}
+            {/* Success / error messages at bottom
             {submitSuccess && submitMessage && (
               <div style={{ color: "green", marginTop: "10px" }}>
                 ✅ {submitMessage}
@@ -593,7 +904,7 @@ export default function SubmitRSVP() {
           </>
         )}
 
-        {/* VERIFY */}
+        {/* VERIFY
         {activeTab === "verify" && (
           <form className="verify-form" onSubmit={handleVerifyRSVP}>
             <h3>Verify / Modify RSVP</h3>
@@ -610,12 +921,12 @@ export default function SubmitRSVP() {
               </button>
             </div>
 
-            {/* Show only when rsvps are returned */}
+            {/* Show only when rsvps are returned
             {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
               <div className="result-table-wrapper">
                 <h4>Current RSVP Details</h4>
 
-                {/* Member details from first RSVP doc */}
+                {/* Member details from first RSVP doc
                 <table className="result-table" style={{ marginBottom: 10 }}>
                   <tbody>
                     <tr>
@@ -637,7 +948,7 @@ export default function SubmitRSVP() {
                   </tbody>
                 </table>
 
-                {/* RSVP Events */}
+                {/* RSVP Events
                 <table className="result-table">
                   <thead>
                     <tr>
@@ -701,14 +1012,14 @@ export default function SubmitRSVP() {
               </div>
             )}
 
-            {/* No results case */}
+            {/* No results case
             {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
               <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
                 No RSVP records found for this confirmation number or Event RSVP may be closed.
               </div>
             )}
 
-            {/* Success / error messages at bottom */}
+            {/* Success / error messages at bottom
             {updateMessage && (
               <div style={{ color: "green", marginTop: "10px" }}>
                 ✅ {updateMessage}
@@ -726,3 +1037,4 @@ export default function SubmitRSVP() {
     </div>
   );
 }
+*/
