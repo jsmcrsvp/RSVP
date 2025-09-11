@@ -59,7 +59,7 @@ export default function Dashboard() {
       loadDashboardData();
     }, 15 * 60 * 1000); // 15 minutes
 
-    return () => clearInterval(interval); // cleanup on unmount
+    return () => clearInterval(interval);
   }, [loadDashboardData]);
 
   // ✅ Filter stats into open & closed groups
@@ -85,7 +85,6 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      {/*<h3>Current RSVP Stats</h3>*/}
 
       {(loading || loadingEvents) && <p>Loading dashboard...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -100,15 +99,14 @@ export default function Dashboard() {
             </p>
           ) : (
             <div className="result-table-wrapper">
-                <h4>Open Events</h4>
+                <h4>Current Open Events</h4>
               <table className="result-table">
                 <thead>
                   <tr>
                     <th>Program</th>
-                    <th>Event</th>
-                    <th>Date</th>
-                    <th>Day</th>
-                    <th>Total RSVP Count</th>
+                    <th>Event Name</th>
+                    <th>Event Date</th>
+                    <th>Event RSVP</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -116,8 +114,7 @@ export default function Dashboard() {
                     <tr key={`open-${idx}`}>
                       <td>{row.programname}</td>
                       <td>{row.eventname}</td>
-                      <td>{displayDate(row.eventdate)}</td>
-                      <td>{row.eventday}</td>
+                      <td>{row.eventday}, {displayDate(row.eventdate)}</td>
                       <td>{row.totalRSVPs}</td>
                     </tr>
                   ))}
@@ -127,14 +124,13 @@ export default function Dashboard() {
           )}
 
           {/* Closed Events Table */}
-          {/*<h4 style={{ marginTop: "2rem" }}>Closed Events</h4>*/}
           {closedStats.length === 0 ? (
             <p style={{ fontStyle: "italic", color: "#666" }}>
               No RSVP responses for closed events.
             </p>
           ) : (
             <div className="result-table-wrapper">
-                <h4>Closed Events</h4>
+                <h4>Current Closed Events</h4>
               <table className="result-table">
                 <thead>
                   <tr>
