@@ -1,6 +1,7 @@
 // frontend/src/components/RSVPPage.js
 import React, { useState } from "react";
 import SubmitRSVP from "./SubmitRSVP";
+import logo from "../assets/JSMCLogo.jpg";
 
 export default function RSVPPage() {
   const [activeTab, setActiveTab] = useState("home");
