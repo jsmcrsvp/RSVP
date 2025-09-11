@@ -1,7 +1,7 @@
 // frontend/src/components/SubmitRSVP.js
 import React, { useState } from "react";
 import axios from "axios";
-import logo from "../assets/jsmc_logo.png"; // adjust path if needed
+import logo from "../assets/JSMCLogo.jpg";
 import { submitRSVP, verifyRSVP } from "../api";
 
 export default function SubmitRSVP({ activeTab, setActiveTab, onHomeClick }) {
