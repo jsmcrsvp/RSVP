@@ -71,3 +71,14 @@
   background: #5cb85c;
   color: white;
 }
+
+/* Logo Style guide */
+.logo-wrapper {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.rsvp-logo {
+  max-width: 125px;   /* adjust size */
+  height: auto;
+}

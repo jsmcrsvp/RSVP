@@ -227,7 +227,82 @@ router.get("/:confNumber", async (req, res) => {
 });
 */
 
-// PUT /api/update_rsvp/:id
+router.put("/update_rsvp/:id", async (req, res) => {
+    const { id } = req.params;
+    const { rsvpcount } = req.body;
+
+    console.log("🔧 Received update request for RSVP ID:", id);
+    console.log("🔢 New RSVP count:", rsvpcount);
+
+    if (rsvpcount === undefined || isNaN(rsvpcount)) {
+        return res.status(400).json({ message: "Invalid RSVP count." });
+    }
+
+    try {
+        console.log("Updating RSVP ID:", id, "with count:", rsvpcount);
+        const updated = await RsvpResponse.findByIdAndUpdate(
+            id,
+            { rsvpcount: parseInt(rsvpcount, 10) },
+            { new: true }
+        );
+
+        if (!updated) {
+            return res.status(404).json({ message: "RSVP record not found." });
+        }
+
+        console.log("Updated RSVP:", updated);
+
+        // 🔔 Send confirmation email
+        try {
+            // ✅ Setup nodemailer transporter (update with your SMTP creds)
+            const transporter = nodemailer.createTransport({
+                host: "smtp.ionos.com",
+                port: 587,
+                secure: false, // true for 465, false for other ports
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS
+
+                    /*service: "gmail", // or SMTP settings
+                    auth: {
+                      user: process.env.EMAIL_USER,
+                      pass: process.env.EMAIL_PASS,*/
+                },
+            });
+
+            const mailOptions = {
+                from: `"JSMC RSVP" <admin@jsgvolleyball.com>`,
+                to: updated.email, // assumes email is in DB (if not, we’ll need to include in payload)
+                subject: "Your RSVP Has Been Updated",
+                html: `
+                  <h2>RSVP Update Confirmation</h2>
+                  <p>Dear ${updated.memname},</p>
+                  <p>Your RSVP has been updated for the following event:</p>
+                  <ul>
+                    <li><b>Program:</b> ${updated.programname}</li>
+                    <li><b>Event:</b> ${updated.eventname}</li>
+                    <li><b>Date:</b> ${updated.eventdate} (${updated.eventday})</li>
+                    <li><b>Updated RSVP Count:</b> ${updated.rsvpcount}</li>
+                    <li><b>Confirmation #:</b> ${updated.rsvpconfnumber}</li>
+                  </ul>
+                  <p>If you did not make this change, please contact us immediately.</p>
+                `,
+            };
+
+            await transporter.sendMail(mailOptions);
+            console.log("✅ RSVP update email sent to:", updated.email);
+        } catch (emailErr) {
+            console.error("❌ Error sending RSVP update email:", emailErr);
+        }
+
+        res.json({ message: "RSVP updated successfully.", updated });
+    } catch (err) {
+        console.error("Error updating RSVP:", err);
+        res.status(500).json({ message: "Server error." });
+    }
+});
+
+/* PUT /api/update_rsvp/:id ============ Working 091125 =====12:oopm ===
 router.put("/update_rsvp/:id", async (req, res) => {
     const { id } = req.params;
     const { rsvpcount } = req.body;
@@ -258,7 +333,7 @@ router.put("/update_rsvp/:id", async (req, res) => {
         console.error("Error updating RSVP:", err);
         res.status(500).json({ message: "Server error." });
     }
-});
+});*/
 
 module.exports = router;
 

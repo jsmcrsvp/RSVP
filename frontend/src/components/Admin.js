@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AddProgramForm from "./AddProgramForm";
 import Dashboard from "./Dashboard";
 import "../styles/Admin.css";
+import logo from "../assets/JSMCLogo.jpg";
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("home");
@@ -14,6 +15,9 @@ export default function Admin() {
   return (
     <div className="page-wrapper">
       <div className="admin-container">
+              <div className="logo-wrapper">
+                <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
+              </div>
         <h2>JSMC RSVP Admin Portal</h2>
 
         {/* Tabs */}
