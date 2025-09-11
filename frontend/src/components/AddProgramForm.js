@@ -8,7 +8,7 @@ import {
 import "../styles/AddProgramForm.css";
 
 // ✅ Utility to format YYYY-MM-DD → MM/DD/YYYY
-const displayDate = (dateStr) => {
+/*const displayDate = (dateStr) => {
   if (!dateStr) return "";
   const date = new Date(dateStr);
   if (isNaN(date)) return dateStr;
@@ -17,7 +17,13 @@ const displayDate = (dateStr) => {
     day: "2-digit",
     year: "numeric",
   });
-};
+};*/
+
+  const displayDate = (dateStr) => {
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    return `${month}/${day}/${year}`;
+  };
 
 const AddProgramForm = () => {
   const [progname, setProgname] = useState("");
