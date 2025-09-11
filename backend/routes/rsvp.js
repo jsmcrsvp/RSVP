@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
             memname,
             memaddress,
             memphonenumber,
-            email,
+            mememail,
             rsvpconfnumber,
             events,
         } = req.body;
@@ -24,6 +24,7 @@ router.post("/", async (req, res) => {
                     memname,
                     memaddress,
                     memphonenumber,
+                    mememail,
                     rsvpcount: ev.rsvpcount,
                     rsvpconfnumber,
                     eventname: ev.eventname,
@@ -74,7 +75,7 @@ JSMC RSVP Team
 
         await transporter.sendMail({
             from: `"JSMC RSVP" <admin@jsgvolleyball.com>`,
-            to: email,
+            to: mememail,
             subject: `RSVP Confirmation - #${rsvpconfnumber}`,
             text: emailBody,
         });
