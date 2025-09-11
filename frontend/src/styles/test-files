@@ -1,4 +1,4 @@
-// frontend/src/components/SubmitRSVP.js
+// frontend/src/components/SubmitRSVP.js ===== Working 09/11/25 ==== 6:00pm
 import React, { useEffect, useState } from "react";
 import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import "../styles/SubmitRSVP.css";
