@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import "../styles/SubmitRSVP.css";
+import logo from "../assets/JSMCLogo.jpg";
 
 export default function SubmitRSVP() {
   const [activeTab, setActiveTab] = useState("home"); // "home" | "submit" | "verify"
@@ -293,6 +294,10 @@ const displayDate = (dateStr) => {
   return (
     <div className="page-wrapper">
       <div className="rsvp-container">
+              {/* ✅ Logo at the top */}
+      <div className="logo-wrapper">
+        <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
+      </div>
         <h2>JSMC RSVP</h2>
 
         {/* Tabs */}

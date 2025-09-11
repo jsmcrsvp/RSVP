@@ -1,10 +1,86 @@
 // backend/routes/rsvp.js
 const express = require("express");
 const router = express.Router();
+const nodemailer = require("nodemailer");
 const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 const Program = require("../models/Programs_DB_Schema"); // 👈 import Program schema
 
-// POST: Save RSVP(s)
+// POST RSVP
+router.post("/", async (req, res) => {
+  try {
+    const {
+      memname,
+      memaddress,
+      memphonenumber,
+      email,
+      rsvpconfnumber,
+      events,
+    } = req.body;
+
+    // Save each event RSVP in DB (without email if not needed in schema)
+    const savedResponses = await Promise.all(
+      events.map(async (ev) => {
+        const newRSVP = new RsvpResponse({
+          memname,
+          memaddress,
+          memphonenumber,
+          rsvpcount: ev.rsvpcount,
+          rsvpconfnumber,
+          eventname: ev.eventname,
+          programname: ev.programname,
+          eventdate: ev.eventdate,
+          eventday: ev.eventday,
+        });
+        return await newRSVP.save();
+      })
+    );
+
+    // ✅ Build email content (all events in one message)
+    let eventDetails = events
+      .map(
+        (ev) =>
+          `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Count: ${ev.rsvpcount})`
+      )
+      .join("\n");
+
+    const emailBody = `
+Dear ${memname},
+
+Your RSVP has been successfully submitted.  
+Confirmation Number: ${rsvpconfnumber}
+
+Here are the event(s) you RSVP’d for:
+${eventDetails}
+
+Thank you,
+JSMC RSVP Team
+`;
+
+    // ✅ Setup nodemailer transporter (update with your SMTP creds)
+    const transporter = nodemailer.createTransport({
+      service: "gmail", // or SMTP settings
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"JSMC RSVP" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: `RSVP Confirmation - #${rsvpconfnumber}`,
+      text: emailBody,
+    });
+
+    res.status(201).json({ message: "RSVP submitted and email sent!" });
+  } catch (err) {
+    console.error("Error submitting RSVP:", err);
+    res.status(500).json({ message: "Error submitting RSVP" });
+  }
+});
+
+
+/* POST: Save RSVP(s) ======= Working 091125 ======= 8:30am
 router.post("/", async (req, res) => {
     try {
         console.log("backend/routes/rsvp.js 📥 Incoming RSVP submission:", JSON.stringify(req.body, null, 2));
@@ -62,7 +138,7 @@ router.post("/", async (req, res) => {
         console.error("❌ Error saving RSVP:", err);
         res.status(500).json({ message: "Error saving RSVP", error: err.message });
     }
-});
+});*/
 
 // GET RSVP by confirmation number
 router.get("/:confNumber", async (req, res) => {
