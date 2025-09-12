@@ -40,58 +40,59 @@ export default function Home() {
                 <div className="logo-wrapper">
                     <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
                 </div>
+                {activeTab === "home" && (
+                    <div className="home">
+                        <h4>Welcome to JSMC RSVP Portal</h4>
 
-                <div className="home">
-                    <h4>Welcome to JSMC RSVP Portal</h4>
+                        {error && <div className="error-message">{error}</div>}
 
-                    {error && <div className="error-message">{error}</div>}
-
-                    <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
-                        <h4>Current Open Events</h4>
-                        {Array.isArray(events) && events.length > 0 ? (
-                            <table className="result-table" style={{ marginBottom: "20px" }}>
-                                <thead>
-                                    <tr>
-                                        <th>Program</th>
-                                        <th>Event Name</th>
-                                        <th>Event Date</th>
-                                        <th>RSVP By</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {events.map((ev, idx) => {
-                                        const isFirst =
-                                            idx === 0 || ev.programname !== events[idx - 1].programname;
-                                        const programCount = events.filter(
-                                            (e) => e.programname === ev.programname
-                                        ).length;
-                                        return (
-                                            <tr key={ev._id || idx}>
-                                                {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
-                                                <td>{ev.eventname}</td>
-                                                <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
-                                                <td>{displayDate(ev.closersvp)}</td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
-                        ) : (
-                            <p style={{ fontStyle: "italic", color: "#666" }}>
-                                No open events available at this time.
-                            </p>
-                        )}
+                        <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
+                            <h4>Current Open Events</h4>
+                            {Array.isArray(events) && events.length > 0 ? (
+                                <table className="result-table" style={{ marginBottom: "20px" }}>
+                                    <thead>
+                                        <tr>
+                                            <th>Program</th>
+                                            <th>Event Name</th>
+                                            <th>Event Date</th>
+                                            <th>RSVP By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {events.map((ev, idx) => {
+                                            const isFirst =
+                                                idx === 0 || ev.programname !== events[idx - 1].programname;
+                                            const programCount = events.filter(
+                                                (e) => e.programname === ev.programname
+                                            ).length;
+                                            return (
+                                                <tr key={ev._id || idx}>
+                                                    {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
+                                                    <td>{ev.eventname}</td>
+                                                    <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
+                                                    <td>{displayDate(ev.closersvp)}</td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <p style={{ fontStyle: "italic", color: "#666" }}>
+                                    No open events available at this time.
+                                </p>
+                            )}
+                        </div>
+                        <h4>Please select Submit RSVP or Verify / Modify RSVP Tab</h4>
                     </div>
-                    <h4>Please select Submit RSVP or Verify / Modify RSVP Tab</h4>
-                </div>
+                )}
                 <div className="tab-header">
-                    <button onClick={() => handleTabChange("home")}>
+                    <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => handleTabChange("home")}>
                         Home
                     </button>
-                    <button onClick={() => handleTabChange("submit")}>
+                    <button className={activeTab === "submit" ? "tab active" : "tab"} onClick={() => handleTabChange("submit")}>
                         Submit RSVP
                     </button>
-                    <button onClick={() => handleTabChange("verify")}>
+                    <button className={activeTab === "verify" ? "tab active" : "tab"} onClick={() => handleTabChange("verify")}>
                         Verify / Modify RSVP
                     </button>
                 </div>
