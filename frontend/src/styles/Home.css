@@ -67,3 +67,31 @@ h4 {
   max-width: 125px;   /* adjust size */
   height: auto;
 }
+
+.tab-header {
+  display: flex;
+  justify-content: center; /* Centers the buttons horizontally */
+  gap: 10px; /* Adds spacing between buttons */
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  background-color: #75bbf8;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.tab:hover {
+  background-color: #7496e4;
+  color: black;
+}
+
+.tab.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
