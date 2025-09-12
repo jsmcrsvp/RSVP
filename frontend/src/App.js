@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/Home";
+import RSVPPage from "./components/RSVPPage";
 import MemberRSVP from "./components/SubmitRSVP/MemberRSVP";
 import NonMemberRSVP from "./components/SubmitRSVP/NonMemberRSVP";
 import VerifyRSVP from "./components/VerifyRSVP";
@@ -9,7 +10,8 @@ function App() {
     <Router>
       <Routes>
         {/* Default route → Home */}
-        <Route path="/" element={<Home />} />
+        {/*<Route path="/" element={<Home />} />*/}
+        <Route path="/" element={<RSVPPage />} />
 
         {/* Explicit routes */}
         <Route path="/home" element={<Home />} />
