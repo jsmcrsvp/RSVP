@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { submitRSVP } from "../../api";
 //import "...../styles/SubmitRSVP.css"
-import ".../styles/SubmitRSVP.css"
+import ".../styles/SubmitRSVP.css";
 
 export default function MemberRSVP({ events, onHome }) {
 
