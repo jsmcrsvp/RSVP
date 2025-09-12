@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./pages/Home";
-import MemberRSVP from "./pages/MemberRSVP";
-import NonMemberRSVP from "./pages/NonMemberRSVP";
-import Verify from "./pages/Verify";
+import Home from "./components/Home";
+import MemberRSVP from "./components/SubmitRSVP/MemberRSVP";
+import NonMemberRSVP from "./components/SubmitRSVP/NonMemberRSVP";
+import VerifyRSVP from "./components/VerifyRSVP";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/member-rsvp" element={<MemberRSVP />} />
         <Route path="/nonmember-rsvp" element={<NonMemberRSVP />} />
-        <Route path="/verify" element={<Verify />} />
+        <Route path="/verify" element={<VerifyRSVP />} />
 
         {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" />} />
