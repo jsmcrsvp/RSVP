@@ -347,7 +347,7 @@ export default function SubmitRSVP() {
               <h4>Current Open Events to Submit or Modify RSVP</h4>
 
               {Array.isArray(events) && events.length > 0 ? (
-                <table className="result-table" style={{ marginBottom: "15px" }}>
+                <table className="result-table" style={{ marginBottom: "20px" }}>
                   <thead>
                     <tr>
                       <th>Program</th>
@@ -416,7 +416,26 @@ export default function SubmitRSVP() {
               </div>
             )}
 
-            {isLifeMember === "no" && <div className="message">Thank you. RSVP is only for Life Members.</div>}
+            {/*{isLifeMember === "no" && <div className="message">Thank you. RSVP is only for Life Members.</div>}*/}
+
+            {isLifeMember === "no" && (
+              <form className="search-form">
+                <div>
+                  <label htmlFor="name">Name:</label>
+                  <input type="text" id="name" name="name" required />
+                </div>
+                <div>
+                  <label htmlFor="address">Address:</label>
+                  <input type="text" id="address" name="address" required />
+                </div>
+                <div>
+                  <label htmlFor="phone">Phone Number:</label>
+                  <input type="tel" id="phone" name="phone" required />
+                </div>
+                <button type="submit">Submit</button>
+              </form>
+            )}
+
 
             {isLifeMember === "yes" && !member && (
               <form className="search-form" onSubmit={handleSearch}>
