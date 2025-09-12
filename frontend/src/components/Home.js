@@ -1,6 +1,8 @@
 // frontend/src/components/Home.js
 import React, { useEffect, useState } from "react";
 import { getOpenEvents } from "../api";
+import "../styles/Home.css";
+import logo from "../assets/JSMCLogo.jpg";
 
 export default function Home() {
     const [events, setEvents] = useState([]);
@@ -31,46 +33,55 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="home">
-            <h4>Welcome to JSMC RSVP Portal</h4>
+        <div className="page-wrapper">
+            <div className="home-container">
+                {/* ✅ Logo at the top */}
+                <div className="logo-wrapper">
+                    <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
+                </div>
 
-            {error && <div className="error-message">{error}</div>}
+                <div className="home">
+                    <h4>Welcome to JSMC RSVP Portal</h4>
 
-            <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
-                <h4>Current Open Events</h4>
-                {Array.isArray(events) && events.length > 0 ? (
-                    <table className="result-table" style={{ marginBottom: "20px" }}>
-                        <thead>
-                            <tr>
-                                <th>Program</th>
-                                <th>Event Name</th>
-                                <th>Event Date</th>
-                                <th>RSVP By</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {events.map((ev, idx) => {
-                                const isFirst =
-                                    idx === 0 || ev.programname !== events[idx - 1].programname;
-                                const programCount = events.filter(
-                                    (e) => e.programname === ev.programname
-                                ).length;
-                                return (
-                                    <tr key={ev._id || idx}>
-                                        {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
-                                        <td>{ev.eventname}</td>
-                                        <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
-                                        <td>{displayDate(ev.closersvp)}</td>
+                    {error && <div className="error-message">{error}</div>}
+
+                    <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
+                        <h4>Current Open Events</h4>
+                        {Array.isArray(events) && events.length > 0 ? (
+                            <table className="result-table" style={{ marginBottom: "20px" }}>
+                                <thead>
+                                    <tr>
+                                        <th>Program</th>
+                                        <th>Event Name</th>
+                                        <th>Event Date</th>
+                                        <th>RSVP By</th>
                                     </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                ) : (
-                    <p style={{ fontStyle: "italic", color: "#666" }}>
-                        No open events available at this time.
-                    </p>
-                )}
+                                </thead>
+                                <tbody>
+                                    {events.map((ev, idx) => {
+                                        const isFirst =
+                                            idx === 0 || ev.programname !== events[idx - 1].programname;
+                                        const programCount = events.filter(
+                                            (e) => e.programname === ev.programname
+                                        ).length;
+                                        return (
+                                            <tr key={ev._id || idx}>
+                                                {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
+                                                <td>{ev.eventname}</td>
+                                                <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
+                                                <td>{displayDate(ev.closersvp)}</td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p style={{ fontStyle: "italic", color: "#666" }}>
+                                No open events available at this time.
+                            </p>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );
