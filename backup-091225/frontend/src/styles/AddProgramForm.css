@@ -1,0 +1,84 @@
+.add-program-container {
+  max-width: 1500px; /* Adjust width to fit nicely */
+  margin: 0 auto;
+  padding: 5px;
+}
+
+.program-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+.program-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-submit {
+  grid-column: span 2;
+  justify-self: start;
+  padding: 8px 16px;
+  background: #4c6daf;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.table-wrapper {
+  overflow-x: auto; /* only scroll if really needed */
+}
+
+.programs-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+.programs-table th,
+.programs-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.programs-table th {
+  background: #4c6daf;
+  color: white;
+}
+
+.btn-edit,
+.btn-save {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background: #f0ad4e;
+  color: white;
+}
+
+.btn-save {
+  background: #5cb85c;
+  color: white;
+}
+
+/* Logo Style guide */
+.logo-wrapper {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.rsvp-logo {
+  max-width: 125px;   /* adjust size */
+  height: auto;
+}

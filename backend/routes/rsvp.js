@@ -5,7 +5,90 @@ const nodemailer = require("nodemailer");
 const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 const Program = require("../models/Programs_DB_Schema"); // 👈 import Program schema
 
-// POST RSVP
+// POST RSVP (works for both members and non-members)
+router.post("/", async (req, res) => {
+    try {
+        const {
+            memname,
+            memaddress,
+            memphonenumber,
+            mememail,
+            rsvpconfnumber,
+            events,
+            isNonMember // 👈 NEW flag to differentiate
+        } = req.body;
+
+        if (!memname || !mememail || !Array.isArray(events) || events.length === 0) {
+            return res.status(400).json({ message: "Missing required RSVP data." });
+        }
+
+        // Save RSVP entries (same schema for members & non-members)
+        const savedResponses = await Promise.all(
+            events.map(async (ev) => {
+                const newRSVP = new RsvpResponse({
+                    memname,
+                    memaddress: memaddress || (isNonMember ? "Non-member" : ""), // fallback
+                    memphonenumber: memphonenumber || (isNonMember ? "N/A" : ""),
+                    mememail,
+                    rsvpcount: ev.rsvpcount,
+                    rsvpconfnumber,
+                    eventname: ev.eventname,
+                    programname: ev.programname,
+                    eventdate: ev.eventdate,
+                    eventday: ev.eventday,
+                    isNonMember: isNonMember || false // 👈 mark explicitly
+                });
+                return await newRSVP.save();
+            })
+        );
+
+        // Build email content
+        let eventDetails = events
+            .map(
+                (ev) =>
+                    `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Count: ${ev.rsvpcount})`
+            )
+            .join("\n");
+
+        const emailBody = `
+        Dear ${memname},
+
+        Your RSVP has been successfully submitted.  
+        Confirmation Number: ${rsvpconfnumber}
+
+        Here are the event(s) you RSVP’d for:
+        ${eventDetails}
+
+        Thank you,
+        JSMC RSVP Team
+        `;
+
+        // Setup nodemailer
+        const transporter = nodemailer.createTransport({
+            host: "smtp.ionos.com",
+            port: 587,
+            secure: false,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            },
+        });
+
+        await transporter.sendMail({
+            from: `"JSMC RSVP" <admin@jsgvolleyball.com>`,
+            to: mememail,
+            subject: `RSVP Confirmation - #${rsvpconfnumber}`,
+            text: emailBody,
+        });
+
+        res.status(201).json({ message: "RSVP submitted and email sent!" });
+    } catch (err) {
+        console.error("Error submitting RSVP:", err);
+        res.status(500).json({ message: "Error submitting RSVP" });
+    }
+});
+
+/* POST RSVP
 router.post("/", async (req, res) => {
     try {
         const {
@@ -17,7 +100,6 @@ router.post("/", async (req, res) => {
             events,
         } = req.body;
 
-        // Save each event RSVP in DB (without email if not needed in schema)
         const savedResponses = await Promise.all(
             events.map(async (ev) => {
                 const newRSVP = new RsvpResponse({
@@ -65,11 +147,6 @@ router.post("/", async (req, res) => {
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
-
-                /*service: "gmail", // or SMTP settings
-                auth: {
-                  user: process.env.EMAIL_USER,
-                  pass: process.env.EMAIL_PASS,*/
             },
         });
 
@@ -86,7 +163,7 @@ router.post("/", async (req, res) => {
         res.status(500).json({ message: "Error submitting RSVP" });
     }
 });
-
+*/
 
 /* POST: Save RSVP(s) ======= Working 091125 ======= 8:30am
 router.post("/", async (req, res) => {
