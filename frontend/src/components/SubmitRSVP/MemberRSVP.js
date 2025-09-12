@@ -1,7 +1,7 @@
 // frontend/src/components/SubmitRSVP/MemberRSVP.js
 import React, { useState } from "react";
 import { submitRSVP } from "../../api";
-import "../styles/SubmitRSVP.css";
+import ".../style/SubmitRSVP.css"
 
 export default function MemberRSVP({ events, onHome }) {
 
@@ -64,7 +64,7 @@ export default function MemberRSVP({ events, onHome }) {
           setSearching(false);
         }
       };
-      
+
     const handleSubmitRSVP = async (e) => {
         e.preventDefault();
         setError("");
