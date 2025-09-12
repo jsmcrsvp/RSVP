@@ -5,6 +5,8 @@ import MemberRSVP from "./components/SubmitRSVP/MemberRSVP";
 import NonMemberRSVP from "./components/SubmitRSVP/NonMemberRSVP";
 import VerifyRSVP from "./components/VerifyRSVP";
 
+import SubmitRSVPLanding from "./pages/SubmitRSVPLanding";
+
 function App() {
   return (
     <Router>
@@ -18,6 +20,7 @@ function App() {
         <Route path="/member-rsvp" element={<MemberRSVP />} />
         <Route path="/nonmember-rsvp" element={<NonMemberRSVP />} />
         <Route path="/verify" element={<VerifyRSVP />} />
+        <Route path="/submit-rsvp" element={<SubmitRSVPLanding />} />
         
         {/* Admin Page
         <Route path="/admin" element={<Admin />} /> */}

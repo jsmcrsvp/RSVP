@@ -1,75 +1,91 @@
-// frontend/src/components/VerifyRSVP.js
+// frontend/src/pages/VerifyRSVP.js
 import React, { useState } from "react";
-import axios from "axios";
+import { verifyRSVP, updateRSVP } from "../api";
+import "../styles/SubmitRSVP.css";
 
-// Utility to format dates
-const displayDate = (dateStr) => {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-};
-
-const VerifyRSVP = () => {
+export default function VerifyRSVP() {
   const [verifyConfNumber, setVerifyConfNumber] = useState("");
+  const [verifyResult, setVerifyResult] = useState({ rsvps: [] });
   const [verifying, setVerifying] = useState(false);
-  const [verifyResult, setVerifyResult] = useState(null);
+
   const [editIndex, setEditIndex] = useState(null);
   const [modifiedCount, setModifiedCount] = useState("");
-  const [updateMessage, setUpdateMessage] = useState("");
-  const [updateError, setUpdateError] = useState("");
+  const [updateMessage, setUpdateMessage] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
+  const [error, setError] = useState("");
 
-  // Extract member details from verify result
-  const verifyMemberFromResult = () => {
-    if (verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0) {
-      const { name, address, phone, email } = verifyResult.rsvps[0];
-      return { name, address, phone, email };
-    }
-    return {};
-  };
-
-  // Handle verify
   const handleVerifyRSVP = async (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
+    setError("");
+    setVerifyResult({ rsvps: [] });
+    setUpdateMessage(null);
+    setUpdateError(null);
+    if (!verifyConfNumber.trim()) {
+      setError("Confirmation number is required.");
+      return;
+    }
+
     setVerifying(true);
-    setUpdateMessage("");
-    setUpdateError("");
     try {
-      const res = await axios.post("/api/verify-rsvp", { confNumber: verifyConfNumber });
-      setVerifyResult({ ...res.data, checked: true });
+      const data = await verifyRSVP(verifyConfNumber.trim());
+      const normalized =
+        data && Array.isArray(data.rsvps) ? data : { rsvps: [] };
+      setVerifyResult(normalized);
     } catch (err) {
-      console.error("Verify failed", err);
-      setVerifyResult({ rsvps: [], checked: true });
-      setUpdateError("Error verifying RSVP.");
+      setError(err.response?.data?.message || err.message || "Error verifying RSVP.");
     } finally {
       setVerifying(false);
+      setEditIndex(null);
+      setModifiedCount("");
     }
   };
 
-  // Handle update of RSVP count
-  const handleUpdateRSVP = async (rsvpId, count) => {
-    setUpdateMessage("");
-    setUpdateError("");
+  const handleUpdateRSVP = async (rsvpId, newCount) => {
     try {
-      await axios.post("/api/update-rsvp", { rsvpId, rsvpcount: count });
-      setUpdateMessage("RSVP updated successfully.");
-      // Update locally
-      const updatedRsvps = verifyResult.rsvps.map((ev, idx) =>
-        ev._id === rsvpId ? { ...ev, rsvpcount: count } : ev
-      );
-      setVerifyResult({ ...verifyResult, rsvps: updatedRsvps });
+      await updateRSVP(rsvpId, parseInt(newCount, 10));
+
+      await handleVerifyRSVP({ preventDefault: () => {} });
       setEditIndex(null);
+
+      setUpdateMessage("RSVP updated successfully!");
+      setUpdateError(null);
+
+      setTimeout(() => {
+        setVerifyConfNumber("");
+        setVerifyResult({ rsvps: [] });
+        setEditIndex(null);
+        setModifiedCount("");
+        setUpdateMessage(null);
+      }, 15000);
     } catch (err) {
-      console.error("Update failed", err);
-      setUpdateError("Failed to update RSVP.");
+      setUpdateError(err.message || "Error updating RSVP.");
+      setUpdateMessage(null);
+      setTimeout(() => setUpdateError(null), 5000);
     }
+  };
+
+  const verifyMemberFromResult = () => {
+    const arr = verifyResult?.rsvps ?? [];
+    if (!Array.isArray(arr) || arr.length === 0) return null;
+    const first = arr[0];
+    return {
+      name: first.memname || "",
+      address: first.memaddress || "",
+      phone: first.memphonenumber || "",
+      email: first.mememail || "",
+    };
+  };
+
+  const displayDate = (dateStr) => {
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    return `${month}/${day}/${year}`;
   };
 
   return (
     <form className="verify-form" onSubmit={handleVerifyRSVP}>
       <h3>Verify / Modify RSVP</h3>
+      {error && <div className="error-message">{error}</div>}
       <div className="inline-fields">
         <input
           className="small-input"
@@ -83,12 +99,10 @@ const VerifyRSVP = () => {
         </button>
       </div>
 
-      {/* Show only when rsvps are returned */}
+      {/* Results */}
       {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
         <div className="result-table-wrapper">
           <h4>Current RSVP Details</h4>
-
-          {/* Member details from first RSVP doc */}
           <table className="result-table" style={{ marginBottom: 10 }}>
             <tbody>
               <tr>
@@ -110,7 +124,6 @@ const VerifyRSVP = () => {
             </tbody>
           </table>
 
-          {/* RSVP Events */}
           <table className="result-table">
             <thead>
               <tr>
@@ -127,9 +140,7 @@ const VerifyRSVP = () => {
                 <tr key={ev._id || idx}>
                   <td>{ev.programname}</td>
                   <td>{ev.eventname}</td>
-                  <td>
-                    {ev.eventday}, {displayDate(ev.eventdate)}
-                  </td>
+                  <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
                   <td>{ev.eventstatus}</td>
                   <td>
                     {editIndex === idx ? (
@@ -176,25 +187,6 @@ const VerifyRSVP = () => {
         </div>
       )}
 
-      {/* No results case */}
-      {verifyResult &&
-        verifyResult.checked &&
-        Array.isArray(verifyResult.rsvps) &&
-        verifyResult.rsvps.length === 0 && (
-          <div
-            style={{
-              textAlign: "center",
-              color: "#888",
-              fontStyle: "italic",
-              marginTop: "10px",
-            }}
-          >
-            No RSVP records found for this confirmation number or Event RSVP may
-            be closed.
-          </div>
-        )}
-
-      {/* Success / error messages */}
       {updateMessage && (
         <div style={{ color: "green", marginTop: "10px" }}>✅ {updateMessage}</div>
       )}
@@ -203,6 +195,4 @@ const VerifyRSVP = () => {
       )}
     </form>
   );
-};
-
-export default VerifyRSVP;
+}

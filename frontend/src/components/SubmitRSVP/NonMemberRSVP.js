@@ -1,51 +1,29 @@
 // frontend/src/pages/NonMemberRSVP.js
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { fetchOpenEvents, submitRSVP } from "../api";
+import "../styles/SubmitRSVP.css";
 
-const NonMemberRSVP = () => {
-  const [form, setForm] = useState({
-    memname: "",
-    memaddress: "",
-    memphonenumber: "",
-    mememail: "",
-  });
+export default function NonMemberRSVP({ onHome }) {
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [events, setEvents] = useState([]);
-  const [selectedEvents, setSelectedEvents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Fetch open events from backend
   useEffect(() => {
-    const fetchEvents = async () => {
+    const loadEvents = async () => {
       try {
-        const res = await axios.get("/api/programs/open-events"); // 👈 you should already have this endpoint
-        setEvents(res.data);
+        const data = await fetchOpenEvents();
+        setEvents(data || []);
       } catch (err) {
-        console.error("Error fetching events:", err);
+        console.error("Error loading events:", err);
       }
     };
-    fetchEvents();
+    loadEvents();
   }, []);
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const toggleEvent = (event) => {
-    if (selectedEvents.find((e) => e.eventname === event.eventname)) {
-      setSelectedEvents(selectedEvents.filter((e) => e.eventname !== event.eventname));
-    } else {
-      setSelectedEvents([...selectedEvents, { ...event, rsvpcount: 1 }]);
-    }
-  };
-
-  const updateCount = (eventname, count) => {
-    setSelectedEvents(
-      selectedEvents.map((e) =>
-        e.eventname === eventname ? { ...e, rsvpcount: count } : e
-      )
-    );
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,96 +31,110 @@ const NonMemberRSVP = () => {
     setMessage("");
 
     try {
-      const rsvpconfnumber = `NM-${Date.now()}`;
-
-      await axios.post("/api/rsvp", {
-        ...form,
-        rsvpconfnumber,
-        events: selectedEvents,
-        isNonMember: true, // 👈 tell backend this is a non-member
+      await submitRSVP({
+        name,
+        address,
+        phone,
+        email,
+        rsvpEntries: events.map((ev) => ({
+          eventId: ev._id,
+          rsvpcount: ev.rsvpcount || 0,
+        })),
       });
 
-      setMessage("RSVP submitted successfully! Confirmation sent via email.");
-      setForm({ memname: "", memaddress: "", memphonenumber: "", mememail: "" });
-      setSelectedEvents([]);
+      setSubmitted(true);
+      setMessage("RSVP submitted successfully!");
     } catch (err) {
-      console.error("Error submitting RSVP:", err);
-      setMessage("Error submitting RSVP. Please try again.");
+      setMessage("Error submitting RSVP.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="container">
-      <h2>Non-Member RSVP</h2>
-      <form onSubmit={handleSubmit}>
+    <form className="rsvp-form" onSubmit={handleSubmit}>
+      <h3>Non-Member RSVP</h3>
+      <div className="inline-fields">
         <input
           type="text"
-          name="memname"
           placeholder="Full Name"
-          value={form.memname}
-          onChange={handleChange}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           required
         />
         <input
           type="text"
-          name="memaddress"
           placeholder="Address"
-          value={form.memaddress}
-          onChange={handleChange}
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
           required
         />
+      </div>
+      <div className="inline-fields">
         <input
           type="text"
-          name="memphonenumber"
           placeholder="Phone Number"
-          value={form.memphonenumber}
-          onChange={handleChange}
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
           required
         />
         <input
           type="email"
-          name="mememail"
           placeholder="Email Address"
-          value={form.mememail}
-          onChange={handleChange}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
+      </div>
 
-        <h3>Select Events</h3>
-        {events.length === 0 && <p>No open events available.</p>}
-        {events.map((ev) => (
-          <div key={ev.eventname}>
-            <label>
-              <input
-                type="checkbox"
-                checked={!!selectedEvents.find((e) => e.eventname === ev.eventname)}
-                onChange={() => toggleEvent(ev)}
-              />
-              {ev.programname} - {ev.eventname} ({ev.eventday}, {ev.eventdate})
-            </label>
-            {selectedEvents.find((e) => e.eventname === ev.eventname) && (
-              <input
-                type="number"
-                min="1"
-                value={
-                  selectedEvents.find((e) => e.eventname === ev.eventname)?.rsvpcount || 1
-                }
-                onChange={(e) => updateCount(ev.eventname, parseInt(e.target.value))}
-              />
-            )}
-          </div>
-        ))}
+      <h4>Open Events</h4>
+      {events.length > 0 ? (
+        <table className="result-table">
+          <thead>
+            <tr>
+              <th>Program</th>
+              <th>Event</th>
+              <th>Date</th>
+              <th>RSVP</th>
+            </tr>
+          </thead>
+          <tbody>
+            {events.map((ev, idx) => (
+              <tr key={ev._id || idx}>
+                <td>{ev.programname}</td>
+                <td>{ev.eventname}</td>
+                <td>{ev.eventday}, {ev.eventdate}</td>
+                <td>
+                  <input
+                    type="number"
+                    min="0"
+                    value={ev.rsvpcount || 0}
+                    onChange={(e) => {
+                      const newEvents = [...events];
+                      newEvents[idx].rsvpcount = e.target.value;
+                      setEvents(newEvents);
+                    }}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No open events.</p>
+      )}
 
-        <button type="submit" disabled={loading}>
+      <div className="form-actions">
+        <button className="button" type="submit" disabled={loading}>
           {loading ? "Submitting..." : "Submit RSVP"}
         </button>
-      </form>
+        <button type="button" onClick={onHome}>
+          Home
+        </button>
+      </div>
 
-      {message && <p>{message}</p>}
-    </div>
+      {submitted && <div className="success-message">{message}</div>}
+      {!submitted && message && <div className="error-message">{message}</div>}
+    </form>
   );
-};
-
-export default NonMemberRSVP;
+}
