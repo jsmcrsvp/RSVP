@@ -6,6 +6,7 @@ import logo from "../assets/JSMCLogo.jpg";
 
 export default function Home() {
     const [events, setEvents] = useState([]);
+    const [loadingEvents, setLoadingEvents] = useState(true);
     const [error, setError] = useState("");
 
     const displayDate = (dateStr) => {
