@@ -17,8 +17,8 @@ function App() {
         <Route path="/nonmember-rsvp" element={<NonMemberRSVP />} />
         <Route path="/verify" element={<VerifyRSVP />} />
         
-        {/* Admin Page */}
-        <Route path="/admin" element={<Admin />} />
+        {/* Admin Page
+        <Route path="/admin" element={<Admin />} /> */}
 
         {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/" />} />
