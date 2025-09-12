@@ -5,6 +5,7 @@ import "../styles/Home.css";
 import logo from "../assets/JSMCLogo.jpg";
 
 export default function Home() {
+    const [activeTab, setActiveTab] = useState("home"); // "home" | "submit" | "verify"
     const [events, setEvents] = useState([]);
     const [loadingEvents, setLoadingEvents] = useState(true);
     const [error, setError] = useState("");
