@@ -8,17 +8,6 @@ import {
 import "../styles/AddProgramForm.css";
 
 // ✅ Utility to format YYYY-MM-DD → MM/DD/YYYY
-/*const displayDate = (dateStr) => {
-  if (!dateStr) return "";
-  const date = new Date(dateStr);
-  if (isNaN(date)) return dateStr;
-  return date.toLocaleDateString("en-US", {
-    month: "2-digit",
-    day: "2-digit",
-    year: "numeric",
-  });
-};*/
-
   const displayDate = (dateStr) => {
     if (!dateStr) return "";
     const [year, month, day] = dateStr.split("-");
