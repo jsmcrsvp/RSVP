@@ -1,7 +1,7 @@
 // frontend/src/pages/SubmitRSVPLanding.js
 import React, { useState } from "react";
-import MemberRSVP from "./MemberRSVP";
-import NonMemberRSVP from "./NonMemberRSVP";
+import MemberRSVP from "../MemberRSVP";
+import NonMemberRSVP from "../NonMemberRSVP";
 import VerifyRSVP from "./VerifyRSVP";
 import "../styles/SubmitRSVP.css";
 

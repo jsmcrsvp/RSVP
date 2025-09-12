@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import "../styles/SubmitRSVP.css";
 import logo from "../assets/JSMCLogo.jpg";
+import "./NonMemberRSVP";
 
 export default function SubmitRSVP() {
   const [activeTab, setActiveTab] = useState("home"); // "home" | "submit" | "verify"
@@ -419,7 +420,8 @@ export default function SubmitRSVP() {
             {/*{isLifeMember === "no" && <div className="message">Thank you. RSVP is only for Life Members.</div>}*/}
 
             {isLifeMember === "no" && (
-              <form className="search-form">
+                    
+              {/*<form className="search-form">
                 <div>
                   <label htmlFor="name">Name:</label>
                   <input type="text" id="name" name="name" required />
@@ -433,7 +435,7 @@ export default function SubmitRSVP() {
                   <input type="tel" id="phone" name="phone" required />
                 </div>
                 <button className="button" type="submit">Submit</button>
-              </form>
+              </form>*/}
             )}
 
 

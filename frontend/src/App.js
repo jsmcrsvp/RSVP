@@ -1,3 +1,27 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import SubmitRSVP from './components/SubmitRSVP';
+import AddProgramForm from './components/AddProgramForm';
+import Admin from './components/Admin';
+import './styles/App.css';
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<SubmitRSVP />} />
+        <Route path="/add-program" element={<AddProgramForm />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/submit-rsvp" element={<SubmitRSVP />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+
+
+/*
 import React, { useState } from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import SubmitRSVP from './components/SubmitRSVP';
@@ -19,6 +43,7 @@ function App() {
 }
 
 export default App;
+*/
 
 /*
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";

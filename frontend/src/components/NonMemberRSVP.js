@@ -1,6 +1,6 @@
 // frontend/src/pages/NonMemberRSVP.js
 import React, { useState, useEffect } from "react";
-import { fetchOpenEvents, submitRSVP } from "../api";
+import { getOpenEvents, submitRSVP } from "../api";
 import "../styles/SubmitRSVP.css";
 
 export default function NonMemberRSVP({ onHome }) {
@@ -16,7 +16,7 @@ export default function NonMemberRSVP({ onHome }) {
   useEffect(() => {
     const loadEvents = async () => {
       try {
-        const data = await fetchOpenEvents();
+        const data = await getOpenEvents();
         setEvents(data || []);
       } catch (err) {
         console.error("Error loading events:", err);
