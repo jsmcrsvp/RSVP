@@ -432,7 +432,7 @@ export default function SubmitRSVP() {
                   <label htmlFor="phone">Phone Number:</label>
                   <input type="tel" id="phone" name="phone" required />
                 </div>
-                <button type="submit">Submit</button>
+                <button className="button" type="submit">Submit</button>
               </form>
             )}
 
