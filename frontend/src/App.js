@@ -4,8 +4,7 @@ import RSVPPage from "./components/RSVPPage";
 import MemberRSVP from "./components/SubmitRSVP/MemberRSVP";
 import NonMemberRSVP from "./components/SubmitRSVP/NonMemberRSVP";
 import VerifyRSVP from "./components/VerifyRSVP";
-
-import SubmitRSVPLanding from "./SubmitRSVP/SubmitRSVPLanding";
+import SubmitRSVPLanding from "./components/SubmitRSVP/SubmitRSVPLanding";
 
 function App() {
   return (
