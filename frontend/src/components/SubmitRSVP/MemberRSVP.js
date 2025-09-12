@@ -1,6 +1,7 @@
 // frontend/src/components/SubmitRSVP/MemberRSVP.js
 import React, { useState } from "react";
 import { submitRSVP } from "../../api";
+import "../styles/SubmitRSVP.css";
 
 export default function MemberRSVP({ events, onHome }) {
 
@@ -24,6 +25,46 @@ export default function MemberRSVP({ events, onHome }) {
         return Object.values(selectedEvents).some((val) => Number(val) > 0);
     };
 
+      const handleSearch = async (e) => {
+        e.preventDefault();
+        setError("");
+        setMember(null);
+        if (searchMode !== "memberId" && searchMode !== "nameHouse") {
+          setError("Choose a search mode first.");
+          return;
+        }
+        if (searchMode === "memberId" && !memberId.trim()) {
+          setError("Member ID is required.");
+          return;
+        }
+        if (searchMode === "nameHouse" && (!name.trim() || !houseNumber.trim())) {
+          setError("Name and House # are required.");
+          return;
+        }
+    
+        setSearching(true);
+        try {
+          const payload =
+            searchMode === "memberId"
+              ? { memberId: memberId.trim() }
+              : { name: name.trim(), houseNumber: houseNumber.trim() };
+    
+          console.log("Searching member with payload:", payload);
+          const result = await searchMember(payload);
+          console.log("Search result:", result);
+          if (result && result.name) {
+            setMember(result);
+          } else {
+            setError("Member not found.");
+          }
+        } catch (err) {
+          console.error("Error searching member:", err);
+          setError(err.message || "Error searching member.");
+        } finally {
+          setSearching(false);
+        }
+      };
+      
     const handleSubmitRSVP = async (e) => {
         e.preventDefault();
         setError("");
