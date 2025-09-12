@@ -20,6 +20,7 @@ export default function MemberRSVP({ events, onHome }) {
     const [submitMessage, setSubmitMessage] = useState(null);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [searching, setSearching] = useState(false);
 
     const hasValidSelection = () => {
         return Object.values(selectedEvents).some((val) => Number(val) > 0);
@@ -140,9 +141,8 @@ export default function MemberRSVP({ events, onHome }) {
     };
 
     return (
-        <div className="page-wrapper">
             <div className="rsvp-container">
-                {isLifeMember === null && (
+                {/*{isLifeMember === null && (
                     <div className="form-section">
                         <h3>Are you JSMC Life Member?</h3>
                         <label>
@@ -152,7 +152,7 @@ export default function MemberRSVP({ events, onHome }) {
                             <input type="radio" name="lifeMember" value="no" onChange={() => setIsLifeMember("no")} /> No
                         </label>
                     </div>
-                )}
+                )}*/}
 
                 {isLifeMember === "yes" && !member && (
                     <form className="search-form" onSubmit={handleSearch}>
@@ -366,7 +366,8 @@ export default function MemberRSVP({ events, onHome }) {
                 )}
 
             </div>
-        </div>
+    );
+}
         /*<div className="form-section">
           <h3>Submit RSVP (Life Member)</h3>
           <form onSubmit={handleSubmitRSVP}>
@@ -447,6 +448,6 @@ export default function MemberRSVP({ events, onHome }) {
               {submitMessage}
             </p>
           )}
-        </div>*/
+        </div>
     );
-}
+}*/
