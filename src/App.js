@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+//import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router } from "react-router-dom";
 import SubmitRSVP from './components/SubmitRSVP';
 import AddProgramForm from './components/AddProgramForm';
 import Admin from './components/Admin';
