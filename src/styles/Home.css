@@ -1,0 +1,97 @@
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #e8f3f9;
+  padding: 1rem;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.home-container {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+}
+
+h4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #5d8cdf;
+}
+
+/* Results Table */
+.result-table-wrapper,
+.last-rsvp {
+  margin-top: 0.2rem;
+  overflow-x: auto;
+  background: #f9f9f9e4;
+  padding: 0.2rem;
+  border-radius: 6px;
+}
+
+.result-table,
+.last-rsvp table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result-table th,
+.result-table td,
+.last-rsvp th,
+.last-rsvp td {
+  border: 1px solid #ccc;
+  padding: 0.6rem;
+  text-align: left;
+}
+
+.result-table th,
+.last-rsvp th {
+  background: #f4f4f4;
+  color: #333;
+}
+
+/* Logo Style guide */
+.logo-wrapper {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.rsvp-logo {
+  max-width: 125px;   /* adjust size */
+  height: auto;
+}
+
+.tab-header {
+  display: flex;
+  justify-content: center; /* Centers the buttons horizontally */
+  gap: 10px; /* Adds spacing between buttons */
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  background-color: #75bbf8;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.tab:hover {
+  background-color: #7496e4;
+  color: black;
+}
+
+.tab.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
