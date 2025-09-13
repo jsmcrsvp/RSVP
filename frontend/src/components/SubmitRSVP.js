@@ -419,7 +419,7 @@ export default function SubmitRSVP() {
 
             {/*{isLifeMember === "no" && <div className="message">Thank you. RSVP is only for Life Members.</div>}*/}
 
-{/* --------------------------------- Non-Member RSVP --------------------------------- */}
+            {/* --------------------------------- Non-Member RSVP --------------------------------- */}
             {isLifeMember === "no" && (
 
               <form className="search-form">
@@ -437,62 +437,9 @@ export default function SubmitRSVP() {
                 </div>
                 <button className="button" type="submit">Submit</button>
               </form>
-            )}
-            <div className="result-table-wrapper">
-              <h4>Select Events to RSVP</h4>
-              <table className="result-table">
-                <thead>
-                  <tr>
-                    <th>Program</th>
-                    <th>Event Name</th>
-                    <th>Event Date</th>
-                    <th>Select</th>
-                    <th>RSVP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {events.map((ev, idx) => {
-                    const isFirst = idx === 0 || ev.programname !== events[idx - 1].programname;
-                    const programCount = events.filter(
-                      (e) => e.programname === ev.programname
-                    ).length;
 
-                    return (
-                      <tr key={idx}>
-                        {isFirst && (
-                          <td rowSpan={programCount}>{ev.programname}</td>
-                        )}
-                        <td>{ev.eventname}</td>
-                        <td>
-                          {ev.eventday}, {displayDate(ev.eventdate)}
-                        </td>
-                        <td>
-                          <input
-                            type="checkbox"
-                            checked={selectedEvents[idx] !== undefined}
-                            onChange={(e) => toggleEventSelection(idx, e.target.checked)}
-                          />
-                        </td>
-                        <td>
-                          {selectedEvents[idx] !== undefined ? (
-                            <input
-                              type="number"
-                              min="0"
-                              value={rsvpCount}
-                              onChange={(e) => setRsvpCount(e.target.value)}
-                              placeholder="Count"
-                              style={{ width: "60px" }}
-                            />
-                          ) : (
-                            "-"
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+
+            )}
 
             {isLifeMember === "yes" && !member && (
               <form className="search-form" onSubmit={handleSearch}>
@@ -590,6 +537,61 @@ export default function SubmitRSVP() {
                     </button>
                   </div>
                 )}
+                <div className="result-table-wrapper">
+                  <h4>Select Events to RSVP</h4>
+                  <table className="result-table">
+                    <thead>
+                      <tr>
+                        <th>Program</th>
+                        <th>Event Name</th>
+                        <th>Event Date</th>
+                        <th>Select</th>
+                        <th>RSVP</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {events.map((ev, idx) => {
+                        const isFirst = idx === 0 || ev.programname !== events[idx - 1].programname;
+                        const programCount = events.filter(
+                          (e) => e.programname === ev.programname
+                        ).length;
+
+                        return (
+                          <tr key={idx}>
+                            {isFirst && (
+                              <td rowSpan={programCount}>{ev.programname}</td>
+                            )}
+                            <td>{ev.eventname}</td>
+                            <td>
+                              {ev.eventday}, {displayDate(ev.eventdate)}
+                            </td>
+                            <td>
+                              <input
+                                type="checkbox"
+                                checked={selectedEvents[idx] !== undefined}
+                                onChange={(e) => toggleEventSelection(idx, e.target.checked)}
+                              />
+                            </td>
+                            <td>
+                              {selectedEvents[idx] !== undefined ? (
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={rsvpCount}
+                                  onChange={(e) => setRsvpCount(e.target.value)}
+                                  placeholder="Count"
+                                  style={{ width: "60px" }}
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </form>
             )}
 
