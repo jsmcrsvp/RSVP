@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SubmitRSVP from './components/SubmitRSVP';
@@ -19,9 +20,8 @@ function App() {
 }
 
 export default App;
+*/
 
-
-/*
 import React, { useState } from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import SubmitRSVP from './components/SubmitRSVP';
@@ -43,7 +43,7 @@ function App() {
 }
 
 export default App;
-*/
+
 
 /*
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
