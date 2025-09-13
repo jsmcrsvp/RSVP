@@ -1,6 +1,5 @@
 // frontend/src/components/SubmitRSVP.js ========== Working )91225 ======7:30am=============
 import React, { useEffect, useState } from "react";
-//import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import "../styles/SubmitRSVP.css";
 import logo from "../assets/JSMCLogo.jpg";
