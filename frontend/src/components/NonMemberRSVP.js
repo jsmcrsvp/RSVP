@@ -105,6 +105,7 @@ export default function NonMemberRSVP({
             }}
             required
             className="input-field"
+            style={{ width: "300px" }}
           />
         </div>
 
