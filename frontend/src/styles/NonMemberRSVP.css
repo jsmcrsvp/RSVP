@@ -34,7 +34,7 @@
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 250px; /* Fixed width for consistency */
+  width: 300px; /* Fixed width for consistency */
 }
 
 /* Results Table */

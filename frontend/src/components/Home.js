@@ -521,7 +521,27 @@ export default function Home() {
             <h4>Please select Submit RSVP or Verify/Modify RSVP</h4>
           </div>
         )}
+
         {/* Tabs */}
+        <div className="tab-header">
+          {activeTab !== "home" && (
+            <button className="tab" onClick={() => handleTabChange("home")}>
+              Home
+            </button>
+          )}
+          {activeTab !== "submit" && (
+            <button className="tab" onClick={() => handleTabChange("submit")}>
+              Submit RSVP
+            </button>
+          )}
+          {activeTab !== "verify" && (
+            <button className="tab" onClick={() => handleTabChange("verify")}>
+              Verify / Modify RSVP
+            </button>
+          )}
+        </div>
+
+        {/* Tabs
         <div className="tab-header">
           <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => handleTabChange("home")}>
             Home
@@ -532,7 +552,7 @@ export default function Home() {
           <button className={activeTab === "verify" ? "tab active" : "tab"} onClick={() => handleTabChange("verify")}>
             Verify / Modify RSVP
           </button>
-        </div>
+        </div>*/}
 
         {/* SUBMIT */}
         {activeTab === "submit" && (

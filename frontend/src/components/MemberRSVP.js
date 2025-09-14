@@ -22,7 +22,7 @@ export default function MemberRSVP({
     <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
 
       <div className="result-table-wrapper">
-        <h4>Membership Details</h4>
+        <h4>Life Membership Details</h4>
         <table className="result-table" style={{ marginBottom: 10 }}>
           <tbody>
             <tr>
