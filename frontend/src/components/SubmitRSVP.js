@@ -11,8 +11,8 @@ import "../styles/SubmitRSVP.css";
 import logo from "../assets/JSMCLogo.jpg";
 
 // IMPORTANT: adjust these imports if your files are located somewhere else
-import MemberRSVP from "./SubmitRSVP/MemberRSVP";
-import NonMemberRSVP from "./SubmitRSVP/NonMemberRSVP";
+import MemberRSVP from "./MemberRSVP";
+import NonMemberRSVP from "./NonMemberRSVP";
 
 export default function SubmitRSVP() {
   const [activeTab, setActiveTab] = useState("home"); // "home" | "submit" | "verify"
