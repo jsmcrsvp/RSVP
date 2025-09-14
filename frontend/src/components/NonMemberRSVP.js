@@ -65,7 +65,7 @@ export default function NonMemberRSVP({
           type="text"
           value={nonMemberName}
           onChange={(e) => setNonMemberName(e.target.value)}
-          required
+          required style={{height: "36px", fontSize: "14px", padding: "6px 10px", boxSizing: "border-box",}}
         />
 
         <label>Address:</label>
@@ -73,7 +73,7 @@ export default function NonMemberRSVP({
           type="text"
           value={nonMemberAddress}
           onChange={(e) => setNonMemberAddress(e.target.value)}
-          required
+          required style={{height: "36px", fontSize: "14px", padding: "6px 10px", boxSizing: "border-box",}}
         />
 
         <label>Phone:</label>
@@ -178,7 +178,7 @@ export default function NonMemberRSVP({
           value={nonMemberEmail}
           onChange={(e) => setNonMemberEmail(e.target.value)}
           placeholder="Enter Email Address"
-          required
+          required style={{height: "36px", fontSize: "14px", padding: "6px 10px", boxSizing: "border-box",}}
         />
         <button
           className="button"
