@@ -481,7 +481,7 @@ export default function Home() {
 
             {/* Open Events Table */}
             <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
-              <h4>Current Open Events to Submit or Modify RSVP</h4>
+              <h4>Current open events to Submit or View/Modify RSVP</h4>
 
               {Array.isArray(events) && events.length > 0 ? (
                 <table className="result-table" style={{ marginBottom: "20px" }}>
@@ -518,7 +518,7 @@ export default function Home() {
               )}
             </div>
 
-            <h4>Please select Submit RSVP or Verify / Modify RSVP Tab</h4>
+            <h4>Please select Submit RSVP or Verify/Modify RSVP</h4>
           </div>
         )}
         {/* Tabs */}

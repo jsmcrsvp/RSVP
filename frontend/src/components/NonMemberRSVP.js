@@ -84,6 +84,28 @@ export default function NonMemberRSVP({
         </div>
 
         <div className="form-group">
+          <label>Name:</label>
+          <input
+            type="text"
+            value={nonMemberName}
+            onChange={(e) => setNonMemberName(e.target.value)}
+            required
+            className="input-field"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Address:</label>
+          <input
+            type="text"
+            value={nonMemberAddress}
+            onChange={(e) => setNonMemberAddress(e.target.value)}
+            required
+            className="input-field"
+          />
+        </div>
+
+        <div className="form-group">
           <label>Phone:</label>
           <input
             type="tel"
@@ -108,7 +130,8 @@ export default function NonMemberRSVP({
           />
         </div>
 
-{/*============================
+
+        {/*============================
         <label>Name:</label>
         <input
           type="text"
