@@ -1,7 +1,7 @@
 // frontend/src/components/SubmitRSVP.js
 import React, { useState } from "react";
-import MemberRSVP from "./SubmitRSVP/MemberRSVP";
-import NonMemberRSVP from "./SubmitRSVP/NonMemberRSVP";
+import MemberRSVP from "./MemberRSVP";
+import NonMemberRSVP from "./NonMemberRSVP";
 import "../styles/SubmitRSVP.css";
 
 export default function SubmitRSVP({ events = [], onHome }) {
