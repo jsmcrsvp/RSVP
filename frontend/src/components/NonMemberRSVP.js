@@ -132,7 +132,7 @@ export default function NonMemberRSVP({
                 : "pointer",
           }}
         >
-          {submitting ? "Submitting..." : "Submit RSVP"}
+          {submitting ? "Submitting..." : "Submit"}
         </button>
       </div>
     </form>

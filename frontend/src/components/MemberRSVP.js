@@ -104,13 +104,13 @@ export default function MemberRSVP({
         <button
           className="button"
           type="submit"
-          disabled={rsvpCount === "" || email === ""}
+          disabled={submitting || rsvpCount === "" || email === ""}
           style={{
-            backgroundColor: rsvpCount === "" || email === "" ? "grey" : "#007bff",
-            cursor: rsvpCount === "" || email === "" ? "not-allowed" : "pointer",
+            backgroundColor: submitting || rsvpCount === "" || email === "" ? "grey" : "#007bff",
+            cursor: submitting || rsvpCount === "" || email === "" ? "not-allowed" : "pointer",
           }}
         >
-          Submit RSVP
+          {submitting ? "Submitting..." : "Submit"}
         </button>
       </div>
 
@@ -125,7 +125,7 @@ export default function MemberRSVP({
           {submitMessage}
         </div>
       )}*/}
-      
+
     </form>
   );
 }
