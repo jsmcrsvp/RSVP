@@ -19,8 +19,6 @@ export default function NonMemberRSVP({
   setNonMemberEmail,
   handleSubmitRSVP,
   submitting,
-  submitMessage,
-  submitSuccess,
 }) {
   return (
     <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
@@ -33,6 +31,7 @@ export default function NonMemberRSVP({
           onChange={(e) => setNonMemberName(e.target.value)}
           required
         />
+
         <label>Address:</label>
         <input
           type="text"
@@ -40,6 +39,7 @@ export default function NonMemberRSVP({
           onChange={(e) => setNonMemberAddress(e.target.value)}
           required
         />
+
         <label>Phone:</label>
         <input
           type="tel"
@@ -47,13 +47,6 @@ export default function NonMemberRSVP({
           onChange={(e) => setNonMemberPhone(e.target.value)}
           required
         />
-        {/*<label>Email:</label>
-        <input
-          type="email"
-          value={nonMemberEmail}
-          onChange={(e) => setNonMemberEmail(e.target.value)}
-          required
-        />*/}
       </div>
 
       <div className="result-table-wrapper">
@@ -114,48 +107,34 @@ export default function NonMemberRSVP({
       </div>
 
       <div className="inline-fields">
-        <label>Email Address</label>
-        <input className="small-input" type="email" value={nonMemberEmail} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address" />
+        <label>Email Address:</label>
+        <input
+          className="small-input"
+          type="email"
+          value={nonMemberEmail}
+          onChange={(e) => setNonMemberEmail(e.target.value)}
+          placeholder="Enter Email Address"
+          required
+        />
         <button
           className="button"
           type="submit"
-          disabled={rsvpCount === "" || nonMemberEmail === ""}
+          disabled={submitting || rsvpCount === "" || nonMemberEmail === ""}
           style={{
-            backgroundColor: rsvpCount === "" || nonMemberEmail === "" ? "grey" : "#007bff",
-            cursor: rsvpCount === "" || nonMemberEmail === "" ? "not-allowed" : "pointer",
-          }}
-        >
-          Submit RSVP
-        </button>
-      </div>
-
-      {/*
-      <div className="inline-fields">
-        <button
-          className="button"
-          type="submit"
-          disabled={submitting}
-          style={{
-            backgroundColor: submitting ? "lightgray" : "#007bff",
-            color: submitting ? "#666" : "white",
-            cursor: submitting ? "not-allowed" : "pointer",
+            backgroundColor:
+              submitting || rsvpCount === "" || nonMemberEmail === ""
+                ? "grey"
+                : "#007bff",
+            color: "white",
+            cursor:
+              submitting || rsvpCount === "" || nonMemberEmail === ""
+                ? "not-allowed"
+                : "pointer",
           }}
         >
           {submitting ? "Submitting..." : "Submit RSVP"}
         </button>
       </div>
-
-      {submitMessage && (
-        <div
-          style={{
-            marginTop: "10px",
-            color: submitSuccess ? "green" : "red",
-          }}
-        >
-          {submitMessage}
-        </div>
-      )} */}
-
     </form>
   );
 }
