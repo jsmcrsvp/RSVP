@@ -1,6 +1,6 @@
 // frontend/src/components/SubmitRSVP/MemberRSVP.js
 import React from "react";
-import "../../styles/SubmitRSVP.css";
+import "../styles/SubmitRSVP.css";
 
 export default function MemberRSVP({
   events,
