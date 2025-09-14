@@ -13,6 +13,8 @@ import logo from "../assets/JSMCLogo.jpg";
 // IMPORTANT: adjust these imports if your files are located somewhere else
 import MemberRSVP from "./MemberRSVP";
 import NonMemberRSVP from "./NonMemberRSVP";
+import VerifyRSVP from "./VerifyRSVP";
+
 
 export default function SubmitRSVP() {
   const [activeTab, setActiveTab] = useState("home"); // "home" | "submit" | "verify"
@@ -707,7 +709,10 @@ return (
         </>
       )}
 
-      {/* VERIFY */}
+{/* VERIFY */}
+{activeTab === "verify" && <VerifyRSVP />}
+
+      {/* VERIFY
       {activeTab === "verify" && (
         <form className="verify-form" onSubmit={handleVerifyRSVP}>
           <h3>Verify / Modify RSVP</h3>
@@ -724,7 +729,7 @@ return (
             </button>
           </div>
 
-          {/* Show only when rsvps are returned */}
+          {/* Show only when rsvps are returned
           {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
             <div className="result-table-wrapper">
               <h4>Current RSVP Details</h4>
@@ -751,7 +756,7 @@ return (
                 </tbody>
               </table>
 
-              {/* RSVP Events */}
+              {/* RSVP Events
               <table className="result-table">
                 <thead>
                   <tr>
@@ -815,14 +820,14 @@ return (
             </div>
           )}
 
-          {/* No results case */}
+          {/* No results case
           {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
             <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
               No RSVP records found for this confirmation number or Event RSVP may be closed.
             </div>
           )}
 
-          {/* Success / error messages at bottom */}
+          {/* Success / error messages at bottom
           {updateMessage && (
             <div style={{ color: "green", marginTop: "10px" }}>
               ✅ {updateMessage}
@@ -835,7 +840,7 @@ return (
           )}
 
         </form>
-      )}
+      )}*/}
     </div>
   </div>
 );

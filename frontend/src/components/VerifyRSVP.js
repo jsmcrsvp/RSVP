@@ -29,7 +29,7 @@ export default function VerifyRSVP() {
     try {
       const data = await verifyRSVP(verifyConfNumber.trim());
       const normalized =
-        data && Array.isArray(data.rsvps) ? data : { rsvps: [] };
+        data && Array.isArray(data.rsvps) ? { ...data, checked: true } : { rsvps: [], checked: true };
       setVerifyResult(normalized);
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Error verifying RSVP.");
@@ -86,6 +86,7 @@ export default function VerifyRSVP() {
     <form className="verify-form" onSubmit={handleVerifyRSVP}>
       <h3>Verify / Modify RSVP</h3>
       {error && <div className="error-message">{error}</div>}
+
       <div className="inline-fields">
         <input
           className="small-input"
@@ -187,6 +188,14 @@ export default function VerifyRSVP() {
         </div>
       )}
 
+      {/* No results case */}
+      {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
+        <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
+          No RSVP records found for this confirmation number or Event RSVP may be closed.
+        </div>
+      )}
+
+      {/* Success / error messages at bottom */}
       {updateMessage && (
         <div style={{ color: "green", marginTop: "10px" }}>✅ {updateMessage}</div>
       )}
