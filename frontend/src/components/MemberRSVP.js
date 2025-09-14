@@ -20,30 +20,28 @@ export default function MemberRSVP({
 }) {
   return (
     <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-      <h4>Life Member Details</h4>
 
-      <div className="form-section">
-        <label>Email (to lookup member):</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+      <div className="result-table-wrapper">
+        <h4>Membership Details</h4>
+        <table className="result-table" style={{ marginBottom: 10 }}>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <td>{member.name}</td>
+            </tr>
+            <tr>
+              <th>Address</th>
+              <td>{member.address}</td>
+            </tr>
+            <tr>
+              <th>Phone</th>
+              <td>{member.phone}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      {member && (
-        <div className="form-section">
-          <label>Name:</label>
-          <input type="text" value={member.name} readOnly />
-          <label>Address:</label>
-          <input type="text" value={member.address} readOnly />
-          <label>Phone:</label>
-          <input type="text" value={member.phone} readOnly />
-          <label>Email:</label>
-          <input type="text" value={email} readOnly />
-        </div>
-      )}
+      <h4>Life Member Details</h4>
 
       <div className="result-table-wrapper">
         <h4>Select Events to RSVP</h4>
@@ -103,17 +101,18 @@ export default function MemberRSVP({
       </div>
 
       <div className="inline-fields">
+        <label>Email Address</label>
+        <input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address" />
         <button
           className="button"
           type="submit"
-          disabled={submitting}
+          disabled={rsvpCount === "" || email === ""}
           style={{
-            backgroundColor: submitting ? "lightgray" : "#007bff",
-            color: submitting ? "#666" : "white",
-            cursor: submitting ? "not-allowed" : "pointer",
+            backgroundColor: rsvpCount === "" || email === "" ? "grey" : "#007bff",
+            cursor: rsvpCount === "" || email === "" ? "not-allowed" : "pointer",
           }}
         >
-          {submitting ? "Submitting..." : "Submit RSVP"}
+          Submit RSVP
         </button>
       </div>
 
