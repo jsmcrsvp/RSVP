@@ -24,7 +24,7 @@ export default function NonMemberRSVP({
 }) {
   return (
     <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-      <h4>Non-Member Details</h4>
+      <h4>Enter Non-Member Details</h4>
       <div className="form-section">
         <label>Name:</label>
         <input
@@ -47,13 +47,13 @@ export default function NonMemberRSVP({
           onChange={(e) => setNonMemberPhone(e.target.value)}
           required
         />
-        <label>Email:</label>
+        {/*<label>Email:</label>
         <input
           type="email"
           value={nonMemberEmail}
           onChange={(e) => setNonMemberEmail(e.target.value)}
           required
-        />
+        />*/}
       </div>
 
       <div className="result-table-wrapper">
@@ -114,6 +114,23 @@ export default function NonMemberRSVP({
       </div>
 
       <div className="inline-fields">
+        <label>Email Address</label>
+        <input className="small-input" type="email" value={nonMemberEmail} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address" />
+        <button
+          className="button"
+          type="submit"
+          disabled={rsvpCount === "" || email === ""}
+          style={{
+            backgroundColor: rsvpCount === "" || email === "" ? "grey" : "#007bff",
+            cursor: rsvpCount === "" || email === "" ? "not-allowed" : "pointer",
+          }}
+        >
+          Submit RSVP
+        </button>
+      </div>
+
+      {/*
+      <div className="inline-fields">
         <button
           className="button"
           type="submit"
@@ -137,7 +154,8 @@ export default function NonMemberRSVP({
         >
           {submitMessage}
         </div>
-      )}
+      )} */}
+
     </form>
   );
 }

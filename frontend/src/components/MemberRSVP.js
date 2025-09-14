@@ -41,8 +41,6 @@ export default function MemberRSVP({
         </table>
       </div>
 
-      <h4>Life Member Details</h4>
-
       <div className="result-table-wrapper">
         <h4>Select Events to RSVP</h4>
         <table className="result-table">
@@ -116,6 +114,7 @@ export default function MemberRSVP({
         </button>
       </div>
 
+      {/*
       {submitMessage && (
         <div
           style={{
@@ -125,7 +124,8 @@ export default function MemberRSVP({
         >
           {submitMessage}
         </div>
-      )}
+      )}*/}
+      
     </form>
   );
 }
