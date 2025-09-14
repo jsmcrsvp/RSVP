@@ -119,10 +119,10 @@ export default function NonMemberRSVP({
         <button
           className="button"
           type="submit"
-          disabled={rsvpCount === "" || email === ""}
+          disabled={rsvpCount === "" || nonMemberEmail === ""}
           style={{
-            backgroundColor: rsvpCount === "" || email === "" ? "grey" : "#007bff",
-            cursor: rsvpCount === "" || email === "" ? "not-allowed" : "pointer",
+            backgroundColor: rsvpCount === "" || nonMemberEmail === "" ? "grey" : "#007bff",
+            cursor: rsvpCount === "" || nonMemberEmail === "" ? "not-allowed" : "pointer",
           }}
         >
           Submit RSVP
