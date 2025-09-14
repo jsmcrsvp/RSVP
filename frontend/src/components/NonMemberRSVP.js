@@ -65,7 +65,8 @@ export default function NonMemberRSVP({
           type="text"
           value={nonMemberName}
           onChange={(e) => setNonMemberName(e.target.value)}
-          required style={{height: "36px", fontSize: "14px", padding: "6px 10px", boxSizing: "border-box",}}
+          required
+          className="input-field"
         />
 
         <label>Address:</label>
@@ -73,28 +74,30 @@ export default function NonMemberRSVP({
           type="text"
           value={nonMemberAddress}
           onChange={(e) => setNonMemberAddress(e.target.value)}
-          required style={{height: "36px", fontSize: "14px", padding: "6px 10px", boxSizing: "border-box",}}
+          required
+          className="input-field"
         />
 
         <label>Phone:</label>
         <input type="tel" value={nonMemberPhone} onChange={(e) => {
-            // Strip all non-digits
-            let cleaned = e.target.value.replace(/\D/g, "");
-            if (cleaned.length > 10) cleaned = cleaned.slice(0, 10);
+          // Strip all non-digits
+          let cleaned = e.target.value.replace(/\D/g, "");
+          if (cleaned.length > 10) cleaned = cleaned.slice(0, 10);
 
-            // Apply (XXX) YYY-ZZZZ format
-            let formatted = cleaned;
-            if (cleaned.length > 6) {
-              formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
-            } else if (cleaned.length > 3) {
-              formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
-            } else if (cleaned.length > 0) {
-              formatted = `(${cleaned}`;
-            }
+          // Apply (XXX) YYY-ZZZZ format
+          let formatted = cleaned;
+          if (cleaned.length > 6) {
+            formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+          } else if (cleaned.length > 3) {
+            formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+          } else if (cleaned.length > 0) {
+            formatted = `(${cleaned}`;
+          }
 
-            setNonMemberPhone(formatted);
-          }}
-          required style={{height: "36px", fontSize: "14px", padding: "6px 10px", boxSizing: "border-box",}}
+          setNonMemberPhone(formatted);
+        }}
+          required
+          className="input-field"
         />
 
         {/*<label>Phone:</label>
@@ -173,12 +176,12 @@ export default function NonMemberRSVP({
       <div className="inline-fields">
         <label>Email Address:</label>
         <input
-          className="small-input"
+          className="input-field"
           type="email"
           value={nonMemberEmail}
           onChange={(e) => setNonMemberEmail(e.target.value)}
           placeholder="Enter Email Address"
-          required style={{height: "36px", fontSize: "14px", padding: "6px 10px", boxSizing: "border-box",}}
+          required
         />
         <button
           className="button"

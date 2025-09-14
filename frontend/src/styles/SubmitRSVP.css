@@ -241,3 +241,12 @@ button:hover,
   max-width: 125px;   /* adjust size */
   height: auto;
 }
+
+.input-field {
+  height: 36px;
+  font-size: 14px;
+  padding: 6px 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
