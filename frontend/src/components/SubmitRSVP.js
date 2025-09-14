@@ -283,8 +283,8 @@ export default function SubmitRSVP() {
     }
   };
 
-  /* =========== Working 091425 =======12:30am ==========
-  const handleSubmitRSVP = async (e) => {
+  // =========== Working 091425 =======12:30am ==========
+  const WorkinghandleSubmitRSVP = async (e) => {
     e.preventDefault();
     setError("");
     setConfirmation(null);
@@ -378,7 +378,6 @@ export default function SubmitRSVP() {
       setSubmitting(false);
     }
   };
-*/}
 
 // -------- Verify handlers --------
 const handleVerifyRSVP = async (e) => {
