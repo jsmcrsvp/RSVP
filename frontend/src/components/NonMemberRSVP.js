@@ -60,6 +60,54 @@ export default function NonMemberRSVP({
     <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
       <h4>Enter Non-Member Details</h4>
       <div className="form-section">
+        <div className="form-group">
+          <label>Name:</label>
+          <input
+            type="text"
+            value={nonMemberName}
+            onChange={(e) => setNonMemberName(e.target.value)}
+            required
+            className="input-field"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Address:</label>
+          <input
+            type="text"
+            value={nonMemberAddress}
+            onChange={(e) => setNonMemberAddress(e.target.value)}
+            required
+            className="input-field"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Phone:</label>
+          <input
+            type="tel"
+            value={nonMemberPhone}
+            onChange={(e) => {
+              let cleaned = e.target.value.replace(/\D/g, "");
+              if (cleaned.length > 10) cleaned = cleaned.slice(0, 10);
+
+              let formatted = cleaned;
+              if (cleaned.length > 6) {
+                formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+              } else if (cleaned.length > 3) {
+                formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+              } else if (cleaned.length > 0) {
+                formatted = `(${cleaned}`;
+              }
+
+              setNonMemberPhone(formatted);
+            }}
+            required
+            className="input-field"
+          />
+        </div>
+
+{/*============================
         <label>Name:</label>
         <input
           type="text"
@@ -99,7 +147,7 @@ export default function NonMemberRSVP({
           required
           className="input-field"
         />
-
+*/}
         {/*<label>Phone:</label>
         <input
           type="tel"
