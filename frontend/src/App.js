@@ -25,6 +25,7 @@ export default App;
 import React, { useState } from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import SubmitRSVP from './components/SubmitRSVP';
+import Home from './components/Home';
 import AddProgramForm from './components/AddProgramForm';
 import Admin from './components/Admin';
 import './styles/App.css';
@@ -33,10 +34,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SubmitRSVP />} />
+        {/*<Route path="/" element={<SubmitRSVP />} />*/}
+        <Route path="/" element={<Home />} />
         <Route path="/add-program" element={<AddProgramForm />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/submit-rsvp" element={<SubmitRSVP />} />
+        {/*<Route path="/submit-rsvp" element={<SubmitRSVP />} />*/}
+        <Route path="/submit-rsvp" element={<Home />} />
       </Routes>
     </Router>
   );

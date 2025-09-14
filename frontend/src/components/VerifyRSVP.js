@@ -1,4 +1,4 @@
-// frontend/src/pages/VerifyRSVP.js
+// frontend/src/components/VerifyRSVP.js
 import React, { useState } from "react";
 import { verifyRSVP, updateRSVP } from "../api";
 import "../styles/SubmitRSVP.css";

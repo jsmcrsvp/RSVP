@@ -1,4 +1,4 @@
-// frontend/src/components/SubmitRSVP/NonMemberRSVP.js
+// frontend/src/components/NonMemberRSVP.js
 import React from "react";
 import "../styles/SubmitRSVP.css";
 
