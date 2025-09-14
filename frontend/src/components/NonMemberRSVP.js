@@ -1,6 +1,7 @@
 // frontend/src/components/NonMemberRSVP.js
 import React, { useEffect, useState } from "react";
-import "../styles/SubmitRSVP.css";
+//import "../styles/SubmitRSVP.css";
+import "../styles/NonMemberRSVP.css"
 
 export default function NonMemberRSVP({
   events,
