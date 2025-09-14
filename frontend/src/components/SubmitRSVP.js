@@ -734,7 +734,7 @@ return (
             <div className="result-table-wrapper">
               <h4>Current RSVP Details</h4>
 
-              {/* Member details from first RSVP doc */}
+              {/* Member details from first RSVP doc
               <table className="result-table" style={{ marginBottom: 10 }}>
                 <tbody>
                   <tr>
