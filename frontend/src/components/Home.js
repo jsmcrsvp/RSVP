@@ -477,7 +477,7 @@ export default function Home() {
         {/* HOME */}
         {activeTab === "home" && (
           <div className="home">
-            <h4>Welcome to JSMC RSVP Portal</h4>
+            <h4>Welcome to JSMC RSVP Home</h4>
 
             {/* Open Events Table */}
             <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
