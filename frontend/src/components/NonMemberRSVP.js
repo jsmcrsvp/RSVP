@@ -77,13 +77,35 @@ export default function NonMemberRSVP({
         />
 
         <label>Phone:</label>
+        <input type="tel" value={nonMemberPhone} onChange={(e) => {
+            // Strip all non-digits
+            let cleaned = e.target.value.replace(/\D/g, "");
+            if (cleaned.length > 10) cleaned = cleaned.slice(0, 10);
+
+            // Apply (XXX) YYY-ZZZZ format
+            let formatted = cleaned;
+            if (cleaned.length > 6) {
+              formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+            } else if (cleaned.length > 3) {
+              formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+            } else if (cleaned.length > 0) {
+              formatted = `(${cleaned}`;
+            }
+
+            setNonMemberPhone(formatted);
+          }}
+          required style={{height: "36px", fontSize: "14px", padding: "6px 10px", boxSizing: "border-box",}}
+        />
+
+        {/*<label>Phone:</label>
         <input
           type="tel"
           value={nonMemberPhone}
           onChange={handlePhoneChange}
           placeholder="(123) 456-7890"
           required
-        />
+        />*/}
+
         {phoneError && (
           <div className="field-error" style={{ color: "red", fontSize: "0.9em", marginTop: "4px" }}>
             {phoneError}
