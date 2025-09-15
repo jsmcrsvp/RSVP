@@ -16,14 +16,14 @@ export default function Admin() {
   return (
     <div className="page-wrapper">
       <div className="admin-container">
-              <div className="logo-wrapper">
-                <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
-              </div>
+        <div className="logo-wrapper">
+          <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
+        </div>
         <h2>JSMC RSVP Admin Portal</h2>
         <h4>Welcome to JSMC RSVP Admin Portal</h4>
 
         {/* Tabs */}
-         <div className="tab-header">
+        <div className="tab-header">
           <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => setActiveTab("home")}>
             Home
           </button>
@@ -31,10 +31,13 @@ export default function Admin() {
             RSVP Dashboard
           </button>
           <button className={activeTab === "activateEvent" ? "tab active" : "tab"} onClick={() => setActiveTab("activateEvent")}>
-            Programs
+            Activate Event
           </button>
           <button className={activeTab === "report" ? "tab active" : "tab"} onClick={() => setActiveTab("report")}>
             Report
+          </button>
+          <button className={activeTab === "adminFunction" ? "tab active" : "tab"} onClick={() => setActiveTab("adminFunction")}>
+            Admin Functions
           </button>
         </div>
 
@@ -55,6 +58,13 @@ export default function Admin() {
         {activeTab === "report" && (
           <div className="report">
             <h4>Reports Coming Soon...</h4>
+          </div>
+        )}
+
+        {/* ADMIN FUNCTIONS */}
+        {activeTab === "adminFunction" && (
+          <div className="adminFunction">
+            <h4>Admin Functions Coming Soon...</h4>
           </div>
         )}
       </div>
