@@ -203,6 +203,39 @@ const ActivateEventForm = () => {
       {error && <p className="form-message error">{error}</p>}
       {success && <p className="form-message success">{success}</p>}
 
+      <div style={{ marginTop: "2rem" }}>
+  <h3>Test: Add Event Only</h3>
+  <form
+    onSubmit={async (e) => {
+      e.preventDefault();
+      try {
+        const res = await fetch("/api/programs/test-add-event", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ event_name: eventName }),
+        });
+
+        const data = await res.json();
+        console.log("✅ Event saved:", data);
+        alert(data.message || "Event saved!");
+        setEventName("");
+      } catch (err) {
+        console.error("❌ Error saving event:", err);
+        alert("Error saving event");
+      }
+    }}
+  >
+    <input
+      type="text"
+      value={eventName}
+      onChange={(e) => setEventName(e.target.value)}
+      placeholder="Enter event name"
+    />
+    <button type="submit">Save Event</button>
+  </form>
+</div>
+
+
       {/* Programs & Events Table */}
       {programs.length > 0 && (
         <div className="table-wrapper">
