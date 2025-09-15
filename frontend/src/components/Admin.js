@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import AddProgramForm from "./AddProgramForm";
+//import AddProgramForm from "./AddProgramForm";
+import ActivateEventForm from "./ActivateEventForm";
 import Dashboard from "./Dashboard";
 import "../styles/Admin.css";
 import logo from "../assets/JSMCLogo.jpg";
@@ -29,7 +30,7 @@ export default function Admin() {
           <button className={activeTab === "dashboard" ? "tab active" : "tab"} onClick={() => setActiveTab("dashboard")}>
             RSVP Dashboard
           </button>
-          <button className={activeTab === "addProgram" ? "tab active" : "tab"} onClick={() => setActiveTab("addProgram")}>
+          <button className={activeTab === "activateEvent" ? "tab active" : "tab"} onClick={() => setActiveTab("activateEvent")}>
             Programs
           </button>
           <button className={activeTab === "report" ? "tab active" : "tab"} onClick={() => setActiveTab("report")}>
@@ -47,8 +48,8 @@ export default function Admin() {
         {/* DASHBOARD */}
         {activeTab === "dashboard" && <Dashboard />}
 
-        {/* ADD PROGRAM */}
-        {activeTab === "addProgram" && <AddProgramForm />}
+        {/* ACTIVATE EVENT */}
+        {activeTab === "activateEvent" && <ActivateEventForm />}
 
         {/* REPORT */}
         {activeTab === "report" && (
