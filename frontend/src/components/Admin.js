@@ -64,7 +64,7 @@ export default function Admin() {
         {/* ADMIN FUNCTIONS */}
         {activeTab === "adminFunction" && (
           <div className="adminFunction">
-            <h4>Admin Functions Coming Soon...</h4>
+            {activeTab === "addprogramevent" && <AddProgramEventForm />}
           </div>
         )}
       </div>
