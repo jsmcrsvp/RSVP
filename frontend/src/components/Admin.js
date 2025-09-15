@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import ActivateEventForm from "./ActivateEventForm";
 import Dashboard from "./Dashboard";
 import AddProgramEventForm from "./AddProgramEventForm";
-import "../styles/Admin.css";
 import logo from "../assets/JSMCLogo.jpg";
+import "../styles/Admin.css";
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("home");
@@ -63,11 +63,7 @@ export default function Admin() {
         )}
 
         {/* ADMIN FUNCTIONS */}
-        {activeTab === "adminFunction" && (
-          <div className="adminFunction">
-            {activeTab === "addprogramevent" && <AddProgramEventForm />}
-          </div>
-        )}
+        {activeTab === "adminFunction" && <AddProgramEventForm />}
       </div>
     </div>
   );
