@@ -69,23 +69,23 @@ export const getDashboardStats = async () => {
 
 // Update event status
 export const updateEventStatus = async (progId, evId, newStatus) => {
-  const res = await api.put(`/api/programs/${progId}/events/${evId}/status`, {
-    eventstatus: newStatus,
-  });
-  return res.data;
+    const res = await api.put(`/api/programs/${progId}/events/${evId}/status`, {
+        eventstatus: newStatus,
+    });
+    return res.data;
 };
 
 // Get all programs (admin)
 export const getAdminPrograms = async () => {
-  //const res = await api.get("/api/programs-events/programs");
-   const res = await api.get("/api/programs");
-  return res.data;
+    const res = await api.get("/api/programs_events/programs");
+    //const res = await api.get("/api/programs");
+    return res.data;
 };
 
 // Get all events (admin)
 export const getAdminEvents = async () => {
-  const res = await api.get("/api/programs-events/events");
-  return res.data;
+    const res = await api.get("/api/programs_events/events");
+    return res.data;
 };
 
 export default api;
