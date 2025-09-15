@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
 // Get all programs
 router.get("/programs", async (req, res) => {
   try {
-    const programs = await ProgramsList.find().sort({ createdAt: -1 });
+    const programs = await ProgramsList.find();
     res.json(programs);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch programs" });
@@ -54,7 +54,7 @@ router.get("/programs", async (req, res) => {
 // Get all events
 router.get("/events", async (req, res) => {
   try {
-    const events = await EventsList.find().sort({ createdAt: -1 });
+    const events = await EventsList.find();
     res.json(events);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch events" });
