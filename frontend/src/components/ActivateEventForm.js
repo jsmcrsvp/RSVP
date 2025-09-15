@@ -22,6 +22,9 @@ const ActivateEventForm = () => {
   const [eventstatus, setEventstatus] = useState("Open");
   const [rsvpClosedate, setRsvpClosedate] = useState("");
 
+  const [testEventName, setTestEventName] = useState("");
+
+
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -203,7 +206,7 @@ const ActivateEventForm = () => {
       {error && <p className="form-message error">{error}</p>}
       {success && <p className="form-message success">{success}</p>}
 
-      <div style={{ marginTop: "2rem" }}>
+<div style={{ marginTop: "2rem" }}>
   <h3>Test: Add Event Only</h3>
   <form
     onSubmit={async (e) => {
@@ -212,13 +215,13 @@ const ActivateEventForm = () => {
         const res = await fetch("/api/programs/test-add-event", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ event_name: eventName }),
+          body: JSON.stringify({ event_name: testEventName }),
         });
 
         const data = await res.json();
         console.log("✅ Event saved:", data);
         alert(data.message || "Event saved!");
-        setEventName("");
+        setTestEventName("");
       } catch (err) {
         console.error("❌ Error saving event:", err);
         alert("Error saving event");
@@ -227,13 +230,14 @@ const ActivateEventForm = () => {
   >
     <input
       type="text"
-      value={eventName}
-      onChange={(e) => setEventName(e.target.value)}
+      value={testEventName}
+      onChange={(e) => setTestEventName(e.target.value)}
       placeholder="Enter event name"
     />
     <button type="submit">Save Event</button>
   </form>
 </div>
+
 
 
       {/* Programs & Events Table */}
