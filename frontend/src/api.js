@@ -75,6 +75,19 @@ export const updateEventStatus = async (progId, evId, newStatus) => {
   return res.data;
 };
 
+// Get all programs (admin)
+export const getAdminPrograms = async () => {
+  const res = await api.get("/api/programs-events/programs");
+  return res.data;
+};
+
+// Get all events (admin)
+export const getAdminEvents = async () => {
+  const res = await api.get("/api/programs-events/events");
+  return res.data;
+};
+
+
 export default api;
 
 /* ========= Working 090325 10pm ====================

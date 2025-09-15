@@ -1,5 +1,6 @@
 // frontend/src/components/AdminFunctionForm.js
 import React, { useState, useEffect } from "react";
+import { getAdminPrograms, getAdminEvents } from "../api";
 
 const AdminFunctionForm = () => {
   const [programName, setProgramName] = useState("");
@@ -10,26 +11,21 @@ const AdminFunctionForm = () => {
   const [message, setMessage] = useState("");
 
   // Fetch existing Programs & Events
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [programRes, eventRes] = await Promise.all([
-          fetch("/api/programs-events/programs"),
-          fetch("/api/programs-events/events"),
-        ]);
 
-        const programsData = await programRes.json();
-        const eventsData = await eventRes.json();
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const programs = await getAdminPrograms();
+      const events = await getAdminEvents();
+      setPrograms(programs);
+      setEvents(events);
+    } catch (error) {
+      console.error("Error fetching existing programs/events:", error);
+    }
+  };
 
-        setPrograms(programsData);
-        setEvents(eventsData);
-      } catch (err) {
-        console.error("Error fetching existing programs/events:", err);
-      }
-    };
-
-    fetchData();
-  }, []);
+  fetchData();
+}, []);
 
   // Handle form submission
   const handleSubmit = async (e) => {
