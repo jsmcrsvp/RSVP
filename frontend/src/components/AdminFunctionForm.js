@@ -27,14 +27,14 @@ useEffect(() => {
   fetchData();
 }, []);
 
-  // Handle form submission
+    // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
     try {
-      const res = await fetch("/api/programs-events", {
+      const res = await fetch("/api/programs_events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -43,30 +43,46 @@ useEffect(() => {
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to save");
+      const text = await res.text(); // <-- get raw text first
+      let data;
+      try {
+        data = JSON.parse(text); // <-- try parsing JSON
+      } catch (err) {
+        console.error("❌ Invalid JSON response from server:", text);
+        throw new Error("Server did not return valid JSON");
+      }
 
-      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to save");
+      }
 
       setMessage(data.message || "Saved successfully!");
 
       // Refresh lists after saving
       if (programName) {
-        setPrograms((prev) => [{ program_name: programName, _id: Date.now() }, ...prev]);
+        setPrograms((prev) => [
+          { program_name: programName, _id: Date.now() },
+          ...prev,
+        ]);
       }
       if (eventName) {
-        setEvents((prev) => [{ event_name: eventName, _id: Date.now() }, ...prev]);
+        setEvents((prev) => [
+          { event_name: eventName, _id: Date.now() },
+          ...prev,
+        ]);
       }
 
       // Reset fields
       setProgramName("");
       setEventName("");
     } catch (err) {
-      console.error("Error adding Program & Event:", err);
-      setMessage("❌ Error saving Program/Event");
+      console.error("❌ Error adding Program & Event:", err);
+      setMessage("❌ " + err.message);
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div style={{ padding: "1rem" }}>

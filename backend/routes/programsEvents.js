@@ -8,30 +8,40 @@ const EventsList = require("../models/Events_List_DB_Schema");
 router.post("/", async (req, res) => {
   try {
     const { program_name, event_name } = req.body;
+    console.log("📥 POST /api/programs_events", { program_name, event_name });
+
+    if (!program_name && !event_name) {
+      return res.status(400).json({ error: "Program or Event name required" });
+    }
 
     let savedProgram = null;
     let savedEvent = null;
 
-    if (program_name && program_name.trim() !== "") {
+    if (program_name?.trim()) {
+      console.log("➡️ Saving program:", program_name);
       const newProgram = new ProgramsList({ program_name });
       savedProgram = await newProgram.save();
     }
 
-    if (event_name && event_name.trim() !== "") {
+    if (event_name?.trim()) {
+      console.log("➡️ Saving event:", event_name);
       const newEvent = new EventsList({ event_name });
       savedEvent = await newEvent.save();
     }
 
-    res.status(201).json({
+    console.log("✅ Saved successfully:", { savedProgram, savedEvent });
+    
+    return res.status(201).json({
       message: "Program/Event saved successfully",
       program: savedProgram,
       event: savedEvent,
     });
   } catch (error) {
     console.error("Error saving Program/Event:", error);
-    res.status(500).json({ error: "Failed to save Program/Event" });
+    return res.status(500).json({ error: "Failed to save Program/Event" });
   }
 });
+
 
 // Get all programs
 router.get("/programs", async (req, res) => {
