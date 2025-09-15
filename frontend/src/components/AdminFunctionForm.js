@@ -1,102 +1,119 @@
+// frontend/src/components/AdminFunctionForm.js
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "../styles/AdminFunctionForm.css";
 
 const AdminFunctionForm = () => {
-  const [program, setProgram] = useState("");
-  const [event, setEvent] = useState("");
+  const [programName, setProgramName] = useState("");
+  const [eventName, setEventName] = useState("");
+  const [programs, setPrograms] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const [existingPrograms, setExistingPrograms] = useState([]);
-  const [existingEvents, setExistingEvents] = useState([]);
-
-  // ✅ Fetch existing Programs and Events for duplicate check
+  // Fetch existing Programs & Events
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [programRes, eventRes] = await Promise.all([
-          axios.get("/api/programs-events/programs"),
-          axios.get("/api/programs-events/events"),
+          fetch("/api/programs-events/programs"),
+          fetch("/api/programs-events/events"),
         ]);
-        setExistingPrograms(programRes.data || []);
-        setExistingEvents(eventRes.data || []);
-      } catch (error) {
-        console.error("Error fetching existing programs/events:", error);
+
+        const programsData = await programRes.json();
+        const eventsData = await eventRes.json();
+
+        setPrograms(programsData);
+        setEvents(eventsData);
+      } catch (err) {
+        console.error("Error fetching existing programs/events:", err);
       }
     };
+
     fetchData();
   }, []);
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setMessage("");
 
-    // ✅ Check for duplicates before submit
-    if (existingPrograms.some((p) => p.program_name.toLowerCase() === program.toLowerCase())) {
-      setMessage(`⚠️ Program "${program}" already exists.`);
-      return;
-    }
-    if (existingEvents.some((ev) => ev.event_name.toLowerCase() === event.toLowerCase())) {
-      setMessage(`⚠️ Event "${event}" already exists.`);
-      return;
-    }
-
     try {
-      await axios.post("/api/programs-events/add", {
-        program_name: program,
-        event_name: event,
+      const res = await fetch("/api/programs-events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          program_name: programName,
+          event_name: eventName,
+        }),
       });
 
-      setMessage("✅ Program & Event added successfully!");
-      setProgram("");
-      setEvent("");
+      if (!res.ok) throw new Error("Failed to save");
 
-      // Refresh local lists after successful add
-      const [programRes, eventRes] = await Promise.all([
-        axios.get("/api/programs-events/programs"),
-        axios.get("/api/programs-events/events"),
-      ]);
-      setExistingPrograms(programRes.data || []);
-      setExistingEvents(eventRes.data || []);
+      const data = await res.json();
 
-    } catch (error) {
-      console.error("Error adding Program & Event:", error);
-      setMessage("❌ Failed to add Program & Event.");
+      setMessage(data.message || "Saved successfully!");
+
+      // Refresh lists after saving
+      if (programName) {
+        setPrograms((prev) => [{ program_name: programName, _id: Date.now() }, ...prev]);
+      }
+      if (eventName) {
+        setEvents((prev) => [{ event_name: eventName, _id: Date.now() }, ...prev]);
+      }
+
+      // Reset fields
+      setProgramName("");
+      setEventName("");
+    } catch (err) {
+      console.error("Error adding Program & Event:", err);
+      setMessage("❌ Error saving Program/Event");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="add-program-container">
-      <h2>Admin – Create New Program & Event</h2>
+    <div style={{ padding: "1rem" }}>
+      <h2>Admin: Add Program & Event</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Program:</label>
+        <div>
+          <label>Program Name:</label>
           <input
             type="text"
-            value={program}
-            onChange={(e) => setProgram(e.target.value)}
-            required
-            className="input-field"
+            value={programName}
+            onChange={(e) => setProgramName(e.target.value)}
           />
         </div>
-
-        <div className="form-group">
-          <label>Event:</label>
+        <div>
+          <label>Event Name:</label>
           <input
             type="text"
-            value={event}
-            onChange={(e) => setEvent(e.target.value)}
-            required
-            className="input-field"
+            value={eventName}
+            onChange={(e) => setEventName(e.target.value)}
           />
         </div>
-
-        <button type="submit" className="submit-button">
-          Add Program & Event
+        <button type="submit" disabled={loading}>
+          {loading ? "Saving..." : "Save"}
         </button>
       </form>
 
-      {message && <p className="form-message">{message}</p>}
+      {message && <p>{message}</p>}
+
+      <hr />
+
+      <h3>Existing Programs</h3>
+      <ul>
+        {programs.map((p) => (
+          <li key={p._id}>{p.program_name}</li>
+        ))}
+      </ul>
+
+      <h3>Existing Events</h3>
+      <ul>
+        {events.map((e) => (
+          <li key={e._id}>{e.event_name}</li>
+        ))}
+      </ul>
     </div>
   );
 };
