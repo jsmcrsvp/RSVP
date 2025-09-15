@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 //import AddProgramForm from "./AddProgramForm";
 import ActivateEventForm from "./ActivateEventForm";
 import Dashboard from "./Dashboard";
+import AddProgramEventForm from "./AddProgramEventForm";
 import "../styles/Admin.css";
 import logo from "../assets/JSMCLogo.jpg";
 
