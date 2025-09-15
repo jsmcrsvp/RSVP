@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 //import AddProgramForm from "./AddProgramForm";
 import ActivateEventForm from "./ActivateEventForm";
 import Dashboard from "./Dashboard";
-import AddProgramEventForm from "./AddProgramEventForm";
+import AdminFunctionForm from "./AdminFunctionForm";
 import logo from "../assets/JSMCLogo.jpg";
 import "../styles/Admin.css";
 
@@ -63,7 +63,7 @@ export default function Admin() {
         )}
 
         {/* ADMIN FUNCTIONS */}
-        {activeTab === "adminFunction" && <AddProgramEventForm />}
+        {activeTab === "adminFunction" && <AdminFunctionForm />}
       </div>
     </div>
   );
