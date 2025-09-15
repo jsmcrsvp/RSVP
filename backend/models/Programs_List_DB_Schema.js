@@ -1,4 +1,3 @@
-// backend/models/Programs_List_DB_Schema.js
 const mongoose = require("mongoose");
 
 const programsListSchema = new mongoose.Schema(
@@ -8,7 +7,7 @@ const programsListSchema = new mongoose.Schema(
   { timestamps: true } // ✅ adds createdAt / updatedAt automatically
 );
 
-// ✅ Third arg fixes the collection name in MongoDB
+// ✅ Third argument fixes the MongoDB collection name
 const ProgramsList = mongoose.model("ProgramsList", programsListSchema, "programs_list");
 
 module.exports = ProgramsList;
