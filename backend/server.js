@@ -119,12 +119,14 @@ app.get("/api/dashboard-stats", async (req, res) => {
 // Import routes
 const programRoutes = require("./routes/programs");
 const rsvpRoutes = require("./routes/rsvp");
-const dashboardRoutes = require("./routes/dashboard"); // ✅ new
+const dashboardRoutes = require("./routes/dashboard");
+const programsEventsRoutes = require("./routes/programsEvents");
 
 // Mount routes
 app.use("/api/programs", programRoutes);
 app.use("/api/rsvp_response", rsvpRoutes);
-app.use("/api/dashboard", dashboardRoutes); // ✅ new
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/programs_events", programsEventsRoutes);
 
 // Health check
 app.get("/", (req, res) => res.send("Backend is running ✅"));

@@ -1,0 +1,14 @@
+// backend/models/Events_List_DB_Schema.js
+const mongoose = require("mongoose");
+
+const eventsListSchema = new mongoose.Schema(
+  {
+    event_name: { type: String, required: true },
+  },
+  { timestamps: true } // ✅ adds createdAt / updatedAt automatically
+);
+
+// ✅ Third arg fixes the collection name in MongoDB
+const EventsList = mongoose.model("EventsList", eventsListSchema, "events_list");
+
+module.exports = EventsList;
