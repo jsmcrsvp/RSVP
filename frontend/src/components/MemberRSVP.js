@@ -2,6 +2,8 @@
 import React from "react";
 import "../styles/SubmitRSVP.css";
 
+const [rsvpCounts, setRsvpCounts] = useState({});
+
 export default function MemberRSVP({
   events,
   displayDate,
@@ -20,7 +22,7 @@ export default function MemberRSVP({
 }) {
   return (
       <>
-      <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
+      <h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
         Life Membership Details</h4>
       <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
         {/*<h4>Life Membership Details</h4>*/}
@@ -43,7 +45,7 @@ export default function MemberRSVP({
           </table>
         </div>
         
-      <h4 style={{ textAlign: "center", margin: "0rem 0 0.5rem 0", color: "#5d8cdf" }}>
+      <h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
         Select Events to RSVP</h4>
         {/*<h4>Current RSVP Details</h4>*/}
         <div className="result-table-wrapper">
@@ -57,6 +59,55 @@ export default function MemberRSVP({
                 <th>RSVP</th>
               </tr>
             </thead>
+            <tbody>
+  {events.map((ev, idx) => {
+    const isFirst =
+      idx === 0 || ev.programname !== events[idx - 1].programname;
+    const programCount = events.filter(
+      (e) => e.programname === ev.programname
+    ).length;
+
+    return (
+      <tr key={idx}>
+        {isFirst && (
+          <td rowSpan={programCount}>{ev.programname}</td>
+        )}
+        <td>{ev.eventname}</td>
+        <td>
+          {ev.eventday}, {displayDate(ev.eventdate)}
+        </td>
+        <td>
+          <input
+            type="checkbox"
+            checked={selectedEvents[idx] !== undefined}
+            onChange={(e) => toggleEventSelection(idx, e.target.checked)}
+          />
+        </td>
+        <td>
+          {selectedEvents[idx] !== undefined ? (
+            <input
+              type="number"
+              min="0"
+              value={rsvpCounts[idx] || ""}
+              onChange={(e) =>
+                setRsvpCounts((prev) => ({
+                  ...prev,
+                  [idx]: e.target.value,
+                }))
+              }
+              placeholder="Count"
+              style={{ width: "60px" }}
+            />
+          ) : (
+            "-"
+          )}
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
+
+            {/*
             <tbody>
               {events.map((ev, idx) => {
                 const isFirst =
@@ -98,7 +149,7 @@ export default function MemberRSVP({
                   </tr>
                 );
               })}
-            </tbody>
+            </tbody>*/}
           </table>
         </div>
 
