@@ -64,7 +64,7 @@ export default function Admin() {
         )}
 
         {/* ADMIN FUNCTIONS */}
-        {activeTab === "adminFunction" && <AdminAddEvent />}
+        {activeTab === "adminFunction" && <AdminFunctions />}
       </div>
     </div>
   );

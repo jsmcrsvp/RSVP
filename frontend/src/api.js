@@ -75,7 +75,7 @@ export const updateEventStatus = async (progId, evId, newStatus) => {
     return res.data;
 };
 
-// Get all programs (admin)
+/* Get all programs (admin)
 export const getAdminPrograms = async () => {
     const res = await api.get("/api/programs_events/programs");
     //const res = await api.get("/api/programs");
@@ -87,6 +87,7 @@ export const getAdminEvents = async () => {
     const res = await api.get("/api/programs_events/events");
     return res.data;
 };
+*/
 
 // ===== Events =====
 // Get all events
@@ -98,6 +99,17 @@ export const getAllEvents = async () => {
 // Add new event
 export const addNewEvent = async (eventName) => {
   const res = await api.post("/api/add_events", { event_name: eventName });
+  return res.data;
+};
+
+// ===== Programs =====
+export const getAllPrograms = async () => {
+  const res = await api.get("/api/add_programs");
+  return res.data;
+};
+
+export const addNewProgram = async (programName) => {
+  const res = await api.post("/api/add_programs", { program_name: programName });
   return res.data;
 };
 
