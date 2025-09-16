@@ -130,10 +130,10 @@ button:hover,
 /* Results Table */
 .result-table-wrapper,
 .last-rsvp {
-  margin-top: 0.2rem;
+  margin-top: 0rem;
   overflow-x: auto;
   background: #f9f9f9e4;
-  padding: 0.2rem;
+  padding: 0.1rem;
   border-radius: 6px;
 }
 

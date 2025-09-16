@@ -45,7 +45,7 @@ export default function VerifyRSVP() {
   const handleUpdateRSVP = async (rsvpId, newCount) => {
     try {
       await updateRSVP(rsvpId, parseInt(newCount, 10));
-      await handleVerifyRSVP({ preventDefault: () => {} });
+      await handleVerifyRSVP({ preventDefault: () => { } });
       setEditIndex(null);
       setUpdateMessage("RSVP updated successfully!");
       setUpdateError(null);
@@ -84,12 +84,13 @@ export default function VerifyRSVP() {
 
   return (
     <form className="verify-form" onSubmit={handleVerifyRSVP}>
-      <h3>Verify / Modify RSVP</h3>
+
       {error && <div className="error-message">{error}</div>}
 
       {/* Hide input + button once verified */}
       {!verifyResult.checked && (
         <div className="inline-fields">
+          <h3>Verify / Modify RSVP</h3>
           <input
             className="small-input"
             type="text"
