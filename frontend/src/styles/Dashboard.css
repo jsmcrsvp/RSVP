@@ -125,6 +125,7 @@ button:hover,
   text-align: center;       /* centers the <h4> above the table */
 }
 
+
 .result-table {
   border-collapse: collapse;
   margin: 0 auto;           /* centers the table horizontally */
