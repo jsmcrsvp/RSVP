@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const ProgramList = require("../models/program_list");
-const EventList = require("../models/events_list");
+const EventList = require("../models/event_list");
 
 // Add new Program & Event
 router.post("/", async (req, res) => {
