@@ -628,12 +628,13 @@ export default function SubmitRSVP() {
                 {/* ---- Name + House Search ---- */}
                 {searchMode === "nameHouse" && (
                   <div className="inline-fields">
+                    <span className="inline-label">First Name:</span>
                     <input
                       className="small-input"
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="First Name"
+                      placeholder="Enter First Name"
                     />
                     <span className="inline-label">House #</span>
                     <input

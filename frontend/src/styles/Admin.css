@@ -40,6 +40,12 @@ h4 {
   color: #5d8cdf;
 }
 
+.inline-label {
+    font-size: 0.9rem;
+    color: #000000;
+    white-space: nowrap;
+}
+
 .tab-header {
   display: flex;
   justify-content: center; /* Centers the buttons horizontally */

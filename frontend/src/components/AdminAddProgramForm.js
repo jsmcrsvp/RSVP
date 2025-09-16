@@ -50,10 +50,8 @@ const AdminAddProgram = () => {
 
     return (
         <div style={{ padding: "1rem" }}>
-            <form
-                onSubmit={handleSubmit}
-                style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}
-            >
+            <form onSubmit={handleSubmit} style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+                <span className="inline-label">Program Name:</span>
                 <input
                     type="text"
                     value={programName}
@@ -61,7 +59,6 @@ const AdminAddProgram = () => {
                     placeholder="Enter program name"
                     style={{ flex: "1", padding: "0.5rem" }}
                 />
-                Program Name:
                 <button type="submit" disabled={loading} style={{ padding: "0.5rem 1rem" }}>
                     {loading ? "Saving..." : "Save"}
                 </button>
