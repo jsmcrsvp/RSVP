@@ -59,7 +59,6 @@ const AdminAddEvent = () => {
                     placeholder="Enter event name"
                     style={{ flex: "1", padding: "0.5rem" }}
                 />
-                Event Name:
                 <button type="submit" disabled={loading} style={{ padding: "0.5rem 1rem" }}>
                     {loading ? "Saving..." : "Save"}
                 </button>

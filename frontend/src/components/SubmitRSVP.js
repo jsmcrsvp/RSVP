@@ -478,11 +478,10 @@ export default function SubmitRSVP() {
         {activeTab === "home" && (
           <div className="home">
             <h4>Welcome to JSMC RSVP Portal</h4>
+            <h4>Current Open Events to Submit or Modify RSVP</h4>
 
             {/* Open Events Table */}
             <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
-              <h4>Current Open Events to Submit or Modify RSVP</h4>
-
               {Array.isArray(events) && events.length > 0 ? (
                 <table className="result-table" style={{ marginBottom: "20px" }}>
                   <thead>
