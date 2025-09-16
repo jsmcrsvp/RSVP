@@ -102,7 +102,6 @@ export default function Dashboard() {
                 Current Open Events
               </h4>
               <div className="result-table-wrapper">
-                <h4>Current Open Events</h4>
                 <table className="result-table">
                   <thead>
                     <tr>
