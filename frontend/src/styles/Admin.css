@@ -70,24 +70,28 @@ h4 {
 
 /* Results Table */
 .result-table-wrapper {
-  margin-top: 1.5rem;
-  overflow-x: auto;
+  display: flex;
+  justify-content: center; /* centers the table horizontally */
+  margin-top: 1rem;
 }
 
 .result-table {
-  width: 100%;
   border-collapse: collapse;
+  width: auto; /* auto width based on content */
+  min-width: 200px; /* optional: ensures table isn't too narrow */
 }
 
 .result-table th,
 .result-table td {
   border: 1px solid #ccc;
-  padding: 0.6rem;
+  padding: 0.5rem 1rem;
   text-align: left;
+  white-space: nowrap; /* prevents text from wrapping */
 }
 
 .result-table th {
-  background: #f4f4f4;
+  background-color: #4c6daf;
+  color: white;
 }
 
 .nowrap {

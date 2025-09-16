@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAdminAllPrograms, addAdminNewProgram } from "../api";
+import "../styles/Admin.css";
 
 const AdminAddProgram = () => {
     const [programName, setProgramName] = useState("");

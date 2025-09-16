@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAllEvents, addNewEvent } from "../api";
+import "../styles/Admin.css";
 
 const AdminAddEvent = () => {
     const [eventName, setEventName] = useState("");
