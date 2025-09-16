@@ -20,9 +20,8 @@ export default function MemberRSVP({
 }) {
   return (
     <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-
+      <h4>Life Membership Details</h4>
       <div className="result-table-wrapper">
-        <h4>Life Membership Details</h4>
         <table className="result-table" style={{ marginBottom: 10 }}>
           <tbody>
             <tr>
@@ -41,8 +40,8 @@ export default function MemberRSVP({
         </table>
       </div>
 
+      <h4>Current RSVP Details</h4>
       <div className="result-table-wrapper">
-        <h4>Select Events to RSVP</h4>
         <table className="result-table">
           <thead>
             <tr>

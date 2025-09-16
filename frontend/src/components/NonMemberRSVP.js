@@ -165,9 +165,8 @@ export default function NonMemberRSVP({
           </div>
         )}
       </div>
-
+      <h4>Select Events to RSVP</h4>
       <div className="result-table-wrapper">
-        <h4>Select Events to RSVP</h4>
         <table className="result-table">
           <thead>
             <tr>

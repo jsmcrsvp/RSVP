@@ -44,7 +44,7 @@ export default function VerifyRSVP() {
     try {
       await updateRSVP(rsvpId, parseInt(newCount, 10));
 
-      await handleVerifyRSVP({ preventDefault: () => {} });
+      await handleVerifyRSVP({ preventDefault: () => { } });
       setEditIndex(null);
 
       setUpdateMessage("RSVP updated successfully!");
@@ -101,9 +101,10 @@ export default function VerifyRSVP() {
       </div>
 
       {/* Results */}
+      <h4>Current RSVP Details</h4>
+
       {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
         <div className="result-table-wrapper">
-          <h4>Current RSVP Details</h4>
           <table className="result-table" style={{ marginBottom: 10 }}>
             <tbody>
               <tr>
