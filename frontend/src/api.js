@@ -88,6 +88,19 @@ export const getAdminEvents = async () => {
     return res.data;
 };
 
+// ===== Events =====
+// Get all events
+export const getAllEvents = async () => {
+  const res = await api.get("/api/add_events");
+  return res.data;
+};
+
+// Add new event
+export const addNewEvent = async (eventName) => {
+  const res = await api.post("/api/add_events", { event_name: eventName });
+  return res.data;
+};
+
 export default api;
 
 /* ========= Working 090325 10pm ====================
