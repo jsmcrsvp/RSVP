@@ -43,7 +43,7 @@ export default function MemberRSVP({
           </table>
         </div>
         
-      <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
+      <h4 style={{ textAlign: "center", margin: "0rem 0 0.5rem 0", color: "#5d8cdf" }}>
         Select Events to RSVP</h4>
         {/*<h4>Current RSVP Details</h4>*/}
         <div className="result-table-wrapper">

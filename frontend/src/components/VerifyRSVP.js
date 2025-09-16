@@ -84,24 +84,27 @@ export default function VerifyRSVP() {
 
   return (
     <form className="verify-form" onSubmit={handleVerifyRSVP}>
-
       {error && <div className="error-message">{error}</div>}
-
       {/* Hide input + button once verified */}
       {!verifyResult.checked && (
-        <div className="inline-fields">
-          <h3>Verify / Modify RSVP</h3>
-          <input
-            className="small-input"
-            type="text"
-            value={verifyConfNumber}
-            onChange={(e) => setVerifyConfNumber(e.target.value)}
-            placeholder="Enter Confirmation #"
-          />
-          <button className="button" type="submit" disabled={verifying}>
-            {verifying ? "Verifying..." : "Verify"}
-          </button>
-        </div>
+        <>
+          <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
+            Verify / Modify RSVP
+          </h4>
+          <div className="inline-fields">
+            <span className="inline-label">Confirmation #:</span>
+            <input
+              className="small-input"
+              type="text"
+              value={verifyConfNumber}
+              onChange={(e) => setVerifyConfNumber(e.target.value)}
+              placeholder="Enter Confirmation #"
+            />
+            <button className="button" type="submit" disabled={verifying}>
+              {verifying ? "Verifying..." : "Verify"}
+            </button>
+          </div>
+        </>
       )}
 
       {/* Results */}
