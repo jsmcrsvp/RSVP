@@ -45,9 +45,14 @@ const ActivateEventForm = () => {
       setLoading(true);
       const [programData, eventData] = await Promise.all([getAdminAllPrograms(), getAllEvents()]);
 
-      // Ensure we have arrays before sorting
-      const sortedPrograms = Array.isArray(programData) ? programData.sort((a, b) => a.progname.localeCompare(b.progname)) : [];
-      const sortedEvents = Array.isArray(eventData) ? eventData.sort((a, b) => a.event_name.localeCompare(b.event_name)) : [];
+      // Safely default to empty array
+      const sortedPrograms = (Array.isArray(programData) ? programData : []).sort(
+        (a, b) => (a.progname || "").localeCompare(b.progname || "")
+      );
+
+      const sortedEvents = (Array.isArray(eventData) ? eventData : []).sort(
+        (a, b) => (a.event_name || "").localeCompare(b.event_name || "")
+      );
 
       setPrograms(sortedPrograms);
       setEvents(sortedEvents);
@@ -58,7 +63,6 @@ const ActivateEventForm = () => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchData();
