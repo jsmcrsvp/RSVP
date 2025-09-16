@@ -1,7 +1,7 @@
 // frontend/src/components/AdminFunctionForm.js
 import React, { useState } from "react";
-import AdminAddProgram from "./AdminAddProgram";
-import AdminAddEvent from "./AdminAddEvent";
+import AdminAddEvent from "./AdminAddEventForm";
+import AdminAddProgram from "./AdminAddProgramForm";
 
 const AdminFunctions = () => {
   const [activeTab, setActiveTab] = useState("programs");
