@@ -1,11 +1,7 @@
 // frontend/src/components/ActivateEventForm.js
 import React, { useState, useEffect } from "react";
-import {
-  addProgram,
-  updateEventStatus,
-} from "../api";
-import { getAdminAllPrograms, getAllEvents } from "../api"; // ✅ import both
-import "../styles/ActivateEventForm.css"
+import { getAllEvents, addNewEvent, getAdminAllPrograms, addProgram, updateEventStatus } from "../api";
+import "../styles/ActivateEventForm.css";
 
 // Utility to format YYYY-MM-DD → MM/DD/YYYY
 const displayDate = (dateStr) => {
@@ -22,14 +18,13 @@ const ActivateEventForm = () => {
   const [eventstatus, setEventstatus] = useState("Open");
   const [rsvpClosedate, setRsvpClosedate] = useState("");
 
-  const [programs, setPrograms] = useState([]); // For table display
-  const [programList, setProgramList] = useState([]); // For dropdown
-  const [eventList, setEventList] = useState([]);     // For dropdown
-
+  const [programs, setPrograms] = useState([]);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // For editing event status
   const [editRow, setEditRow] = useState(null);
   const [newStatus, setNewStatus] = useState("");
 
@@ -37,27 +32,23 @@ const ActivateEventForm = () => {
   useEffect(() => {
     if (eventdate) {
       const date = new Date(eventdate + "T00:00:00Z");
-      const day = date.toLocaleDateString("en-US", {
-        weekday: "long",
-        timeZone: "UTC",
-      });
+      const day = date.toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
       setEventday(day);
     } else {
       setEventday("");
     }
   }, [eventdate]);
 
-  // Fetch programs and events from DB for dropdowns and table
-  const fetchData = async () => {
+  // Fetch programs and events independently
+  const fetchProgramsAndEvents = async () => {
     try {
       setLoading(true);
-      const [progData, evtData] = await Promise.all([
+      const [programData, eventData] = await Promise.all([
         getAdminAllPrograms(),
-        getAllEvents(),
+        getAllEvents()
       ]);
-      setProgramList(progData.map((p) => p.program_name).sort());
-      setEventList(evtData.map((e) => e.event_name).sort());
-      setPrograms(progData); // table uses the full program object
+      setPrograms(programData || []);
+      setEvents(eventData || []);
     } catch (err) {
       console.error("Error fetching programs/events:", err);
       setError("Failed to load programs or events");
@@ -67,10 +58,10 @@ const ActivateEventForm = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchProgramsAndEvents();
   }, []);
 
-  // Handle form submission
+  // Handle form submission (activate program & event)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -95,30 +86,28 @@ const ActivateEventForm = () => {
         ],
       };
 
-      await addProgram(payload);
+      await addProgram(payload); // Add to program collection
       setSuccess("✅ Program & Event added successfully!");
-      // Reset form
       setProgname("");
       setEventname("");
       setEventdate("");
       setEventday("");
       setEventstatus("Open");
       setRsvpClosedate("");
-
-      fetchData(); // Refresh dropdowns and table
+      fetchProgramsAndEvents();
     } catch (err) {
       console.error("Error activating event:", err);
-      setError("❌ Failed to activate event.");
+      setError("❌ Failed to activate program & event.");
     }
   };
 
-  // Save status change
-  const handleSaveStatus = async (progId, evId) => {
+  // Save status change for events
+  const handleSaveStatus = async (eventId) => {
     try {
-      await updateEventStatus(progId, evId, newStatus);
+      await updateEventStatus(null, eventId, newStatus); // progId not needed for independent events
       setSuccess("✅ Event status updated!");
       setEditRow(null);
-      fetchData();
+      fetchProgramsAndEvents();
     } catch (err) {
       console.error("Error updating event status:", err);
       setError("❌ Failed to update status.");
@@ -129,7 +118,7 @@ const ActivateEventForm = () => {
     <div className="add-program-container">
       <h3>Activate Program & Event</h3>
 
-      {/* Program Form */}
+      {/* Program & Event Form */}
       <form className="program-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Select Program</label>
@@ -139,8 +128,10 @@ const ActivateEventForm = () => {
             required
           >
             <option value="">-- Select Program --</option>
-            {programList.map((p) => (
-              <option key={p} value={p}>{p}</option>
+            {programs.map((p) => (
+              <option key={p._id} value={p.program_name}>
+                {p.program_name}
+              </option>
             ))}
           </select>
         </div>
@@ -153,8 +144,10 @@ const ActivateEventForm = () => {
             required
           >
             <option value="">-- Select Event --</option>
-            {eventList.map((e) => (
-              <option key={e} value={e}>{e}</option>
+            {events.map((ev) => (
+              <option key={ev._id} value={ev.event_name}>
+                {ev.event_name}
+              </option>
             ))}
           </select>
         </div>
@@ -197,21 +190,22 @@ const ActivateEventForm = () => {
           </select>
         </div>
 
-        <button type="submit" className="btn-submit">Add Program</button>
+        <button type="submit" className="btn-submit">
+          Add Program & Event
+        </button>
       </form>
 
       {/* Status messages */}
       {error && <p className="form-message error">{error}</p>}
       {success && <p className="form-message success">{success}</p>}
 
-      {/* Programs & Events Table */}
-      {programs.length > 0 && (
+      {/* Events Table */}
+      {events.length > 0 && (
         <div className="table-wrapper">
-          <h3>Active Program & Event Details</h3>
+          <h3>Active Events</h3>
           <table className="programs-table">
             <thead>
               <tr>
-                <th>Program Name</th>
                 <th>Event Name</th>
                 <th>Event Date</th>
                 <th>RSVP By</th>
@@ -220,58 +214,48 @@ const ActivateEventForm = () => {
               </tr>
             </thead>
             <tbody>
-              {programs.map((program, index) =>
-                program.progevent.map((event, idx) => {
-                  const rowKey = `${program._id}-${event._id}`;
-                  const isFirst = idx === 0;
-
-                  return (
-                    <tr key={rowKey}>
-                      {isFirst && (
-                        <td rowSpan={program.progevent.length}>
-                          {program.progname}
-                        </td>
+              {events.map((event) => {
+                const rowKey = event._id;
+                return (
+                  <tr key={rowKey}>
+                    <td>{event.event_name}</td>
+                    <td>{displayDate(event.eventdate)}</td>
+                    <td>{displayDate(event.closersvp)}</td>
+                    <td>
+                      {editRow === rowKey ? (
+                        <select
+                          value={newStatus}
+                          onChange={(e) => setNewStatus(e.target.value)}
+                        >
+                          <option value="Open">Open</option>
+                          <option value="Closed">Closed</option>
+                          <option value="Completed">Completed</option>
+                        </select>
+                      ) : (
+                        event.eventstatus
                       )}
-                      <td>{event.eventname}</td>
-                      <td>{event.eventday}, {displayDate(event.eventdate)}</td>
-                      <td>{displayDate(event.closersvp)}</td>
-                      <td>
-                        {editRow === rowKey ? (
-                          <select
-                            value={newStatus}
-                            onChange={(e) => setNewStatus(e.target.value)}
-                          >
-                            <option value="Open">Open</option>
-                            <option value="Closed">Closed</option>
-                            <option value="Completed">Completed</option>
-                          </select>
-                        ) : (
-                          event.eventstatus
-                        )}
-                      </td>
-                      <td>
-                        {editRow === rowKey ? (
-                          <button className="btn-save"
-                            onClick={() =>
-                              handleSaveStatus(program._id, event._id)
-                            }
-                          >
-                            Save
-                          </button>
-                        ) : (
-                          <input
-                            type="checkbox"
-                            onChange={() => {
-                              setEditRow(rowKey);
-                              setNewStatus(event.eventstatus);
-                            }}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
+                    </td>
+                    <td>
+                      {editRow === rowKey ? (
+                        <button
+                          className="btn-save"
+                          onClick={() => handleSaveStatus(event._id)}
+                        >
+                          Save
+                        </button>
+                      ) : (
+                        <input
+                          type="checkbox"
+                          onChange={() => {
+                            setEditRow(rowKey);
+                            setNewStatus(event.eventstatus);
+                          }}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
