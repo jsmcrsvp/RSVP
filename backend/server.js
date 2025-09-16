@@ -153,6 +153,20 @@ app.get("/server-keep-alive", async (req, res) => {
 });
 
 
+app.get("/test-db-write", async (req, res) => {
+  try {
+    const EventsList = require("./models/Events_List_DB_Schema");
+    const test = new EventsList({ event_name: "Test Event" });
+    const saved = await test.save();
+    console.log("✅ Test DB write:", saved);
+    res.json({ success: true, saved });
+  } catch (err) {
+    console.error("❌ DB write failed:", err);
+    res.status(500).json({ error: "DB write failed" });
+  }
+});
+
+
 /* ==============Working 090325 - 3:45pm ==============
 //=================== Load Dependencies ===================
 require("dotenv").config(); // load only your .env
