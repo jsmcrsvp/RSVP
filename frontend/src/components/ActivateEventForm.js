@@ -122,34 +122,42 @@ const ActivateEventForm = () => {
       <form className="program-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Select Program</label>
-          <select
-            value={progname}
-            onChange={(e) => setProgname(e.target.value)}
-            required
-          >
-            <option value="">-- Select Program --</option>
-            {programs.map((p) => (
-              <option key={p._id} value={p.program_name}>
-                {p.program_name}
-              </option>
-            ))}
-          </select>
+<select
+  value={progname}
+  onChange={(e) => setProgname(e.target.value)}
+  required
+>
+  <option value="">-- Select Program --</option>
+  {programs
+    .slice() // create a copy so original state isn’t mutated
+    .sort((a, b) => a.program_name.localeCompare(b.program_name))
+    .map((p) => (
+      <option key={p._id} value={p.program_name}>
+        {p.program_name}
+      </option>
+    ))}
+</select>
+
         </div>
 
         <div className="form-group">
           <label>Select Event</label>
-          <select
-            value={eventname}
-            onChange={(e) => setEventname(e.target.value)}
-            required
-          >
-            <option value="">-- Select Event --</option>
-            {events.map((ev) => (
-              <option key={ev._id} value={ev.event_name}>
-                {ev.event_name}
-              </option>
-            ))}
-          </select>
+<select
+  value={eventname}
+  onChange={(e) => setEventname(e.target.value)}
+  required
+>
+  <option value="">-- Select Event --</option>
+  {events
+    .slice()
+    .sort((a, b) => a.event_name.localeCompare(b.event_name))
+    .map((ev) => (
+      <option key={ev._id} value={ev.event_name}>
+        {ev.event_name}
+      </option>
+    ))}
+</select>
+
         </div>
 
         <div className="form-group">
