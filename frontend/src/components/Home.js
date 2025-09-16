@@ -620,6 +620,7 @@ export default function Home() {
                 {/* ---- Member ID Search ---- */}
                 {searchMode === "memberId" && (
                   <div className="inline-fields">
+                    <span className="inline-label">Member ID:</span>
                     <input
                       className="small-input"
                       type="number"
@@ -647,6 +648,7 @@ export default function Home() {
                 {/* ---- Name + House Search ---- */}
                 {searchMode === "nameHouse" && (
                   <div className="inline-fields">
+                    <span className="inline-label">First Name:</span>
                     <input
                       className="small-input"
                       type="text"
@@ -654,7 +656,7 @@ export default function Home() {
                       onChange={(e) => setName(e.target.value)}
                       placeholder="First Name"
                     />
-                    <span className="inline-label">House #</span>
+                    <span className="inline-label">House #:</span>
                     <input
                       className="small-input"
                       type="text"
