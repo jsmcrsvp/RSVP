@@ -16,7 +16,7 @@ router.get("/stats", async (req, res) => {
             eventday: "$eventday",
           },
           totalRSVPs: { $sum: "$rsvpcount" },    // sum of numeric rsvpcount
-          totalKidsRSVPs: {$sum: "kidsrsvpcount"},
+          totalKidsRSVPs: {$sum: "$kidsrsvpcount"},
         },
       },
       { $sort: { "_id.programname": 1, "_id.eventdate": 1, "_id.eventname": 1 } },
