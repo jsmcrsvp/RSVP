@@ -84,96 +84,98 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="dashboard-container">
-      {(loading || loadingEvents) && <p>Loading dashboard...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <div className="page-wrapper">
+      <div className="dashboard-container">
+        {(loading || loadingEvents) && <p>Loading dashboard...</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {/* Open Events Table */}
-      {!loading && !loadingEvents && !error && (
-        <>
-          
-          {openStats.length === 0 ? (
-            <p style={{ fontStyle: "italic", color: "#666" }}>
-              No RSVP responses for open events.
-            </p>
-          ) : (
-            <div className="result-table-wrapper">
+        {/* Open Events Table */}
+        {!loading && !loadingEvents && !error && (
+          <>
+
+            {openStats.length === 0 ? (
+              <p style={{ fontStyle: "italic", color: "#666" }}>
+                No RSVP responses for open events.
+              </p>
+            ) : (
+              <div className="result-table-wrapper">
                 <h4>Current Open Events</h4>
-              <table className="result-table">
-                <thead>
-                  <tr>
-                    <th>Program</th>
-                    <th>Event Name</th>
-                    <th>Event Date</th>
-                    <th>Event RSVP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {openStats.map((row, idx) => (
-                    <tr key={`open-${idx}`}>
-                      <td>{row.programname}</td>
-                      <td>{row.eventname}</td>
-                      <td>{row.eventday}, {displayDate(row.eventdate)}</td>
-                      <td>{row.totalRSVPs}</td>
+                <table className="result-table">
+                  <thead>
+                    <tr>
+                      <th>Program</th>
+                      <th>Event Name</th>
+                      <th>Event Date</th>
+                      <th>Event RSVP</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>
+                    {openStats.map((row, idx) => (
+                      <tr key={`open-${idx}`}>
+                        <td>{row.programname}</td>
+                        <td>{row.eventname}</td>
+                        <td>{row.eventday}, {displayDate(row.eventdate)}</td>
+                        <td>{row.totalRSVPs}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
-          {/* Closed Events Table */}
-          {closedStats.length === 0 ? (
-            <p style={{ fontStyle: "italic", color: "#666" }}>
-              No RSVP responses for closed events.
-            </p>
-          ) : (
-            <div className="result-table-wrapper">
+            {/* Closed Events Table */}
+            {closedStats.length === 0 ? (
+              <p style={{ fontStyle: "italic", color: "#666" }}>
+                No RSVP responses for closed events.
+              </p>
+            ) : (
+              <div className="result-table-wrapper">
                 <h4>Current Closed Events</h4>
-              <table className="result-table">
-                <thead>
-                  <tr>
-                    <th>Program</th>
-                    <th>Event Name</th>
-                    <th>Event Date</th>
-                    <th>Event RSVP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {closedStats.map((row, idx) => (
-                    <tr key={`closed-${idx}`}>
-                      <td>{row.programname}</td>
-                      <td>{row.eventname}</td>
-                      <td>{row.eventday}, {displayDate(row.eventdate)}</td>
-                      <td>{row.totalRSVPs}</td>
+                <table className="result-table">
+                  <thead>
+                    <tr>
+                      <th>Program</th>
+                      <th>Event Name</th>
+                      <th>Event Date</th>
+                      <th>Event RSVP</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>
+                    {closedStats.map((row, idx) => (
+                      <tr key={`closed-${idx}`}>
+                        <td>{row.programname}</td>
+                        <td>{row.eventname}</td>
+                        <td>{row.eventday}, {displayDate(row.eventdate)}</td>
+                        <td>{row.totalRSVPs}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
-          {/* 🔄 Manual Refresh Button */}
-          <div style={{ textAlign: "center", marginTop: "2rem" }}>
-            <button
-              className="btn-refresh"
-              onClick={loadDashboardData}
-              disabled={loading || loadingEvents}
-              style={{
-                padding: "8px 16px",
-                borderRadius: "6px",
-                border: "none",
-                background: "#4c6daf",
-                color: "white",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              {loading || loadingEvents ? "Refreshing..." : "🔄 Refresh Dashboard"}
-            </button>
-          </div>
-        </>
-      )}
+            {/* 🔄 Manual Refresh Button */}
+            <div style={{ textAlign: "center", marginTop: "2rem" }}>
+              <button
+                className="btn-refresh"
+                onClick={loadDashboardData}
+                disabled={loading || loadingEvents}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: "6px",
+                  border: "none",
+                  background: "#4c6daf",
+                  color: "white",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                {loading || loadingEvents ? "Refreshing..." : "🔄 Refresh Dashboard"}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

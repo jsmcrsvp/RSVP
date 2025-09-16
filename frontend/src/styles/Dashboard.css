@@ -33,14 +33,14 @@ h3 {
   font-size: 1.2rem;
   color: #5d8cdf;
 }
-/*
+
 h4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
   font-size: 1.1rem;
   color: #5d8cdf;
 }
-*/
+
 /* Messages */
 .message {
   text-align: center;
@@ -123,12 +123,6 @@ button:hover,
   margin-top: 1rem;
   margin-bottom: 1.5rem;
   text-align: center;       /* centers the <h4> above the table */
-}
-
-.result-table-wrapper h4 {
-  margin-bottom: 0.5rem;    /* keeps heading close to the table */
-  text-align: center;
-  color: #5d8cdf;
 }
 
 .result-table {
