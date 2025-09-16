@@ -101,108 +101,112 @@ export default function VerifyRSVP() {
       </div>
 
       {/* Results */}
-      <h4>Current RSVP Details</h4>
 
       {verifyResult && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
-        <div className="result-table-wrapper">
-          <table className="result-table" style={{ marginBottom: 10 }}>
-            <tbody>
-              <tr>
-                <th>Name</th>
-                <td>{verifyMemberFromResult()?.name}</td>
-              </tr>
-              <tr>
-                <th>Address</th>
-                <td>{verifyMemberFromResult()?.address}</td>
-              </tr>
-              <tr>
-                <th>Phone</th>
-                <td>{verifyMemberFromResult()?.phone}</td>
-              </tr>
-              <tr>
-                <th>Email</th>
-                <td>{verifyMemberFromResult()?.email}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <table className="result-table">
-            <thead>
-              <tr>
-                <th>Program</th>
-                <th>Event Name</th>
-                <th>Event Date</th>
-                <th>Status</th>
-                <th>RSVP</th>
-                <th>Modify</th>
-              </tr>
-            </thead>
-            <tbody>
-              {verifyResult.rsvps.map((ev, idx) => (
-                <tr key={ev._id || idx}>
-                  <td>{ev.programname}</td>
-                  <td>{ev.eventname}</td>
-                  <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
-                  <td>{ev.eventstatus}</td>
-                  <td>
-                    {editIndex === idx ? (
-                      <input
-                        type="number"
-                        min="0"
-                        value={modifiedCount}
-                        onChange={(e) => setModifiedCount(e.target.value)}
-                        style={{ width: "60px" }}
-                      />
-                    ) : (
-                      ev.rsvpcount
-                    )}
-                  </td>
-                  <td>
-                    {ev.eventstatus === "Open" ? (
-                      editIndex === idx ? (
-                        <button
-                          type="button"
-                          onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}
-                        >
-                          Save
-                        </button>
-                      ) : (
-                        <label>
-                          <input
-                            type="checkbox"
-                            onChange={() => {
-                              setEditIndex(idx);
-                              setModifiedCount(ev.rsvpcount);
-                            }}
-                          />
-                          Modify
-                        </label>
-                      )
-                    ) : (
-                      <span style={{ color: "gray" }}>Not Editable</span>
-                    )}
-                  </td>
+        <>
+          <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
+            Current RSVP Details
+          </h4>
+          <div className="result-table-wrapper">
+            <table className="result-table" style={{ marginBottom: 10 }}>
+              <tbody>
+                <tr>
+                  <th>Name</th>
+                  <td>{verifyMemberFromResult()?.name}</td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                <tr>
+                  <th>Address</th>
+                  <td>{verifyMemberFromResult()?.address}</td>
+                </tr>
+                <tr>
+                  <th>Phone</th>
+                  <td>{verifyMemberFromResult()?.phone}</td>
+                </tr>
+                <tr>
+                  <th>Email</th>
+                  <td>{verifyMemberFromResult()?.email}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table className="result-table">
+              <thead>
+                <tr>
+                  <th>Program</th>
+                  <th>Event Name</th>
+                  <th>Event Date</th>
+                  <th>Status</th>
+                  <th>RSVP</th>
+                  <th>Modify</th>
+                </tr>
+              </thead>
+              <tbody>
+                {verifyResult.rsvps.map((ev, idx) => (
+                  <tr key={ev._id || idx}>
+                    <td>{ev.programname}</td>
+                    <td>{ev.eventname}</td>
+                    <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
+                    <td>{ev.eventstatus}</td>
+                    <td>
+                      {editIndex === idx ? (
+                        <input
+                          type="number"
+                          min="0"
+                          value={modifiedCount}
+                          onChange={(e) => setModifiedCount(e.target.value)}
+                          style={{ width: "60px" }}
+                        />
+                      ) : (
+                        ev.rsvpcount
+                      )}
+                    </td>
+                    <td>
+                      {ev.eventstatus === "Open" ? (
+                        editIndex === idx ? (
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}
+                          >
+                            Save
+                          </button>
+                        ) : (
+                          <label>
+                            <input
+                              type="checkbox"
+                              onChange={() => {
+                                setEditIndex(idx);
+                                setModifiedCount(ev.rsvpcount);
+                              }}
+                            />
+                            Modify
+                          </label>
+                        )
+                      ) : (
+                        <span style={{ color: "gray" }}>Not Editable</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          </>
       )}
 
-      {/* No results case */}
-      {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
-        <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
-          No RSVP records found for this confirmation number or Event RSVP may be closed.
-        </div>
-      )}
+          {/* No results case */}
+          {verifyResult && verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
+            <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
+              No RSVP records found for this confirmation number or Event RSVP may be closed.
+            </div>
+          )}
 
-      {/* Success / error messages at bottom */}
-      {updateMessage && (
-        <div style={{ color: "green", marginTop: "10px" }}>✅ {updateMessage}</div>
-      )}
-      {updateError && (
-        <div style={{ color: "red", marginTop: "10px" }}>❌ {updateError}</div>
-      )}
-    </form>
-  );
+          {/* Success / error messages at bottom */}
+          {updateMessage && (
+            <div style={{ color: "green", marginTop: "10px" }}>✅ {updateMessage}</div>
+          )}
+          {updateError && (
+            <div style={{ color: "red", marginTop: "10px" }}>❌ {updateError}</div>
+          )}
+        </form>
+      );
 }
