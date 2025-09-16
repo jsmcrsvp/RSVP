@@ -8,7 +8,7 @@ const AdminFunctions = () => {
 
   return (
     <div style={{ padding: "1rem" }}>
-      <h2>Admin Functions</h2>
+      {/*<h2>Admin Functions</h2>*/}
 
       {/* Tabs */}
       <div style={{ display: "flex", marginBottom: "1rem" }}>

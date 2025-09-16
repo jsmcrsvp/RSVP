@@ -43,7 +43,7 @@ const AdminAddProgram = () => {
 
   return (
     <div style={{ padding: "1rem" }}>
-      <h2>Admin: Add Program</h2>
+      {/*<h2>Admin: Add Program</h2>*/}
       <form onSubmit={handleSubmit}>
         <div>
           <label>Program Name:</label>
