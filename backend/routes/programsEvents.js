@@ -1,132 +1,72 @@
 // backend/routes/programsEvents.js
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
-//const Program = require("../models/program_list");
-//const Event = require("../models/events_list");
+const ProgramList = require("../models/program_list");
+const EventList = require("../models/events_list");
 
-const ProgramsList = require("../models/Programs_List_DB_Schema");
-const EventsList = require("../models/Events_List_DB_Schema");
-
-// ✅ Helper to send consistent JSON error
-function sendError(res, message, status = 400) {
-  return res.status(status).json({ success: false, error: message });
-}
-
-// ======================= CREATE PROGRAM =======================
-router.post("/programs", async (req, res) => {
+// Add new Program & Event
+router.post("/", async (req, res) => {
   try {
-    const { program_name } = req.body;
+    const { program_name, event_name } = req.body;
 
-    if (!program_name || typeof program_name !== "string" || !program_name.trim()) {
-      return sendError(res, "Program name is required");
+    if (!program_name && !event_name) {
+      return res.status(400).json({ error: "Program or Event name required" });
     }
 
-    // Check for duplicates
-    const exists = await Program.findOne({ program_name: program_name.trim() });
-    if (exists) {
-      return sendError(res, "Program already exists", 409);
+    let savedProgram = null;
+    let savedEvent = null;
+
+    if (program_name?.trim()) {
+      const exists = await ProgramList.findOne({ program_name: program_name.trim() });
+      if (exists) return res.status(400).json({ error: "Program already exists" });
+
+      const newProgram = new ProgramList({ program_name: program_name.trim() });
+      savedProgram = await newProgram.save();
     }
 
-    const newProgram = new Program({ program_name: program_name.trim() });
-    await newProgram.save();
+    if (event_name?.trim()) {
+      const exists = await EventList.findOne({ event_name: event_name.trim() });
+      if (exists) return res.status(400).json({ error: "Event already exists" });
 
-    res.json({ success: true, data: newProgram });
-  } catch (err) {
-    console.error("Error adding program:", err);
-    sendError(res, "Failed to add program", 500);
+      const newEvent = new EventList({ event_name: event_name.trim() });
+      savedEvent = await newEvent.save();
+    }
+
+    return res.status(201).json({
+      message: "Program/Event saved successfully",
+      program: savedProgram,
+      event: savedEvent,
+    });
+  } catch (error) {
+    console.error("❌ Error saving Program/Event:", error);
+    return res.status(500).json({ error: "Failed to save Program/Event" });
   }
 });
 
-// ======================= GET ALL PROGRAMS =======================
+// Get all programs
 router.get("/programs", async (req, res) => {
   try {
-    const programs = await Program.find();
-    res.json({ success: true, data: programs });
-  } catch (err) {
-    console.error("Error fetching programs:", err);
-    sendError(res, "Failed to fetch programs", 500);
+    const programs = await ProgramList.find().sort({ createdAt: -1 });
+    res.json(programs);
+  } catch (error) {
+    console.error("❌ Error fetching programs:", error);
+    res.status(500).json({ error: "Failed to fetch programs" });
   }
 });
 
-// ======================= CREATE EVENT =======================
-router.post("/events", async (req, res) => {
-  try {
-    const { event_name } = req.body;
-
-    if (!event_name || typeof event_name !== "string" || !event_name.trim()) {
-      return sendError(res, "Event name is required");
-    }
-
-    // Check for duplicates
-    const exists = await Event.findOne({ event_name: event_name.trim() });
-    if (exists) {
-      return sendError(res, "Event already exists", 409);
-    }
-
-    const newEvent = new Event({ event_name: event_name.trim() });
-    await newEvent.save();
-
-    res.json({ success: true, data: newEvent });
-  } catch (err) {
-    console.error("Error adding event:", err);
-    sendError(res, "Failed to add event", 500);
-  }
-});
-
-// ======================= GET ALL EVENTS =======================
+// Get all events
 router.get("/events", async (req, res) => {
   try {
-    const events = await Event.find();
-    res.json({ success: true, data: events });
-  } catch (err) {
-    console.error("Error fetching events:", err);
-    sendError(res, "Failed to fetch events", 500);
-  }
-});
-
-// ======================= GET BY ID (PROGRAM/ EVENT) =======================
-router.get("/programs/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return sendError(res, "Invalid program ID");
-    }
-
-    const program = await Program.findById(id);
-    if (!program) {
-      return sendError(res, "Program not found", 404);
-    }
-
-    res.json({ success: true, data: program });
-  } catch (err) {
-    console.error("Error fetching program by ID:", err);
-    sendError(res, "Failed to fetch program", 500);
-  }
-});
-
-router.get("/events/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return sendError(res, "Invalid event ID");
-    }
-
-    const event = await Event.findById(id);
-    if (!event) {
-      return sendError(res, "Event not found", 404);
-    }
-
-    res.json({ success: true, data: event });
-  } catch (err) {
-    console.error("Error fetching event by ID:", err);
-    sendError(res, "Failed to fetch event", 500);
+    const events = await EventList.find().sort({ createdAt: -1 });
+    res.json(events);
+  } catch (error) {
+    console.error("❌ Error fetching events:", error);
+    res.status(500).json({ error: "Failed to fetch events" });
   }
 });
 
 module.exports = router;
+
 
 
 /*
