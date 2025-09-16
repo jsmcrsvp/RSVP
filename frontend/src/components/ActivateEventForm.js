@@ -1,14 +1,9 @@
 // frontend/src/components/ActivateEventForm.js
 import React, { useState, useEffect } from "react";
-import {
-  getAdminAllPrograms,
-  getAllEvents,
-  addProgram,
-  updateEventStatus,
-} from "../api";
+import { getAllEvents, getAdminAllPrograms, addProgram, updateEventStatus } from "../api";
 import "../styles/ActivateEventForm.css";
 
-// Utility: format YYYY-MM-DD → MM/DD/YYYY
+// ✅ Utility to format YYYY-MM-DD → MM/DD/YYYY
 const displayDate = (dateStr) => {
   if (!dateStr) return "";
   const [year, month, day] = dateStr.split("-");
@@ -29,7 +24,7 @@ const ActivateEventForm = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Status editing
+  // For editing event status
   const [editRow, setEditRow] = useState(null);
   const [newStatus, setNewStatus] = useState("");
 
@@ -37,37 +32,34 @@ const ActivateEventForm = () => {
   useEffect(() => {
     if (eventdate) {
       const date = new Date(eventdate + "T00:00:00Z");
-      const day = date.toLocaleDateString("en-US", {
-        weekday: "long",
-        timeZone: "UTC",
-      });
+      const day = date.toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
       setEventday(day);
-    } else setEventday("");
+    } else {
+      setEventday("");
+    }
   }, [eventdate]);
 
-  // Fetch programs and events
-  const fetchPrograms = async () => {
+  // Fetch programs & events from DB
+  const fetchData = async () => {
     try {
       setLoading(true);
-      const programData = await getAdminAllPrograms();
-      const eventData = await getAllEvents();
-
-      // Sort A→Z for dropdowns
-      setPrograms(programData.sort((a, b) => a.program_name.localeCompare(b.program_name)));
+      const [programData, eventData] = await Promise.all([getAdminAllPrograms(), getAllEvents()]);
+      // Sort A→Z
+      setPrograms(programData.sort((a, b) => a.progname.localeCompare(b.progname)));
       setEvents(eventData.sort((a, b) => a.event_name.localeCompare(b.event_name)));
     } catch (err) {
-      console.error("Error fetching programs/events:", err);
-      setError("Failed to load programs or events");
+      console.error("Error fetching data:", err);
+      setError("Failed to load programs or events.");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPrograms();
+    fetchData();
   }, []);
 
-  // Handle form submit
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -100,8 +92,7 @@ const ActivateEventForm = () => {
       setEventday("");
       setEventstatus("Open");
       setRsvpClosedate("");
-
-      fetchPrograms();
+      fetchData();
     } catch (err) {
       console.error("Error activating event:", err);
       setError("❌ Failed to activate event.");
@@ -114,18 +105,28 @@ const ActivateEventForm = () => {
       await updateEventStatus(progId, evId, newStatus);
       setSuccess("✅ Event status updated!");
       setEditRow(null);
-      fetchPrograms();
+      fetchData();
     } catch (err) {
-      console.error("Error updating status:", err);
+      console.error("Error updating event status:", err);
       setError("❌ Failed to update status.");
     }
   };
+
+  // Filter active events (status Open | Closed | Completed) and group by program
+  const activePrograms = programs
+    .map((program) => ({
+      ...program,
+      progevent: program.progevent.filter((ev) =>
+        ["Open", "Closed", "Completed"].includes(ev.eventstatus)
+      ),
+    }))
+    .filter((program) => program.progevent.length > 0);
 
   return (
     <div className="add-program-container">
       <h3>Activate Program & Event</h3>
 
-      {/* Form */}
+      {/* Program Form */}
       <form className="program-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Select Program</label>
@@ -136,9 +137,7 @@ const ActivateEventForm = () => {
           >
             <option value="">-- Select Program --</option>
             {programs.map((p) => (
-              <option key={p._id} value={p.program_name}>
-                {p.program_name}
-              </option>
+              <option key={p._id} value={p.progname}>{p.progname}</option>
             ))}
           </select>
         </div>
@@ -152,21 +151,14 @@ const ActivateEventForm = () => {
           >
             <option value="">-- Select Event --</option>
             {events.map((e) => (
-              <option key={e._id} value={e.event_name}>
-                {e.event_name}
-              </option>
+              <option key={e._id} value={e.event_name}>{e.event_name}</option>
             ))}
           </select>
         </div>
 
         <div className="form-group">
           <label>Event Date</label>
-          <input
-            type="date"
-            value={eventdate}
-            onChange={(e) => setEventdate(e.target.value)}
-            required
-          />
+          <input type="date" value={eventdate} onChange={(e) => setEventdate(e.target.value)} required />
         </div>
 
         <div className="form-group">
@@ -176,38 +168,26 @@ const ActivateEventForm = () => {
 
         <div className="form-group">
           <label>RSVP Close Date</label>
-          <input
-            type="date"
-            value={rsvpClosedate}
-            onChange={(e) => setRsvpClosedate(e.target.value)}
-            required
-          />
+          <input type="date" value={rsvpClosedate} onChange={(e) => setRsvpClosedate(e.target.value)} required />
         </div>
 
         <div className="form-group">
           <label>Event Status</label>
-          <select
-            value={eventstatus}
-            onChange={(e) => setEventstatus(e.target.value)}
-            required
-          >
+          <select value={eventstatus} onChange={(e) => setEventstatus(e.target.value)} required>
             <option value="Open">Open</option>
             <option value="Closed">Closed</option>
             <option value="Completed">Completed</option>
           </select>
         </div>
 
-        <button type="submit" className="btn-submit">
-          Add Program
-        </button>
+        <button type="submit" className="btn-submit">Activate Event</button>
       </form>
 
-      {/* Status messages */}
       {error && <p className="form-message error">{error}</p>}
       {success && <p className="form-message success">{success}</p>}
 
-      {/* Active Events Table */}
-      {programs.length > 0 && (
+      {/* Active Programs Table */}
+      {activePrograms.length > 0 && (
         <div className="table-wrapper">
           <h3>Active Program & Event Details</h3>
           <table className="programs-table">
@@ -222,71 +202,42 @@ const ActivateEventForm = () => {
               </tr>
             </thead>
             <tbody>
-              {programs
-                .filter(
-                  (program) =>
-                    Array.isArray(program.progevent) &&
-                    program.progevent.length > 0 &&
-                    program.progevent.some(
-                      (ev) => ev.eventstatus === "Open" || ev.eventstatus === "Closed" || ev.eventstatus === "Completed"
-                    )
-                )
-                .map((program) =>
-                  program.progevent
-                    .filter(
-                      (ev) => ev.eventstatus === "Open" || ev.eventstatus === "Closed" || ev.eventstatus === "Completed"
-                    )
-                    .map((event, idx) => {
-                      const rowKey = `${program._id}-${event._id}`;
-                      const isFirst = idx === 0;
-                      return (
-                        <tr key={rowKey}>
-                          {isFirst && (
-                            <td rowSpan={program.progevent.filter(ev => ev.eventstatus === "Open" || ev.eventstatus === "Closed" || ev.eventstatus === "Completed").length}>
-                              {program.progname}
-                            </td>
-                          )}
-                          <td>{event.eventname}</td>
-                          <td>{event.eventday}, {displayDate(event.eventdate)}</td>
-                          <td>{displayDate(event.closersvp)}</td>
-                          <td>
-                            {editRow === rowKey ? (
-                              <select
-                                value={newStatus}
-                                onChange={(e) => setNewStatus(e.target.value)}
-                              >
-                                <option value="Open">Open</option>
-                                <option value="Closed">Closed</option>
-                                <option value="Completed">Completed</option>
-                              </select>
-                            ) : (
-                              event.eventstatus
-                            )}
-                          </td>
-                          <td>
-                            {editRow === rowKey ? (
-                              <button
-                                className="btn-save"
-                                onClick={() =>
-                                  handleSaveStatus(program._id, event._id)
-                                }
-                              >
-                                Save
-                              </button>
-                            ) : (
-                              <input
-                                type="checkbox"
-                                onChange={() => {
-                                  setEditRow(rowKey);
-                                  setNewStatus(event.eventstatus);
-                                }}
-                              />
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })
-                )}
+              {activePrograms.map((program) =>
+                program.progevent.map((event, idx) => {
+                  const rowKey = `${program._id}-${event._id}`;
+                  const isFirst = idx === 0;
+                  return (
+                    <tr key={rowKey}>
+                      {isFirst && (
+                        <td rowSpan={program.progevent.length}>{program.progname}</td>
+                      )}
+                      <td>{event.eventname}</td>
+                      <td>{event.eventday}, {displayDate(event.eventdate)}</td>
+                      <td>{displayDate(event.closersvp)}</td>
+                      <td>
+                        {editRow === rowKey ? (
+                          <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
+                            <option value="Open">Open</option>
+                            <option value="Closed">Closed</option>
+                            <option value="Completed">Completed</option>
+                          </select>
+                        ) : (
+                          event.eventstatus
+                        )}
+                      </td>
+                      <td>
+                        {editRow === rowKey ? (
+                          <button className="btn-save" onClick={() => handleSaveStatus(program._id, event._id)}>
+                            Save
+                          </button>
+                        ) : (
+                          <input type="checkbox" onChange={() => { setEditRow(rowKey); setNewStatus(event.eventstatus); }} />
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
@@ -296,6 +247,7 @@ const ActivateEventForm = () => {
 };
 
 export default ActivateEventForm;
+
 
 
 
