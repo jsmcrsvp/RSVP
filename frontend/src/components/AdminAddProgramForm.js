@@ -142,20 +142,19 @@ const AdminAddProgram = () => {
     return (
 
         <div style={{ padding: "1rem" }}>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}
-      >
-        <input
-          type="text"
-          value={programName}
-          onChange={(e) => setProgramName(e.target.value)}
-          placeholder="Enter program name"
-          style={{ flex: "1", padding: "0.5rem" }}
-        />
-        <button type="submit" disabled={loading} style={{ padding: "0.5rem 1rem" }}>
-          {loading ? "Saving..." : "Save"}
-        </button>
+            <form
+                onSubmit={handleSubmit} style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}
+            >
+                <input
+                    type="text"
+                    value={programName}
+                    onChange={(e) => setProgramName(e.target.value)}
+                    placeholder="Enter program name"
+                    style={{ flex: "1", padding: "0.5rem" }}
+                />
+                <button type="submit" disabled={loading} style={{ padding: "0.5rem 1rem" }}>
+                    {loading ? "Saving..." : "Save"}
+                </button>
             </form>
 
             {message && <p>{message}</p>}
@@ -169,19 +168,19 @@ const AdminAddProgram = () => {
                             <th>Program Name</th>
                         </tr>
                     </thead>
-<tbody>
-  {Array.isArray(programs) && programs.length > 0 ? (
-    programs.map((p) => (
-      <tr key={p._id || Math.random()}>
-        <td>{p.program_name}</td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td style={{ textAlign: "center" }}>No programs found</td>
-    </tr>
-  )}
-</tbody>
+                    <tbody>
+                        {Array.isArray(programs) && programs.length > 0 ? (
+                            programs.map((p) => (
+                                <tr key={p._id || Math.random()}>
+                                    <td>{p.program_name}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td style={{ textAlign: "center" }}>No programs found</td>
+                            </tr>
+                        )}
+                    </tbody>
                 </table>
             </div>
         </div>

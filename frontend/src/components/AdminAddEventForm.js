@@ -143,16 +143,17 @@ const AdminAddEvent = () => {
 
     return (
         <div style={{ padding: "1rem" }}>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Event Name:</label>
-                    <input
-                        type="text"
-                        value={eventName}
-                        onChange={(e) => setEventName(e.target.value)}
-                    />
-                </div>
-                <button type="submit" disabled={loading}>
+            <form onSubmit={handleSubmit}
+                style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}
+            >
+                <input
+                    type="text"
+                    value={eventName}
+                    onChange={(e) => setEventName(e.target.value)}
+                    placeholder="Enter event name"
+                    style={{ flex: "1", padding: "0.5rem" }}
+                />
+                <button type="submit" disabled={loading} style={{ padding: "0.5rem 1rem" }}>
                     {loading ? "Saving..." : "Save"}
                 </button>
             </form>
@@ -168,19 +169,19 @@ const AdminAddEvent = () => {
                             <th>Event Name</th>
                         </tr>
                     </thead>
-<tbody>
-  {Array.isArray(events) && events.length > 0 ? (
-    events.map((e) => (
-      <tr key={e._id || Math.random()}>
-        <td>{e.event_name}</td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td style={{ textAlign: "center" }}>No events found</td>
-    </tr>
-  )}
-</tbody>
+                    <tbody>
+                        {Array.isArray(events) && events.length > 0 ? (
+                            events.map((e) => (
+                                <tr key={e._id || Math.random()}>
+                                    <td>{e.event_name}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td style={{ textAlign: "center" }}>No events found</td>
+                            </tr>
+                        )}
+                    </tbody>
                 </table>
             </div>
         </div>
