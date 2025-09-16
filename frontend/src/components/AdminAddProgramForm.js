@@ -1,3 +1,4 @@
+{/*
 import React, { useState, useEffect } from "react";
 import { getAdminAllPrograms, addAdminNewProgram } from "../api";
 import "../styles/Admin.css";
@@ -92,9 +93,9 @@ const AdminAddProgram = () => {
 };
 
 export default AdminAddProgram;
+*/}
 
 
-{/*
 import React, { useState, useEffect } from "react";
 import { getAdminAllPrograms, addAdminNewProgram } from "../api";
 import "../styles/Admin.css";
@@ -142,7 +143,6 @@ const AdminAddProgram = () => {
     return (
 
         <div style={{ padding: "1rem" }}>
-            {/*<h2>Admin: Add Program</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Program Name:</label>
@@ -188,4 +188,3 @@ const AdminAddProgram = () => {
 };
 
 export default AdminAddProgram;
-*/}
