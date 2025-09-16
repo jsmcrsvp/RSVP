@@ -51,47 +51,31 @@ const ActivateEventForm = () => {
     }
   }, [eventdate]);
 
-  // Fetch Programs & Events from DB
-  const fetchProgramsAndEvents = async () => {
-    try {
-      setLoading(true);
-      setError("");
+  // Fetch programs and events from DB with safe sorting
+const fetchProgramsAndEvents = async () => {
+  try {
+    setLoading(true);
+    setError("");
 
-      const [programData, eventData] = await Promise.all([
-        getAdminAllPrograms(),
-        getAllEvents(),
-      ]);
+    // Fetch programs
+    const programData = await getAdminAllPrograms();
+    const safePrograms = Array.isArray(programData) ? programData : [];
+    safePrograms.sort((a, b) => (a.progname || "").localeCompare(b.progname || ""));
+    setPrograms(safePrograms);
 
-      // Sort A→Z
-      setProgramsList(
-        Array.isArray(programData)
-          ? programData.sort((a, b) => a.progname.localeCompare(b.progname))
-          : []
-      );
+    // Fetch events
+    const eventData = await getAllEvents();
+    const safeEvents = Array.isArray(eventData) ? eventData : [];
+    safeEvents.sort((a, b) => (a.event_name || "").localeCompare(b.event_name || ""));
+    setEvents(safeEvents);
 
-      setEventsList(
-        Array.isArray(eventData)
-          ? eventData.sort((a, b) => a.event_name.localeCompare(b.event_name))
-          : []
-      );
-
-      // Only programs with active events
-      const activeProgramsFiltered = (Array.isArray(programData) ? programData : []).map(p => ({
-        ...p,
-        progevent: Array.isArray(p.progevent) ? p.progevent.filter(e =>
-          ["Open", "Closed", "Completed"].includes(e.eventstatus)
-        ) : [],
-      })).filter(p => p.progevent.length > 0);
-
-      setActivePrograms(activeProgramsFiltered);
-
-    } catch (err) {
-      console.error("Error fetching data:", err);
-      setError("Failed to load Programs and Events.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    setError("Failed to load programs or events");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchProgramsAndEvents();
