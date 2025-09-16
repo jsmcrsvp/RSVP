@@ -1,6 +1,11 @@
 // frontend/src/components/ActivateEventForm.js
 import React, { useState, useEffect } from "react";
-import { getAllEvents, getAdminAllPrograms, addProgram, updateEventStatus } from "../api";
+import {
+  getAllEvents,
+  getAdminAllPrograms,
+  addProgram,
+  updateEventStatus,
+} from "../api";
 import "../styles/ActivateEventForm.css";
 
 // ✅ Utility to format YYYY-MM-DD → MM/DD/YYYY
@@ -11,6 +16,7 @@ const displayDate = (dateStr) => {
 };
 
 const ActivateEventForm = () => {
+  // Form states
   const [progname, setProgname] = useState("");
   const [eventname, setEventname] = useState("");
   const [eventdate, setEventdate] = useState("");
@@ -18,17 +24,23 @@ const ActivateEventForm = () => {
   const [eventstatus, setEventstatus] = useState("Open");
   const [rsvpClosedate, setRsvpClosedate] = useState("");
 
-  const [programs, setPrograms] = useState([]);
-  const [events, setEvents] = useState([]);
+  // Dropdown lists
+  const [programsList, setProgramsList] = useState([]);
+  const [eventsList, setEventsList] = useState([]);
+
+  // Feedback & loading
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // For editing event status
+  // Active programs/events table
+  const [activePrograms, setActivePrograms] = useState([]);
+
+  // Status editing
   const [editRow, setEditRow] = useState(null);
   const [newStatus, setNewStatus] = useState("");
 
-  // Auto-update eventDay when eventdate changes
+  // Update eventDay when eventdate changes
   useEffect(() => {
     if (eventdate) {
       const date = new Date(eventdate + "T00:00:00Z");
@@ -39,36 +51,53 @@ const ActivateEventForm = () => {
     }
   }, [eventdate]);
 
-  // Fetch programs & events from DB
-  const fetchData = async () => {
+  // Fetch Programs & Events from DB
+  const fetchProgramsAndEvents = async () => {
     try {
       setLoading(true);
-      const [programData, eventData] = await Promise.all([getAdminAllPrograms(), getAllEvents()]);
+      setError("");
 
-      // Safely default to empty array
-      const sortedPrograms = (Array.isArray(programData) ? programData : []).sort(
-        (a, b) => (a.progname || "").localeCompare(b.progname || "")
+      const [programData, eventData] = await Promise.all([
+        getAdminAllPrograms(),
+        getAllEvents(),
+      ]);
+
+      // Sort A→Z
+      setProgramsList(
+        Array.isArray(programData)
+          ? programData.sort((a, b) => a.progname.localeCompare(b.progname))
+          : []
       );
 
-      const sortedEvents = (Array.isArray(eventData) ? eventData : []).sort(
-        (a, b) => (a.event_name || "").localeCompare(b.event_name || "")
+      setEventsList(
+        Array.isArray(eventData)
+          ? eventData.sort((a, b) => a.event_name.localeCompare(b.event_name))
+          : []
       );
 
-      setPrograms(sortedPrograms);
-      setEvents(sortedEvents);
+      // Only programs with active events
+      const activeProgramsFiltered = (Array.isArray(programData) ? programData : []).map(p => ({
+        ...p,
+        progevent: Array.isArray(p.progevent) ? p.progevent.filter(e =>
+          ["Open", "Closed", "Completed"].includes(e.eventstatus)
+        ) : [],
+      })).filter(p => p.progevent.length > 0);
+
+      setActivePrograms(activeProgramsFiltered);
+
     } catch (err) {
       console.error("Error fetching data:", err);
-      setError("Failed to load programs or events.");
+      setError("Failed to load Programs and Events.");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchProgramsAndEvents();
   }, []);
 
-  // Handle form submission
+  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -94,14 +123,14 @@ const ActivateEventForm = () => {
       };
 
       await addProgram(payload);
-      setSuccess("✅ Program & Event activated successfully!");
+      setSuccess("✅ Program & Event added successfully!");
       setProgname("");
       setEventname("");
       setEventdate("");
       setEventday("");
       setEventstatus("Open");
       setRsvpClosedate("");
-      fetchData();
+      fetchProgramsAndEvents();
     } catch (err) {
       console.error("Error activating event:", err);
       setError("❌ Failed to activate event.");
@@ -114,28 +143,18 @@ const ActivateEventForm = () => {
       await updateEventStatus(progId, evId, newStatus);
       setSuccess("✅ Event status updated!");
       setEditRow(null);
-      fetchData();
+      fetchProgramsAndEvents();
     } catch (err) {
       console.error("Error updating event status:", err);
       setError("❌ Failed to update status.");
     }
   };
 
-  // Filter active events (status Open | Closed | Completed) and group by program
-  const activePrograms = programs
-    .map((program) => ({
-      ...program,
-      progevent: program.progevent.filter((ev) =>
-        ["Open", "Closed", "Completed"].includes(ev.eventstatus)
-      ),
-    }))
-    .filter((program) => program.progevent.length > 0);
-
   return (
     <div className="add-program-container">
       <h3>Activate Program & Event</h3>
 
-      {/* Program Form */}
+      {/* Form */}
       <form className="program-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Select Program</label>
@@ -145,7 +164,7 @@ const ActivateEventForm = () => {
             required
           >
             <option value="">-- Select Program --</option>
-            {programs.map((p) => (
+            {programsList.map((p) => (
               <option key={p._id} value={p.progname}>{p.progname}</option>
             ))}
           </select>
@@ -159,7 +178,7 @@ const ActivateEventForm = () => {
             required
           >
             <option value="">-- Select Event --</option>
-            {events.map((e) => (
+            {eventsList.map((e) => (
               <option key={e._id} value={e.event_name}>{e.event_name}</option>
             ))}
           </select>
@@ -167,7 +186,12 @@ const ActivateEventForm = () => {
 
         <div className="form-group">
           <label>Event Date</label>
-          <input type="date" value={eventdate} onChange={(e) => setEventdate(e.target.value)} required />
+          <input
+            type="date"
+            value={eventdate}
+            onChange={(e) => setEventdate(e.target.value)}
+            required
+          />
         </div>
 
         <div className="form-group">
@@ -177,19 +201,28 @@ const ActivateEventForm = () => {
 
         <div className="form-group">
           <label>RSVP Close Date</label>
-          <input type="date" value={rsvpClosedate} onChange={(e) => setRsvpClosedate(e.target.value)} required />
+          <input
+            type="date"
+            value={rsvpClosedate}
+            onChange={(e) => setRsvpClosedate(e.target.value)}
+            required
+          />
         </div>
 
         <div className="form-group">
           <label>Event Status</label>
-          <select value={eventstatus} onChange={(e) => setEventstatus(e.target.value)} required>
+          <select
+            value={eventstatus}
+            onChange={(e) => setEventstatus(e.target.value)}
+            required
+          >
             <option value="Open">Open</option>
             <option value="Closed">Closed</option>
             <option value="Completed">Completed</option>
           </select>
         </div>
 
-        <button type="submit" className="btn-submit">Activate Event</button>
+        <button type="submit" className="btn-submit">Add Program</button>
       </form>
 
       {error && <p className="form-message error">{error}</p>}
@@ -211,21 +244,26 @@ const ActivateEventForm = () => {
               </tr>
             </thead>
             <tbody>
-              {activePrograms.map((program) =>
-                program.progevent.map((event, idx) => {
+              {activePrograms.map(program => {
+                const events = program.progevent || [];
+                return events.map((event, idx) => {
                   const rowKey = `${program._id}-${event._id}`;
                   const isFirst = idx === 0;
+
                   return (
                     <tr key={rowKey}>
                       {isFirst && (
-                        <td rowSpan={program.progevent.length}>{program.progname}</td>
+                        <td rowSpan={events.length}>{program.progname}</td>
                       )}
                       <td>{event.eventname}</td>
                       <td>{event.eventday}, {displayDate(event.eventdate)}</td>
                       <td>{displayDate(event.closersvp)}</td>
                       <td>
                         {editRow === rowKey ? (
-                          <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
+                          <select
+                            value={newStatus}
+                            onChange={(e) => setNewStatus(e.target.value)}
+                          >
                             <option value="Open">Open</option>
                             <option value="Closed">Closed</option>
                             <option value="Completed">Completed</option>
@@ -236,17 +274,26 @@ const ActivateEventForm = () => {
                       </td>
                       <td>
                         {editRow === rowKey ? (
-                          <button className="btn-save" onClick={() => handleSaveStatus(program._id, event._id)}>
+                          <button
+                            className="btn-save"
+                            onClick={() => handleSaveStatus(program._id, event._id)}
+                          >
                             Save
                           </button>
                         ) : (
-                          <input type="checkbox" onChange={() => { setEditRow(rowKey); setNewStatus(event.eventstatus); }} />
+                          <input
+                            type="checkbox"
+                            onChange={() => {
+                              setEditRow(rowKey);
+                              setNewStatus(event.eventstatus);
+                            }}
+                          />
                         )}
                       </td>
                     </tr>
                   );
-                })
-              )}
+                });
+              })}
             </tbody>
           </table>
         </div>
@@ -256,6 +303,7 @@ const ActivateEventForm = () => {
 };
 
 export default ActivateEventForm;
+
 
 
 
