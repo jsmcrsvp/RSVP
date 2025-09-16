@@ -1,4 +1,3 @@
-{/*
 import React, { useState, useEffect } from "react";
 import { getAdminAllPrograms, addAdminNewProgram } from "../api";
 import "../styles/Admin.css";
@@ -73,19 +72,19 @@ const AdminAddProgram = () => {
               <th>Program Name</th>
             </tr>
           </thead>
-          <tbody>
-            {programs.length > 0 ? (
-              programs.map((p) => (
-                <tr key={p._id}>
-                  <td>{p.program_name}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td style={{ textAlign: "center" }}>No programs found</td>
-              </tr>
-            )}
-          </tbody>
+<tbody>
+  {Array.isArray(programs) && programs.length > 0 ? (
+    programs.map((p) => (
+      <tr key={p._id || Math.random()}>
+        <td>{p.program_name}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td style={{ textAlign: "center" }}>No programs found</td>
+    </tr>
+  )}
+</tbody>
         </table>
       </div>
     </div>
@@ -93,9 +92,8 @@ const AdminAddProgram = () => {
 };
 
 export default AdminAddProgram;
-*/}
 
-
+{/*}
 import React, { useState, useEffect } from "react";
 import { getAdminAllPrograms, addAdminNewProgram } from "../api";
 import "../styles/Admin.css";
@@ -188,3 +186,4 @@ const AdminAddProgram = () => {
 };
 
 export default AdminAddProgram;
+*/}

@@ -72,19 +72,20 @@ const AdminAddEvent = () => {
               <th>Event Name</th>
             </tr>
           </thead>
-          <tbody>
-            {events.length > 0 ? (
-              events.map((e) => (
-                <tr key={e._id}>
-                  <td>{e.event_name}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td style={{ textAlign: "center" }}>No events found</td>
-              </tr>
-            )}
-          </tbody>
+<tbody>
+  {Array.isArray(events) && events.length > 0 ? (
+    events.map((e) => (
+      <tr key={e._id || Math.random()}>
+        <td>{e.event_name}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td style={{ textAlign: "center" }}>No events found</td>
+    </tr>
+  )}
+</tbody>
+
         </table>
       </div>
     </div>
