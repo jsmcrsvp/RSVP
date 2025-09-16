@@ -44,9 +44,13 @@ const ActivateEventForm = () => {
     try {
       setLoading(true);
       const [programData, eventData] = await Promise.all([getAdminAllPrograms(), getAllEvents()]);
-      // Sort A→Z
-      setPrograms(programData.sort((a, b) => a.progname.localeCompare(b.progname)));
-      setEvents(eventData.sort((a, b) => a.event_name.localeCompare(b.event_name)));
+
+      // Ensure we have arrays before sorting
+      const sortedPrograms = Array.isArray(programData) ? programData.sort((a, b) => a.progname.localeCompare(b.progname)) : [];
+      const sortedEvents = Array.isArray(eventData) ? eventData.sort((a, b) => a.event_name.localeCompare(b.event_name)) : [];
+
+      setPrograms(sortedPrograms);
+      setEvents(sortedEvents);
     } catch (err) {
       console.error("Error fetching data:", err);
       setError("Failed to load programs or events.");
@@ -54,6 +58,7 @@ const ActivateEventForm = () => {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchData();
