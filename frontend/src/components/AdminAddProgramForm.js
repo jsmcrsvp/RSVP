@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getAllPrograms, addNewProgram } from "../api";
+import { getAdminAllPrograms, addAdminNewProgram } from "../api";
 
 const AdminAddProgram = () => {
   const [programName, setProgramName] = useState("");
@@ -11,7 +11,7 @@ const AdminAddProgram = () => {
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
-        const data = await getAllPrograms();
+        const data = await getAdminAllPrograms();
         setPrograms(data);
       } catch (err) {
         console.error("❌ Error fetching programs:", err);
@@ -29,7 +29,7 @@ const AdminAddProgram = () => {
     setMessage("");
 
     try {
-      const data = await addNewProgram(programName.trim());
+      const data = await addAdminNewProgram(programName.trim());
       setPrograms([data.program, ...programs]);
       setMessage(data.message || "Program added successfully");
       setProgramName("");

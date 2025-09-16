@@ -103,12 +103,12 @@ export const addNewEvent = async (eventName) => {
 };
 
 // ===== Programs =====
-export const getAllPrograms = async () => {
+export const getAdminAllPrograms = async () => {
   const res = await api.get("/api/add_programs");
   return res.data;
 };
 
-export const addNewProgram = async (programName) => {
+export const addAdminNewProgram = async (programName) => {
   const res = await api.post("/api/add_programs", { program_name: programName });
   return res.data;
 };
