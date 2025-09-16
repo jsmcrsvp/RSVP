@@ -84,7 +84,8 @@ const AdminAddEvent = () => {
                     </tbody>
                 </table>
             </div>
-            );
+        </div>
+    );
 };
 
-            export default AdminAddEvent;
+export default AdminAddEvent;
