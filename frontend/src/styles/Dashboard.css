@@ -1,234 +1,245 @@
 /* Full page wrapper for vertical + horizontal centering */
 .page-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #e8f3f9;
-  padding: 1rem;
-  margin: 0;
-  font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #e8f3f9;
+    padding: 1rem;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
 /* Main Dashboard container */
 .dashboard-container {
-  background: #ffffff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 800px;
-  text-align: center;
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /*width: 100%;
+  max-width: 600px;*/
+    max-width: auto;
+    text-align: center;
 }
 
 /* Headings */
 h2 {
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem;
-  color: #df7b5d;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    color: #df7b5d;
 }
 
 h3 {
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-  color: #5d8cdf;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #5d8cdf;
 }
 
 h4 {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  color: #5d8cdf;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #5d8cdf;
 }
 
 /* Messages */
 .message {
-  text-align: center;
-  color: green;
-  font-weight: bold;
-  margin-bottom: 10px;
+    text-align: center;
+    color: green;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .error-message {
-  color: red;
-  margin-bottom: 1rem;
+    color: red;
+    margin-bottom: 1rem;
 }
 
 /* Form Styling */
 .search-form,
 .rsvp-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .form-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
 .inline-fields {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .inline-label {
-  font-size: 0.9rem;
-  color: #333;
-  white-space: nowrap;
+    font-size: 0.9rem;
+    color: #333;
+    white-space: nowrap;
 }
 
 .small-input,
 input[type="text"],
 input[type="number"],
 select {
-  width: 100%;
-  max-width: 200px;
-  padding: 0.4rem 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 0.9rem;
+    width: 100%;
+    max-width: 200px;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9rem;
 }
 
 .rsvp-count-input {
-  max-width: 60px; /* max 2-digit input */
+    max-width: 60px;
+    /* max 2-digit input */
 }
 
 /* Buttons */
 button,
 .button {
-  background: #33afff;
-  color: white;
-  border: none;
-  padding: 0.6rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  transition: background 0.2s;
+    background: #33afff;
+    color: white;
+    border: none;
+    padding: 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.2s;
 }
 
 button:hover,
 .button:hover {
-  background: #1e8ae5;
+    background: #1e8ae5;
 }
 
 /* Results Table Wrapper */
 .result-table-wrapper {
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-  text-align: center;       /* centers the <h4> above the table */
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    /* centers the <h4> above the table */
 }
 
 
 .result-table {
-  border-collapse: collapse;
-  margin: 0 auto;           /* centers the table horizontally */
-  width: auto;              /* shrink to fit content instead of full width */
-  min-width: 300px;         /* prevent collapsing too small */
-  background: #f9f9f9e4;
-  border-radius: 6px;
+    border-collapse: collapse;
+    margin: 0 auto;
+    /* centers the table horizontally */
+    width: auto;
+    /* shrink to fit content instead of full width */
+    min-width: 300px;
+    /* prevent collapsing too small */
+    background: #f9f9f9e4;
+    border-radius: 6px;
 }
 
 .result-table th,
 .result-table td {
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  text-align: left;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
 }
 
 .result-table th {
-  background: #f4f4f4;
-  color: #333;
+    background: #f4f4f4;
+    color: #333;
 }
 
 
 /* Mobile adjustments */
 @media (max-width: 480px) {
-  .inline-fields {
-    flex-direction: column;
-    width: 100%;
-  }
+    .inline-fields {
+        flex-direction: column;
+        width: 100%;
+    }
 
-  .small-input,
-  input[type="text"],
-  input[type="number"],
-  select {
-    width: 100%;
-  }
+    .small-input,
+    input[type="text"],
+    input[type="number"],
+    select {
+        width: 100%;
+    }
 }
 
 /* make membership table title sit closer and match confirmation */
 .last-rsvp h4,
 .rsvp-container h4 {
-  margin-bottom: 0.4rem;
+    margin-bottom: 0.4rem;
 }
 
 /* smaller RSVP count input for 2 digits */
 .rsvp-count-input {
-  max-width: 56px;
-  padding: 0.35rem;
-  text-align: center;
+    max-width: 56px;
+    padding: 0.35rem;
+    text-align: center;
 }
 
 .tab-header {
-  display: flex;
-  justify-content: center; /* Centers the buttons horizontally */
-  gap: 10px; /* Adds spacing between buttons */
-  margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    /* Centers the buttons horizontally */
+    gap: 10px;
+    /* Adds spacing between buttons */
+    margin-bottom: 20px;
 }
 
 .tab {
-  padding: 10px 20px;
-  background-color: #75bbf8;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
+    padding: 10px 20px;
+    background-color: #75bbf8;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
 }
 
 .tab:hover {
-  background-color: #7496e4;
-  color: black;
+    background-color: #7496e4;
+    color: black;
 }
 
 .tab.active {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
 }
 
-.result-table td, .result-table th {
-  border: 1px solid #ccc;
-  padding: 8px;
+.result-table td,
+.result-table th {
+    border: 1px solid #ccc;
+    padding: 8px;
 }
+
 .result-table {
-  border-collapse: collapse;
-  width: 100%;
+    border-collapse: collapse;
+    width: 100%;
 }
 
 /* Logo Style guide */
 .logo-wrapper {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .rsvp-logo {
-  max-width: 125px;   /* adjust size */
-  height: auto;
+    max-width: 125px;
+    /* adjust size */
+    height: auto;
 }
 
 .input-field {
-  height: 36px;
-  font-size: 14px;
-  padding: 6px 10px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+    height: 36px;
+    font-size: 14px;
+    padding: 6px 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }

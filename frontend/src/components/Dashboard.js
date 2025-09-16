@@ -98,7 +98,7 @@ export default function Dashboard() {
             </p>
           ) : (
             <>
-              <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#4c6daf" }}>
+              <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
                 Current Open Events
               </h4>
               <div className="result-table-wrapper">
