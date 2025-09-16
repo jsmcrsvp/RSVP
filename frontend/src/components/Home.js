@@ -477,12 +477,11 @@ export default function Home() {
         {/* HOME */}
         {activeTab === "home" && (
           <div className="home">
-            <h4>Welcome to JSMC RSVP Home</h4>
+            <h2>JSMC RSVP Portal</h2>
+            <h4>Current open events to Submit or View/Modify RSVP</h4>
 
             {/* Open Events Table */}
             <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
-              <h4>Current open events to Submit or View/Modify RSVP</h4>
-
               {Array.isArray(events) && events.length > 0 ? (
                 <table className="result-table" style={{ marginBottom: "20px" }}>
                   <thead>
