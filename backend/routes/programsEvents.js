@@ -2,8 +2,11 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Program = require("../models/program_list");
-const Event = require("../models/events_list");
+//const Program = require("../models/program_list");
+//const Event = require("../models/events_list");
+
+const ProgramsList = require("../models/Programs_List_DB_Schema");
+const EventsList = require("../models/Events_List_DB_Schema");
 
 // ✅ Helper to send consistent JSON error
 function sendError(res, message, status = 400) {

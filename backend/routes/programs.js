@@ -1,6 +1,5 @@
 const express = require("express");
 const Program = require("../models/Programs_DB_Schema");
-const EventsList = require("../models/Events_List_DB_Schema");
 
 const router = express.Router();
 
@@ -148,32 +147,6 @@ router.put("/:progId/events/:evId/status", async (req, res) => {
     res.status(500).json({ message: "❌ Server error" });
   }
 });
-
-
-router.post("/test-add-event", async (req, res) => {
-  try {
-    const { event_name } = req.body;
-    console.log("📥 Test POST /api/programs/test-add-event", event_name);
-
-    if (!event_name?.trim()) {
-      return res.status(400).json({ error: "Event name is required" });
-    }
-
-    const newEvent = new EventsList({ event_name });
-    const savedEvent = await newEvent.save();
-
-    console.log("✅ Event saved:", savedEvent);
-    return res.status(201).json({
-      message: "Event saved successfully",
-      event: savedEvent,
-    });
-  } catch (error) {
-    console.error("❌ Error saving event:", error);
-    return res.status(500).json({ error: "Failed to save event" });
-  }
-});
-
-
 
 module.exports = router;
 

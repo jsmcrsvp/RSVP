@@ -22,9 +22,6 @@ const ActivateEventForm = () => {
   const [eventstatus, setEventstatus] = useState("Open");
   const [rsvpClosedate, setRsvpClosedate] = useState("");
 
-  const [testEventName, setTestEventName] = useState("");
-
-
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -205,56 +202,6 @@ const ActivateEventForm = () => {
       {/* Status messages */}
       {error && <p className="form-message error">{error}</p>}
       {success && <p className="form-message success">{success}</p>}
-
-
-<form
-  onSubmit={async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("/api/programs/test-add-event", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event_name: testEventName }),
-      });
-
-      const rawText = await res.text(); // Get raw response
-      console.log("📥 Raw response from server:", rawText); // Log it
-
-      const contentType = res.headers.get("content-type");
-      let data;
-
-      if (contentType && contentType.includes("application/json")) {
-        try {
-          data = JSON.parse(rawText);
-        } catch (err) {
-          console.error("❌ Failed to parse JSON:", err);
-          throw new Error("Invalid JSON format");
-        }
-      } else {
-        console.error("❌ Server did not return JSON:", rawText);
-        throw new Error("Server did not return valid JSON");
-      }
-
-      console.log("✅ Parsed response:", data);
-      alert(data.message || "Event saved!");
-      setTestEventName("");
-    } catch (err) {
-      console.error("❌ Error saving event:", err);
-      alert("Error saving event: " + err.message);
-    }
-  }}
->
-  <input
-    type="text"
-    value={testEventName}
-    onChange={(e) => setTestEventName(e.target.value)}
-    placeholder="Enter event name"
-  />
-  <button type="submit">Save Event</button>
-</form>
-
-
-
 
       {/* Programs & Events Table */}
       {programs.length > 0 && (
