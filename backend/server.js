@@ -120,13 +120,13 @@ app.get("/api/dashboard-stats", async (req, res) => {
 const programRoutes = require("./routes/programs");
 const rsvpRoutes = require("./routes/rsvp");
 const dashboardRoutes = require("./routes/dashboard");
-const programsEventsRoutes = require("./routes/programsEvents");
+//const programsEventsRoutes = require("./routes/programsEvents");
 
 // Mount routes
 app.use("/api/programs", programRoutes);
 app.use("/api/rsvp_response", rsvpRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-app.use("/api/programs_events", programsEventsRoutes);
+app.use("/api/programs_events", require("./routes/programsEvents"));
 
 // Health check
 app.get("/", (req, res) => res.send("Backend is running ✅"));
