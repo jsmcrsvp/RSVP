@@ -10,6 +10,7 @@ const rsvpResponseSchema = new mongoose.Schema(
     memphonenumber: { type: String, required: false }, // optional
     mememail: { type: String, required: false },        // optional
     rsvpcount: { type: Number, required: true },       // e.g. 2
+    kidsrsvpcount: { type: Number, required: true },       // e.g. 2
     rsvpconfnumber: { type: String, required: true },  // unique 6-digit confirmation
     eventname: { type: String, required: true },       // e.g. "Navkarsi"
     programname: { type: String, required: true },     // e.g. "Anniversary"

@@ -120,7 +120,6 @@ app.get("/api/dashboard-stats", async (req, res) => {
 const programRoutes = require("./routes/programs");
 const rsvpRoutes = require("./routes/rsvp");
 const dashboardRoutes = require("./routes/dashboard");
-//const programsEventsRoutes = require("./routes/programsEvents");
 const addEventsRoutes = require("./routes/addEvents");
 const addProgramsRoutes = require("./routes/addPrograms");
 
@@ -128,7 +127,6 @@ const addProgramsRoutes = require("./routes/addPrograms");
 app.use("/api/programs", programRoutes);
 app.use("/api/rsvp_response", rsvpRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-//app.use("/api/programs_events", require("./routes/programsEvents"));
 app.use("/api/add_events", addEventsRoutes);
 app.use("/api/add_programs", addProgramsRoutes);
 
