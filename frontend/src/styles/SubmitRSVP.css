@@ -105,7 +105,8 @@ select {
 }
 
 .rsvp-count-input {
-  max-width: 60px; /* max 2-digit input */
+  max-width: 60px;
+  /* max 2-digit input */
 }
 
 /* Buttons */
@@ -128,6 +129,16 @@ button:hover,
 }
 
 /* Results Table */
+.result-table-wrapper
+{
+  margin-top: 0rem;
+  overflow-x: auto;
+  background: #f9f9f9e4;
+  padding: 0.1rem;
+  border-radius: 6px;
+}
+
+  /*
 .result-table-wrapper,
 .last-rsvp {
   margin-top: 0rem;
@@ -156,6 +167,19 @@ button:hover,
 .last-rsvp th {
   background: #f4f4f4;
   color: #333;
+}
+*/
+
+.result-table td,
+.result-table th {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.result-table {
+  margin-top: 0rem;
+  border-collapse: collapse;
+  width: 100%;
 }
 
 /* Mobile adjustments */
@@ -197,8 +221,10 @@ button:hover,
 
 .tab-header {
   display: flex;
-  justify-content: center; /* Centers the buttons horizontally */
-  gap: 10px; /* Adds spacing between buttons */
+  justify-content: center;
+  /* Centers the buttons horizontally */
+  gap: 10px;
+  /* Adds spacing between buttons */
   margin-bottom: 20px;
 }
 
@@ -223,15 +249,6 @@ button:hover,
   border-color: #007bff;
 }
 
-.result-table td, .result-table th {
-  border: 1px solid #ccc;
-  padding: 8px;
-}
-.result-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
 /* Logo Style guide */
 .logo-wrapper {
   text-align: center;
@@ -239,7 +256,8 @@ button:hover,
 }
 
 .rsvp-logo {
-  max-width: 125px;   /* adjust size */
+  max-width: 125px;
+  /* adjust size */
   height: auto;
 }
 
