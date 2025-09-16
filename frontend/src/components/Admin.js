@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-//import AddProgramForm from "./AddProgramForm";
 import ActivateEventForm from "./ActivateEventForm";
 import Dashboard from "./Dashboard";
 import AdminFunctions from "./AdminFunctionForm";
-import AdminAddEvent from "./AdminAddEventForm";
 import logo from "../assets/JSMCLogo.jpg";
 import "../styles/Admin.css";
 

@@ -1,7 +1,7 @@
 // frontend/src/components/Dashboard.js
 import React, { useEffect, useState, useCallback } from "react";
 import { getOpenEvents, getClosedEvents, getDashboardStats } from "../api";
-import "../styles/SubmitRSVP.css";
+import "../styles/Dashboard.css";
 
 // ✅ Utility to format YYYY-MM-DD → MM/DD/YYYY
 const displayDate = (dateStr) => {
