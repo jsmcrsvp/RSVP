@@ -160,7 +160,6 @@ export default function ActivateEventForm() {
 
   useEffect(() => {
     fetchProgramsAndEvents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // handle submit (activate event under program)
