@@ -128,6 +128,12 @@ app.use("/api/rsvp_response", rsvpRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/programs_events", require("./routes/programsEvents"));
 
+// =================== Global JSON Error Handler ===================
+app.use((err, req, res, next) => {
+  console.error("🔥 Uncaught error:", err);
+  res.status(500).json({ error: err.message || "Internal server error" });
+});
+
 // Health check
 app.get("/", (req, res) => res.send("Backend is running ✅"));
 //=================== Server Init ===================
