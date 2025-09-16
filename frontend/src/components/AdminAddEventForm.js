@@ -1,3 +1,4 @@
+{/*}
 import React, { useState, useEffect } from "react";
 import { getAllEvents, addNewEvent } from "../api";
 import "../styles/Admin.css";
@@ -93,8 +94,9 @@ const AdminAddEvent = () => {
 };
 
 export default AdminAddEvent;
+*/}
 
-{/*
+
 import React, { useState, useEffect } from "react";
 import { getAllEvents, addNewEvent } from "../api";
 import "../styles/Admin.css";
@@ -141,7 +143,6 @@ const AdminAddEvent = () => {
 
     return (
         <div style={{ padding: "1rem" }}>
-            {/*<h2>Admin: Add Event</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Event Name:</label>
@@ -167,19 +168,19 @@ const AdminAddEvent = () => {
                             <th>Event Name</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {events.length > 0 ? (
-                            events.map((e) => (
-                                <tr key={e._id}>
-                                    <td>{e.event_name}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td style={{ textAlign: "center" }}>No events found</td>
-                            </tr>
-                        )}
-                    </tbody>
+<tbody>
+  {Array.isArray(events) && events.length > 0 ? (
+    events.map((e) => (
+      <tr key={e._id || Math.random()}>
+        <td>{e.event_name}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td style={{ textAlign: "center" }}>No events found</td>
+    </tr>
+  )}
+</tbody>
                 </table>
             </div>
         </div>
@@ -187,4 +188,3 @@ const AdminAddEvent = () => {
 };
 
 export default AdminAddEvent;
-*/}

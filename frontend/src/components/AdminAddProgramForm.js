@@ -1,3 +1,4 @@
+{/*
 import React, { useState, useEffect } from "react";
 import { getAdminAllPrograms, addAdminNewProgram } from "../api";
 import "../styles/Admin.css";
@@ -92,8 +93,8 @@ const AdminAddProgram = () => {
 };
 
 export default AdminAddProgram;
+*/}
 
-{/*}
 import React, { useState, useEffect } from "react";
 import { getAdminAllPrograms, addAdminNewProgram } from "../api";
 import "../styles/Admin.css";
@@ -141,18 +142,20 @@ const AdminAddProgram = () => {
     return (
 
         <div style={{ padding: "1rem" }}>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Program Name:</label>
-                    <input
-                        type="text"
-                        value={programName}
-                        onChange={(e) => setProgramName(e.target.value)}
-                    />
-                </div>
-                <button type="submit" disabled={loading}>
-                    {loading ? "Saving..." : "Save"}
-                </button>
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}
+      >
+        <input
+          type="text"
+          value={programName}
+          onChange={(e) => setProgramName(e.target.value)}
+          placeholder="Enter program name"
+          style={{ flex: "1", padding: "0.5rem" }}
+        />
+        <button type="submit" disabled={loading} style={{ padding: "0.5rem 1rem" }}>
+          {loading ? "Saving..." : "Save"}
+        </button>
             </form>
 
             {message && <p>{message}</p>}
@@ -186,4 +189,3 @@ const AdminAddProgram = () => {
 };
 
 export default AdminAddProgram;
-*/}
