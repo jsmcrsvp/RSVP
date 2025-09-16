@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { getAllEvents, addNewEvent } from "../api";
 
 const AdminAddEvent = () => {
   const [eventName, setEventName] = useState("");
@@ -11,8 +11,8 @@ const AdminAddEvent = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get("/api/add_events");
-        setEvents(res.data);
+        const data = await getAllEvents();
+        setEvents(data);
       } catch (err) {
         console.error("❌ Error fetching events:", err);
         setMessage("Failed to load existing events");
@@ -29,10 +29,9 @@ const AdminAddEvent = () => {
     setMessage("");
 
     try {
-      const res = await axios.post("/api/add_events", { event_name: eventName.trim() });
-
-      setEvents([res.data.event, ...events]);
-      setMessage(res.data.message || "Event added successfully");
+      const data = await addNewEvent(eventName.trim());
+      setEvents([data.event, ...events]);
+      setMessage(data.message || "Event added successfully");
       setEventName("");
     } catch (err) {
       console.error("❌ Error adding event:", err);
