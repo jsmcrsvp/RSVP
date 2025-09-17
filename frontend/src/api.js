@@ -133,6 +133,12 @@ export const getPrograms = async () => {
   return res.data;
 };
 
+// Download RSVP Excel report for a given program + event
+export const downloadEventReport = (programName, eventName) => {
+  const url = `/api/report/download/${encodeURIComponent(programName)}/${encodeURIComponent(eventName)}`;
+  window.open(url, "_blank");
+};
+
 export default api;
 
 /* ========= Working 090325 10pm ====================
