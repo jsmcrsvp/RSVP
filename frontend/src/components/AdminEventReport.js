@@ -1,28 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { getAllPrograms, getReportEvents } from "../api"; // make sure api.js has matching calls
+// frontend/src/components/AdminEventReport.js
+import React, { useEffect, useState } from "react";
+import { getAllPrograms } from "../api";
 import axios from "axios";
 
 export default function AdminEventReport() {
   const [programs, setPrograms] = useState([]);
-  const [selectedProgram, setSelectedProgram] = useState("");
   const [events, setEvents] = useState([]);
+  const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedEvent, setSelectedEvent] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingPrograms, setLoadingPrograms] = useState(true);
+  const [loadingEvents, setLoadingEvents] = useState(false);
+  const [error, setError] = useState("");
 
-  // Fetch all programs on mount
+  // Fetch programs from backend
   useEffect(() => {
-    async function fetchPrograms() {
+    const fetchPrograms = async () => {
+      setLoadingPrograms(true);
+      setError("");
       try {
-        const res = await getAllPrograms();
-        setPrograms(res.map(p => p.progname));
+        const data = await getAllPrograms();
+        setPrograms(data || []);
       } catch (err) {
         console.error("Error fetching programs:", err);
+        setError("Failed to load programs.");
+      } finally {
+        setLoadingPrograms(false);
       }
-    }
+    };
     fetchPrograms();
   }, []);
 
-  // Fetch events when program changes
+  // Update events when program changes
   useEffect(() => {
     if (!selectedProgram) {
       setEvents([]);
@@ -30,56 +38,111 @@ export default function AdminEventReport() {
       return;
     }
 
-    async function fetchEvents() {
+    setLoadingEvents(true);
+    setError("");
+
+    const fetchEvents = async () => {
       try {
-        const res = await getReportEvents(selectedProgram);
-        setEvents(res.map(ev => ev.eventname));
-        setSelectedEvent(res.length ? res[0].eventname : "");
+        // Use Dashboard-style routes to get open and closed events
+        const openRes = await axios.get("/api/programs/open");
+        const closedRes = await axios.get("/api/programs/closed");
+
+        const allEvents = [
+          ...(Array.isArray(openRes.data) ? openRes.data : []),
+          ...(Array.isArray(closedRes.data) ? closedRes.data : []),
+        ];
+
+        // Filter by selected program
+        const filteredEvents = allEvents.filter(
+          (ev) => ev.programname === selectedProgram
+        );
+
+        setEvents(filteredEvents);
+        if (filteredEvents.length === 0) setSelectedEvent("");
       } catch (err) {
         console.error("Error fetching events:", err);
-        setEvents([]);
-        setSelectedEvent("");
+        setError("Failed to load events for selected program.");
+      } finally {
+        setLoadingEvents(false);
       }
-    }
+    };
+
     fetchEvents();
   }, [selectedProgram]);
 
-  const handleDownload = async () => {
-    if (!selectedProgram || !selectedEvent) return;
+  // Handle Excel download
+  const handleDownload = () => {
+    if (!selectedProgram || !selectedEvent) {
+      alert("Please select a program and event to download report.");
+      return;
+    }
 
-    const url = `/api/report/download/${encodeURIComponent(selectedProgram)}/${encodeURIComponent(selectedEvent)}`;
-    window.open(url, "_blank"); // opens download in new tab
+    const url = `/api/report/download/${encodeURIComponent(
+      selectedProgram
+    )}/${encodeURIComponent(selectedEvent)}`;
+    // Open download in new tab/window
+    window.open(url, "_blank");
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h3>Admin Event Report</h3>
+    <div className="admin-report">
+      <h3>Admin Event RSVP Report</h3>
+
+      {error && <div style={{ color: "red" }}>{error}</div>}
 
       <div style={{ marginBottom: "1rem" }}>
         <label>Program: </label>
-        <select value={selectedProgram} onChange={e => setSelectedProgram(e.target.value)}>
-          <option value="">-- Select Program --</option>
-          {programs.map((prog, idx) => (
-            <option key={idx} value={prog}>{prog}</option>
-          ))}
-        </select>
+        {loadingPrograms ? (
+          <span>Loading programs...</span>
+        ) : (
+          <select
+            value={selectedProgram}
+            onChange={(e) => setSelectedProgram(e.target.value)}
+          >
+            <option value="">-- Select Program --</option>
+            {programs.map((p, idx) => (
+              <option key={idx} value={p.progname}>
+                {p.progname}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       <div style={{ marginBottom: "1rem" }}>
         <label>Event: </label>
-        <select value={selectedEvent} onChange={e => setSelectedEvent(e.target.value)}>
-          <option value="">{events.length ? "-- Select Event --" : "No Open or Closed Events"}</option>
-          {events.map((ev, idx) => (
-            <option key={idx} value={ev}>{ev}</option>
-          ))}
-        </select>
+        {loadingEvents ? (
+          <span>Loading events...</span>
+        ) : events.length === 0 ? (
+          <span>No Open or Closed events for this program</span>
+        ) : (
+          <select
+            value={selectedEvent}
+            onChange={(e) => setSelectedEvent(e.target.value)}
+          >
+            <option value="">-- Select Event --</option>
+            {events.map((ev, idx) => (
+              <option key={idx} value={ev.eventname}>
+                {ev.eventname} ({ev.eventday}, {ev.eventdate})
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       <button
         onClick={handleDownload}
         disabled={!selectedProgram || !selectedEvent}
+        style={{
+          backgroundColor:
+            !selectedProgram || !selectedEvent ? "grey" : "#007bff",
+          color: "white",
+          padding: "0.5rem 1rem",
+          border: "none",
+          cursor: !selectedProgram || !selectedEvent ? "not-allowed" : "pointer",
+        }}
       >
-        Download Excel Report
+        Download RSVP Report (Excel)
       </button>
     </div>
   );
