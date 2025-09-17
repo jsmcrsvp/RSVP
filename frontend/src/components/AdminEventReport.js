@@ -58,30 +58,37 @@ export default function AdminEventReport() {
   }, [selectedProgram]);
 
   // Fetch RSVP summary data
-  const generateReport = async () => {
-    if (!selectedProgram || !selectedEvent) return;
+const generateReport = async () => {
+  if (!selectedProgram || !selectedEvent) return;
 
-    try {
-      setReportLoading(true);
-      const res = await getDashboardStats();
-      const allStats = Array.isArray(res.data) ? res.data : [];
+  try {
+    setReportLoading(true);
+    const res = await getDashboardStats();
+    const allStats = Array.isArray(res.data) ? res.data : [];
 
-      const filtered = allStats.filter(
-        (item) =>
-          item.programname === selectedProgram &&
-          item.eventname === selectedEvent
-      );
+    console.log("Dashboard stats response:", allStats);
+    console.log("Selected Program:", selectedProgram);
+    console.log("Selected Event:", selectedEvent);
 
-      setReportData(filtered);
-      setError("");
-    } catch (err) {
-      console.error("Error fetching report:", err);
-      setError("Failed to fetch RSVP report data.");
-      setReportData([]);
-    } finally {
-      setReportLoading(false);
-    }
-  };
+    const filtered = allStats.filter(
+      (item) =>
+        item.programname.trim().toLowerCase() === selectedProgram.trim().toLowerCase() &&
+        item.eventname.trim().toLowerCase() === selectedEvent.trim().toLowerCase()
+    );
+
+    console.log("Filtered:", filtered);
+
+    setReportData(filtered);
+    setError("");
+  } catch (err) {
+    console.error("Error fetching report:", err);
+    setError("Failed to fetch RSVP report data.");
+    setReportData([]);
+  } finally {
+    setReportLoading(false);
+  }
+};
+
 
   return (
     <div style={{ padding: "1rem" }}>
