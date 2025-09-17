@@ -30,7 +30,8 @@ router.post("/", async (req, res) => {
                     memaddress: memaddress || (isNonMember ? "Non-member" : ""), // fallback
                     memphonenumber: memphonenumber || (isNonMember ? "N/A" : ""),
                     mememail,
-                    rsvpcount: ev.rsvpcount,
+    rsvpcount: ev.rsvpcount,        // adult RSVP
+    kidsrsvpcount: ev.kidsrsvpcount || 0, // 👈 add this line
                     rsvpconfnumber,
                     eventname: ev.eventname,
                     programname: ev.programname,
@@ -43,12 +44,13 @@ router.post("/", async (req, res) => {
         );
 
         // Build email content
-        let eventDetails = events
-            .map(
-                (ev) =>
-                    `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Count: ${ev.rsvpcount})`
-            )
-            .join("\n");
+let eventDetails = events
+    .map(
+        (ev) =>
+            `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Adult: ${ev.rsvpcount}, Kids: ${ev.kidsrsvpcount || 0})`
+    )
+    .join("\n");
+
 
         const emailBody = `
         Dear ${memname},

@@ -221,7 +221,8 @@ export default function Home() {
             eventname: ev.eventname,
             eventday: ev.eventday,
             eventdate: ev.eventdate,
-            rsvpcount: Number(rsvpCount),
+            rsvpcount: Number(rsvpCount) || 0,       // adult
+            kidsrsvpcount: Number(kidsRsvpCount) || 0, // 👈 add kids RSVP
           }
           : null
       )
