@@ -134,31 +134,35 @@ export default function Dashboard() {
               No RSVP responses for closed events.
             </p>
           ) : (
-            <div className="result-table-wrapper">
-              <h4>Current Closed Events</h4>
-              <table className="result-table">
-                <thead>
-                  <tr>
-                    <th>Program</th>
-                    <th>Event Name</th>
-                    <th>Event Date</th>
-                    <th>Adult RSVP</th>
-                    <th>Kids RSVP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {closedStats.map((row, idx) => (
-                    <tr key={`closed-${idx}`}>
-                      <td>{row.programname}</td>
-                      <td>{row.eventname}</td>
-                      <td>{row.eventday}, {displayDate(row.eventdate)}</td>
-                      <td>{row.totalRSVPs}</td>
-                      <td>{row.totalKidsRSVPs}</td>
+            <>
+              <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
+                Current Closed Events
+              </h4>
+              <div className="result-table-wrapper">
+                <table className="result-table">
+                  <thead>
+                    <tr>
+                      <th>Program</th>
+                      <th>Event Name</th>
+                      <th>Event Date</th>
+                      <th>Adult RSVP</th>
+                      <th>Kids RSVP</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {closedStats.map((row, idx) => (
+                      <tr key={`closed-${idx}`}>
+                        <td>{row.programname}</td>
+                        <td>{row.eventname}</td>
+                        <td>{row.eventday}, {displayDate(row.eventdate)}</td>
+                        <td>{row.totalRSVPs}</td>
+                        <td>{row.totalKidsRSVPs}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
 
           {/* 🔄 Manual Refresh Button */}
