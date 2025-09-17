@@ -276,6 +276,7 @@ export default function Home() {
         setName("");
         setHouseNumber("");
         setRsvpCount("");
+        setKidsRsvpCount("");
         setActiveTab("home");
       }, 15000);
     } catch (err) {
@@ -579,6 +580,8 @@ export default function Home() {
                 selectedEvents={selectedEvents}
                 rsvpCount={rsvpCount}
                 setRsvpCount={setRsvpCount}
+        kidsRsvpCount={kidsRsvpCount}
+        setKidsRsvpCount={setKidsRsvpCount}
                 nonMemberName={nonMemberName}
                 setNonMemberName={setNonMemberName}
                 nonMemberAddress={nonMemberAddress}

@@ -30,8 +30,8 @@ router.post("/", async (req, res) => {
                     memaddress: memaddress || (isNonMember ? "Non-member" : ""), // fallback
                     memphonenumber: memphonenumber || (isNonMember ? "N/A" : ""),
                     mememail,
-    rsvpcount: ev.rsvpcount,        // adult RSVP
-    kidsrsvpcount: ev.kidsrsvpcount || 0, // 👈 add this line
+                    rsvpcount: ev.rsvpcount,        // adult RSVP
+                    kidsrsvpcount: ev.kidsrsvpcount || 0, // 👈 add this line
                     rsvpconfnumber,
                     eventname: ev.eventname,
                     programname: ev.programname,
@@ -44,12 +44,12 @@ router.post("/", async (req, res) => {
         );
 
         // Build email content
-let eventDetails = events
-    .map(
-        (ev) =>
-            `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Adult: ${ev.rsvpcount}, Kids: ${ev.kidsrsvpcount || 0})`
-    )
-    .join("\n");
+        let eventDetails = events
+            .map(
+                (ev) =>
+                    `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Adult: ${ev.rsvpcount}, Kids: ${ev.kidsrsvpcount || 0})`
+            )
+            .join("\n");
 
 
         const emailBody = `
@@ -137,56 +137,56 @@ router.get("/:confNumber", async (req, res) => {
 
 // ✨ Update RSVP (Adults + Kids)
 router.put("/update_rsvp/:id", async (req, res) => {
-  const { id } = req.params;
-  const { rsvpcount, kidsrsvpcount } = req.body;
+    const { id } = req.params;
+    const { rsvpcount, kidsrsvpcount } = req.body;
 
-  console.log("🔧 Received update request for RSVP ID:", id);
-  console.log("👨 Adults (rsvpcount):", rsvpcount, "👶 Kids (kidsrsvpcount):", kidsrsvpcount);
+    console.log("🔧 Received update request for RSVP ID:", id);
+    console.log("👨 Adults (rsvpcount):", rsvpcount, "👶 Kids (kidsrsvpcount):", kidsrsvpcount);
 
-  const adultNum = Number(rsvpcount);
-  const kidsNum = Number(kidsrsvpcount);
+    const adultNum = Number(rsvpcount);
+    const kidsNum = Number(kidsrsvpcount);
 
-  if (!Number.isFinite(adultNum) || !Number.isFinite(kidsNum)) {
-    return res
-      .status(400)
-      .json({ message: "Invalid RSVP counts. Both adult and kids counts must be numbers." });
-  }
-
-  try {
-    const updated = await RsvpResponse.findByIdAndUpdate(
-      id,
-      {
-        rsvpcount: Math.max(0, parseInt(adultNum, 10)),
-        kidsrsvpcount: Math.max(0, parseInt(kidsNum, 10)),
-      },
-      { new: true }
-    );
-
-    if (!updated) {
-      return res.status(404).json({ message: "RSVP record not found." });
+    if (!Number.isFinite(adultNum) || !Number.isFinite(kidsNum)) {
+        return res
+            .status(400)
+            .json({ message: "Invalid RSVP counts. Both adult and kids counts must be numbers." });
     }
 
-    console.log("✅ Updated RSVP:", updated);
-
-    // ✉️ Send confirmation email
     try {
-      const transporter = nodemailer.createTransport({
-        host: "smtp.ionos.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
+        const updated = await RsvpResponse.findByIdAndUpdate(
+            id,
+            {
+                rsvpcount: Math.max(0, parseInt(adultNum, 10)),
+                kidsrsvpcount: Math.max(0, parseInt(kidsNum, 10)),
+            },
+            { new: true }
+        );
 
-      const total = (updated.rsvpcount || 0) + (updated.kidsrsvpcount || 0);
+        if (!updated) {
+            return res.status(404).json({ message: "RSVP record not found." });
+        }
 
-      const mailOptions = {
-        from: `"JSMC RSVP" <${process.env.EMAIL_FROM || "admin@jsgvolleyball.com"}>`,
-        to: updated.mememail,
-        subject: "Your RSVP Has Been Updated",
-        html: `
+        console.log("✅ Updated RSVP:", updated);
+
+        // ✉️ Send confirmation email
+        try {
+            const transporter = nodemailer.createTransport({
+                host: "smtp.ionos.com",
+                port: 587,
+                secure: false,
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS,
+                },
+            });
+
+            const total = (updated.rsvpcount || 0) + (updated.kidsrsvpcount || 0);
+
+            const mailOptions = {
+                from: `"JSMC RSVP" <${process.env.EMAIL_FROM || "admin@jsgvolleyball.com"}>`,
+                to: updated.mememail,
+                subject: "Your RSVP Has Been Updated",
+                html: `
           <h2>RSVP Update Confirmation</h2>
           <p>Dear ${updated.memname || "Guest"},</p>
           <p>Your RSVP has been updated for the following event:</p>
@@ -201,19 +201,19 @@ router.put("/update_rsvp/:id", async (req, res) => {
           </ul>
           <p>If you did not make this change, please contact us immediately.</p>
         `,
-      };
+            };
 
-      await transporter.sendMail(mailOptions);
-      console.log("📧 RSVP update email sent to:", updated.mememail);
-    } catch (emailErr) {
-      console.error("❌ Error sending RSVP update email:", emailErr);
+            await transporter.sendMail(mailOptions);
+            console.log("📧 RSVP update email sent to:", updated.mememail);
+        } catch (emailErr) {
+            console.error("❌ Error sending RSVP update email:", emailErr);
+        }
+
+        res.json({ message: "RSVP updated successfully.", updated });
+    } catch (err) {
+        console.error("❌ Error updating RSVP:", err);
+        res.status(500).json({ message: "Server error." });
     }
-
-    res.json({ message: "RSVP updated successfully.", updated });
-  } catch (err) {
-    console.error("❌ Error updating RSVP:", err);
-    res.status(500).json({ message: "Server error." });
-  }
 });
 
 
