@@ -132,10 +132,6 @@ app.use("/api/add_events", addEventsRoutes);
 app.use("/api/add_programs", addProgramsRoutes);
 app.use("/api/report", reportRoutes);
 
-import rsvpRoutes from "./routes/rsvp.js";
-app.use("/api/rsvp", rsvpRoutes);
-
-
 // =================== Global JSON Error Handler ===================
 app.use((err, req, res, next) => {
   console.error("🔥 Uncaught error:", err);
