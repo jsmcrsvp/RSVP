@@ -1,36 +1,33 @@
 // frontend/src/components/AdminEventReport.js
 import React, { useEffect, useState } from "react";
-import { getAllPrograms } from "../api";
-import axios from "axios";
+import { getAllPrograms, getOpenEvents, getClosedEvents } from "../api";
 
 export default function AdminEventReport() {
   const [programs, setPrograms] = useState([]);
   const [events, setEvents] = useState([]);
   const [selectedProgram, setSelectedProgram] = useState("");
   const [selectedEvent, setSelectedEvent] = useState("");
-  const [loadingPrograms, setLoadingPrograms] = useState(true);
-  const [loadingEvents, setLoadingEvents] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch programs from backend
+  // Fetch programs on mount
   useEffect(() => {
     const fetchPrograms = async () => {
-      setLoadingPrograms(true);
-      setError("");
       try {
         const data = await getAllPrograms();
-        setPrograms(data || []);
+        setPrograms(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Error fetching programs:", err);
         setError("Failed to load programs.");
       } finally {
-        setLoadingPrograms(false);
+        setLoading(false);
       }
     };
+
     fetchPrograms();
   }, []);
 
-  // Update events when program changes
+  // Fetch events whenever a program is selected
   useEffect(() => {
     if (!selectedProgram) {
       setEvents([]);
@@ -38,112 +35,93 @@ export default function AdminEventReport() {
       return;
     }
 
-    setLoadingEvents(true);
-    setError("");
-
     const fetchEvents = async () => {
       try {
-        // Use Dashboard-style routes to get open and closed events
-        const openRes = await axios.get("/api/programs/open");
-        const closedRes = await axios.get("/api/programs/closed");
+        setError("");
+        const [openData, closedData] = await Promise.all([
+          getOpenEvents(),
+          getClosedEvents(),
+        ]);
 
-        const allEvents = [
-          ...(Array.isArray(openRes.data) ? openRes.data : []),
-          ...(Array.isArray(closedRes.data) ? closedRes.data : []),
-        ];
-
-        // Filter by selected program
-        const filteredEvents = allEvents.filter(
+        // Combine and filter by selected program
+        const filteredEvents = [...openData, ...closedData].filter(
           (ev) => ev.programname === selectedProgram
         );
 
         setEvents(filteredEvents);
-        if (filteredEvents.length === 0) setSelectedEvent("");
+        setSelectedEvent(filteredEvents.length > 0 ? filteredEvents[0].eventname : "");
       } catch (err) {
         console.error("Error fetching events:", err);
-        setError("Failed to load events for selected program.");
-      } finally {
-        setLoadingEvents(false);
+        setError("Failed to load events for the selected program.");
       }
     };
 
     fetchEvents();
   }, [selectedProgram]);
 
-  // Handle Excel download
-  const handleDownload = () => {
-    if (!selectedProgram || !selectedEvent) {
-      alert("Please select a program and event to download report.");
-      return;
-    }
-
-    const url = `/api/report/download/${encodeURIComponent(
-      selectedProgram
-    )}/${encodeURIComponent(selectedEvent)}`;
-    // Open download in new tab/window
+  const downloadExcel = () => {
+    if (!selectedProgram || !selectedEvent) return;
+    const url = `/api/report/download/${encodeURIComponent(selectedProgram)}/${encodeURIComponent(selectedEvent)}`;
     window.open(url, "_blank");
   };
 
   return (
-    <div className="admin-report">
-      <h3>Admin Event RSVP Report</h3>
+    <div style={{ padding: "1rem" }}>
+      <h3>Admin RSVP Event Report</h3>
 
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      {loading ? (
+        <p>Loading programs...</p>
+      ) : error ? (
+        <p style={{ color: "red" }}>{error}</p>
+      ) : (
+        <>
+          <div style={{ marginBottom: "1rem" }}>
+            <label htmlFor="programSelect">Program:</label>
+            <select
+              id="programSelect"
+              value={selectedProgram}
+              onChange={(e) => setSelectedProgram(e.target.value)}
+              style={{ marginLeft: "0.5rem" }}
+            >
+              <option value="">-- Select Program --</option>
+              {programs.map((p, idx) => (
+                <option key={idx} value={p.progname}>{p.progname}</option>
+              ))}
+            </select>
+          </div>
 
-      <div style={{ marginBottom: "1rem" }}>
-        <label>Program: </label>
-        {loadingPrograms ? (
-          <span>Loading programs...</span>
-        ) : (
-          <select
-            value={selectedProgram}
-            onChange={(e) => setSelectedProgram(e.target.value)}
+          <div style={{ marginBottom: "1rem" }}>
+            <label htmlFor="eventSelect">Event:</label>
+            <select
+              id="eventSelect"
+              value={selectedEvent}
+              onChange={(e) => setSelectedEvent(e.target.value)}
+              style={{ marginLeft: "0.5rem" }}
+            >
+              {events.length === 0 ? (
+                <option value="">-- No Open/Closed Events --</option>
+              ) : (
+                events.map((ev, idx) => (
+                  <option key={idx} value={ev.eventname}>{ev.eventname}</option>
+                ))
+              )}
+            </select>
+          </div>
+
+          <button
+            onClick={downloadExcel}
+            disabled={!selectedProgram || !selectedEvent}
+            style={{
+              padding: "0.5rem 1rem",
+              backgroundColor: !selectedProgram || !selectedEvent ? "grey" : "#007bff",
+              color: "white",
+              cursor: !selectedProgram || !selectedEvent ? "not-allowed" : "pointer",
+            }}
           >
-            <option value="">-- Select Program --</option>
-            {programs.map((p, idx) => (
-              <option key={idx} value={p.progname}>
-                {p.progname}
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
-
-      <div style={{ marginBottom: "1rem" }}>
-        <label>Event: </label>
-        {loadingEvents ? (
-          <span>Loading events...</span>
-        ) : events.length === 0 ? (
-          <span>No Open or Closed events for this program</span>
-        ) : (
-          <select
-            value={selectedEvent}
-            onChange={(e) => setSelectedEvent(e.target.value)}
-          >
-            <option value="">-- Select Event --</option>
-            {events.map((ev, idx) => (
-              <option key={idx} value={ev.eventname}>
-                {ev.eventname} ({ev.eventday}, {ev.eventdate})
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
-
-      <button
-        onClick={handleDownload}
-        disabled={!selectedProgram || !selectedEvent}
-        style={{
-          backgroundColor:
-            !selectedProgram || !selectedEvent ? "grey" : "#007bff",
-          color: "white",
-          padding: "0.5rem 1rem",
-          border: "none",
-          cursor: !selectedProgram || !selectedEvent ? "not-allowed" : "pointer",
-        }}
-      >
-        Download RSVP Report (Excel)
-      </button>
+            Download Excel Report
+          </button>
+        </>
+      )}
     </div>
   );
 }
