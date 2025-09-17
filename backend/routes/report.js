@@ -6,7 +6,7 @@ const ExcelJS = require("exceljs");
 const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 
 // GET: Generate RSVP report for a given program + event
-router.get("/:programName/:eventName", async (req, res) => {
+router.get("/download/:programName/:eventName", async (req, res) => {
   try {
     const { programName, eventName } = req.params;
 
@@ -19,11 +19,9 @@ router.get("/:programName/:eventName", async (req, res) => {
       return res.status(404).json({ message: "No RSVPs found for this event." });
     }
 
-    // Create workbook & worksheet
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("RSVP Report");
 
-    // Add headers
     worksheet.columns = [
       { header: "Member Name", key: "memname", width: 30 },
       { header: "Phone Number", key: "memphonenumber", width: 20 },
@@ -31,7 +29,6 @@ router.get("/:programName/:eventName", async (req, res) => {
       { header: "Kids RSVP", key: "kidsrsvpcount", width: 15 },
     ];
 
-    // Add rows
     responses.forEach((rsvp) => {
       worksheet.addRow({
         memname: rsvp.memname,
@@ -41,7 +38,6 @@ router.get("/:programName/:eventName", async (req, res) => {
       });
     });
 
-    // Set response headers for file download
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

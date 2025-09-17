@@ -1,105 +1,139 @@
-// frontend/src/components/EventReport.js
-import React, { useState, useEffect } from "react";
-import { getPrograms } from "../api";
+// frontend/src/components/AdminEventReport.js
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-const SERVER_URL =
-  process.env.REACT_APP_BACKEND_SERVER_URL || "http://localhost:3001";
-
-const AdminEventReport = () => {
+export default function AdminEventReport() {
   const [programs, setPrograms] = useState([]);
   const [selectedProgram, setSelectedProgram] = useState("");
+  const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState("");
+  const [loadingPrograms, setLoadingPrograms] = useState(true);
+  const [loadingEvents, setLoadingEvents] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
 
-  // Fetch programs + events
+  // Load programs on mount
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
-        const data = await getPrograms();
-        setPrograms(data);
+        const res = await axios.get("/api/report/programs");
+        setPrograms(res.data);
       } catch (err) {
         console.error("Error fetching programs:", err);
+      } finally {
+        setLoadingPrograms(false);
       }
     };
     fetchPrograms();
   }, []);
 
-  // Handle report download
-  const handleDownload = () => {
-    if (!selectedProgram || !selectedEvent) {
-      alert("Please select a program and event.");
-      return;
-    }
+  // Load events when program changes
+  useEffect(() => {
+    const fetchEvents = async () => {
+      if (!selectedProgram) return;
+      setLoadingEvents(true);
+      try {
+        const res = await axios.get(`/api/report/events/${encodeURIComponent(selectedProgram)}`);
+        setEvents(res.data);
+        setSelectedEvent(""); // reset event selection
+      } catch (err) {
+        console.error("Error fetching events:", err);
+        setEvents([]);
+      } finally {
+        setLoadingEvents(false);
+      }
+    };
+    fetchEvents();
+  }, [selectedProgram]);
 
-    const url = `${SERVER_URL}/api/report/${encodeURIComponent(
-      selectedProgram
-    )}/${encodeURIComponent(selectedEvent)}`;
-    window.open(url, "_blank");
+  // Handle Excel download
+  const handleDownload = async () => {
+    if (!selectedProgram || !selectedEvent) return;
+
+    setDownloadError("");
+    try {
+      const res = await axios.get(
+        `/api/report/download/${encodeURIComponent(selectedProgram)}/${encodeURIComponent(selectedEvent)}`,
+        { responseType: "blob" } // important for file download
+      );
+
+      // Create a link to download the file
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `RSVP_Report_${selectedProgram}_${selectedEvent}.xlsx`
+      );
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error("Error downloading report:", err);
+      setDownloadError("Failed to download report. Make sure RSVPs exist for this event.");
+    }
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Download RSVP Report</h2>
+    <div className="admin-event-report">
+      <h3>Admin Event RSVP Report</h3>
 
-      <div>
-        <label style={{ marginRight: "10px" }}>Select Program:</label>
-        <select
-          value={selectedProgram}
-          onChange={(e) => {
-            setSelectedProgram(e.target.value);
-            setSelectedEvent("");
-          }}
-        >
-          <option value="">-- Select Program --</option>
-          {programs.map((prog) => (
-            <option key={prog._id} value={prog.progname}>
-              {prog.progname}
-            </option>
-          ))}
-        </select>
+      <div className="form-group">
+        <label>Program:</label>
+        {loadingPrograms ? (
+          <p>Loading programs...</p>
+        ) : (
+          <select
+            value={selectedProgram}
+            onChange={(e) => setSelectedProgram(e.target.value)}
+          >
+            <option value="">-- Select Program --</option>
+            {programs.map((prog, idx) => (
+              <option key={idx} value={prog.progname}>
+                {prog.progname}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
-      {selectedProgram && (
-        <div style={{ marginTop: "15px" }}>
-          <label style={{ marginRight: "10px" }}>Select Event:</label>
+      <div className="form-group">
+        <label>Event:</label>
+        {loadingEvents ? (
+          <p>Loading events...</p>
+        ) : events.length > 0 ? (
           <select
             value={selectedEvent}
             onChange={(e) => setSelectedEvent(e.target.value)}
           >
             <option value="">-- Select Event --</option>
-            {programs
-              .filter((p) => p.progname === selectedProgram)
-              .flatMap((p) =>
-                (p.events || [])
-                  .filter(
-                    (ev) =>
-                      ev.eventstatus === "Open" || ev.eventstatus === "Closed"
-                  )
-                  .map((ev, idx) => (
-                    <option key={idx} value={ev.eventname}>
-                      {ev.eventname} ({ev.eventstatus})
-                    </option>
-                  ))
-              )}
+            {events.map((ev, idx) => (
+              <option key={idx} value={ev.eventname}>
+                {ev.eventname} ({ev.eventstatus})
+              </option>
+            ))}
           </select>
-        </div>
-      )}
+        ) : (
+          <p>No Open/Closed events available.</p>
+        )}
+      </div>
 
       <button
+        className="button"
         onClick={handleDownload}
+        disabled={!selectedProgram || !selectedEvent}
         style={{
-          marginTop: "20px",
-          padding: "8px 16px",
-          backgroundColor: "#4CAF50",
+          backgroundColor: !selectedProgram || !selectedEvent ? "grey" : "#007bff",
           color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
+          cursor: !selectedProgram || !selectedEvent ? "not-allowed" : "pointer",
+          marginTop: "1rem"
         }}
       >
-        Download Report
+        Download Excel Report
       </button>
+
+      {downloadError && (
+        <div style={{ color: "red", marginTop: "0.5rem" }}>{downloadError}</div>
+      )}
     </div>
   );
-};
-
-export default AdminEventReport;
+}
