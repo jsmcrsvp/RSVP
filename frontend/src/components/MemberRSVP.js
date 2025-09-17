@@ -70,7 +70,7 @@ export default function MemberRSVP({
         </>
         {/*<h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
           Select Events to RSVP
-        </h4>*/}</>
+        </h4>*/}
       <div className="result-table-wrapper">
         <table className="result-table">
           <thead>
