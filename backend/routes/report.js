@@ -87,4 +87,32 @@ router.get("/download/:programName/:eventName", async (req, res) => {
   }
 });
 
+router.get("/rsvps/:programName/:eventName", async (req, res) => {
+  try {
+    const { programName, eventName } = req.params;
+
+    const responses = await RsvpResponse.find({
+      programname: programName,
+      eventname: eventName,
+    });
+
+    if (!responses.length) {
+      return res.json([]); // return empty array if none found
+    }
+
+    // Map to frontend-friendly shape
+    const reportData = responses.map((rsvp) => ({
+      memname: rsvp.memname,
+      memphonenumber: rsvp.memphonenumber,
+      rsvpcount: rsvp.rsvpcount,
+      kidsrsvpcount: rsvp.kidsrsvpcount || 0,
+    }));
+
+    res.json(reportData);
+  } catch (err) {
+    console.error("Error fetching RSVP report:", err);
+    res.status(500).json({ message: "Error fetching RSVP report" });
+  }
+});
+
 module.exports = router;

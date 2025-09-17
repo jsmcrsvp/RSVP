@@ -1,6 +1,7 @@
 // frontend/src/components/AdminEventReport.js
 import React, { useEffect, useState } from "react";
 import { getAllPrograms, getOpenEvents, getClosedEvents } from "../api";
+import axios from "axios";
 
 export default function AdminEventReport() {
   const [programs, setPrograms] = useState([]);
@@ -9,6 +10,8 @@ export default function AdminEventReport() {
   const [selectedEvent, setSelectedEvent] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [reportData, setReportData] = useState([]);
+  const [reportLoading, setReportLoading] = useState(false);
 
   // Fetch programs on mount
   useEffect(() => {
@@ -23,11 +26,10 @@ export default function AdminEventReport() {
         setLoading(false);
       }
     };
-
     fetchPrograms();
   }, []);
 
-  // Fetch events whenever a program is selected
+  // Fetch events when a program is selected
   useEffect(() => {
     if (!selectedProgram) {
       setEvents([]);
@@ -42,12 +44,9 @@ export default function AdminEventReport() {
           getOpenEvents(),
           getClosedEvents(),
         ]);
-
-        // Combine and filter by selected program
         const filteredEvents = [...openData, ...closedData].filter(
           (ev) => ev.programname === selectedProgram
         );
-
         setEvents(filteredEvents);
         setSelectedEvent(filteredEvents.length > 0 ? filteredEvents[0].eventname : "");
       } catch (err) {
@@ -59,10 +58,21 @@ export default function AdminEventReport() {
     fetchEvents();
   }, [selectedProgram]);
 
-  const downloadExcel = () => {
+  // Fetch RSVP data for table
+  const generateReport = async () => {
     if (!selectedProgram || !selectedEvent) return;
-    const url = `/api/report/download/${encodeURIComponent(selectedProgram)}/${encodeURIComponent(selectedEvent)}`;
-    window.open(url, "_blank");
+
+    try {
+      setReportLoading(true);
+      const res = await axios.get(`/api/report/rsvps/${encodeURIComponent(selectedProgram)}/${encodeURIComponent(selectedEvent)}`);
+      setReportData(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error("Error fetching report:", err);
+      setError("Failed to fetch RSVP report data.");
+      setReportData([]);
+    } finally {
+      setReportLoading(false);
+    }
   };
 
   return (
@@ -109,17 +119,47 @@ export default function AdminEventReport() {
           </div>
 
           <button
-            onClick={downloadExcel}
-            disabled={!selectedProgram || !selectedEvent}
+            onClick={generateReport}
+            disabled={!selectedProgram || !selectedEvent || reportLoading}
             style={{
               padding: "0.5rem 1rem",
               backgroundColor: !selectedProgram || !selectedEvent ? "grey" : "#007bff",
               color: "white",
               cursor: !selectedProgram || !selectedEvent ? "not-allowed" : "pointer",
+              marginBottom: "1rem",
             }}
           >
-            Download Excel Report
+            {reportLoading ? "Generating..." : "Generate Report"}
           </button>
+
+          {reportData.length > 0 && (
+            <div style={{ overflowX: "auto", marginTop: "1rem" }}>
+              <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                <thead>
+                  <tr>
+                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Member Name</th>
+                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Phone Number</th>
+                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Adult RSVP</th>
+                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Kids RSVP</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reportData.map((rsvp, idx) => (
+                    <tr key={idx}>
+                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.memname}</td>
+                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.memphonenumber}</td>
+                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.rsvpcount}</td>
+                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.kidsrsvpcount}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {reportData.length === 0 && !reportLoading && selectedEvent && (
+            <p>No RSVPs found for the selected event.</p>
+          )}
         </>
       )}
     </div>
