@@ -1,6 +1,7 @@
 // frontend/src/components/MemberRSVP.js
 import React, { useState } from "react";
-import "../styles/SubmitRSVP.css";
+import "../styles/MemberRSVP.css";
+//import "../styles/SubmitRSVP.css";
 
 export default function MemberRSVP({
   events,
@@ -63,16 +64,11 @@ export default function MemberRSVP({
         </div>
 
         {/* RSVP Event Table */}
-        <>
-          <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
-            Select Events to RSVP
-          </h4>
-        </>
-        {/*<h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
+        <h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
           Select Events to RSVP
-        </h4>*/}
+        </h4>
       <div className="result-table-wrapper">
-        <table className="result-table">
+        <table className="result-table" style={{ marginTop: 0 }}>
           <thead>
             <tr>
               <th>Program</th>
