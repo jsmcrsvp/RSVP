@@ -34,6 +34,7 @@ export default function Home() {
   const [selectedEvents, setSelectedEvents] = useState({}); // { idx: count/flag }
   const [email, setEmail] = useState("");
   const [rsvpCount, setRsvpCount] = useState(""); // RSVP count (single field as in your code)
+  const [kidsRsvpCount, setKidsRsvpCount] = useState(""); // ← important
   const [confirmation, setConfirmation] = useState(null);
 
   const [loadingEvents, setLoadingEvents] = useState(true);
@@ -701,6 +702,8 @@ export default function Home() {
                 selectedEvents={selectedEvents}
                 rsvpCount={rsvpCount}
                 setRsvpCount={setRsvpCount}
+                kidsRsvpCount={kidsRsvpCount}
+                setKidsRsvpCount={setKidsRsvpCount}
                 email={email}
                 setEmail={setEmail}
                 member={member}
