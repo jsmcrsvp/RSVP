@@ -78,7 +78,7 @@ export default function NonMemberRSVP({
           alert("Please enter a valid 10-digit phone number.");
           return;
         }
-        handleSubmitRSVP();
+        handleSubmitRSVP(e);
       }}
     >
       <h4>Enter Non-Member Details</h4>
