@@ -27,18 +27,19 @@ export default function MemberRSVP({
       <h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
         Life Membership Details
       </h4>
-      <form
-        className="rsvp-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (rsvpCount === "" || kidsRsvpCount === "" || email.trim() === "") {
-            setError("Please fill adult, kids counts and email.");
-            return;
-          }
-          setError("");
-          handleSubmitRSVP();
-        }}
-      >
+<form
+  className="rsvp-form"
+  onSubmit={(e) => {
+    e.preventDefault(); // stop form default submission
+    if (rsvpCount === "" || kidsRsvpCount === "" || email.trim() === "") {
+      setError("Please fill adult, kids counts and email.");
+      return;
+    }
+    setError("");
+    handleSubmitRSVP(e); // <-- pass the event here
+  }}
+>
+
         {error && <div style={{ color: "red", marginBottom: "10px" }}>❌ {error}</div>}
 
         {/* Member Info */}
