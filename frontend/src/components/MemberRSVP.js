@@ -27,18 +27,18 @@ export default function MemberRSVP({
       <h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
         Life Membership Details
       </h4>
-<form
-  className="rsvp-form"
-  onSubmit={(e) => {
-    e.preventDefault(); // stop form default submission
-    if (rsvpCount === "" || kidsRsvpCount === "" || email.trim() === "") {
-      setError("Please fill adult, kids counts and email.");
-      return;
-    }
-    setError("");
-    handleSubmitRSVP(e); // <-- pass the event here
-  }}
->
+      <form
+        className="rsvp-form"
+        onSubmit={(e) => {
+          e.preventDefault(); // stop form default submission
+          if (rsvpCount === "" || kidsRsvpCount === "" || email.trim() === "") {
+            setError("Please fill adult, kids counts and email.");
+            return;
+          }
+          setError("");
+          handleSubmitRSVP(e); // <-- pass the event here
+        }}
+      >
 
         {error && <div style={{ color: "red", marginBottom: "10px" }}>❌ {error}</div>}
 
@@ -63,127 +63,132 @@ export default function MemberRSVP({
         </div>
 
         {/* RSVP Event Table */}
-        <h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
+        <>
+          <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
+            Select Events to RSVP
+          </h4>
+        </>
+        {/*<h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
           Select Events to RSVP
-        </h4>
-        <div className="result-table-wrapper">
-          <table className="result-table">
-            <thead>
-              <tr>
-                <th>Program</th>
-                <th>Event Name</th>
-                <th>Event Date</th>
-                <th>Select</th>
-                <th>Adult RSVP</th>
-                <th>Kids RSVP</th>
-              </tr>
-            </thead>
-            <tbody>
-              {events.map((ev, idx) => {
-                const isFirst =
-                  idx === 0 || ev.programname !== events[idx - 1].programname;
-                const programCount = events.filter(
-                  (e) => e.programname === ev.programname
-                ).length;
+        </h4>*/}</>
+      <div className="result-table-wrapper">
+        <table className="result-table">
+          <thead>
+            <tr>
+              <th>Program</th>
+              <th>Event Name</th>
+              <th>Event Date</th>
+              <th>Select</th>
+              <th>Adult RSVP</th>
+              <th>Kids RSVP</th>
+            </tr>
+          </thead>
+          <tbody>
+            {events.map((ev, idx) => {
+              const isFirst =
+                idx === 0 || ev.programname !== events[idx - 1].programname;
+              const programCount = events.filter(
+                (e) => e.programname === ev.programname
+              ).length;
 
-                return (
-                  <tr key={idx}>
-                    {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
-                    <td>{ev.eventname}</td>
-                    <td>
-                      {ev.eventday}, {displayDate(ev.eventdate)}
-                    </td>
-                    <td>
+              return (
+                <tr key={idx}>
+                  {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
+                  <td>{ev.eventname}</td>
+                  <td>
+                    {ev.eventday}, {displayDate(ev.eventdate)}
+                  </td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedEvents[idx] !== undefined}
+                      onChange={(e) =>
+                        toggleEventSelection(idx, e.target.checked)
+                      }
+                    />
+                  </td>
+                  <td>
+                    {selectedEvents[idx] !== undefined ? (
                       <input
-                        type="checkbox"
-                        checked={selectedEvents[idx] !== undefined}
-                        onChange={(e) =>
-                          toggleEventSelection(idx, e.target.checked)
-                        }
+                        type="number"
+                        min="0"
+                        value={rsvpCount}
+                        onChange={(e) => setRsvpCount(e.target.value)}
+                        placeholder="Adults"
+                        style={{ width: "60px" }}
                       />
-                    </td>
-                    <td>
-                      {selectedEvents[idx] !== undefined ? (
-                        <input
-                          type="number"
-                          min="0"
-                          value={rsvpCount}
-                          onChange={(e) => setRsvpCount(e.target.value)}
-                          placeholder="Adults"
-                          style={{ width: "60px" }}
-                        />
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                    <td>
-                      {selectedEvents[idx] !== undefined ? (
-                        <input
-                          type="number"
-                          min="0"
-                          value={kidsRsvpCount}
-                          onChange={(e) => setKidsRsvpCount(e.target.value)}
-                          placeholder="Kids"
-                          style={{ width: "60px" }}
-                        />
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+                  <td>
+                    {selectedEvents[idx] !== undefined ? (
+                      <input
+                        type="number"
+                        min="0"
+                        value={kidsRsvpCount}
+                        onChange={(e) => setKidsRsvpCount(e.target.value)}
+                        placeholder="Kids"
+                        style={{ width: "60px" }}
+                      />
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
-        {/* Email + Submit */}
-        <div className="inline-fields">
-          <label>Email Address</label>
-          <input
-            className="small-input"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter Email Address"
-          />
-          <button
-            className="button"
-            type="submit"
-            disabled={
+      {/* Email + Submit */}
+      <div className="inline-fields">
+        <label>Email Address</label>
+        <input
+          className="small-input"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter Email Address"
+        />
+        <button
+          className="button"
+          type="submit"
+          disabled={
+            submitting ||
+            rsvpCount === "" ||
+            kidsRsvpCount === "" ||
+            email.trim() === ""
+          }
+          style={{
+            backgroundColor:
               submitting ||
-              rsvpCount === "" ||
-              kidsRsvpCount === "" ||
-              email.trim() === ""
-            }
-            style={{
-              backgroundColor:
-                submitting ||
                 rsvpCount === "" ||
                 kidsRsvpCount === "" ||
                 email.trim() === ""
-                  ? "grey"
-                  : "#007bff",
-              cursor:
-                submitting ||
+                ? "grey"
+                : "#007bff",
+            cursor:
+              submitting ||
                 rsvpCount === "" ||
                 kidsRsvpCount === "" ||
                 email.trim() === ""
-                  ? "not-allowed"
-                  : "pointer",
-            }}
-          >
-            {submitting ? "Submitting..." : "Submit"}
-          </button>
-        </div>
+                ? "not-allowed"
+                : "pointer",
+          }}
+        >
+          {submitting ? "Submitting..." : "Submit"}
+        </button>
+      </div>
 
-        {/* Submission Message */}
-        {submitMessage && (
-          <div style={{ color: submitSuccess ? "green" : "red", marginTop: "10px" }}>
-            {submitMessage}
-          </div>
-        )}
-      </form>
+      {/* Submission Message */}
+      {submitMessage && (
+        <div style={{ color: submitSuccess ? "green" : "red", marginTop: "10px" }}>
+          {submitMessage}
+        </div>
+      )}
+    </form >
     </>
   );
 }
