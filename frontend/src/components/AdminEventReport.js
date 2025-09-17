@@ -37,6 +37,11 @@ export default function AdminEventReport() {
       return;
     }
 
+    useEffect(() => {
+      console.log("Selected Program:", selectedProgram);
+      console.log("Selected Event:", selectedEvent);
+    }, [selectedProgram, selectedEvent]);
+
     const fetchEvents = async () => {
       try {
         setError("");
@@ -118,6 +123,9 @@ export default function AdminEventReport() {
               )}
             </select>
           </div>
+
+          <p>Selected Program: {selectedProgram}</p>
+          <p>Selected Event: {selectedEvent}</p>
 
           <button
             onClick={generateReport}
