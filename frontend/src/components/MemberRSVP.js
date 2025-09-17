@@ -1,5 +1,5 @@
 // frontend/src/components/MemberRSVP.js
-import React from "react";
+import React, { useState } from "react";
 import "../styles/SubmitRSVP.css";
 
 export default function MemberRSVP({
@@ -9,6 +9,8 @@ export default function MemberRSVP({
   selectedEvents,
   rsvpCount,
   setRsvpCount,
+  kidsRsvpCount,
+  setKidsRsvpCount,
   email,
   setEmail,
   member,
@@ -18,12 +20,28 @@ export default function MemberRSVP({
   submitMessage,
   submitSuccess,
 }) {
+  const [error, setError] = useState("");
+
   return (
-      <>
+    <>
       <h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
-        Life Membership Details</h4>
-      <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-        {/*<h4>Life Membership Details</h4>*/}
+        Life Membership Details
+      </h4>
+      <form
+        className="rsvp-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (rsvpCount === "" || kidsRsvpCount === "" || email.trim() === "") {
+            setError("Please fill adult, kids counts and email.");
+            return;
+          }
+          setError("");
+          handleSubmitRSVP();
+        }}
+      >
+        {error && <div style={{ color: "red", marginBottom: "10px" }}>❌ {error}</div>}
+
+        {/* Member Info */}
         <div className="result-table-wrapper">
           <table className="result-table" style={{ marginBottom: 10 }}>
             <tbody>
@@ -42,10 +60,11 @@ export default function MemberRSVP({
             </tbody>
           </table>
         </div>
-        
-      <h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
-        Select Events to RSVP</h4>
-        {/*<h4>Current RSVP Details</h4>*/}
+
+        {/* RSVP Event Table */}
+        <h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
+          Select Events to RSVP
+        </h4>
         <div className="result-table-wrapper">
           <table className="result-table">
             <thead>
@@ -54,7 +73,8 @@ export default function MemberRSVP({
                 <th>Event Name</th>
                 <th>Event Date</th>
                 <th>Select</th>
-                <th>RSVP</th>
+                <th>Adult RSVP</th>
+                <th>Kids RSVP</th>
               </tr>
             </thead>
             <tbody>
@@ -88,7 +108,21 @@ export default function MemberRSVP({
                           min="0"
                           value={rsvpCount}
                           onChange={(e) => setRsvpCount(e.target.value)}
-                          placeholder="Count"
+                          placeholder="Adults"
+                          style={{ width: "60px" }}
+                        />
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td>
+                      {selectedEvents[idx] !== undefined ? (
+                        <input
+                          type="number"
+                          min="0"
+                          value={kidsRsvpCount}
+                          onChange={(e) => setKidsRsvpCount(e.target.value)}
+                          placeholder="Kids"
                           style={{ width: "60px" }}
                         />
                       ) : (
@@ -102,24 +136,55 @@ export default function MemberRSVP({
           </table>
         </div>
 
+        {/* Email + Submit */}
         <div className="inline-fields">
           <label>Email Address</label>
-          <input className="small-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address" />
+          <input
+            className="small-input"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter Email Address"
+          />
           <button
             className="button"
             type="submit"
-            disabled={submitting || rsvpCount === "" || email === ""}
+            disabled={
+              submitting ||
+              rsvpCount === "" ||
+              kidsRsvpCount === "" ||
+              email.trim() === ""
+            }
             style={{
-              backgroundColor: submitting || rsvpCount === "" || email === "" ? "grey" : "#007bff",
-              cursor: submitting || rsvpCount === "" || email === "" ? "not-allowed" : "pointer",
+              backgroundColor:
+                submitting ||
+                rsvpCount === "" ||
+                kidsRsvpCount === "" ||
+                email.trim() === ""
+                  ? "grey"
+                  : "#007bff",
+              cursor:
+                submitting ||
+                rsvpCount === "" ||
+                kidsRsvpCount === "" ||
+                email.trim() === ""
+                  ? "not-allowed"
+                  : "pointer",
             }}
           >
             {submitting ? "Submitting..." : "Submit"}
           </button>
         </div>
+
+        {/* Submission Message */}
+        {submitMessage && (
+          <div style={{ color: submitSuccess ? "green" : "red", marginTop: "10px" }}>
+            {submitMessage}
+          </div>
+        )}
       </form>
-      </>
-      );
+    </>
+  );
 }
 
 
