@@ -1,48 +1,43 @@
-// backend/routes/report.js
 const express = require("express");
 const router = express.Router();
 const ExcelJS = require("exceljs");
 
-const RsvpResponse = require("../models/Rsvp_Response_DB_Schema"); // RSVP collection
-const Program = require("../models/Programs_DB_Schema");           // Programs collection
+const Programs = require("../models/Programs_DB_Schema");
+const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 
-// --------------------------
-// GET: All programs
-// --------------------------
+// 1️⃣ Get all programs (for dropdown)
 router.get("/programs", async (req, res) => {
   try {
-    const programs = await Program.find({}, { progname: 1, _id: 0 });
-    res.json(programs.map(p => p.progname));
+    const programs = await Programs.find({}, { progname: 1, _id: 0 }).sort({ progname: 1 });
+    res.json(programs);
   } catch (err) {
     console.error("Error fetching programs:", err);
     res.status(500).json({ message: "Error fetching programs" });
   }
 });
 
-// --------------------------
-// GET: Events by program (status Open or Closed)
-// --------------------------
+// 2️⃣ Get events for a given program (status Open or Closed)
 router.get("/events/:programName", async (req, res) => {
   try {
     const { programName } = req.params;
+    const events = await Programs.find(
+      { progname: programName, eventstatus: { $in: ["Open", "Closed"] } },
+      { events: 1, _id: 0 }
+    );
 
-    const program = await Program.findOne({ progname: programName });
-    if (!program) {
-      return res.status(404).json({ message: "Program not found" });
-    }
+    if (!events.length) return res.json([]);
 
-    // Filter events with status Open or Closed
-    const events = (program.events || []).filter(ev => ["Open", "Closed"].includes(ev.eventstatus));
-    res.json(events);
+    // Flatten events array if nested
+    const flatEvents = events[0].events.filter(ev => ["Open", "Closed"].includes(ev.eventstatus));
+
+    res.json(flatEvents);
   } catch (err) {
     console.error("Error fetching events:", err);
     res.status(500).json({ message: "Error fetching events" });
   }
 });
 
-// --------------------------
-// GET: Download RSVP report for a given program + event
-// --------------------------
+// 3️⃣ Download RSVP report as Excel for selected program + event
 router.get("/download/:programName/:eventName", async (req, res) => {
   try {
     const { programName, eventName } = req.params;
@@ -56,7 +51,6 @@ router.get("/download/:programName/:eventName", async (req, res) => {
       return res.status(404).json({ message: "No RSVPs found for this event." });
     }
 
-    // Create Excel workbook
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("RSVP Report");
 
@@ -76,7 +70,6 @@ router.get("/download/:programName/:eventName", async (req, res) => {
       });
     });
 
-    // Send Excel file
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

@@ -127,16 +127,21 @@ export const addAdminNewProgram = async (programName) => {
   return res.data;
 };
 
-// Get programs (with events inside)
+/* Get programs (with events inside)
 export const getPrograms = async () => {
   const res = await api.get("/api/programs");
   return res.data;
-};
+};*/
 
 // Download RSVP Excel report for a given program + event
 export const downloadEventReport = (programName, eventName) => {
   const url = `/api/report/download/${encodeURIComponent(programName)}/${encodeURIComponent(eventName)}`;
   window.open(url, "_blank");
+};
+
+export const getReportEvents = async (programName) => {
+  const res = await axios.get(`/api/report/events/${encodeURIComponent(programName)}`);
+  return res.data;
 };
 
 export default api;
