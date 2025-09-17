@@ -49,7 +49,7 @@ export const submitRSVP = async (payload) => {
     }
 };
 
-// Verify RSVP by confirmation number
+{/* Verify RSVP by confirmation number
 export const verifyRSVP = async (confNumber) => {
     const res = await api.get(`/api/rsvp_response/${confNumber}`);
     return res.data;
@@ -59,6 +59,20 @@ export const verifyRSVP = async (confNumber) => {
 export const updateRSVP = async (id, rsvpcount) => {
     const res = await api.put(`/api/rsvp_response/update_rsvp/${id}`, { rsvpcount });
     return res.data; // this will include { message, updated }
+};
+*/}
+
+// Verify RSVP by confirmation number
+export const verifyRSVP = async (confNumber) => {
+  const res = await axios.get(`${SERVER_URL}/api/rsvp_response/${confNumber}`);
+  return res.data;
+};
+
+// Update RSVP counts (adults + kids)
+export const updateRSVP = async (id, payload) => {
+  // payload should be: { rsvpcount: number, kidsrsvpcount: number }
+  const res = await axios.put(`${SERVER_URL}/api/rsvp_response/update_rsvp/${id}`, payload);
+  return res.data; // includes { message, updated }
 };
 
 // Dashboard
