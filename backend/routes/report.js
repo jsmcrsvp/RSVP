@@ -4,6 +4,43 @@ const router = express.Router();
 const ExcelJS = require("exceljs");
 
 const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
+const Programs = require("../models/Programs_DB_Schema");
+
+// --- New route: Get all programs ---
+router.get("/programs", async (req, res) => {
+  try {
+    const programs = await Programs.find({}, "progname eventstatus").sort({ progname: 1 });
+    res.json(programs);
+  } catch (err) {
+    console.error("Error fetching programs:", err);
+    res.status(500).json({ message: "Error fetching programs" });
+  }
+});
+
+// --- New route: Get events for a program (Open/Closed only) ---
+router.get("/events/:programName", async (req, res) => {
+  try {
+    const { programName } = req.params;
+    const program = await Programs.findOne({ progname: programName });
+
+    if (!program || !program.events) {
+      return res.json([]); // no events for this program
+    }
+
+    // Filter Open or Closed events
+    const filteredEvents = program.events.filter(
+      (ev) => ev.eventstatus === "Open" || ev.eventstatus === "Closed"
+    );
+
+    res.json(filteredEvents);
+  } catch (err) {
+    console.error("Error fetching events:", err);
+    res.status(500).json({ message: "Error fetching events" });
+  }
+});
+
+module.exports = router;
+
 
 // GET: Generate RSVP report for a given program + event
 router.get("/download/:programName/:eventName", async (req, res) => {
