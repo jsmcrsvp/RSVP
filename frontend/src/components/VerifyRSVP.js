@@ -9,7 +9,8 @@ export default function VerifyRSVP() {
   const [verifying, setVerifying] = useState(false);
 
   const [editIndex, setEditIndex] = useState(null);
-  const [modifiedCount, setModifiedCount] = useState("");
+  const [modifiedAdult, setModifiedAdult] = useState("");
+  const [modifiedKids, setModifiedKids] = useState("");
   const [updateMessage, setUpdateMessage] = useState(null);
   const [updateError, setUpdateError] = useState(null);
   const [error, setError] = useState("");
@@ -38,13 +39,18 @@ export default function VerifyRSVP() {
     } finally {
       setVerifying(false);
       setEditIndex(null);
-      setModifiedCount("");
+      setModifiedAdult("");
+      setModifiedKids("");
     }
   };
 
-  const handleUpdateRSVP = async (rsvpId, newCount) => {
+  const handleUpdateRSVP = async (rsvpId, newAdult, newKids) => {
     try {
-      await updateRSVP(rsvpId, parseInt(newCount, 10));
+      await updateRSVP(rsvpId, {
+        rsvpcount: parseInt(newAdult, 10),
+        kidsrsvpcount: parseInt(newKids, 10),
+      });
+
       await handleVerifyRSVP({ preventDefault: () => {} });
       setEditIndex(null);
       setUpdateMessage("RSVP updated successfully!");
@@ -54,7 +60,8 @@ export default function VerifyRSVP() {
         setVerifyConfNumber("");
         setVerifyResult({ rsvps: [], checked: false });
         setEditIndex(null);
-        setModifiedCount("");
+        setModifiedAdult("");
+        setModifiedKids("");
         setUpdateMessage(null);
       }, 15000);
     } catch (err) {
@@ -162,21 +169,35 @@ export default function VerifyRSVP() {
                         <input
                           type="number"
                           min="0"
-                          value={modifiedCount}
-                          onChange={(e) => setModifiedCount(e.target.value)}
+                          value={modifiedAdult}
+                          onChange={(e) => setModifiedAdult(e.target.value)}
                           style={{ width: "60px" }}
                         />
                       ) : (
                         ev.rsvpcount
                       )}
                     </td>
-                    <td>{ev.kidsrsvpcount ?? 0}</td>
+                    <td>
+                      {editIndex === idx ? (
+                        <input
+                          type="number"
+                          min="0"
+                          value={modifiedKids}
+                          onChange={(e) => setModifiedKids(e.target.value)}
+                          style={{ width: "60px" }}
+                        />
+                      ) : (
+                        ev.kidsrsvpcount ?? 0
+                      )}
+                    </td>
                     <td>
                       {ev.eventstatus === "Open" ? (
                         editIndex === idx ? (
                           <button
                             type="button"
-                            onClick={() => handleUpdateRSVP(ev._id, modifiedCount)}
+                            onClick={() =>
+                              handleUpdateRSVP(ev._id, modifiedAdult, modifiedKids)
+                            }
                           >
                             Save
                           </button>
@@ -186,7 +207,8 @@ export default function VerifyRSVP() {
                               type="checkbox"
                               onChange={() => {
                                 setEditIndex(idx);
-                                setModifiedCount(ev.rsvpcount);
+                                setModifiedAdult(ev.rsvpcount);
+                                setModifiedKids(ev.kidsrsvpcount ?? 0);
                               }}
                             />
                             Modify
@@ -231,6 +253,7 @@ export default function VerifyRSVP() {
     </form>
   );
 }
+
 
 
 {/*// frontend/src/components/VerifyRSVP.js ====== Working 091625 ==== 5:00pm =====
