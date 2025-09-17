@@ -1,6 +1,6 @@
 // frontend/src/components/AdminEventReport.js
 import React, { useEffect, useState } from "react";
-import { getAllPrograms, getOpenEvents, getClosedEvents } from "../api";
+import { getAllPrograms, getOpenEvents, getClosedEvents, getDashboardStats } from "../api";
 import axios from "axios";
 
 export default function AdminEventReport() {
