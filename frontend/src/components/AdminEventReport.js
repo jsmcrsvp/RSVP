@@ -48,7 +48,8 @@ export default function AdminEventReport() {
           (ev) => ev.programname === selectedProgram
         );
         setEvents(filteredEvents);
-        setSelectedEvent(filteredEvents.length > 0 ? filteredEvents[0].eventname : "");
+        setSelectedEvent("");
+        //setSelectedEvent(filteredEvents.length > 0 ? filteredEvents[0].eventname : "");
       } catch (err) {
         console.error("Error fetching events:", err);
         setError("Failed to load events for the selected program.");
@@ -109,7 +110,7 @@ export default function AdminEventReport() {
               style={{ marginLeft: "0.5rem" }}
             >
               {events.length === 0 ? (
-                <option value="">-- No Open/Closed Events --</option>
+                <option value="">-- Select Event --</option>
               ) : (
                 events.map((ev, idx) => (
                   <option key={idx} value={ev.eventname}>{ev.eventname}</option>
