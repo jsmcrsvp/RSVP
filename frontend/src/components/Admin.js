@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ActivateEventForm from "./ActivateEventForm";
 import Dashboard from "./Dashboard";
 import AdminFunctions from "./AdminFunctionForm";
+import AdminEventReport from "./AdminEventReport";
 import logo from "../assets/JSMCLogo.jpg";
 import "../styles/Admin.css";
 
@@ -55,11 +56,7 @@ export default function Admin() {
         {activeTab === "activateEvent" && <ActivateEventForm />}
 
         {/* REPORT */}
-        {activeTab === "report" && (
-          <div className="report">
-            <h4>Reports Coming Soon...</h4>
-          </div>
-        )}
+        {activeTab === "report" && <AdminEventReport />}
 
         {/* ADMIN FUNCTIONS */}
         {activeTab === "adminFunction" && <AdminFunctions />}

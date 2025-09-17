@@ -127,6 +127,12 @@ export const addAdminNewProgram = async (programName) => {
   return res.data;
 };
 
+// Get programs (with events inside)
+export const getPrograms = async () => {
+  const res = await api.get("/api/programs");
+  return res.data;
+};
+
 export default api;
 
 /* ========= Working 090325 10pm ====================

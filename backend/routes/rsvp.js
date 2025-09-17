@@ -217,6 +217,9 @@ router.put("/update_rsvp/:id", async (req, res) => {
 });
 
 
+module.exports = router;
+
+
 {/*
 router.put("/update_rsvp/:id", async (req, res) => {
     const { id } = req.params;
@@ -288,8 +291,6 @@ router.put("/update_rsvp/:id", async (req, res) => {
     }
 });
 */}
-
-module.exports = router;
 
 // GET: Retrieve RSVP(s) by confirmation number
 
