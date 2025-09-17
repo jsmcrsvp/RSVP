@@ -85,7 +85,7 @@ export default function AdminEventReport() {
             >
               <option value="">-- Select Program --</option>
               {programs.map((p, idx) => (
-                <option key={idx} value={prog.progname}>{prog.progname}</option>
+                <option key={idx} value={p.progname}>{p.progname}</option>
               ))}
             </select>
           </div>
@@ -102,9 +102,7 @@ export default function AdminEventReport() {
                 <option value="">-- No Open/Closed Events --</option>
               ) : (
                 events.map((ev, idx) => (
-                  <option key={idx} value={ev.eventname}>
-                    {ev.eventname})
-                  </option>
+                  <option key={idx} value={ev.eventname}>{ev.eventname}</option>
                 ))
               )}
             </select>
