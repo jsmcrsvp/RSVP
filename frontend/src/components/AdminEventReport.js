@@ -1,7 +1,7 @@
 // frontend/src/components/AdminEventReport.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../styles/AdminEventReport.css";
+//import "../styles/AdminEventReport.css";
 
 export default function AdminEventReport() {
   const [programs, setPrograms] = useState([]);
