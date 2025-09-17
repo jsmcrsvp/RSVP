@@ -72,7 +72,7 @@ export default function AdminEventReport() {
       setReportLoading(true);
       const res = await getDashboardStats();
       const allStats = Array.isArray(res.data) ? res.data : [];
-
+      console.log (res.data);
       // Filter for selected program and event
       const filtered = allStats.filter(
         (item) =>
