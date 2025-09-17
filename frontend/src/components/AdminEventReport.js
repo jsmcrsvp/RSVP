@@ -70,8 +70,18 @@ export default function AdminEventReport() {
 
     try {
       setReportLoading(true);
-      const res = await axios.get(`/api/report/rsvps/${encodeURIComponent(selectedProgram)}/${encodeURIComponent(selectedEvent)}`);
-      setReportData(Array.isArray(res.data) ? res.data : []);
+      const res = await axios.get("/api/report/stats");
+      const allStats = Array.isArray(res.data) ? res.data : [];
+
+      // Filter for selected program and event
+      const filtered = allStats.filter(
+        (item) =>
+          item.programname === selectedProgram &&
+          item.eventname === selectedEvent
+      );
+
+      setReportData(filtered);
+      setError("");
     } catch (err) {
       console.error("Error fetching report:", err);
       setError("Failed to fetch RSVP report data.");
@@ -80,6 +90,7 @@ export default function AdminEventReport() {
       setReportLoading(false);
     }
   };
+
 
   return (
     <div style={{ padding: "1rem" }}>
@@ -141,6 +152,34 @@ export default function AdminEventReport() {
             {reportLoading ? "Generating..." : "Generate Report"}
           </button>
 
+{reportData.length > 0 && (
+  <table>
+    <thead>
+      <tr>
+        <th>Program</th>
+        <th>Event</th>
+        <th>Date</th>
+        <th>Day</th>
+        <th>Adult RSVP</th>
+        <th>Kids RSVP</th>
+      </tr>
+    </thead>
+    <tbody>
+      {reportData.map((r, idx) => (
+        <tr key={idx}>
+          <td>{r.programname}</td>
+          <td>{r.eventname}</td>
+          <td>{r.eventdate}</td>
+          <td>{r.eventday}</td>
+          <td>{r.totalRSVPs}</td>
+          <td>{r.totalKidsRSVPs}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
+
+{/*
           {reportData.length > 0 && (
             <div style={{ overflowX: "auto", marginTop: "1rem" }}>
               <table style={{ borderCollapse: "collapse", width: "100%" }}>
@@ -165,7 +204,7 @@ export default function AdminEventReport() {
               </table>
             </div>
           )}
-
+*/}
           {reportData.length === 0 && !reportLoading && selectedEvent && (
             <p>No RSVPs found for the selected event.</p>
           )}
