@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const ExcelJS = require("exceljs");
 
-const RsvpResponse = require("../models/rsvpResponse");
+const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 
 // GET: Generate RSVP report for a given program + event
 router.get("/:programName/:eventName", async (req, res) => {
