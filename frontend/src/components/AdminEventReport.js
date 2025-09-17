@@ -70,7 +70,7 @@ export default function AdminEventReport() {
 
     try {
       setReportLoading(true);
-      const res = await axios.get("/api/report/stats");
+      const res = await getDashboardStats();
       const allStats = Array.isArray(res.data) ? res.data : [];
 
       // Filter for selected program and event
