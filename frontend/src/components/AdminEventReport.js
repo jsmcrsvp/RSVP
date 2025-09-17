@@ -37,11 +37,6 @@ export default function AdminEventReport() {
       return;
     }
 
-    useEffect(() => {
-      console.log("Selected Program:", selectedProgram);
-      console.log("Selected Event:", selectedEvent);
-    }, [selectedProgram, selectedEvent]);
-
     const fetchEvents = async () => {
       try {
         setError("");
@@ -63,6 +58,11 @@ export default function AdminEventReport() {
 
     fetchEvents();
   }, [selectedProgram]);
+
+  useEffect(() => {
+    console.log("Selected Program:", selectedProgram);
+    console.log("Selected Event:", selectedEvent);
+  }, [selectedProgram, selectedEvent]);
 
   // Fetch RSVP data for table
   const generateReport = async () => {
