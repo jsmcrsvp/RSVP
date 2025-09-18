@@ -11,6 +11,7 @@ export default function AdminEventReport() {
   const [error, setError] = useState("");
   const [reportData, setReportData] = useState([]);
   const [reportLoading, setReportLoading] = useState(false);
+  const [stats, setStats] = useState([]);
 
   // Fetch programs on mount
   useEffect(() => {
@@ -63,8 +64,10 @@ const generateReport = async () => {
 
   try {
     setReportLoading(true);
-    const res = await getDashboardStats();
-    const allStats = Array.isArray(res.data) ? res.data : [];
+    //const res = await getDashboardStats();
+    const statsData = await getDashboardStats();
+    const allStats = Array.isArray(statsData) ? statsData : []
+    //setStats(Array.isArray(statsData) ? statsData : []);
 
     console.log("Dashboard stats response:", allStats);
     console.log("Selected Program:", selectedProgram);
