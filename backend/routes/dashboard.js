@@ -41,7 +41,6 @@ router.get("/stats", async (req, res) => {
 });
 
 
-
 // ✅ New RSVP detail route
 router.post("/rsvps/details", async (req, res) => {
   console.log("📋 RSVP member details request received");

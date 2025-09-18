@@ -65,13 +65,10 @@ export default function AdminEventReport() {
 
     try {
       setReportLoading(true);
-
-      const statsRes = await getDashboardStats();
-      const allStats = Array.isArray(statsRes.data) ? statsRes.data : [];
+    const statsData = await getDashboardStats();
+    const allStats = Array.isArray(statsData) ? statsData : []
 
       console.log("Dashboard stats response:", allStats);
-      console.log("Selected Program:", selectedProgram);
-      console.log("Selected Event:", selectedEvent);
 
       const filtered = allStats.filter(
         (item) =>
@@ -81,6 +78,10 @@ export default function AdminEventReport() {
 
       setReportData(filtered);
 
+      console.log("Selected Program:", selectedProgram);
+      console.log("Selected Event:", selectedEvent);
+      console.log("Selected Event:", selectedEvent);
+      
       // Fetch member-level RSVP details
       const detailRes = await getRsvpDetails(selectedProgram, selectedEvent);
       setMemberDetails(Array.isArray(detailRes.data) ? detailRes.data : []);
