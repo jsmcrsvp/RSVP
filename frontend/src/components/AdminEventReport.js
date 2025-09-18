@@ -12,6 +12,8 @@ export default function AdminEventReport() {
   const [reportData, setReportData] = useState([]);
   const [reportLoading, setReportLoading] = useState(false);
   const [stats, setStats] = useState([]);
+  const [memberDetails, setMemberDetails] = useState([]);
+
 
   // Fetch programs on mount
   useEffect(() => {
@@ -58,7 +60,39 @@ export default function AdminEventReport() {
     fetchEvents();
   }, [selectedProgram]);
 
-  // Fetch RSVP summary data
+  const generateReport = async () => {
+  if (!selectedProgram || !selectedEvent) return;
+
+  try {
+    setReportLoading(true);
+
+    const statsRes = await getDashboardStats();
+    const allStats = Array.isArray(statsRes.data) ? statsRes.data : [];
+
+    const filtered = allStats.filter(
+      (item) =>
+        item.programname.trim().toLowerCase() === selectedProgram.trim().toLowerCase() &&
+        item.eventname.trim().toLowerCase() === selectedEvent.trim().toLowerCase()
+    );
+
+    setReportData(filtered);
+
+    // Fetch member-level RSVP details
+    const detailRes = await getRsvpDetails(selectedProgram, selectedEvent);
+    setMemberDetails(Array.isArray(detailRes.data) ? detailRes.data : []);
+
+    setError("");
+  } catch (err) {
+    console.error("Error fetching report:", err);
+    setError("Failed to fetch RSVP report data.");
+    setReportData([]);
+    setMemberDetails([]);
+  } finally {
+    setReportLoading(false);
+  }
+};
+
+  /* Fetch RSVP summary data
 const generateReport = async () => {
   if (!selectedProgram || !selectedEvent) return;
 
@@ -91,7 +125,7 @@ const generateReport = async () => {
     setReportLoading(false);
   }
 };
-
+*/
 
   return (
     <div style={{ padding: "1rem" }}>
@@ -152,35 +186,32 @@ const generateReport = async () => {
           </button>
 
           {/* Report Table */}
-          {reportData.length > 0 && (
-            <div style={{ overflowX: "auto", marginTop: "1rem" }}>
-              <table style={{ borderCollapse: "collapse", width: "100%" }}>
-                <thead>
-                  <tr>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Program</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Event</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Date</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Day</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Adult RSVP</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Kids RSVP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {reportData.map((r, idx) => (
-                    <tr key={idx}>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{r.programname}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{r.eventname}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{r.eventdate}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{r.eventday}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{r.totalRSVPs}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{r.totalKidsRSVPs}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
+          
+{memberDetails.length > 0 && (
+  <div style={{ overflowX: "auto", marginTop: "2rem" }}>
+    <h4>Member RSVP Details</h4>
+    <table style={{ borderCollapse: "collapse", width: "100%" }}>
+      <thead>
+        <tr>
+          <th style={{ border: "1px solid #ddd", padding: "8px" }}>Member Name</th>
+          <th style={{ border: "1px solid #ddd", padding: "8px" }}>Phone Number</th>
+          <th style={{ border: "1px solid #ddd", padding: "8px" }}>Adult RSVP</th>
+          <th style={{ border: "1px solid #ddd", padding: "8px" }}>Kids RSVP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {memberDetails.map((rsvp, idx) => (
+          <tr key={idx}>
+            <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.memname}</td>
+            <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.memphonenumber}</td>
+            <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.rsvpcount}</td>
+            <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.kidsrsvpcount}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
           {/* No Data Message */}
           {reportData.length === 0 && !reportLoading && selectedEvent && (
             <p>No RSVP summary found for the selected event.</p>

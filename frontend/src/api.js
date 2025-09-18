@@ -144,6 +144,10 @@ export const getReportEvents = async (programName) => {
   return res.data;
 };
 
+export const getRsvpDetails = async (programname, eventname) => {
+  return axios.post("/api/report/rsvps/details", { programname, eventname });
+};
+
 export default api;
 
 /* ========= Working 090325 10pm ====================
