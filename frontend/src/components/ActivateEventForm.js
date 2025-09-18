@@ -144,7 +144,6 @@ export default function ActivateEventForm() {
       <h3>Activate Program & Event</h3>
 
       <form className="program-form" onSubmit={handleSubmit}>
-
         {/* Row 1 */}
         <div className="form-row">
           <div className="form-group">
