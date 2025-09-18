@@ -8,7 +8,6 @@ import {
 } from "../api";
 import "../styles/ActivateEventForm.css";
 
-// Utility functions
 const displayDate = (dateStr) => {
   if (!dateStr) return "";
   const [year, month, day] = dateStr.split("-");
@@ -16,7 +15,6 @@ const displayDate = (dateStr) => {
 };
 
 const safeString = (v) => (v == null ? "" : String(v).trim());
-
 const extractProgramName = (p) =>
   safeString(p?.program_name ?? p?.progname ?? p?.progName ?? p?.name ?? p?.program ?? p);
 const extractEventName = (e) =>
@@ -42,6 +40,7 @@ export default function ActivateEventForm() {
   const [editRow, setEditRow] = useState(null);
   const [newStatus, setNewStatus] = useState("");
 
+  // Update Event Day when Event Date changes
   useEffect(() => {
     if (eventdate) {
       const d = new Date(eventdate + "T00:00:00Z");
@@ -53,8 +52,7 @@ export default function ActivateEventForm() {
   const fetchProgramsAndEvents = async () => {
     try {
       setLoading(true);
-      setError("");
-      setSuccess("");
+      setError(""); setSuccess("");
 
       const [rawProgramList, rawEventList, rawProgramsCollection] = await Promise.all([
         (async () => { try { return await getAdminAllPrograms(); } catch { return []; } })(),
@@ -100,9 +98,7 @@ export default function ActivateEventForm() {
     } catch (err) {
       console.error("Error fetching programs/events:", err);
       setError("Failed to load programs/events.");
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
   useEffect(() => { fetchProgramsAndEvents(); }, []);
@@ -148,6 +144,8 @@ export default function ActivateEventForm() {
       <h3>Activate Program & Event</h3>
 
       <form className="program-form" onSubmit={handleSubmit}>
+
+        {/* Row 1 */}
         <div className="form-row">
           <div className="form-group">
             <label>Select Program</label>
@@ -164,25 +162,6 @@ export default function ActivateEventForm() {
               {eventsList.map((ev) => <option key={ev.id} value={ev.name}>{ev.name}</option>)}
             </select>
           </div>
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label>Event Date</label>
-            <input type="date" value={eventdate} onChange={(e) => setEventdate(e.target.value)} required />
-          </div>
-
-          <div className="form-group">
-            <label>Event Day</label>
-            <input type="text" value={eventday} readOnly />
-          </div>
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label>RSVP Close Date</label>
-            <input type="date" value={rsvpClosedate} onChange={(e) => setRsvpClosedate(e.target.value)} required />
-          </div>
 
           <div className="form-group">
             <label>Event Status</label>
@@ -194,11 +173,31 @@ export default function ActivateEventForm() {
           </div>
         </div>
 
+        {/* Row 2 */}
+        <div className="form-row">
+          <div className="form-group">
+            <label>Event Date</label>
+            <input type="date" value={eventdate} onChange={(e) => setEventdate(e.target.value)} required />
+          </div>
+
+          <div className="form-group">
+            <label>Event Day</label>
+            <input type="text" value={eventday} readOnly />
+          </div>
+
+          <div className="form-group">
+            <label>RSVP Close Date</label>
+            <input type="date" value={rsvpClosedate} onChange={(e) => setRsvpClosedate(e.target.value)} required />
+          </div>
+        </div>
+
+        {/* Row 3 */}
         <div className="form-row" style={{ justifyContent: "center" }}>
           <button type="submit" className="btn-submit">Activate Event</button>
         </div>
       </form>
 
+      {/* Messages */}
       {error && <p className="form-message error">{error}</p>}
       {success && <p className="form-message success">{success}</p>}
 
@@ -258,7 +257,6 @@ export default function ActivateEventForm() {
     </div>
   );
 }
-
 
 
 
