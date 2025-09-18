@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getAllPrograms, getOpenEvents, getClosedEvents, getDashboardStats, getRsvpDetails } from "../api";
+import { getAllPrograms, getOpenEvents, getClosedEvents, getRsvpDetails } from "../api";
+import "../styles/Dashboard.css";
 
 export default function AdminEventReport() {
   const [programs, setPrograms] = useState([]);
@@ -10,9 +11,9 @@ export default function AdminEventReport() {
   const [error, setError] = useState("");
   const [reportLoading, setReportLoading] = useState(false);
   const [memberDetails, setMemberDetails] = useState([]);
-  const [reportGenerated, setReportGenerated] = useState(false); // Tracks if Generate Report was clicked
+  const [reportGenerated, setReportGenerated] = useState(false);
 
-  // Fetch programs on mount
+  // Fetch programs
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
@@ -47,7 +48,7 @@ export default function AdminEventReport() {
           (ev) => ev.programname === selectedProgram
         );
         setEvents(filteredEvents);
-        setSelectedEvent(""); // Require manual selection
+        setSelectedEvent("");
       } catch (err) {
         console.error("Error fetching events:", err);
         setError("Failed to load events for the selected program.");
@@ -61,13 +62,12 @@ export default function AdminEventReport() {
   const generateReport = async () => {
     if (!selectedProgram || !selectedEvent) return;
 
-    setReportGenerated(true); // Mark that user clicked Generate
+    setReportGenerated(true);
     setReportLoading(true);
     setMemberDetails([]);
     setError("");
 
     try {
-      // Fetch member-level RSVP details
       const detailRes = await getRsvpDetails(selectedProgram, selectedEvent);
       setMemberDetails(Array.isArray(detailRes) ? detailRes : []);
     } catch (err) {
@@ -80,9 +80,7 @@ export default function AdminEventReport() {
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h3>Admin RSVP Event Report</h3>
-
+    <div className="dashboard-container">
       {loading ? (
         <p>Loading programs...</p>
       ) : error ? (
@@ -100,7 +98,9 @@ export default function AdminEventReport() {
             >
               <option value="">-- Select Program --</option>
               {programs.map((p, idx) => (
-                <option key={idx} value={p.progname}>{p.progname}</option>
+                <option key={idx} value={p.progname}>
+                  {p.progname}
+                </option>
               ))}
             </select>
           </div>
@@ -117,7 +117,9 @@ export default function AdminEventReport() {
             >
               <option value="">-- Select Event --</option>
               {events.map((ev, idx) => (
-                <option key={idx} value={ev.eventname}>{ev.eventname}</option>
+                <option key={idx} value={ev.eventname}>
+                  {ev.eventname}
+                </option>
               ))}
             </select>
           </div>
@@ -141,32 +143,34 @@ export default function AdminEventReport() {
           {memberDetails.length > 0 && (
             <div style={{ overflowX: "auto", marginTop: "2rem" }}>
               <h4>Member RSVP Details</h4>
-              <table style={{ borderCollapse: "collapse", width: "100%" }}>
-                <thead>
-                  <tr>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Member Name</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Phone Number</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Adult RSVP</th>
-                    <th style={{ border: "1px solid #ddd", padding: "8px" }}>Kids RSVP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {memberDetails.map((rsvp, idx) => (
-                    <tr key={idx}>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.memname}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.memphonenumber}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.rsvpcount}</td>
-                      <td style={{ border: "1px solid #ddd", padding: "8px" }}>{rsvp.kidsrsvpcount}</td>
+              <div className="result-table-wrapper">
+                <table className="result-table">
+                  <thead>
+                    <tr>
+                      <th>Member Name</th>
+                      <th>Phone Number</th>
+                      <th>Adult RSVP</th>
+                      <th>Kids RSVP</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {memberDetails.map((rsvp, idx) => (
+                      <tr key={idx}>
+                        <td>{rsvp.memname}</td>
+                        <td>{rsvp.memphonenumber}</td>
+                        <td>{rsvp.rsvpcount}</td>
+                        <td>{rsvp.kidsrsvpcount}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
 
           {/* No Data Message only after Generate clicked */}
           {reportGenerated && memberDetails.length === 0 && !reportLoading && (
-            <p>No RSVP summary found for the selected event.</p>
+            <p>No RSVP report exists for the selected event.</p>
           )}
         </>
       )}
@@ -175,9 +179,7 @@ export default function AdminEventReport() {
 }
 
 
-
-
-{/*import React, { useEffect, useState } from "react"; ==========Working 09182025 ====== 1:00pm =====
+      {/*import React, { useEffect, useState } from "react"; ==========Working 09182025 ====== 1:00pm =====
 import { getAllPrograms, getOpenEvents, getClosedEvents, getDashboardStats, getRsvpDetails } from "../api";
 import axios from "axios";
 
