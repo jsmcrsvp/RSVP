@@ -141,18 +141,19 @@ button:hover,
     border-radius: 6px;
 }
 
-.result-table th,
+.result-table th {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: center;
+    background: #f4f4f4;
+    color: #333;
+}
+
 .result-table td {
     border: 1px solid #ccc;
     padding: 8px 12px;
     text-align: left;
 }
-
-.result-table th {
-    background: #f4f4f4;
-    color: #333;
-}
-
 
 /* Mobile adjustments */
 @media (max-width: 480px) {
