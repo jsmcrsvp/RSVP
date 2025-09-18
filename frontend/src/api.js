@@ -145,7 +145,8 @@ export const getReportEvents = async (programName) => {
 };
 
 export const getRsvpDetails = async (programname, eventname) => {
-  const res = axios.post("/api/dashboard/rsvps", { programname, eventname });
+  console.log("➡️ Sending request to /api/dashboard/rsvps with:", { programname, eventname });
+  const res = await axios.post("/api/dashboard/rsvps", { programname, eventname });
   return res.data;
 };
 
