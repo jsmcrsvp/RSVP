@@ -145,7 +145,8 @@ export const getReportEvents = async (programName) => {
 };
 
 export const getRsvpDetails = async (programname, eventname) => {
-  return axios.post("/api/dashboard/rsvps", { programname, eventname });
+  const res = axios.post("/api/dashboard/rsvps", { programname, eventname });
+  return res.data;
 };
 
 export default api;

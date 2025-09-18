@@ -65,8 +65,8 @@ export default function AdminEventReport() {
 
     try {
       setReportLoading(true);
-    const statsData = await getDashboardStats();
-    const allStats = Array.isArray(statsData) ? statsData : []
+      const statsData = await getDashboardStats();
+      const allStats = Array.isArray(statsData) ? statsData : []
 
       console.log("Dashboard stats response:", allStats);
 
@@ -83,7 +83,9 @@ export default function AdminEventReport() {
 
       // Fetch member-level RSVP details
       const detailRes = await getRsvpDetails(selectedProgram, selectedEvent);
-      setMemberDetails(Array.isArray(detailRes.data) ? detailRes.data : []);
+      //setMemberDetails(Array.isArray(detailRes.data) ? detailRes.data : []);
+      const setMemberDetails = (Array.isArray(detailRes.data) ? detailRes.data : []);
+      console.log("Member stats response:", setMemberDetails);
 
       setError("");
     } catch (err) {
