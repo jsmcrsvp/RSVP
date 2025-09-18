@@ -84,9 +84,8 @@ export default function AdminEventReport() {
       // Fetch member-level RSVP details
       const detailRes = await getRsvpDetails(selectedProgram, selectedEvent);
       console.log("Member raw response:", detailRes);
-      //setMemberDetails(Array.isArray(detailRes.data) ? detailRes.data : []);
-      const setMemberDetails = (Array.isArray(detailRes) ? detailRes : []);
-      console.log("Member stats response:", setMemberDetails);
+      setMemberDetails(Array.isArray(detailRes) ? detailRes : []);
+      console.log("Member stats response:", detailRes);
 
       setError("");
     } catch (err) {
@@ -98,41 +97,6 @@ export default function AdminEventReport() {
       setReportLoading(false);
     }
   };
-
-  /* Fetch RSVP summary data
-const generateReport = async () => {
-  if (!selectedProgram || !selectedEvent) return;
-
-  try {
-    setReportLoading(true);
-    //const res = await getDashboardStats();
-    const statsData = await getDashboardStats();
-    const allStats = Array.isArray(statsData) ? statsData : []
-    //setStats(Array.isArray(statsData) ? statsData : []);
-
-    console.log("Dashboard stats response:", allStats);
-    console.log("Selected Program:", selectedProgram);
-    console.log("Selected Event:", selectedEvent);
-
-    const filtered = allStats.filter(
-      (item) =>
-        item.programname.trim().toLowerCase() === selectedProgram.trim().toLowerCase() &&
-        item.eventname.trim().toLowerCase() === selectedEvent.trim().toLowerCase()
-    );
-
-    console.log("Filtered:", filtered);
-
-    setReportData(filtered);
-    setError("");
-  } catch (err) {
-    console.error("Error fetching report:", err);
-    setError("Failed to fetch RSVP report data.");
-    setReportData([]);
-  } finally {
-    setReportLoading(false);
-  }
-};
-*/
 
   return (
     <div style={{ padding: "1rem" }}>
