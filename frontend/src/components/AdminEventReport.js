@@ -84,7 +84,7 @@ export default function AdminEventReport() {
       // Fetch member-level RSVP details
       const detailRes = await getRsvpDetails(selectedProgram, selectedEvent);
       //setMemberDetails(Array.isArray(detailRes.data) ? detailRes.data : []);
-      const setMemberDetails = (Array.isArray(detailRes.data) ? detailRes.data : []);
+      const setMemberDetails = (Array.isArray(detailRes.data) ? detailRes : []);
       console.log("Member stats response:", setMemberDetails);
 
       setError("");
