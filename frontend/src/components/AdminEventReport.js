@@ -10,6 +10,7 @@ export default function AdminEventReport() {
   const [error, setError] = useState("");
   const [reportLoading, setReportLoading] = useState(false);
   const [memberDetails, setMemberDetails] = useState([]);
+  const [reportGenerated, setReportGenerated] = useState(false); // Tracks if Generate Report was clicked
 
   // Fetch programs on mount
   useEffect(() => {
@@ -42,11 +43,9 @@ export default function AdminEventReport() {
           getOpenEvents(),
           getClosedEvents(),
         ]);
-
         const filteredEvents = [...openData, ...closedData].filter(
           (ev) => ev.programname === selectedProgram
         );
-
         setEvents(filteredEvents);
         setSelectedEvent(""); // Require manual selection
       } catch (err) {
@@ -58,21 +57,19 @@ export default function AdminEventReport() {
     fetchEvents();
   }, [selectedProgram]);
 
-  // Generate report on button click
+  // Generate report
   const generateReport = async () => {
     if (!selectedProgram || !selectedEvent) return;
 
-    try {
-      setReportLoading(true);
-      setError("");
+    setReportGenerated(true); // Mark that user clicked Generate
+    setReportLoading(true);
+    setMemberDetails([]);
+    setError("");
 
+    try {
       // Fetch member-level RSVP details
       const detailRes = await getRsvpDetails(selectedProgram, selectedEvent);
       setMemberDetails(Array.isArray(detailRes) ? detailRes : []);
-
-      console.log("Selected Program:", selectedProgram);
-      console.log("Selected Event:", selectedEvent);
-      console.log("Member RSVP Details:", detailRes);
     } catch (err) {
       console.error("Error fetching report:", err);
       setError("Failed to fetch RSVP report data.");
@@ -140,7 +137,7 @@ export default function AdminEventReport() {
             {reportLoading ? "Generating..." : "Generate Report"}
           </button>
 
-          {/* Member RSVP Table */}
+          {/* Report Table */}
           {memberDetails.length > 0 && (
             <div style={{ overflowX: "auto", marginTop: "2rem" }}>
               <h4>Member RSVP Details</h4>
@@ -167,8 +164,8 @@ export default function AdminEventReport() {
             </div>
           )}
 
-          {/* No Data Message */}
-          {memberDetails.length === 0 && !reportLoading && selectedEvent && (
+          {/* No Data Message only after Generate clicked */}
+          {reportGenerated && memberDetails.length === 0 && !reportLoading && (
             <p>No RSVP summary found for the selected event.</p>
           )}
         </>
