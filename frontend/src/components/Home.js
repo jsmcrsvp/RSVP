@@ -484,43 +484,44 @@ export default function Home() {
             <h4>Current open events to Submit or View/Modify RSVP</h4>
 
             {/* Open Events Table */}
-            <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
-              {Array.isArray(events) && events.length > 0 ? (
-                <table className="result-table" style={{ marginBottom: "20px" }}>
-                  <thead>
-                    <tr>
-                      <th>Program</th>
-                      <th>Event Name</th>
-                      <th>Event Date</th>
-                      <th>RSVP By</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {events.map((ev, idx) => {
-                      // Check if this is the first event for this program
-                      const isFirst = idx === 0 || ev.programname !== events[idx - 1].programname;
-                      // Count how many events belong to this program
-                      const programCount = events.filter((e) => e.programname === ev.programname).length;
+            <div style={{ overflowX: "auto", marginTop: "1rem", marginBottom: "1rem" }}>
+              <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
+                {Array.isArray(events) && events.length > 0 ? (
+                  <table className="result-table" style={{ marginBottom: "20px" }}>
+                    <thead>
+                      <tr>
+                        <th>Program</th>
+                        <th>Event Name</th>
+                        <th>Event Date</th>
+                        <th>RSVP By</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {events.map((ev, idx) => {
+                        // Check if this is the first event for this program
+                        const isFirst = idx === 0 || ev.programname !== events[idx - 1].programname;
+                        // Count how many events belong to this program
+                        const programCount = events.filter((e) => e.programname === ev.programname).length;
 
-                      return (
-                        <tr key={ev._id || idx}>
-                          {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
-                          <td>{ev.eventname}</td>
-                          <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
-                          <td>{displayDate(ev.closersvp)}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              ) : (
-                <p style={{ fontStyle: "italic", color: "#666" }}>
-                  No open events available at this time.
-                </p>
-              )}
+                        return (
+                          <tr key={ev._id || idx}>
+                            {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
+                            <td>{ev.eventname}</td>
+                            <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
+                            <td>{displayDate(ev.closersvp)}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p style={{ fontStyle: "italic", color: "#666" }}>
+                    No open events available at this time.
+                  </p>
+                )}
+              </div>
+              <h4>Please select Submit RSVP or Verify/Modify RSVP</h4>
             </div>
-
-            <h4>Please select Submit RSVP or Verify/Modify RSVP</h4>
           </div>
         )}
 
@@ -580,8 +581,8 @@ export default function Home() {
                 selectedEvents={selectedEvents}
                 rsvpCount={rsvpCount}
                 setRsvpCount={setRsvpCount}
-        kidsRsvpCount={kidsRsvpCount}
-        setKidsRsvpCount={setKidsRsvpCount}
+                kidsRsvpCount={kidsRsvpCount}
+                setKidsRsvpCount={setKidsRsvpCount}
                 nonMemberName={nonMemberName}
                 setNonMemberName={setNonMemberName}
                 nonMemberAddress={nonMemberAddress}
