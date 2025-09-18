@@ -144,8 +144,6 @@ export const getReportEvents = async (programName) => {
   return res.data;
 };
 
-import api from "./apiConfig";
-
 export const getRsvpDetails = async (programname, eventname) => {
   console.log("➡️ Sending request to /api/dashboard/rsvps with:", { programname, eventname });
   const res = await api.post("/api/dashboard/rsvps", { programname, eventname });
