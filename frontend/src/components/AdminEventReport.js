@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllPrograms, getOpenEvents, getClosedEvents, getDashboardStats } from "../api";
+import { getAllPrograms, getOpenEvents, getClosedEvents, getDashboardStats, getRsvpDetails } from "../api";
 import axios from "axios";
 
 export default function AdminEventReport() {
@@ -186,7 +186,7 @@ const generateReport = async () => {
           </button>
 
           {/* Report Table */}
-          
+
 {memberDetails.length > 0 && (
   <div style={{ overflowX: "auto", marginTop: "2rem" }}>
     <h4>Member RSVP Details</h4>
