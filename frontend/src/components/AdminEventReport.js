@@ -80,8 +80,7 @@ export default function AdminEventReport() {
 
       console.log("Selected Program:", selectedProgram);
       console.log("Selected Event:", selectedEvent);
-      console.log("Selected Event:", selectedEvent);
-      
+
       // Fetch member-level RSVP details
       const detailRes = await getRsvpDetails(selectedProgram, selectedEvent);
       setMemberDetails(Array.isArray(detailRes.data) ? detailRes.data : []);
