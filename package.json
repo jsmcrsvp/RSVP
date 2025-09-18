@@ -6,12 +6,13 @@
     "dotenv": "^17.2.1",
     "exceljs": "^4.4.0",
     "express": "^4.21.2",
+    "file-saver": "^2.0.5",
     "mongodb": "^6.19.0",
     "mongoose": "^8.x.x",
     "nodemailer": "^7.0.6",
     "react-router-dom": "^7.9.1",
     "react-scripts": "^5.0.1",
-    "xlsx": "^0.18.x"
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",
