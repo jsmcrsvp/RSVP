@@ -116,6 +116,11 @@ app.get("/api/dashboard-stats", async (req, res) => {
   }
 });
 
+app.use((req, res, next) => {
+  console.log(`➡️ Incoming: ${req.method} ${req.url}`);
+  next();
+});
+
 //=================== Program Routes ===================
 // Import routes
 const programRoutes = require("./routes/programs");
