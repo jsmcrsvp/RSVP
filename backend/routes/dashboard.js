@@ -40,6 +40,31 @@ router.get("/stats", async (req, res) => {
   }
 });
 
+
+
+// ✅ New RSVP detail route
+router.post("/rsvps/details", async (req, res) => {
+  console.log("📋 RSVP member details request received");
+
+  const { programname, eventname } = req.body;
+
+  if (!programname || !eventname) {
+    return res.status(400).json({ message: "Program and event are required." });
+  }
+
+  try {
+    const details = await RsvpResponse.find({
+      programname,
+      eventname
+    }).select("memname memphonenumber rsvpcount kidsrsvpcount");
+
+    res.json(details);
+  } catch (err) {
+    console.error("❌ Error fetching RSVP member details:", err);
+    res.status(500).json({ message: "Error fetching RSVP member details." });
+  }
+});
+
 module.exports = router;
 
 {/* backend/routes/dashboard.js ===== Working 091625 ==== 5:00pm ====
