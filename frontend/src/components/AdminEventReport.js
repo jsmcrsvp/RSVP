@@ -9,6 +9,7 @@ export default function AdminEventReport() {
   const [selectedEvent, setSelectedEvent] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [reportData, setReportData] = useState([]);
   const [reportLoading, setReportLoading] = useState(false);
   const [memberDetails, setMemberDetails] = useState([]);
 
@@ -183,7 +184,7 @@ export default function AdminEventReport() {
           )}
           {/* No Data Message */}
           {memberDetails.length === 0 && !reportLoading && selectedEvent && (
-            <p>No RSVP report exists for the selected event.</p>
+            <p>No RSVP summary found for the selected event.</p>
           )}
         </>
       )}
