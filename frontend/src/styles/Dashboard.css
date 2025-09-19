@@ -120,7 +120,7 @@ button:hover,
     background: #1e8ae5;
 }
 
-/* Results Table Wrapper */
+/* Results Table Wrapper ===== Need to match it with SubmitRSVP.css ======*/
 .result-table-wrapper {
     margin-top: 1rem;
     margin-bottom: 1.5rem;

@@ -99,10 +99,21 @@ export const addAdminNewProgram = async (programName) => {
   return res.data;
 };
 
-// ===== Member Report =====
+// ===== Member Report using Dashboard.js =====
 export const getRsvpDetails = async (programname, eventname) => {
   console.log("➡️ Sending request to /api/dashboard/rsvps with:", { programname, eventname });
   const res = await api.post("/api/dashboard/rsvps", { programname, eventname });
+  return res.data;
+};
+
+// ===== Member Report using Report.js =====
+export const getReportStats = async () => {
+    const res = await api.get("/api/report/stats");
+    return res.data;
+};
+export const getRsvpReports = async (programname, eventname) => {
+  console.log("➡️ Sending request to /api/report/report-rsvps with:", { programname, eventname });
+  const res = await api.post("/api/report/rsvps", { programname, eventname });
   return res.data;
 };
 

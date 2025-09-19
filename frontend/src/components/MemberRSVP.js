@@ -180,9 +180,9 @@ export default function MemberRSVP({
 
         {/* Submission Message */}
         {submitMessage && (
-          <div style={{ color: submitSuccess ? "green" : "red", marginTop: "10px" }}>
+          {/*<div style={{ color: submitSuccess ? "green" : "red", marginTop: "10px" }}>
             {submitMessage}
-          </div>
+          </div>*/}
         )}
       </form >
     </>
