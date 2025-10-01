@@ -1,12 +1,7 @@
 // frontend/src/components/Home.js
 import React, { useEffect, useState } from "react";
-import {
-  getOpenEvents,
-  searchMember,
-  submitRSVP,
-  verifyRSVP,
-  updateRSVP,
-} from "../api";
+//import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP,} from "../api"; Commentd 10/1
+import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP,} from "../api";
 import "../styles/SubmitRSVP.css";
 import logo from "../assets/JSMCLogo.jpg";
 
@@ -143,7 +138,8 @@ export default function Home() {
           : { name: name.trim(), houseNumber: houseNumber.trim() };
 
       console.log("Searching member with payload:", payload);
-      const result = await searchMember(payload);
+      //onst result = await searchMember(payload);
+      const result = await getMember(payload);
       console.log("Search result:", result);
       if (result && result.name) {
         setMember(result);
