@@ -85,7 +85,7 @@ export default function Dashboard() {
 
   return (
     <div style={{ overflowX: "auto", marginTop: "0rem", marginBottom: "0rem" }}>
-    {/*<div className="dashboard-container">*/}
+      {/*<div className="dashboard-container">*/}
       {(loading || loadingEvents) && <p>Loading dashboard...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
