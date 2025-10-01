@@ -9,9 +9,16 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Member search using search_member function in server.js
+/* Member search using search_member function in server.js Commented 10/1
 export const searchMember = async (payload) => {
   const res = await api.post("/search_member", payload);
+  return res.data;
+};
+*/
+
+// Member search using search_member function in searchMember.js
+export const getMember = async (payload) => {
+  const res = await api.post("/api/searchMember", payload);
   return res.data;
 };
 

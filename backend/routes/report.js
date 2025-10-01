@@ -43,7 +43,7 @@ router.get("/report-stats", async (req, res) => {
 
 // ✅ POST: Program & Event based Members RSVP Details
 router.post("/report-rsvps", async (req, res) => {
-  console.log("📋 report/js: RSVP member details request received", req.body);
+  console.log("📋 report/js: RSVP member details request received for: ", req.body);
 
   const { programname, eventname } = req.body;
 

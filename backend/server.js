@@ -34,7 +34,7 @@ mongoose
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-const Member = require("./models/Members_DB_Schema");
+//const Member = require("./models/Members_DB_Schema"); Commented 10/1
 
 // Auto-reconnect on disconnect
 mongoose.connection.on("disconnected", async () => {
@@ -125,6 +125,7 @@ app.use((req, res, next) => {
 
 //=================== Program Routes ===================
 // Import routes
+const searchMemberRoute = require("./routes/searchMember");
 const programRoutes = require("./routes/programs");
 const rsvpRoutes = require("./routes/rsvp");
 const dashboardRoutes = require("./routes/dashboard");
@@ -133,6 +134,7 @@ const addProgramsRoutes = require("./routes/addPrograms");
 const reportRoutes = require("./routes/report");
 
 // Mount routes
+app.use("/api/searchMember", searchMemberRoute);
 app.use("/api/programs", programRoutes);
 app.use("/api/rsvp_response", rsvpRoutes);
 app.use("/api/dashboard", dashboardRoutes);

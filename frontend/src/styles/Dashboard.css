@@ -13,12 +13,11 @@
 /* Main Dashboard container */
 .dashboard-container {
     background: #ffffff;
-    padding: 1rem;
+    padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /*width: 100%;
-  max-width: 600px;*/
     max-width: auto;
+    max-height: auto;
     text-align: center;
 }
 
@@ -128,19 +127,18 @@ button:hover,
 }
 */
 
-.result-table-wrapper
-{
-  margin-top: 0rem;
-  overflow-x: auto;
-  background: #f9f9f9e4;
-  padding: 0.1rem;
-  border-radius: 6px;
+.result-table-wrapper {
+    margin-top: 0rem;
+    overflow-x: auto;
+    background: #f9f9f9e4;
+    padding: 0.1rem;
+    border-radius: 6px;
 }
 
 .result-table td,
 .result-table th {
-  border: 1px solid #ccc;
-  padding: 8px;
+    border: 1px solid #ccc;
+    padding: 8px;
 }
 
 /*
@@ -155,10 +153,11 @@ button:hover,
 */
 
 .result-table {
-  margin-top: 0rem;
-  border-collapse: collapse;
-  width: 100%;
+    margin-top: 0rem;
+    border-collapse: collapse;
+    width: 100%;
 }
+
 /*
 .result-table th {
     border: 1px solid #ccc;
