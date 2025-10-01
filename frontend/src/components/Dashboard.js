@@ -86,109 +86,107 @@ export default function Dashboard() {
   return (
     /*<div style={{ overflowX: "auto", marginTop: "0rem", marginBottom: "0rem" }}>*/
     <div className="page-wrapper">
-      <div className="dashboard-container">
-        {(loading || loadingEvents) && <p>Loading dashboard...</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
+      {(loading || loadingEvents) && <p>Loading dashboard...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-        {/* Open Events Table */}
-        {!loading && !loadingEvents && !error && (
-          <>
+      {/* Open Events Table */}
+      {!loading && !loadingEvents && !error && (
+        <>
 
-            {openStats.length === 0 ? (
-              <p style={{ fontStyle: "italic", color: "#666" }}>
-                No RSVP responses for open events.
-              </p>
-            ) : (
-              <>
-                <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
-                  Current Open Events
-                </h4>
-                <div className="result-table-wrapper">
-                  <table className="result-table">
-                    <thead>
-                      <tr>
-                        <th>Program</th>
-                        <th>Event Name</th>
-                        <th>Event Date</th>
-                        <th>Adult RSVP</th>
-                        <th>Kids RSVP</th>
+          {openStats.length === 0 ? (
+            <p style={{ fontStyle: "italic", color: "#666" }}>
+              No RSVP responses for open events.
+            </p>
+          ) : (
+            <>
+              <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
+                Current Open Events
+              </h4>
+              <div className="result-table-wrapper">
+                <table className="result-table">
+                  <thead>
+                    <tr>
+                      <th>Program</th>
+                      <th>Event Name</th>
+                      <th>Event Date</th>
+                      <th>Adult RSVP</th>
+                      <th>Kids RSVP</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {openStats.map((row, idx) => (
+                      <tr key={`open-${idx}`}>
+                        <td>{row.programname}</td>
+                        <td>{row.eventname}</td>
+                        <td>{row.eventday}, {displayDate(row.eventdate)}</td>
+                        <td>{row.totalRSVPs}</td>
+                        <td>{row.totalKidsRSVPs}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {openStats.map((row, idx) => (
-                        <tr key={`open-${idx}`}>
-                          <td>{row.programname}</td>
-                          <td>{row.eventname}</td>
-                          <td>{row.eventday}, {displayDate(row.eventdate)}</td>
-                          <td>{row.totalRSVPs}</td>
-                          <td>{row.totalKidsRSVPs}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
-            )}
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
 
-            {/* Closed Events Table */}
-            {closedStats.length === 0 ? (
-              <p style={{ fontStyle: "italic", color: "#666" }}>
-                No RSVP responses for closed events.
-              </p>
-            ) : (
-              <>
-                <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
-                  Current Closed Events
-                </h4>
-                <div className="result-table-wrapper">
-                  <table className="result-table">
-                    <thead>
-                      <tr>
-                        <th>Program</th>
-                        <th>Event Name</th>
-                        <th>Event Date</th>
-                        <th>Adult RSVP</th>
-                        <th>Kids RSVP</th>
+          {/* Closed Events Table */}
+          {closedStats.length === 0 ? (
+            <p style={{ fontStyle: "italic", color: "#666" }}>
+              No RSVP responses for closed events.
+            </p>
+          ) : (
+            <>
+              <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
+                Current Closed Events
+              </h4>
+              <div className="result-table-wrapper">
+                <table className="result-table">
+                  <thead>
+                    <tr>
+                      <th>Program</th>
+                      <th>Event Name</th>
+                      <th>Event Date</th>
+                      <th>Adult RSVP</th>
+                      <th>Kids RSVP</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {closedStats.map((row, idx) => (
+                      <tr key={`closed-${idx}`}>
+                        <td>{row.programname}</td>
+                        <td>{row.eventname}</td>
+                        <td>{row.eventday}, {displayDate(row.eventdate)}</td>
+                        <td>{row.totalRSVPs}</td>
+                        <td>{row.totalKidsRSVPs}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {closedStats.map((row, idx) => (
-                        <tr key={`closed-${idx}`}>
-                          <td>{row.programname}</td>
-                          <td>{row.eventname}</td>
-                          <td>{row.eventday}, {displayDate(row.eventdate)}</td>
-                          <td>{row.totalRSVPs}</td>
-                          <td>{row.totalKidsRSVPs}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
-            )}
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
 
-            {/* 🔄 Manual Refresh Button */}
-            <div style={{ textAlign: "center", marginTop: "2rem" }}>
-              <button
-                className="btn-refresh"
-                onClick={loadDashboardData}
-                disabled={loading || loadingEvents}
-                style={{
-                  padding: "8px 16px",
-                  borderRadius: "6px",
-                  border: "none",
-                  background: "#4c6daf",
-                  color: "white",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                {loading || loadingEvents ? "Refreshing..." : "🔄 Refresh Dashboard"}
-              </button>
-            </div>
-          </>
-        )}
-      </div>
+          {/* 🔄 Manual Refresh Button */}
+          <div style={{ textAlign: "center", marginTop: "2rem" }}>
+            <button
+              className="btn-refresh"
+              onClick={loadDashboardData}
+              disabled={loading || loadingEvents}
+              style={{
+                padding: "8px 16px",
+                borderRadius: "6px",
+                border: "none",
+                background: "#4c6daf",
+                color: "white",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              {loading || loadingEvents ? "Refreshing..." : "🔄 Refresh Dashboard"}
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
