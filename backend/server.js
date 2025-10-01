@@ -149,11 +149,12 @@ app.use((err, req, res, next) => {
 // Health check
 app.get("/", (req, res) => res.send("Backend is running ✅"));
 
-// =================== Serve Frontend Build ===================
+/* =================== Serve Frontend Build ===================
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });
+*/
 
 //=================== Server Init ===================
 const PORT = process.env.PORT || 3001;
