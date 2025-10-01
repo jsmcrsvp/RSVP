@@ -121,26 +121,45 @@ button:hover,
 }
 
 /* Results Table Wrapper ===== Need to match it with SubmitRSVP.css ======*/
-.result-table-wrapper {
+/*.result-table-wrapper {
     margin-top: 1rem;
     margin-bottom: 1.5rem;
     text-align: center;
-    /* centers the <h4> above the table */
+}
+*/
+
+.result-table-wrapper
+{
+  margin-top: 0rem;
+  overflow-x: auto;
+  background: #f9f9f9e4;
+  padding: 0.1rem;
+  border-radius: 6px;
 }
 
+.result-table td,
+.result-table th {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
 
+/*
 .result-table {
     border-collapse: collapse;
     margin: 0 auto;
-    /* centers the table horizontally */
     width: auto;
-    /* shrink to fit content instead of full width */
     min-width: 300px;
-    /* prevent collapsing too small */
     background: #f9f9f9e4;
     border-radius: 6px;
 }
+*/
 
+.result-table {
+  margin-top: 0rem;
+  border-collapse: collapse;
+  width: 100%;
+}
+/*
 .result-table th {
     border: 1px solid #ccc;
     padding: 8px 12px;
@@ -154,6 +173,7 @@ button:hover,
     padding: 8px 12px;
     text-align: left;
 }
+*/
 
 /* Mobile adjustments */
 @media (max-width: 480px) {

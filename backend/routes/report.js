@@ -5,7 +5,7 @@ const RsvpResponse = require("../models/Rsvp_Response_DB_Schema"); // adjust pat
 
 // GET: RSVP counts grouped by program + event + date + day
 router.get("/report-stats", async (req, res) => {
-  console.log ("Report request received");
+  console.log ("report/js: Report request received");
   try {
     const stats = await RsvpResponse.aggregate([
       {
@@ -43,7 +43,7 @@ router.get("/report-stats", async (req, res) => {
 
 // ✅ POST: Program & Event based Members RSVP Details
 router.post("/report-rsvps", async (req, res) => {
-  console.log("📋 RSVP member details request received", req.body);
+  console.log("📋 report/js: RSVP member details request received", req.body);
 
   const { programname, eventname } = req.body;
 

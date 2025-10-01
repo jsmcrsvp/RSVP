@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getAllPrograms, getOpenEvents, getClosedEvents, getRsvpDetails } from "../api";
+//import { getAllPrograms, getOpenEvents, getClosedEvents, getRsvpDetails } from "../api";
+import { getAllPrograms, getOpenEvents, getClosedEvents, getRsvpReports } from "../api";
 import "../styles/Dashboard.css";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
@@ -70,7 +71,8 @@ export default function AdminEventReport() {
     setError("");
 
     try {
-      const detailRes = await getRsvpDetails(selectedProgram, selectedEvent);
+      //const detailRes = await getRsvpDetails(selectedProgram, selectedEvent);
+const detailRes = await getRsvpReports(selectedProgram, selectedEvent);
       setMemberDetails(Array.isArray(detailRes) ? detailRes : []);
     } catch (err) {
       console.error("Error fetching report:", err);

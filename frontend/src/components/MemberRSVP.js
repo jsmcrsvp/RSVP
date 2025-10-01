@@ -64,78 +64,78 @@ export default function MemberRSVP({
         </div>
 
         {/* RSVP Event Table */}
-        <div style={{ overflowX: "auto", marginTop: "1rem", marginBottom: "1rem" }}>
+        <div style={{ overflowX: "auto", marginTop: "0rem", marginBottom: "0rem" }}>
           <h4>Select Events to RSVP</h4>
-        <div className="result-table-wrapper">
-          <table className="result-table" style={{ marginTop: 0 }}>
-            <thead>
-              <tr>
-                <th>Program</th>
-                <th>Event Name</th>
-                <th>Event Date</th>
-                <th>Select</th>
-                <th>Adult RSVP</th>
-                <th>Kids RSVP</th>
-              </tr>
-            </thead>
-            <tbody>
-              {events.map((ev, idx) => {
-                const isFirst =
-                  idx === 0 || ev.programname !== events[idx - 1].programname;
-                const programCount = events.filter(
-                  (e) => e.programname === ev.programname
-                ).length;
+          <div className="result-table-wrapper">
+            <table className="result-table" style={{ marginTop: 0 }}>
+              <thead>
+                <tr>
+                  <th>Program</th>
+                  <th>Event Name</th>
+                  <th>Event Date</th>
+                  <th>Select</th>
+                  <th>Adult RSVP</th>
+                  <th>Kids RSVP</th>
+                </tr>
+              </thead>
+              <tbody>
+                {events.map((ev, idx) => {
+                  const isFirst =
+                    idx === 0 || ev.programname !== events[idx - 1].programname;
+                  const programCount = events.filter(
+                    (e) => e.programname === ev.programname
+                  ).length;
 
-                return (
-                  <tr key={idx}>
-                    {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
-                    <td>{ev.eventname}</td>
-                    <td>
-                      {ev.eventday}, {displayDate(ev.eventdate)}
-                    </td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedEvents[idx] !== undefined}
-                        onChange={(e) =>
-                          toggleEventSelection(idx, e.target.checked)
-                        }
-                      />
-                    </td>
-                    <td>
-                      {selectedEvents[idx] !== undefined ? (
+                  return (
+                    <tr key={idx}>
+                      {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
+                      <td>{ev.eventname}</td>
+                      <td>
+                        {ev.eventday}, {displayDate(ev.eventdate)}
+                      </td>
+                      <td>
                         <input
-                          type="number"
-                          min="0"
-                          value={rsvpCount}
-                          onChange={(e) => setRsvpCount(e.target.value)}
-                          placeholder="Adults"
-                          style={{ width: "60px" }}
+                          type="checkbox"
+                          checked={selectedEvents[idx] !== undefined}
+                          onChange={(e) =>
+                            toggleEventSelection(idx, e.target.checked)
+                          }
                         />
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                    <td>
-                      {selectedEvents[idx] !== undefined ? (
-                        <input
-                          type="number"
-                          min="0"
-                          value={kidsRsvpCount}
-                          onChange={(e) => setKidsRsvpCount(e.target.value)}
-                          placeholder="Kids"
-                          style={{ width: "60px" }}
-                        />
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                      <td>
+                        {selectedEvents[idx] !== undefined ? (
+                          <input
+                            type="number"
+                            min="0"
+                            value={rsvpCount}
+                            onChange={(e) => setRsvpCount(e.target.value)}
+                            placeholder="Adults"
+                            style={{ width: "60px" }}
+                          />
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                      <td>
+                        {selectedEvents[idx] !== undefined ? (
+                          <input
+                            type="number"
+                            min="0"
+                            value={kidsRsvpCount}
+                            onChange={(e) => setKidsRsvpCount(e.target.value)}
+                            placeholder="Kids"
+                            style={{ width: "60px" }}
+                          />
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Email + Submit */}

@@ -1,52 +1,52 @@
 import axios from "axios";
 
 const SERVER_URL =
-    process.env.REACT_APP_BACKEND_SERVER_URL || "http://localhost:3001";
+  process.env.REACT_APP_BACKEND_SERVER_URL || "http://localhost:3001";
 
 const api = axios.create({
-    baseURL: SERVER_URL,
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
+  baseURL: SERVER_URL,
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
 });
 
 // Member search using search_member function in server.js
 export const searchMember = async (payload) => {
-    const res = await api.post("/search_member", payload);
-    return res.data;
+  const res = await api.post("/search_member", payload);
+  return res.data;
 };
 
 // Add program
 export const addProgram = async (payload) => {
-    const res = await api.post("/api/programs", payload);
-    return res.data;
+  const res = await api.post("/api/programs", payload);
+  return res.data;
 };
 
 // Get open events
 export const getOpenEvents = async () => {
-    const res = await api.get("/api/programs/open");
-    return res.data;
+  const res = await api.get("/api/programs/open");
+  return res.data;
 };
 
 // Get closed events
 export const getClosedEvents = async () => {
-    const res = await api.get("/api/programs/closed");
-    return res.data;
+  const res = await api.get("/api/programs/closed");
+  return res.data;
 };
 
 // Get all programs with events
 export const getAllPrograms = async () => {
-    const res = await api.get("/api/programs");
-    return res.data;
+  const res = await api.get("/api/programs");
+  return res.data;
 };
 
 // Submit RSVP
 export const submitRSVP = async (payload) => {
-    try {
-        const response = await api.post("/api/rsvp_response", payload);
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response?.data?.message || "API Error");
-    }
+  try {
+    const response = await api.post("/api/rsvp_response", payload);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "API Error");
+  }
 };
 
 // Verify RSVP by confirmation number
@@ -63,16 +63,16 @@ export const updateRSVP = async (id, payload) => {
 
 // Dashboard
 export const getDashboardStats = async () => {
-    const res = await api.get("/api/dashboard/stats");
-    return res.data;
+  const res = await api.get("/api/dashboard/stats");
+  return res.data;
 };
 
 // Update event status
 export const updateEventStatus = async (progId, evId, newStatus) => {
-    const res = await api.put(`/api/programs/${progId}/events/${evId}/status`, {
-        eventstatus: newStatus,
-    });
-    return res.data;
+  const res = await api.put(`/api/programs/${progId}/events/${evId}/status`, {
+    eventstatus: newStatus,
+  });
+  return res.data;
 };
 
 // ===== Events =====
@@ -99,20 +99,22 @@ export const addAdminNewProgram = async (programName) => {
   return res.data;
 };
 
-// ===== Member Report using Dashboard.js =====
+/* ===== Member Report using Dashboard.js =====
 export const getRsvpDetails = async (programname, eventname) => {
   console.log("➡️ Sending request to /api/dashboard/rsvps with:", { programname, eventname });
   const res = await api.post("/api/dashboard/rsvps", { programname, eventname });
   return res.data;
 };
+*/
 
 // ===== Member Report using Report.js =====
 export const getReportStats = async () => {
-    const res = await api.get("/api/report/report-stats");
-    return res.data;
+  console.log("➡️ api.js: Sending request to /api/report/report-stats with:", { programname, eventname });
+  const res = await api.get("/api/report/report-stats");
+  return res.data;
 };
 export const getRsvpReports = async (programname, eventname) => {
-  console.log("➡️ Sending request to /api/report/report-rsvps with:", { programname, eventname });
+  console.log("➡️ api.js: Sending request to /api/report/report-rsvps with:", { programname, eventname });
   const res = await api.post("/api/report/report-rsvps", { programname, eventname });
   return res.data;
 };
