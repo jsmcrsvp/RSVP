@@ -1,7 +1,7 @@
 // backend/routes/searchMember.js
 const express = require("express");
 const router = express.Router();
-const Member = require("./models/Members_DB_Schema");
+const Member = require("../models/Members_DB_Schema");
 
 router.post("/", async (req, res) => {
   const { memberId, name, houseNumber } = req.body;
