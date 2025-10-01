@@ -52,7 +52,7 @@ app.get("/", (req, res) => {
   res.send("Backend is running ✅");
 });
 
-//=================== Member Routes ===================
+//=================== Search Member ===================
 app.post("/search_member", async (req, res) => {
   const { memberId, name, houseNumber } = req.body;
   console.log("server.js/search_member: Member ", memberId, name, houseNumber);
@@ -87,7 +87,7 @@ app.post("/search_member", async (req, res) => {
 });
 
 //=================== Dashboard ===================
-app.get("/api/dashboard-stats", async (req, res) => {
+/*app.get("/api/dashboard-stats", async (req, res) => {
   try {
     const events = await RSVPCollection.aggregate([
       {
@@ -115,6 +115,7 @@ app.get("/api/dashboard-stats", async (req, res) => {
     res.status(500).send("Error fetching stats");
   }
 });
+*/
 
 {/* =======Troubleshooting module ============
 app.use((req, res, next) => {
@@ -147,6 +148,13 @@ app.use((err, req, res, next) => {
 
 // Health check
 app.get("/", (req, res) => res.send("Backend is running ✅"));
+
+// =================== Serve Frontend Build ===================
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
+});
+
 //=================== Server Init ===================
 const PORT = process.env.PORT || 3001;
 

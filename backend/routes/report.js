@@ -1,11 +1,11 @@
-// backend/routes/dashboard.js
+// backend/routes/report.js
 const express = require("express");
 const router = express.Router();
 const RsvpResponse = require("../models/Rsvp_Response_DB_Schema"); // adjust path if needed
 
 // GET: RSVP counts grouped by program + event + date + day
 router.get("/report-stats", async (req, res) => {
-  console.log ("Dashboard request received");
+  console.log ("Report request received");
   try {
     const stats = await RsvpResponse.aggregate([
       {
@@ -35,8 +35,8 @@ router.get("/report-stats", async (req, res) => {
 
     res.json(out);
   } catch (err) {
-    console.error("❌ Error fetching dashboard stats:", err);
-    res.status(500).json({ message: "Error fetching dashboard stats" });
+    console.error("❌ Error fetching report stats:", err);
+    res.status(500).json({ message: "Error fetching report stats" });
   }
 });
 

@@ -9,7 +9,7 @@ const api = axios.create({
     withCredentials: true,
 });
 
-// Member search
+// Member search using search_member function in server.js
 export const searchMember = async (payload) => {
     const res = await api.post("/search_member", payload);
     return res.data;
@@ -108,12 +108,12 @@ export const getRsvpDetails = async (programname, eventname) => {
 
 // ===== Member Report using Report.js =====
 export const getReportStats = async () => {
-    const res = await api.get("/api/report/stats");
+    const res = await api.get("/api/report/report-stats");
     return res.data;
 };
 export const getRsvpReports = async (programname, eventname) => {
   console.log("➡️ Sending request to /api/report/report-rsvps with:", { programname, eventname });
-  const res = await api.post("/api/report/rsvps", { programname, eventname });
+  const res = await api.post("/api/report/report-rsvps", { programname, eventname });
   return res.data;
 };
 
