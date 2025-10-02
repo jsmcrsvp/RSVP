@@ -524,7 +524,7 @@ export default function SubmitRSVP() {
         {activeTab === "submit" && (
           <>
             {isLifeMember === null && (
-              <div className="tform-section">
+              <div className="form-section">
                 <h3>Are you JSMC Life Member?</h3>
                 <label>
                   <input type="radio" name="lifeMember" value="yes" onChange={() => setIsLifeMember("yes")} /> Yes
