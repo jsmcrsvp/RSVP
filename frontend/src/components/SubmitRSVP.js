@@ -5,14 +5,13 @@ import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP,} from "..
 import "../styles/SubmitRSVP.css";
 import logo from "../assets/JSMCLogo.jpg";
 
-// IMPORTANT: adjust these imports if your files are located somewhere else
 import MemberRSVP from "./MemberRSVP";
 import NonMemberRSVP from "./NonMemberRSVP";
 import VerifyRSVP from "./VerifyRSVP";
 
 
 export default function SubmitRSVP() {
-  const [activeTab, setActiveTab] = useState("home"); // "home" | "submit" | "verify"
+  const [activeTab, setActiveTab] = useState("home");
 
   // Shared
   const [events, setEvents] = useState([]);
@@ -26,9 +25,9 @@ export default function SubmitRSVP() {
   const [houseNumber, setHouseNumber] = useState("");
   const [member, setMember] = useState(null);
 
-  const [selectedEvents, setSelectedEvents] = useState({}); // { idx: count/flag }
+  const [selectedEvents, setSelectedEvents] = useState({});
   const [email, setEmail] = useState("");
-  const [rsvpCount, setRsvpCount] = useState(""); // RSVP count (single field as in your code)
+  const [rsvpCount, setRsvpCount] = useState("");
   const [confirmation, setConfirmation] = useState(null);
 
   const [loadingEvents, setLoadingEvents] = useState(true);
@@ -41,7 +40,7 @@ export default function SubmitRSVP() {
 
   // Verify states
   const [verifyConfNumber, setVerifyConfNumber] = useState("");
-  const [verifyResult, setVerifyResult] = useState({ rsvps: [] }); // always an object with rsvps array
+  const [verifyResult, setVerifyResult] = useState({ rsvps: [] });
   const [verifying, setVerifying] = useState(false);
 
   // Modify RSVP
@@ -170,7 +169,6 @@ export default function SubmitRSVP() {
   };
 
   const hasValidSelection = () => {
-    // at least one event selected & count > 0 (you already used this rule)
     return Object.keys(selectedEvents).some((k) => {
       const v = Number(selectedEvents[k] || rsvpCount);
       return !isNaN(v) && v > 0;
@@ -288,9 +286,6 @@ export default function SubmitRSVP() {
     setConfirmation(null);
     setSubmitMessage(null);
 
-    // If non-member workflow, member may be null but we still want to use the manual fields.
-    // Your request was to keep variable names; so the NonMemberRSVP component should set `member` or we will
-    // send the manual fields as memname/memaddress/etc in payload. For the member flow below, member is required.
     if (isLifeMember === "yes" && !member) {
       setError("Please search and select a member first.");
       return;
@@ -321,13 +316,9 @@ export default function SubmitRSVP() {
       )
       .filter(Boolean);
 
-    // If member flow, use member fields; if non-member flow, we expect NonMemberRSVP to set `member` object
-    // or provide manual fields via top-level variables. To keep compatibility, we prefer:
-    // - if member exists -> use member fields
-    // - else expect manual fields are in name/houseNumber/email etc and use them
     const memName = member ? member.name : name;
-    const memAddress = member ? member.address : houseNumber; // if you store address in a different var, adjust accordingly
-    const memPhone = member ? member.phone : ""; // NonMemberRSVP should set a top-level state for phone if needed
+    const memAddress = member ? member.address : houseNumber;
+    const memPhone = member ? member.phone : "";
 
     // Build unified payload
     const payload = {

@@ -86,37 +86,6 @@ app.post("/search_member", async (req, res) => {
   }
 });
 
-//=================== Dashboard ===================
-/*app.get("/api/dashboard-stats", async (req, res) => {
-  try {
-    const events = await RSVPCollection.aggregate([
-      {
-        $group: {
-          _id: { eventname: "$eventname" },
-          total: { $sum: 1 },
-          yes: { $sum: { $cond: [{ $eq: ["$vote", "Yes"] }, 1, 0] } },
-          no: { $sum: { $cond: [{ $eq: ["$vote", "No"] }, 1, 0] } },
-          maybe: { $sum: { $cond: [{ $eq: ["$vote", "Maybe"] }, 1, 0] } },
-        },
-      },
-    ]);
-
-    res.json(
-      events.map((e) => ({
-        eventname: e._id.eventname,
-        total: e.total,
-        yes: e.yes,
-        no: e.no,
-        maybe: e.maybe,
-      }))
-    );
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error fetching stats");
-  }
-});
-*/
-
 {/* =======Troubleshooting module ============
 app.use((req, res, next) => {
   console.log(`➡️ Incoming: ${req.method} ${req.url}`);

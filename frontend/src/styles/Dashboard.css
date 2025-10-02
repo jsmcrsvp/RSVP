@@ -1,25 +1,3 @@
-/* Full page wrapper for vertical + horizontal centering
-.page-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #e8f3f9;
-    padding: 1rem;
-    margin: 0;
-    font-family: Arial, sans-serif;
-}
-
-.dashboard-container {
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: auto;
-    max-height: auto;
-    text-align: center;
-}
-*/
 /* Headings */
 h2 {
     margin-bottom: 0.5rem;
