@@ -19,6 +19,10 @@ export default function Dashboard() {
   const [closedEvents, setClosedEvents] = useState([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
 
+  // ⏱ countdown state (seconds)
+  const REFRESH_INTERVAL = 15 * 60; // 15 minutes in seconds
+  const [secondsLeft, setSecondsLeft] = useState(REFRESH_INTERVAL);
+
   // 🔄 reusable function to load everything
   const loadDashboardData = useCallback(async () => {
     setLoading(true);
@@ -44,6 +48,7 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
       setLoadingEvents(false);
+      setSecondsLeft(REFRESH_INTERVAL); // 🔄 reset countdown after manual refresh
     }
   }, []);
 
