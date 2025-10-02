@@ -83,49 +83,44 @@ export default function NonMemberRSVP({
     >
       <h3>Enter Non-Member Details</h3>
 
-      <div className="form-section"><div className="non-member-form-table">
-        <div className="form-row">
-          <label htmlFor="name">Name:</label>
-          <input
-            id="name"
-            type="text"
-            value={nonMemberName}
-            onChange={(e) => setNonMemberName(e.target.value)}
-            required
-            className="input-field"
-          />
-        </div>
+<div className="rsvp-form-table">
+  <div className="form-row">
+    <label>Name:</label>
+    <input
+      type="text"
+      value={nonMemberName}
+      onChange={(e) => setNonMemberName(e.target.value)}
+      required
+      className="input-field"
+    />
+  </div>
 
-        <div className="form-row">
-          <label htmlFor="address">Address:</label>
-          <input
-            id="address"
-            type="text"
-            value={nonMemberAddress}
-            onChange={(e) => setNonMemberAddress(e.target.value)}
-            required
-            className="input-field"
-          />
-        </div>
+  <div className="form-row">
+    <label>Address:</label>
+    <input
+      type="text"
+      value={nonMemberAddress}
+      onChange={(e) => setNonMemberAddress(e.target.value)}
+      required
+      className="input-field"
+    />
+  </div>
 
-        <div className="form-row">
-          <label htmlFor="phone">Phone:</label>
-          <div className="input-wrapper">
-            <input
-              id="phone"
-              type="tel"
-              value={nonMemberPhone}
-              onChange={handlePhoneChange}
-              required
-              className="input-field"
-            />
-            {phoneError && (
-              <div className="field-error">{phoneError}</div>
-            )}
-          </div>
-        </div>
-      </div>
-      </div>
+  <div className="form-row">
+    <label>Phone:</label>
+    <input
+      type="tel"
+      value={nonMemberPhone}
+      onChange={handlePhoneChange}
+      required
+      className="input-field"
+    />
+    {phoneError && (
+      <div className="field-error">{phoneError}</div>
+    )}
+  </div>
+</div>
+
 
 
 
