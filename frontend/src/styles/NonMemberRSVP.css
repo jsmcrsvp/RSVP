@@ -2,7 +2,7 @@
 .form-section {
   display: table;
   width: 100%;
-  border-spacing: 0.5rem 0.75rem; /* spacing between rows */
+  border-spacing: 0.3rem 0.5rem; /* spacing between rows */
 }
 
 .form-group {
@@ -21,7 +21,7 @@
 .form-group .input-field {
   display: table-cell;
   width: 100%;
-  max-width: 400px; /* limit per field, not entire form */
+  max-width: 200px; /* limit per field, not entire form */
 }
 
 

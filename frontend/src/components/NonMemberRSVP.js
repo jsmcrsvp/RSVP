@@ -81,7 +81,7 @@ export default function NonMemberRSVP({
         handleSubmitRSVP(e);
       }}
     >
-      <h4>Enter Non-Member Details</h4>
+      <h3>Enter Non-Member Details</h3>
 
 <div className="form-section">
   <div className="form-group">
@@ -173,9 +173,9 @@ export default function NonMemberRSVP({
         </div>
       </div>
 */}
-      <h4 style={{ textAlign: "center", margin: "0rem 0 0.5rem 0", color: "#5d8cdf" }}>
+      <h3 style={{ textAlign: "center", margin: "0rem 0 0.5rem 0", color: "#5d8cdf" }}>
         Select Events to RSVP
-      </h4>
+      </h3>
 
       <div className="result-table-wrapper">
         <table className="result-table">
