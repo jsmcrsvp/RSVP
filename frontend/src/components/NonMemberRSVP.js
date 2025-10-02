@@ -83,53 +83,53 @@ export default function NonMemberRSVP({
     >
       <h3>Enter Non-Member Details</h3>
 
-<div className="form-section"><div className="non-member-form-table">
-  <div className="form-row">
-    <label htmlFor="name">Name:</label>
-    <input
-      id="name"
-      type="text"
-      value={nonMemberName}
-      onChange={(e) => setNonMemberName(e.target.value)}
-      required
-      className="input-field"
-    />
-  </div>
+      <div className="form-section"><div className="non-member-form-table">
+        <div className="form-row">
+          <label htmlFor="name">Name:</label>
+          <input
+            id="name"
+            type="text"
+            value={nonMemberName}
+            onChange={(e) => setNonMemberName(e.target.value)}
+            required
+            className="input-field"
+          />
+        </div>
 
-  <div className="form-row">
-    <label htmlFor="address">Address:</label>
-    <input
-      id="address"
-      type="text"
-      value={nonMemberAddress}
-      onChange={(e) => setNonMemberAddress(e.target.value)}
-      required
-      className="input-field"
-    />
-  </div>
+        <div className="form-row">
+          <label htmlFor="address">Address:</label>
+          <input
+            id="address"
+            type="text"
+            value={nonMemberAddress}
+            onChange={(e) => setNonMemberAddress(e.target.value)}
+            required
+            className="input-field"
+          />
+        </div>
 
-  <div className="form-row">
-    <label htmlFor="phone">Phone:</label>
-    <div className="input-wrapper">
-      <input
-        id="phone"
-        type="tel"
-        value={nonMemberPhone}
-        onChange={handlePhoneChange}
-        required
-        className="input-field"
-      />
-      {phoneError && (
-        <div className="field-error">{phoneError}</div>
-      )}
-    </div>
-  </div>
-</div>
+        <div className="form-row">
+          <label htmlFor="phone">Phone:</label>
+          <div className="input-wrapper">
+            <input
+              id="phone"
+              type="tel"
+              value={nonMemberPhone}
+              onChange={handlePhoneChange}
+              required
+              className="input-field"
+            />
+            {phoneError && (
+              <div className="field-error">{phoneError}</div>
+            )}
+          </div>
+        </div>
+      </div>
+      </div>
 
 
 
-
-{/*
+      {/*
       <div className="form-section">
         <div className="form-group">
           <label>Name:</label>
@@ -173,7 +173,7 @@ export default function NonMemberRSVP({
           )}
         </div>
       </div>
-*/}
+      */}
       <h3 style={{ textAlign: "center", margin: "0rem 0 0.5rem 0", color: "#5d8cdf" }}>
         Select Events to RSVP
       </h3>
@@ -264,13 +264,13 @@ export default function NonMemberRSVP({
           style={{
             backgroundColor:
               submitting ||
-              (!hasValidSelection() || nonMemberEmail.trim() === "" || !isPhoneValid)
+                (!hasValidSelection() || nonMemberEmail.trim() === "" || !isPhoneValid)
                 ? "grey"
                 : "#007bff",
             color: "white",
             cursor:
               submitting ||
-              (!hasValidSelection() || nonMemberEmail.trim() === "" || !isPhoneValid)
+                (!hasValidSelection() || nonMemberEmail.trim() === "" || !isPhoneValid)
                 ? "not-allowed"
                 : "pointer",
           }}
