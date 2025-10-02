@@ -98,7 +98,7 @@ export default function NonMemberRSVP({
           <label>Address:</label>
           <input
             type="text"
-            value={nonMemberAddress}
+            value={nonMemberName}
             onChange={(e) => setNonMemberAddress(e.target.value)}
             required
             className="input-field"
@@ -216,13 +216,13 @@ export default function NonMemberRSVP({
           style={{
             backgroundColor:
               submitting ||
-              (!hasValidSelection() || nonMemberEmail.trim() === "" || !isPhoneValid)
+                (!hasValidSelection() || nonMemberEmail.trim() === "" || !isPhoneValid)
                 ? "grey"
                 : "#007bff",
             color: "white",
             cursor:
               submitting ||
-              (!hasValidSelection() || nonMemberEmail.trim() === "" || !isPhoneValid)
+                (!hasValidSelection() || nonMemberEmail.trim() === "" || !isPhoneValid)
                 ? "not-allowed"
                 : "pointer",
           }}
