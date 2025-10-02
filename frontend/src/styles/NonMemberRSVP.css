@@ -1,24 +1,21 @@
 .form-section {
   display: grid;
-  grid-template-columns: 150px 1fr; /* 2 columns: fixed label + flexible input */
-  gap: 0.75rem 1rem; /* row gap | column gap */
+  grid-template-columns: 150px 1fr; /* first col fixed, second flexible */
+  row-gap: 0.75rem;
+  column-gap: 1rem;
   align-items: center;
   margin-bottom: 1rem;
 }
 
-.form-group {
-  display: contents; /* allows label+input to flow into the grid properly */
-}
-
-.form-group label {
+.form-section label {
   font-weight: 500;
-  text-align: left;  /* 🔹 no more right justification */
+  text-align: left;
   white-space: nowrap;
 }
 
-.form-group .input-field {
+.form-section .input-field {
   width: 100%;
-  max-width: 400px; /* 🔹 optional, prevents stretching too far */
+  max-width: 400px;
 }
 
 
