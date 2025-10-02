@@ -1,35 +1,27 @@
-/* Shrink and align form neatly */
-.rsvp-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-width: 500px;   /* 🔹 Reduce overall form width */
-  margin: 0 auto;     /* 🔹 Center on page */
+/* Keep form full width, but make input rows look like a table */
+.form-section {
+  display: table;
+  width: 100%;
+  border-spacing: 0.5rem 0.75rem; /* spacing between rows */
 }
 
-/* Make label + input sit tighter */
 .form-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;        /* 🔹 Reduce spacing */
-  margin: 8px 0;      /* 🔹 Less vertical space */
+  display: table-row;
 }
 
-/* Labels take less space but align consistently */
 .form-group label {
-  min-width: 90px;    /* 🔹 Smaller fixed label width */
+  display: table-cell;
   font-weight: 500;
+  padding-right: 0.75rem;
   text-align: right;
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
-/* Inputs adjust to smaller width */
-.input-field {
-  height: 32px;       /* 🔹 Slightly smaller height */
-  font-size: 14px;
-  padding: 4px 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 220px;       /* 🔹 Reduced from 300px */
+.form-group .input-field {
+  display: table-cell;
+  width: 100%;
+  max-width: 400px; /* limit per field, not entire form */
 }
 
 

@@ -82,6 +82,53 @@ export default function NonMemberRSVP({
       }}
     >
       <h4>Enter Non-Member Details</h4>
+
+<div className="form-section">
+  <div className="form-group">
+    <label>Name:</label>
+    <input
+      type="text"
+      value={nonMemberName}
+      onChange={(e) => setNonMemberName(e.target.value)}
+      required
+      className="input-field"
+    />
+  </div>
+
+  <div className="form-group">
+    <label>Address:</label>
+    <input
+      type="text"
+      value={nonMemberAddress}
+      onChange={(e) => setNonMemberAddress(e.target.value)}
+      required
+      className="input-field"
+    />
+  </div>
+
+  <div className="form-group">
+    <label>Phone:</label>
+    <input
+      type="tel"
+      value={nonMemberPhone}
+      onChange={handlePhoneChange}
+      required
+      className="input-field"
+    />
+              {phoneError && (
+            <div
+              className="field-error"
+              style={{ color: "red", fontSize: "0.9em", marginTop: "4px" }}
+            >
+              {phoneError}
+              </div>
+                        )}
+  </div>
+</div>
+
+
+
+{/*
       <div className="form-section">
         <div className="form-group">
           <label>Name:</label>
@@ -125,7 +172,7 @@ export default function NonMemberRSVP({
           )}
         </div>
       </div>
-
+*/}
       <h4 style={{ textAlign: "center", margin: "0rem 0 0.5rem 0", color: "#5d8cdf" }}>
         Select Events to RSVP
       </h4>
