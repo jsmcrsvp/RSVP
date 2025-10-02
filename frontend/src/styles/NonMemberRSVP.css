@@ -1,27 +1,24 @@
-/* Keep form full width, but make input rows look like a table */
 .form-section {
-  display: table;
-  width: 100%;
-  border-spacing: 0.3rem 0.5rem; /* spacing between rows */
+  display: grid;
+  grid-template-columns: 150px 1fr; /* 2 columns: fixed label + flexible input */
+  gap: 0.75rem 1rem; /* row gap | column gap */
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .form-group {
-  display: table-row;
+  display: contents; /* allows label+input to flow into the grid properly */
 }
 
 .form-group label {
-  display: table-cell;
   font-weight: 500;
-  padding-right: 0.75rem;
-  text-align: right;
+  text-align: left;  /* 🔹 no more right justification */
   white-space: nowrap;
-  vertical-align: middle;
 }
 
 .form-group .input-field {
-  display: table-cell;
   width: 100%;
-  max-width: 200px; /* limit per field, not entire form */
+  max-width: 400px; /* 🔹 optional, prevents stretching too far */
 }
 
 
