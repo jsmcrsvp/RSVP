@@ -80,17 +80,6 @@ export default function Dashboard() {
     return `${m}:${s}`;
   };
 
-  /* ⏱ Auto refresh every 15 minutes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log("⏱ Auto refreshing dashboard...");
-      loadDashboardData();
-    }, 15 * 60 * 1000); // 15 minutes
-
-    return () => clearInterval(interval);
-  }, [loadDashboardData]);
-*/
-
   // ✅ Filter stats into open & closed groups
   const openStats = stats.filter((row) =>
     openEvents.some(

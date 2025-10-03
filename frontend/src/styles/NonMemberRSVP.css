@@ -1,3 +1,25 @@
+/* frontend/src/styles/NonMemberRSVP.css*/
+
+/* Headings */
+h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  color: #df7b5d;
+}
+
+h3 {
+  margin-bottom: 0rem;
+  font-size: 1.2rem;
+  color: #5d8cdf;
+}
+
+h4 {
+  margin-top: 1rem;
+  margin-bottom: 0rem;
+  font-size: 1.1rem;
+  color: #5d8cdf;
+}
+
 .rsvp-form-table {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -32,13 +54,14 @@
   color: red;
   font-size: 0.9em;
   margin-top: 4px;
+  align-items: center;
 }
 
 
 /* Results Table */
 .result-table-wrapper,
 .last-rsvp {
-  margin-top: 0.2rem;
+  margin-top: 0.1rem;
   overflow-x: auto;
   background: #f9f9f9e4;
   padding: 0.2rem;
