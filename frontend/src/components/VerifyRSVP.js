@@ -142,6 +142,7 @@ export default function VerifyRSVP() {
                 value="nameHouse"
                 checked={searchMode === "nameHouse"}
                 onChange={() => setSearchMode("nameHouse")}
+                style={{ marginBottom: "1rem" }}
               />
               First Name &amp; House #
             </label>
