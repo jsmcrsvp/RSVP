@@ -1,7 +1,7 @@
 
 // frontend/src/components/VerifyRSVP.js
 import React, { useState } from "react";
-import { verifyRSVP, updateRSVP } from "../api"; // ✅ only using existing functions
+import { verifyRSVP, updateRSVP, verifyRSVPByNameHouse } from "../api"; // ✅ only using existing functions
 import "../styles/SubmitRSVP.css";
 
 export default function VerifyRSVP() {
