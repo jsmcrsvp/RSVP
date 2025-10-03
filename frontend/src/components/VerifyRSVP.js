@@ -1,6 +1,7 @@
+
 // frontend/src/components/VerifyRSVP.js
 import React, { useState } from "react";
-import { verifyRSVP, updateRSVP } from "../api"; // ✅ only existing API functions
+import { verifyRSVP, updateRSVP } from "../api"; // ✅ only using existing functions
 import "../styles/SubmitRSVP.css";
 
 export default function VerifyRSVP() {
@@ -25,7 +26,6 @@ export default function VerifyRSVP() {
   const [updateMessage, setUpdateMessage] = useState(null);
   const [updateError, setUpdateError] = useState(null);
 
-  // Handle verification (confirmation OR name/house)
   const handleVerifyRSVP = async (e) => {
     if (e && e.preventDefault) e.preventDefault();
     setError("");
@@ -33,24 +33,29 @@ export default function VerifyRSVP() {
     setUpdateMessage(null);
     setUpdateError(null);
 
-    if (searchMode === "confNumber" && !verifyConfNumber.trim()) {
-      setError("Confirmation number is required.");
-      return;
-    }
-
-    if (searchMode === "nameHouse" && (!name.trim() || !houseNumber.trim())) {
-      setError("First Name and House # are required.");
-      return;
+    if (searchMode === "confNumber") {
+      if (!verifyConfNumber.trim()) {
+        setError("Confirmation number is required.");
+        return;
+      }
+    } else {
+      if (!name.trim() || !houseNumber.trim()) {
+        setError("Name and House # are required.");
+        return;
+      }
     }
 
     setVerifying(true);
     try {
       let data;
+
       if (searchMode === "confNumber") {
+        // Search by confirmation number
         data = await verifyRSVP(verifyConfNumber.trim());
       } else {
-        // ✅ Name + House search handled by existing verifyRSVP backend
-        data = await verifyRSVP({ name: name.trim(), houseNumber: houseNumber.trim() });
+        // Search by Name + House
+        // Backend expects memname and memaddress to query RSVPs
+        data = await verifyRSVP({ memname: name.trim(), memaddress: houseNumber.trim() });
       }
 
       const normalized =
@@ -66,7 +71,6 @@ export default function VerifyRSVP() {
     }
   };
 
-  // Update RSVP counts
   const handleUpdateRSVP = async (rsvpId) => {
     try {
       await updateRSVP(rsvpId, {
@@ -74,7 +78,6 @@ export default function VerifyRSVP() {
         kidsrsvpcount: parseInt(modifiedKidsCount, 10),
       });
 
-      // Refresh after update
       await handleVerifyRSVP({ preventDefault: () => {} });
 
       setEditIndex(null);
@@ -120,7 +123,6 @@ export default function VerifyRSVP() {
 
       {error && <div className="error-message">{error}</div>}
 
-      {/* Search Mode */}
       {!verifyResult.checked && (
         <>
           <div className="form-row">
@@ -144,7 +146,6 @@ export default function VerifyRSVP() {
             </label>
           </div>
 
-          {/* Confirmation # input */}
           {searchMode === "confNumber" && (
             <div className="inline-fields">
               <input
@@ -160,7 +161,6 @@ export default function VerifyRSVP() {
             </div>
           )}
 
-          {/* Name + House inputs */}
           {searchMode === "nameHouse" && (
             <div className="inline-fields">
               <span className="inline-label">First Name:</span>
@@ -187,7 +187,6 @@ export default function VerifyRSVP() {
         </>
       )}
 
-      {/* Results table */}
       {verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length > 0 && (
         <>
           <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
@@ -235,9 +234,7 @@ export default function VerifyRSVP() {
                   <tr key={ev._id || idx}>
                     <td>{ev.programname}</td>
                     <td>{ev.eventname}</td>
-                    <td>
-                      {ev.eventday}, {displayDate(ev.eventdate)}
-                    </td>
+                    <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
                     <td>{ev.eventstatus}</td>
                     <td>
                       {editIndex === idx ? (
@@ -307,7 +304,6 @@ export default function VerifyRSVP() {
     </form>
   );
 }
-
 
 
 
