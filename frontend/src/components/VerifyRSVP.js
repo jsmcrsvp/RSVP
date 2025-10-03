@@ -78,7 +78,7 @@ export default function VerifyRSVP() {
         kidsrsvpcount: parseInt(modifiedKidsCount, 10),
       });
 
-      await handleVerifyRSVP({ preventDefault: () => {} });
+      await handleVerifyRSVP({ preventDefault: () => { } });
 
       setEditIndex(null);
       setUpdateMessage("RSVP updated successfully!");
@@ -132,10 +132,11 @@ export default function VerifyRSVP() {
                 value="confNumber"
                 checked={searchMode === "confNumber"}
                 onChange={() => setSearchMode("confNumber")}
+                style={{ marginBottom: "1rem" }}
               />
               Confirmation #
             </label>
-            <label style={{ marginLeft: "1rem" }}>
+            <label style={{ marginLeft: "0.1rem" }}>
               <input
                 type="radio"
                 value="nameHouse"
