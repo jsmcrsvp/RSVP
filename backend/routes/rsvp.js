@@ -219,18 +219,21 @@ router.put("/update_rsvp/:id", async (req, res) => {
 // GET RSVP by Name + House #
 router.get("/search", async (req, res) => {
   const { name, houseNumber } = req.query;
-  if (!name || !houseNumber) return res.status(400).json({ message: "Name and House # required." });
+  if (!name || !houseNumber) {
+    return res.status(400).json({ message: "Name and House # required." });
+  }
 
   try {
-    //const rsvps = await RsvpResponse.find({ memname: name, memaddress: houseNumber });
-
     const rsvps = await RsvpResponse.find({
-        memname: { $regex: new RegExp(name, "i") },
-        memaddress: { $regex: new RegExp(houseNumber, "i") },
-        });
+      memname: { $regex: new RegExp(name, "i") },
+      memaddress: { $regex: new RegExp(houseNumber, "i") },
+    });
 
-        console.log("rsvp.js/search: Member ", name, houseNumber);
-    if (!rsvps || rsvps.length === 0) return res.status(404).json({ rsvps: [] });
+    console.log("rsvp.js/search: Member ", name, houseNumber);
+
+    if (!rsvps || rsvps.length === 0) {
+      return res.status(404).json({ rsvps: [] });
+    }
 
     // Enrich with event status from Program collection
     const enrichedRsvps = await Promise.all(
@@ -256,6 +259,7 @@ router.get("/search", async (req, res) => {
     res.status(500).json({ message: "Server error fetching RSVP by Name + House" });
   }
 });
+
 
 module.exports = router;
 

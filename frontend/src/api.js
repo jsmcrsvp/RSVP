@@ -64,6 +64,7 @@ export const verifyRSVP = async (confNumber) => {
 
 // Verify RSVP by name and house number
 export const verifyRSVPByNameHouse = async (name, houseNumber) => {
+  console.log("➡️ api.js: Sending request to /api/rsvp/search with:", { name, houseNumber });
   const res = await axios.get(`${SERVER_URL}/api/rsvp_response/search`, {
     params: { name, houseNumber },
   });
