@@ -224,7 +224,7 @@ router.get("/search", async (req, res) => {
   try {
     //const rsvps = await RsvpResponse.find({ memname: name, memaddress: houseNumber });
 
-    const rsvps = await RsvpResponse.findOne({
+    const rsvps = await RsvpResponse.find({
         memname: { $regex: new RegExp(name, "i") },
         memaddress: { $regex: new RegExp(houseNumber, "i") },
         });
