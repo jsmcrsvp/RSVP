@@ -62,6 +62,14 @@ export const verifyRSVP = async (confNumber) => {
   return res.data;
 };
 
+// Verify RSVP by name and house number
+export const verifyRSVPByNameHouse = async (name, houseNumber) => {
+  const res = await axios.get(`${SERVER_URL}/api/rsvp_response/search`, {
+    params: { name, houseNumber },
+  });
+  return res.data;
+};
+
 // Update RSVP counts (adults + kids)
 export const updateRSVP = async (id, payload) => {
   const res = await axios.put(`${SERVER_URL}/api/rsvp_response/update_rsvp/${id}`, payload);

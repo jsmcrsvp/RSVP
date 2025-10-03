@@ -269,6 +269,40 @@ router.get("/", async (req, res) => {
   }
 });
 
+// GET RSVP by Name + House #
+router.get("/search", async (req, res) => {
+  const { name, houseNumber } = req.query;
+  if (!name || !houseNumber) return res.status(400).json({ message: "Name and House # required." });
+
+  try {
+    const rsvps = await RsvpResponse.find({ memname: name, memaddress: houseNumber });
+
+    if (!rsvps || rsvps.length === 0) return res.status(404).json({ rsvps: [] });
+
+    // Enrich with event status from Program collection
+    const enrichedRsvps = await Promise.all(
+      rsvps.map(async (rsvp) => {
+        const program = await Program.findOne({ progname: rsvp.programname }, { progevent: 1 });
+        let status = "Unknown";
+        if (program) {
+          const ev = program.progevent.find(
+            (e) =>
+              e.eventname === rsvp.eventname &&
+              e.eventdate === rsvp.eventdate &&
+              e.eventday === rsvp.eventday
+          );
+          if (ev) status = ev.eventstatus;
+        }
+        return { ...rsvp.toObject(), eventstatus: status };
+      })
+    );
+
+    res.json({ rsvps: enrichedRsvps });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error fetching RSVP by Name + House" });
+  }
+});
 
 module.exports = router;
 

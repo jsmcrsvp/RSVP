@@ -55,7 +55,7 @@ export default function VerifyRSVP() {
       } else {
         // Search by Name + House
         // Backend expects memname and memaddress to query RSVPs
-        data = await verifyRSVP({ memname: name.trim(), memaddress: houseNumber.trim() });
+        data = await verifyRSVPByNameHouse(name.trim(), houseNumber.trim());
       }
 
       const normalized =
