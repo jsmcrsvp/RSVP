@@ -116,9 +116,7 @@ export default function Dashboard() {
             </p>
           ) : (
             <>
-              <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
-                Current Open Events
-              </h4>
+              <h3>Current Open Events</h3>
               <div className="result-table-wrapper">
                 <table className="result-table">
                   <thead>
@@ -153,9 +151,7 @@ export default function Dashboard() {
             </p>
           ) : (
             <>
-              <h4 style={{ textAlign: "center", margin: "1rem 0 0.5rem 0", color: "#5d8cdf" }}>
-                Current Closed Events
-              </h4>
+              <h3>Current Closed Events</h3>
               <div className="result-table-wrapper">
                 <table className="result-table">
                   <thead>

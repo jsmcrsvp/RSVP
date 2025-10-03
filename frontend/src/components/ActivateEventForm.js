@@ -327,20 +327,20 @@ const safeString = (v) => (v == null ? "" : String(v).trim());
 const extractProgramName = (p) =>
   safeString(
     p?.program_name ??
-      p?.progname ??
-      p?.progName ??
-      p?.name ??
-      p?.program ??
-      p
+    p?.progname ??
+    p?.progName ??
+    p?.name ??
+    p?.program ??
+    p
   );
 const extractEventName = (e) =>
   safeString(
     e?.event_name ??
-      e?.eventname ??
-      e?.evname ??
-      e?.name ??
-      e?.event ??
-      e
+    e?.eventname ??
+    e?.evname ??
+    e?.name ??
+    e?.event ??
+    e
   );
 const extractId = (obj, fallback) => obj?._id ?? obj?.id ?? fallback ?? null;
 
@@ -633,66 +633,68 @@ export default function ActivateEventForm() {
       {openEvents.length > 0 && (
         <div className="table-wrapper">
           <h3>Current Open Events</h3>
-          <table className="programs-table">
-            <thead>
-              <tr>
-                <th>Program</th>
-                <th>Event</th>
-                <th>Event Date</th>
-                <th>RSVP By</th>
-                <th>Status</th>
-                <th>Modify</th>
-              </tr>
-            </thead>
-            <tbody>
-              {openEvents.map(({ program, ev }) => {
-                const rowKey = `${program.id}-${ev.id}`;
-                return (
-                  <tr key={rowKey}>
-                    <td>{program.name}</td>
-                    <td>{ev.name}</td>
-                    <td>
-                      {ev.eventday}, {displayDate(ev.eventdate)}
-                    </td>
-                    <td>{displayDate(ev.closersvp)}</td>
-                    <td>
-                      {editRow === rowKey ? (
-                        <select
-                          value={newStatus}
-                          onChange={(e) => setNewStatus(e.target.value)}
-                        >
-                          <option value="Closed">Closed</option>
-                          <option value="Completed">Completed</option>
-                        </select>
-                      ) : (
-                        ev.status
-                      )}
-                    </td>
-                    <td>
-                      {editRow === rowKey ? (
-                        <button
-                          className="btn-save"
-                          onClick={() =>
-                            handleSaveStatus(program.id, ev.id)
-                          }
-                        >
-                          Save
-                        </button>
-                      ) : (
-                        <input
-                          type="checkbox"
-                          onChange={() => {
-                            setEditRow(rowKey);
-                            setNewStatus(ev.status);
-                          }}
-                        />
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="result-table-wrapper">
+            <table className="result-table">
+              <thead>
+                <tr>
+                  <th>Program</th>
+                  <th>Event</th>
+                  <th>Event Date</th>
+                  <th>RSVP By</th>
+                  <th>Status</th>
+                  <th>Modify</th>
+                </tr>
+              </thead>
+              <tbody>
+                {openEvents.map(({ program, ev }) => {
+                  const rowKey = `${program.id}-${ev.id}`;
+                  return (
+                    <tr key={rowKey}>
+                      <td>{program.name}</td>
+                      <td>{ev.name}</td>
+                      <td>
+                        {ev.eventday}, {displayDate(ev.eventdate)}
+                      </td>
+                      <td>{displayDate(ev.closersvp)}</td>
+                      <td>
+                        {editRow === rowKey ? (
+                          <select
+                            value={newStatus}
+                            onChange={(e) => setNewStatus(e.target.value)}
+                          >
+                            <option value="Closed">Closed</option>
+                            <option value="Completed">Completed</option>
+                          </select>
+                        ) : (
+                          ev.status
+                        )}
+                      </td>
+                      <td>
+                        {editRow === rowKey ? (
+                          <button
+                            className="btn-save"
+                            onClick={() =>
+                              handleSaveStatus(program.id, ev.id)
+                            }
+                          >
+                            Save
+                          </button>
+                        ) : (
+                          <input
+                            type="checkbox"
+                            onChange={() => {
+                              setEditRow(rowKey);
+                              setNewStatus(ev.status);
+                            }}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
@@ -700,68 +702,70 @@ export default function ActivateEventForm() {
       {closedEvents.length > 0 && (
         <div className="table-wrapper">
           <h3>Current Closed Events</h3>
-          <table className="programs-table">
-            <thead>
-              <tr>
-                <th>Program</th>
-                <th>Event</th>
-                <th>Event Date</th>
-                <th>RSVP By</th>
-                <th>Status</th>
-                <th>Modify</th>
-              </tr>
-            </thead>
-            <tbody>
-              {closedEvents.map(({ program, ev }) => {
-                const rowKey = `${program.id}-${ev.id}`;
-                return (
-                  <tr key={rowKey}>
-                    <td>{program.name}</td>
-                    <td>{ev.name}</td>
-                    <td>
-                      {ev.eventday}, {displayDate(ev.eventdate)}
-                    </td>
-                    <td>{displayDate(ev.closersvp)}</td>
-                    <td>
-                      {editRow === rowKey ? (
-                        <select
-                          value={newStatus}
-                          onChange={(e) => setNewStatus(e.target.value)}
-                        >
-                          <option value="Open">Open</option>
-                          <option value="Completed">Completed</option>
-                        </select>
-                      ) : (
-                        ev.status
-                      )}
-                    </td>
-                    <td>
-                      {editRow === rowKey ? (
-                        <button
-                          className="btn-save"
-                          onClick={() =>
-                            handleSaveStatus(program.id, ev.id)
-                          }
-                        >
-                          Save
-                        </button>
-                      ) : (
-                        <input
-                          type="checkbox"
-                          onChange={() => {
-                            setEditRow(rowKey);
-                            setNewStatus(ev.status);
-                          }}
-                        />
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="result-table-wrapper">
+            <table className="result-table">
+              <thead>
+                <tr>
+                  <th>Program</th>
+                  <th>Event</th>
+                  <th>Event Date</th>
+                  <th>RSVP By</th>
+                  <th>Status</th>
+                  <th>Modify</th>
+                </tr>
+              </thead>
+              <tbody>
+                {closedEvents.map(({ program, ev }) => {
+                  const rowKey = `${program.id}-${ev.id}`;
+                  return (
+                    <tr key={rowKey}>
+                      <td>{program.name}</td>
+                      <td>{ev.name}</td>
+                      <td>
+                        {ev.eventday}, {displayDate(ev.eventdate)}
+                      </td>
+                      <td>{displayDate(ev.closersvp)}</td>
+                      <td>
+                        {editRow === rowKey ? (
+                          <select
+                            value={newStatus}
+                            onChange={(e) => setNewStatus(e.target.value)}
+                          >
+                            <option value="Open">Open</option>
+                            <option value="Completed">Completed</option>
+                          </select>
+                        ) : (
+                          ev.status
+                        )}
+                      </td>
+                      <td>
+                        {editRow === rowKey ? (
+                          <button
+                            className="btn-save"
+                            onClick={() =>
+                              handleSaveStatus(program.id, ev.id)
+                            }
+                          >
+                            Save
+                          </button>
+                        ) : (
+                          <input
+                            type="checkbox"
+                            onChange={() => {
+                              setEditRow(rowKey);
+                              setNewStatus(ev.status);
+                            }}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          </div>
+          )}
         </div>
-      )}
-    </div>
-  );
+      );
 }

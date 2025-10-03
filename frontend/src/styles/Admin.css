@@ -99,6 +99,7 @@ h4 {
 .result-table th {
   background-color: #4c6daf;
   color: white;
+  text-align: center;
 }
 
 .nowrap {
