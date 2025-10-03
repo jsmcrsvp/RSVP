@@ -216,67 +216,20 @@ router.put("/update_rsvp/:id", async (req, res) => {
     }
 });
 
-// GET RSVP by confirmation number OR Name + House #
-router.get("/", async (req, res) => {
-  try {
-    const { confNumber, name, houseNumber } = req.query;
-
-    let rsvps;
-    if (confNumber) {
-      rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
-    } else if (name && houseNumber) {
-      rsvps = await RsvpResponse.find({
-        memname: name,
-        memaddress: houseNumber, // adjust if your schema stores house number differently
-      });
-    } else {
-      return res.status(400).json({ message: "Provide confirmation number OR Name + House #" });
-    }
-
-    if (!rsvps || rsvps.length === 0) {
-      return res.status(404).json({ message: "RSVP not found" });
-    }
-
-    const enrichedRsvps = await Promise.all(
-      rsvps.map(async (rsvp) => {
-        const program = await Program.findOne(
-          { progname: rsvp.programname },
-          { progevent: 1 }
-        );
-
-        let status = "Unknown";
-        if (program) {
-          const ev = program.progevent.find(
-            (e) =>
-              e.eventname === rsvp.eventname &&
-              e.eventdate === rsvp.eventdate &&
-              e.eventday === rsvp.eventday
-          );
-          if (ev) status = ev.eventstatus;
-        }
-
-        return {
-          ...rsvp.toObject(),
-          eventstatus: status,
-        };
-      })
-    );
-
-    res.json({ rsvps: enrichedRsvps });
-  } catch (err) {
-    console.error("Error fetching RSVP:", err);
-    res.status(500).json({ message: "Server error fetching RSVP" });
-  }
-});
-
 // GET RSVP by Name + House #
 router.get("/search", async (req, res) => {
   const { name, houseNumber } = req.query;
   if (!name || !houseNumber) return res.status(400).json({ message: "Name and House # required." });
 
   try {
-    const rsvps = await RsvpResponse.find({ memname: name, memaddress: houseNumber });
+    //const rsvps = await RsvpResponse.find({ memname: name, memaddress: houseNumber });
 
+    const rsvps = await RsvpResponse.findOne({
+        memname: { $regex: new RegExp(name, "i") },
+        memaddress: { $regex: new RegExp(houseNumber, "i") },
+        });
+
+        console.log("rsvp.js/search: Member ", name, houseNumber);
     if (!rsvps || rsvps.length === 0) return res.status(404).json({ rsvps: [] });
 
     // Enrich with event status from Program collection
