@@ -279,7 +279,7 @@ export default function SubmitRSVP() {
     }
   };
 
-  // =========== Working 091425 =======12:30am ==========
+
   const WorkinghandleSubmitRSVP = async (e) => {
     e.preventDefault();
     setError("");

@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
                 return await newRSVP.save();
             })
         );
-        
+
         // Build email content
         let eventDetails = events
             .map(
@@ -64,7 +64,7 @@ router.post("/", async (req, res) => {
         Thank you,
         JSMC RSVP Team
         `;
-
+        {/*
         // Setup nodemailer
         const transporter = nodemailer.createTransport({
             host: "smtp.ionos.com",
@@ -82,9 +82,9 @@ router.post("/", async (req, res) => {
             subject: `RSVP Confirmation - #${rsvpconfnumber}`,
             text: emailBody,
         });
-        
-        res.status(201).json({ message: "RSVP submitted and email sent!" });
-        //res.status(201).json({ message: "RSVP submitted!" });
+        */}
+        //res.status(201).json({ message: "RSVP submitted and email sent!" });
+        res.status(201).json({ message: "RSVP submitted!" });
     } catch (err) {
         console.error("Error submitting RSVP:", err);
         res.status(500).json({ message: "Error submitting RSVP" });
