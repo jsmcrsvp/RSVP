@@ -1,7 +1,7 @@
 // frontend/src/components/SubmitRSVP.js
 import React, { useEffect, useState } from "react";
 //import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP,} from "../api"; Commented 10/1
-import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP,} from "../api";
+import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import "../styles/SubmitRSVP.css";
 import logo from "../assets/JSMCLogo.jpg";
 
@@ -244,11 +244,26 @@ export default function SubmitRSVP() {
 
     setSubmitting(true);
     try {
+      /* ==== Commented due to mail issue ======
       const res = await submitRSVP(payload);
       console.log("Submit response:", res);
       setConfirmation({ confNumber, ...res });
       setSubmitMessage("RSVP submitted successfully!");
+      setSubmitSuccess(true);*/
+
+      /* ==== Added due to mail issue ======*/
+      const res = await submitRSVP(payload);
+      console.log("Submit response:", res);
+      setConfirmation({ confNumber, ...res });
+
+      // Backend may include an email warning
+      if (res.emailWarning) {
+        setSubmitMessage("RSVP submitted successfully! (⚠️ Confirmation email could not be sent)");
+      } else {
+        setSubmitMessage("RSVP submitted successfully!");
+      }
       setSubmitSuccess(true);
+      /* ==== Added due to mail issue ======*/
 
       // Reset after delay
       setTimeout(() => {
@@ -678,14 +693,30 @@ export default function SubmitRSVP() {
               />
             )}
 
-            {/* Success / error messages at bottom */}
+            {/* Success / error messages at bottom*/}
             {submitSuccess && submitMessage && (
+              /* ====== Commented due to email issue
               <div style={{ color: "green", marginTop: "10px" }}>
                 ✅ {submitMessage}
                 {confirmation && (
                   <div>Confirmation #: {confirmation.confNumber || confirmation?.confNumber}</div>
                 )}
-              </div>
+              </div>*/
+
+              /* ====== Added due to email issue */
+              <div style={{ marginTop: "10px" }}>
+                <div style={{ color: "green" }}>✅ {submitMessage}</div>
+                  {confirmation && (
+                    <div>Confirmation #: {confirmation.confNumber || confirmation?.confNumber}
+                    </div>
+                  )}
+              {submitMessage.includes("⚠️") && (
+                <div style={{ color: "orange", marginTop: "5px" }}>
+                  ⚠️ Your RSVP is saved, but confirmation email could not be sent.
+                </div>
+              )}
+            </div>
+            /* ====== Added due to email issue */
             )}
 
             {!submitSuccess && submitMessage && (

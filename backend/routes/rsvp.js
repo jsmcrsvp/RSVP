@@ -7,51 +7,52 @@ const Program = require("../models/Programs_DB_Schema"); // 👈 import Program 
 
 // POST RSVP (works for both members and non-members)
 router.post("/", async (req, res) => {
+  try {
+    const {
+      memname,
+      memaddress,
+      memphonenumber,
+      mememail,
+      rsvpconfnumber,
+      events,
+      isNonMember
+    } = req.body;
+
+    if (!memname || !mememail || !Array.isArray(events) || events.length === 0) {
+      return res.status(400).json({ message: "Missing required RSVP data." });
+    }
+
+    // Save RSVP entries
+    const savedResponses = await Promise.all(
+      events.map(async (ev) => {
+        const newRSVP = new RsvpResponse({
+          memname,
+          memaddress: memaddress || (isNonMember ? "Non-member" : ""),
+          memphonenumber: memphonenumber || (isNonMember ? "N/A" : ""),
+          mememail,
+          rsvpcount: ev.rsvpcount,
+          kidsrsvpcount: ev.kidsrsvpcount || 0,
+          rsvpconfnumber,
+          eventname: ev.eventname,
+          programname: ev.programname,
+          eventdate: ev.eventdate,
+          eventday: ev.eventday,
+          isNonMember: isNonMember || false
+        });
+        return await newRSVP.save();
+      })
+    );
+
+    // Try sending email (but don’t fail if blocked)
     try {
-        const {
-            memname,
-            memaddress,
-            memphonenumber,
-            mememail,
-            rsvpconfnumber,
-            events,
-            isNonMember // 👈 NEW flag to differentiate
-        } = req.body;
+      let eventDetails = events
+        .map(
+          (ev) =>
+            `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Adult: ${ev.rsvpcount}, Kids: ${ev.kidsrsvpcount || 0})`
+        )
+        .join("\n");
 
-        if (!memname || !mememail || !Array.isArray(events) || events.length === 0) {
-            return res.status(400).json({ message: "Missing required RSVP data." });
-        }
-
-        // Save RSVP entries (same schema for members & non-members)
-        const savedResponses = await Promise.all(
-            events.map(async (ev) => {
-                const newRSVP = new RsvpResponse({
-                    memname,
-                    memaddress: memaddress || (isNonMember ? "Non-member" : ""), // fallback
-                    memphonenumber: memphonenumber || (isNonMember ? "N/A" : ""),
-                    mememail,
-                    rsvpcount: ev.rsvpcount,        // adult RSVP
-                    kidsrsvpcount: ev.kidsrsvpcount || 0, 
-                    rsvpconfnumber,
-                    eventname: ev.eventname,
-                    programname: ev.programname,
-                    eventdate: ev.eventdate,
-                    eventday: ev.eventday,
-                    isNonMember: isNonMember || false 
-                });
-                return await newRSVP.save();
-            })
-        );
-        
-        // Build email content
-        let eventDetails = events
-            .map(
-                (ev) =>
-                    `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Adult: ${ev.rsvpcount}, Kids: ${ev.kidsrsvpcount || 0})`
-            )
-            .join("\n");
-
-        const emailBody = `
+      const emailBody = `
         Dear ${memname},
 
         Your RSVP has been successfully submitted.  
@@ -62,42 +63,38 @@ router.post("/", async (req, res) => {
 
         Thank you,
         JSMC RSVP Team
-        `;
+      `;
 
-        // Try sending email, but don’t break RSVP if it fails
-        try {
-            const transporter = nodemailer.createTransport({
-                host: "smtp.ionos.com",
-                port: 587,
-                secure: false,
-                auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS
-                },
-            });
+      const transporter = nodemailer.createTransport({
+        host: "smtp.ionos.com",
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        },
+      });
 
-            await transporter.sendMail({
-                from: `"JSMC RSVP" <admin@jsgvolleyball.com>`,
-                to: mememail,
-                subject: `RSVP Confirmation - #${rsvpconfnumber}`,
-                text: emailBody,
-            });
-
-            console.log("✅ RSVP email sent to:", mememail);
-        } catch (emailErr) {
-            console.error("❌ Email failed, but RSVP saved:", emailErr.message);
-        }
-        
-        // Always confirm RSVP save
-        res.status(201).json({ 
-            message: "RSVP submitted successfully (email may not have been sent).", 
-            savedResponses 
-        });
-
-    } catch (err) {
-        console.error("Error submitting RSVP:", err);
-        res.status(500).json({ message: "Error submitting RSVP" });
+      await transporter.sendMail({
+        from: `"JSMC RSVP" <admin@jsgvolleyball.com>`,
+        to: mememail,
+        subject: `RSVP Confirmation - #${rsvpconfnumber}`,
+        text: emailBody,
+      });
+    } catch (emailErr) {
+      console.warn("⚠️ Email could not be sent, but RSVP is saved:", emailErr.message);
     }
+
+    // Always return success if RSVP saved
+    res.status(201).json({
+      message: "RSVP submitted successfully",
+      savedResponses,
+    });
+
+  } catch (err) {
+    console.error("❌ Error submitting RSVP:", err);
+    res.status(500).json({ message: "Error submitting RSVP" });
+  }
 });
 
 /* POST RSVP (works for both members and non-members)
