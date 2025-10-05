@@ -704,32 +704,31 @@ export default function SubmitRSVP() {
               </div>*/
 
               /* ====== Added due to email issue */
-              <div style={{ marginTop: "10px" }}>
-                <div style={{ color: "green" }}>✅ {submitMessage}</div>
-                  {confirmation && (
-                    <div>Confirmation #: {confirmation.confNumber || confirmation?.confNumber}
-                    </div>
-                  )}
-              {submitMessage.includes("⚠️") && (
-                <div style={{ color: "orange", marginTop: "5px" }}>
-                  ⚠️ Your RSVP is saved, but confirmation email could not be sent.
-                </div>
-              )}
-            </div>
+              <div style={{ color: "green", marginTop: "10px" }}>
+                ✅ {submitMessage}
+                {confirmation?.confNumber && (
+                  <div>Confirmation #: {confirmation.confNumber}</div>
+                )}
+                {confirmation?.emailWarning && (
+                  <div style={{ color: "orange", marginTop: "5px" }}>
+                    ⚠️ RSVP saved, but email could not be sent.
+                  </div>
+                )}
+              </div>
             /* ====== Added due to email issue */
             )}
 
-            {!submitSuccess && submitMessage && (
-              <div style={{ color: "red", marginTop: "10px" }}>
-                ❌ {submitMessage}
-              </div>
-            )}
-          </>
+        {!submitSuccess && submitMessage && (
+          <div style={{ color: "red", marginTop: "10px" }}>
+            ❌ {submitMessage}
+          </div>
+        )}
+      </>
         )}
 
-        {/* VERIFY */}
-        {activeTab === "verify" && <VerifyRSVP />}
-      </div>
+      {/* VERIFY */}
+      {activeTab === "verify" && <VerifyRSVP />}
     </div>
+    </div >
   );
 }
