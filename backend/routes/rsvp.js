@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
                 return await newRSVP.save();
             })
         );
-
+        
         // Build email content
         let eventDetails = events
             .map(
@@ -65,9 +65,7 @@ router.post("/", async (req, res) => {
         JSMC RSVP Team
         `;
 
-        console.log(`📌 Email skipped for RSVP #${rsvpconfnumber}, name=${memname}`);
-        
-        /* Setup nodemailer
+        // Setup nodemailer
         const transporter = nodemailer.createTransport({
             host: "smtp.ionos.com",
             port: 587,
@@ -78,14 +76,21 @@ router.post("/", async (req, res) => {
             },
         });
 
-        await transporter.sendMail({
-            from: `"JSMC RSVP" <admin@jsgvolleyball.com>`,
-            to: mememail,
-            subject: `RSVP Confirmation - #${rsvpconfnumber}`,
-            text: emailBody,
-        });*/
-
-        res.status(201).json({ message: "RSVP submitted and email SKIPPED!" });
+// Send email confirmation (optional, non-blocking)
+try {
+  await transporter.sendMail({
+    from: `"JSMC RSVP" <admin@jsgvolleyball.com>`,
+    to: mememail,
+    subject: `RSVP Confirmation - #${rsvpconfnumber}`,
+    text: emailBody,
+  });
+  console.log("📧 RSVP confirmation email sent to", mememail);
+} catch (emailErr) {
+  console.error("❌ Failed to send RSVP confirmation email:", emailErr.message);
+  // Don't crash — just log it
+}
+        
+        res.status(201).json({ message: "RSVP submitted and email sent!" });
         //res.status(201).json({ message: "RSVP submitted!" });
     } catch (err) {
         console.error("Error submitting RSVP:", err);
