@@ -64,8 +64,10 @@ router.post("/", async (req, res) => {
         Thank you,
         JSMC RSVP Team
         `;
-        {/*
-        // Setup nodemailer
+
+        console.log(`📌 Email skipped for RSVP #${rsvpconfnumber}, name=${memname}`);
+        
+        /* Setup nodemailer
         const transporter = nodemailer.createTransport({
             host: "smtp.ionos.com",
             port: 587,
@@ -81,10 +83,10 @@ router.post("/", async (req, res) => {
             to: mememail,
             subject: `RSVP Confirmation - #${rsvpconfnumber}`,
             text: emailBody,
-        });
-        */}
-        //res.status(201).json({ message: "RSVP submitted and email sent!" });
-        res.status(201).json({ message: "RSVP submitted!" });
+        });*/
+
+        res.status(201).json({ message: "RSVP submitted and email SKIPPED!" });
+        //res.status(201).json({ message: "RSVP submitted!" });
     } catch (err) {
         console.error("Error submitting RSVP:", err);
         res.status(500).json({ message: "Error submitting RSVP" });
