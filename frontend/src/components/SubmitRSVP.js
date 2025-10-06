@@ -252,17 +252,22 @@ export default function SubmitRSVP() {
       setSubmitSuccess(true);*/
 
       /* ==== Added due to mail issue ======*/
-      const res = await submitRSVP(payload);
-      console.log("Submit response:", res);
-      setConfirmation({ confNumber, ...res });
+try {
+  const res = await submitRSVP(payload);
+  console.log("Submit response:", res);
 
-      // Backend may include an email warning
-      if (res.emailWarning) {
-        setSubmitMessage("RSVP submitted successfully! (⚠️ Confirmation email could not be sent)");
-      } else {
-        setSubmitMessage("RSVP submitted successfully!");
-      }
-      setSubmitSuccess(true);
+  setConfirmation({ confNumber, ...res });
+  setSubmitMessage(
+    res.emailError
+      ? "RSVP submitted successfully! (Email could not be sent)"
+      : "RSVP submitted successfully!"
+  );
+  setSubmitSuccess(true);
+} catch (err) {
+  console.error("Error submitting RSVP:", err);
+  setSubmitMessage("Error submitting RSVP: " + (err.message || "Unknown"));
+  setSubmitSuccess(false);
+}
       /* ==== Added due to mail issue ======*/
 
       // Reset after delay
