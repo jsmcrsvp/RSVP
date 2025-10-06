@@ -127,6 +127,7 @@ router.put("/:progId/events/:evId/status", async (req, res) => {
   const { progId, evId } = req.params;
   const { eventstatus } = req.body;
 
+  console.log("➡️ Received request program.js with:", { progId, evId, eventstatus });
   try {
     const program = await Program.findById(progId);
     if (!program) {

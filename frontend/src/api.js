@@ -85,6 +85,7 @@ export const getDashboardStats = async () => {
 
 // Update event status
 export const updateEventStatus = async (progId, evId, newStatus) => {
+  console.log("➡️ Sending request to /api/updateEventStatus/ with:", { progId, evId, newStatus });
   const res = await api.put(`/api/programs/${progId}/events/${evId}/status`, {
     eventstatus: newStatus,
   });
