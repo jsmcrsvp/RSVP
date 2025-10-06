@@ -15,87 +15,102 @@ router.post("/", async (req, res) => {
       mememail,
       rsvpconfnumber,
       events,
-      isNonMember
+      isNonMember // 👈 NEW flag to differentiate
     } = req.body;
 
     if (!memname || !mememail || !Array.isArray(events) || events.length === 0) {
       return res.status(400).json({ message: "Missing required RSVP data." });
     }
 
-    // Save RSVP entries
+    // Save RSVP entries (same schema for members & non-members)
     const savedResponses = await Promise.all(
       events.map(async (ev) => {
         const newRSVP = new RsvpResponse({
           memname,
-          memaddress: memaddress || (isNonMember ? "Non-member" : ""),
+          memaddress: memaddress || (isNonMember ? "Non-member" : ""), // fallback
           memphonenumber: memphonenumber || (isNonMember ? "N/A" : ""),
           mememail,
-          rsvpcount: ev.rsvpcount,
-          kidsrsvpcount: ev.kidsrsvpcount || 0,
+          rsvpcount: ev.rsvpcount,        // adult RSVP
+          kidsrsvpcount: ev.kidsrsvpcount || 0, // 👈 add this line
           rsvpconfnumber,
           eventname: ev.eventname,
           programname: ev.programname,
           eventdate: ev.eventdate,
           eventday: ev.eventday,
-          isNonMember: isNonMember || false
+          isNonMember: isNonMember || false // 👈 mark explicitly
         });
         return await newRSVP.save();
       })
     );
 
-    // Try sending email (but don’t fail if blocked)
+    // Build email content
+    let eventDetails = events
+      .map(
+        (ev) =>
+          `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Adult: ${ev.rsvpcount}, Kids: ${ev.kidsrsvpcount || 0})`
+      )
+      .join("\n");
+
+    const emailBody = `
+    Dear ${memname},
+
+    Your RSVP has been successfully submitted.  
+    Confirmation Number: ${rsvpconfnumber}
+
+    Here are the event(s) you RSVP’d for:
+    ${eventDetails}
+
+    Thank you,
+    JSMC RSVP Team
+    `;
+
+    // Setup nodemailer with timeouts (so it won't hang forever)
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ionos.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      },
+      connectionTimeout: 10000, // 10 sec max wait
+      greetingTimeout: 5000,    // 5 sec greeting wait
+      socketTimeout: 10000      // 10 sec inactivity
+    });
+
     try {
-      let eventDetails = events
-        .map(
-          (ev) =>
-            `• ${ev.programname} - ${ev.eventname} on ${ev.eventday}, ${ev.eventdate} (Adult: ${ev.rsvpcount}, Kids: ${ev.kidsrsvpcount || 0})`
-        )
-        .join("\n");
-
-      const emailBody = `
-        Dear ${memname},
-
-        Your RSVP has been successfully submitted.  
-        Confirmation Number: ${rsvpconfnumber}
-
-        Here are the event(s) you RSVP’d for:
-        ${eventDetails}
-
-        Thank you,
-        JSMC RSVP Team
-      `;
-
-      const transporter = nodemailer.createTransport({
-        host: "smtp.ionos.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-        },
-      });
-
       await transporter.sendMail({
         from: `"JSMC RSVP" <admin@jsgvolleyball.com>`,
         to: mememail,
         subject: `RSVP Confirmation - #${rsvpconfnumber}`,
         text: emailBody,
       });
+
+      return res.status(201).json({
+        success: true,
+        message: "RSVP submitted and email sent!",
+        confNumber: rsvpconfnumber,
+        emailWarning: false
+      });
+
     } catch (emailErr) {
-      console.warn("⚠️ Email could not be sent, but RSVP is saved:", emailErr.message);
+      console.error("❌ Email failed, but RSVP saved:", emailErr.message);
+
+      // Always return success for RSVP
+      return res.status(201).json({
+        success: true,
+        message: "RSVP submitted, but email could not be sent.",
+        confNumber: rsvpconfnumber,
+        emailWarning: true
+      });
     }
 
-    // Always return success if RSVP saved
-    res.status(201).json({
-      message: "RSVP submitted successfully",
-      savedResponses,
-    });
-
   } catch (err) {
-    console.error("❌ Error submitting RSVP:", err);
-    res.status(500).json({ message: "Error submitting RSVP" });
+    console.error("Error submitting RSVP:", err);
+    return res.status(500).json({ success: false, message: "Error submitting RSVP" });
   }
 });
+
 
 /* POST RSVP (works for both members and non-members)
 router.post("/", async (req, res) => {
