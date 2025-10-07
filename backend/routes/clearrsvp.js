@@ -1,31 +1,50 @@
+// backend/routes/clearrsvp.js
 const express = require("express");
 const router = express.Router();
-const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 const Program = require("../models/Programs_DB_Schema");
+const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
 
-// Get completed event
-router.get("/completed-event", async (req, res) => {
+// ✅ Route 1: Get list of completed events
+router.get("/completed-events", async (req, res) => {
   try {
-    const completedEvent = await Program.findOne({ status: "Completed" }).sort({ updatedAt: -1 });
-    if (!completedEvent) return res.json({ eventName: null });
-    res.json({ eventName: completedEvent.event_name });
+    const programs = await Program.find({ "progevent.eventstatus": "Completed" });
+    if (!programs || programs.length === 0) {
+      return res.status(404).json({ message: "No completed events found" });
+    }
+
+    // Flatten out the completed events
+    const completedEvents = [];
+    programs.forEach((program) => {
+      program.progevent.forEach((ev) => {
+        if (ev.eventstatus === "Completed") {
+          completedEvents.push({
+            programName: program.progname,
+            eventName: ev.eventname,
+          });
+        }
+      });
+    });
+
+    res.json(completedEvents);
   } catch (err) {
-    console.error("Error fetching completed event:", err);
-    res.status(500).json({ error: "Failed to fetch completed event" });
+    console.error("❌ Error fetching completed events:", err);
+    res.status(500).json({ message: "Server error while fetching completed events" });
   }
 });
 
-// Clear RSVP for completed event
-router.post("/clear", async (req, res) => {
+// ✅ Route 2: Clear RSVP responses for a completed event
+router.delete("/clear/:eventName", async (req, res) => {
   try {
-    const completedEvent = await Program.findOne({ status: "Completed" }).sort({ updatedAt: -1 });
-    if (!completedEvent) return res.status(404).json({ error: "No completed event found" });
+    const { eventName } = req.params;
 
-    await RsvpResponse.deleteMany({ event_name: completedEvent.event_name });
-    res.json({ message: "RSVP data cleared successfully" });
+    const deleted = await RsvpResponse.deleteMany({ eventname: eventName });
+    res.json({
+      message: `RSVP responses cleared for event '${eventName}'`,
+      deletedCount: deleted.deletedCount,
+    });
   } catch (err) {
-    console.error("Error clearing RSVP data:", err);
-    res.status(500).json({ error: "Failed to clear RSVP data" });
+    console.error("❌ Error clearing RSVP responses:", err);
+    res.status(500).json({ message: "Server error while clearing RSVP responses" });
   }
 });
 
