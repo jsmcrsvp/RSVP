@@ -85,7 +85,7 @@ export const getDashboardStats = async () => {
 
 // Update event status
 export const updateEventStatus = async (progId, evId, newStatus) => {
-  console.log("➡️ Sending request to /api/updateEventStatus/ with:", { progId, evId, newStatus });
+  //console.log("➡️ Sending request to /api/updateEventStatus/ with:", { progId, evId, newStatus });
   const res = await api.put(`/api/programs/${progId}/events/${evId}/status`, {
     eventstatus: newStatus,
   });
@@ -135,5 +135,22 @@ export const getRsvpReports = async (programname, eventname) => {
   const res = await api.post("/api/report/report-rsvps", { programname, eventname });
   return res.data;
 };
+
+// Get the completed event name
+export const getCompletedEvent = async () => {
+  const response = await fetch("/api/clearrsvp/completed-event");
+  return await response.json();
+};
+
+// Clear RSVP for completed event
+export const clearRSVP = async () => {
+  const response = await fetch("/api/clearrsvp/clear", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+  return await response.json();
+};
+
+
 
 export default api;
