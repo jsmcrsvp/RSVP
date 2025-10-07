@@ -38,15 +38,16 @@ export default function AdminClearRsvp() {
         setMessage("");
         setError("");
         try {
-            await clearRSVP(ev.eventname);
+            const data = await clearRSVP(ev.eventname);
             setMessage(`RSVP cleared for event '${ev.eventname}'`);
 
-            // Update totalRSVP to 0 instead of removing row
+            // If backend confirms event deleted, remove row; else set totalRSVP to 0
             setCompletedEvents((prev) =>
-                prev.map((e) =>
-                    e._id === eventId ? { ...e, totalRSVP: 0 } : e
-                )
+                prev
+                    .map((e) => (e._id === eventId ? { ...e, totalRSVP: 0 } : e))
+                    .filter((e) => e._id !== eventId || !data.eventDeleted)
             );
+
             setSelectedEvents((prev) => {
                 const updated = { ...prev };
                 delete updated[eventId];
@@ -59,6 +60,7 @@ export default function AdminClearRsvp() {
             setLoadingEvents((prev) => ({ ...prev, [eventId]: false }));
         }
     };
+
 
 
     return (

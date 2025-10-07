@@ -237,7 +237,7 @@ export default function VerifyRSVP() {
                     <td>{ev.programname}</td>
                     <td>{ev.eventname}</td>
                     <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
-                    <td>{ev.eventstatus}</td>
+                    <td style={{ textAlign: "center" }}>{ev.eventstatus}</td>
                     <td>
                       {editIndex === idx ? (
                         <input
@@ -245,7 +245,7 @@ export default function VerifyRSVP() {
                           min="0"
                           value={modifiedAdultCount}
                           onChange={(e) => setModifiedAdultCount(e.target.value)}
-                          style={{ width: "60px" }}
+                          style={{ width: "60px", textAlign: "center" }}
                         />
                       ) : (
                         ev.rsvpcount
@@ -258,7 +258,7 @@ export default function VerifyRSVP() {
                           min="0"
                           value={modifiedKidsCount}
                           onChange={(e) => setModifiedKidsCount(e.target.value)}
-                          style={{ width: "60px" }}
+                          style={{ width: "60px", textAlign: "center"}} 
                         />
                       ) : (
                         ev.kidsrsvpcount

@@ -48,20 +48,35 @@ router.get("/completed-events", async (req, res) => {
 
 // ✅ Route 2: Clear RSVP responses for a completed event
 router.post("/clear-rsvp", async (req, res) => {
-    try {
-        const { eventName } = req.body;
-        if (!eventName) return res.status(400).json({ message: "eventName is required" });
+  try {
+    const { eventName } = req.body;
+    if (!eventName) return res.status(400).json({ message: "eventName is required" });
 
-        const deleted = await RsvpResponse.deleteMany({ eventname: eventName });
-        res.json({
-            message: `RSVP responses cleared for event '${eventName}'`,
-            deletedCount: deleted.deletedCount,
-        });
-    } catch (err) {
-        console.error("❌ Error clearing RSVP responses:", err);
-        res.status(500).json({ message: "Server error while clearing RSVP responses" });
+    // Delete RSVP responses
+    const deleted = await RsvpResponse.deleteMany({ eventname: eventName });
+
+    // Check if any RSVP responses remain
+    const remainingRSVP = await RsvpResponse.countDocuments({ eventname: eventName });
+
+    // If none remain, delete the event from Program collection
+    if (remainingRSVP === 0) {
+      await Program.updateMany(
+        {},
+        { $pull: { progevent: { eventname: eventName } } }
+      );
     }
+
+    res.json({
+      message: `RSVP responses cleared for event '${eventName}'`,
+      deletedCount: deleted.deletedCount,
+      eventDeleted: remainingRSVP === 0, // flag frontend can use if needed
+    });
+  } catch (err) {
+    console.error("❌ Error clearing RSVP responses:", err);
+    res.status(500).json({ message: "Server error while clearing RSVP responses" });
+  }
 });
+
 
 
 module.exports = router;
