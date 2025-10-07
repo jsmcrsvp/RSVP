@@ -238,7 +238,7 @@ export default function VerifyRSVP() {
                     <td>{ev.eventname}</td>
                     <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
                     <td style={{ textAlign: "center" }}>{ev.eventstatus}</td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       {editIndex === idx ? (
                         <input
                           type="number"
@@ -251,7 +251,7 @@ export default function VerifyRSVP() {
                         ev.rsvpcount
                       )}
                     </td>
-                    <td>
+                    <td style={{ textAlign: "center" }}>
                       {editIndex === idx ? (
                         <input
                           type="number"

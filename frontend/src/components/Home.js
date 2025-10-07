@@ -1,5 +1,5 @@
 // frontend/src/components/Home.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 //import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP,} from "../api"; Commentd 10/1
 import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP,} from "../api";
 import "../styles/SubmitRSVP.css";
@@ -111,6 +111,19 @@ export default function Home() {
       }
     })();
   }, []);
+
+    // -------- Refs for input fields --------
+  const memberIdRef = useRef(null);
+  const firstNameRef = useRef(null);
+
+  // Focus the input when searchMode changes
+  useEffect(() => {
+    if (searchMode === "memberId") {
+      memberIdRef.current?.focus();
+    } else if (searchMode === "nameHouse") {
+      firstNameRef.current?.focus();
+    }
+  }, [searchMode]);
 
   // -------- Submit handlers --------
   const handleSearch = async (e) => {
@@ -629,6 +642,7 @@ export default function Home() {
                       value={memberId}
                       onChange={(e) => setMemberId(e.target.value)}
                       placeholder="Enter Member ID"
+                      ref={memberIdRef}
                     />
                     <button
                       className="button"
@@ -657,6 +671,7 @@ export default function Home() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="First Name"
+                      ref={firstNameRef}
                     />
                     <span className="inline-label">House #:</span>
                     <input
