@@ -348,6 +348,7 @@ export default function ActivateEventForm() {
                             value={newStatus}
                             onChange={(e) => setNewStatus(e.target.value)}
                           >
+                            <option value="">-- Select Status --</option>
                             <option value="Closed">Closed</option>
                             <option value="Completed">Completed</option>
                           </select>
@@ -370,7 +371,8 @@ export default function ActivateEventForm() {
                             type="checkbox"
                             onChange={() => {
                               setEditRow(rowKey);
-                              setNewStatus(ev.status);
+                              //setNewStatus(ev.status);
+                              setNewStatus("");  // force user to pick a new status
                             }}
                           />
                         )}
@@ -417,6 +419,7 @@ export default function ActivateEventForm() {
                             value={newStatus}
                             onChange={(e) => setNewStatus(e.target.value)}
                           >
+                            <option value="">-- Select Status --</option>
                             <option value="Open">Open</option>
                             <option value="Completed">Completed</option>
                           </select>
@@ -439,7 +442,8 @@ export default function ActivateEventForm() {
                             type="checkbox"
                             onChange={() => {
                               setEditRow(rowKey);
-                              setNewStatus(ev.status);
+                              //setNewStatus(ev.status);
+                              setNewStatus("");  // force user to pick a new status
                             }}
                           />
                         )}
