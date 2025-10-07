@@ -138,7 +138,7 @@ export const getRsvpReports = async (programname, eventname) => {
 
 // Get the completed event name
 export const getCompletedEvent = async () => {
-  const response = await fetch("/api/clearrsvp/completed-event");
+  const response = await fetch("/api/clearrsvp/completed-events");
   return await response.json();
 };
 
