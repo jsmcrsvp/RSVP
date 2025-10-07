@@ -70,4 +70,4 @@ const AdminClearRsvp = () => {
   );
 };
 
-export default AdminClearRSVP;
+export default AdminClearRsvp;
