@@ -136,20 +136,24 @@ export const getRsvpReports = async (programname, eventname) => {
   return res.data;
 };
 
-// Get the completed event name
+// Fetch completed events
 export const getCompletedEvents = async () => {
-  const response = await fetch("/api/clearrsvp/completed-events");
-  return await response.json();
+  const res = await fetch(`${SERVER_URL}/api/clearrsvp/completed-events`);
+  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+  return res.json();
 };
 
-// Clear RSVP for completed event
-export const clearRsvpForEvent = async () => {
-  const response = await fetch("/api/clearrsvp/clear", {
+// Clear RSVP for selected event
+export const clearRSVP = async (eventName) => {
+  const res = await fetch(`${SERVER_URL}/api/clearrsvp/clear-rsvp`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ eventName }),
   });
-  return await response.json();
+  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+  return res.json();
 };
+
 
 
 
