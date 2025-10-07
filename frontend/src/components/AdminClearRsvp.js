@@ -6,7 +6,7 @@ import "../styles/SubmitRSVP.css";
 export default function AdminClearRsvp() {
   const [completedEvents, setCompletedEvents] = useState([]);
   const [selectedEvents, setSelectedEvents] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loadingEvents, setLoadingEvents] = useState({}); // per-row loading
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -32,13 +32,15 @@ export default function AdminClearRsvp() {
     }));
   };
 
-  const handleClearRsvp = async (eventId) => {
-    setLoading(true);
+  const handleClearRsvp = async (ev) => {
+    const eventId = ev._id;
+    setLoadingEvents((prev) => ({ ...prev, [eventId]: true }));
     setMessage("");
     setError("");
     try {
-      await clearRSVP(eventId);
-      setMessage("RSVP cleared successfully!");
+      await clearRSVP(ev.eventname);
+      setMessage(`RSVP cleared for event '${ev.eventname}'`);
+      // Remove cleared event from table
       setCompletedEvents(completedEvents.filter((e) => e._id !== eventId));
       setSelectedEvents((prev) => {
         const updated = { ...prev };
@@ -49,7 +51,7 @@ export default function AdminClearRsvp() {
       console.error("❌ Error clearing RSVP:", err);
       setError(err.response?.data?.message || err.message || "Failed to clear RSVP");
     } finally {
-      setLoading(false);
+      setLoadingEvents((prev) => ({ ...prev, [eventId]: false }));
     }
   };
 
@@ -91,8 +93,11 @@ export default function AdminClearRsvp() {
                   <td>{ev.eventday}, {ev.eventdate}</td>
                   <td style={{ textAlign: "center" }}>
                     {selectedEvents[ev._id] && (
-                      <button onClick={() => handleClearRsvp(ev._id)} disabled={loading}>
-                        {loading ? "Clearing..." : "Clear RSVP"}
+                      <button
+                        onClick={() => handleClearRsvp(ev)}
+                        disabled={!!loadingEvents[ev._id]}
+                      >
+                        {loadingEvents[ev._id] ? "Clearing..." : "Clear RSVP"}
                       </button>
                     )}
                   </td>
