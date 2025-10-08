@@ -73,8 +73,24 @@ export default function NonMemberRSVP({
       className="rsvp-form"
       onSubmit={(e) => {
         e.preventDefault();
-        if (!hasValidSelection()) {
-          alert("Please select at least one event and enter adult or kids RSVP count.");
+
+        // Build selectedRSVPs array for the selected events
+        const selectedRSVPs = events
+          .map((ev, idx) => {
+            if (!selectedEvents[idx]) return null;
+            return {
+              eventId: ev._id || idx,
+              eventname: ev.eventname,
+              programname: ev.programname,
+              eventdate: ev.eventdate,
+              adultCount: rsvpCounts[idx] || 0,
+              kidCount: kidsRsvpCounts[idx] || 0,
+            };
+          })
+          .filter(Boolean);
+
+        if (selectedRSVPs.length === 0) {
+          alert("Please select at least one event.");
           return;
         }
         if (!nonMemberEmail.trim()) {
@@ -85,8 +101,11 @@ export default function NonMemberRSVP({
           alert("Please enter a valid 10-digit phone number.");
           return;
         }
-        handleSubmitRSVP(e, selectedRSVPs)
+
+        // ✅ Pass both e and selectedRSVPs to the parent
+        handleSubmitRSVP(e, selectedRSVPs);
       }}
+
     >
       <h3>Enter Non-Member Details</h3>
 
@@ -220,17 +239,17 @@ export default function NonMemberRSVP({
           style={{
             backgroundColor:
               submitting ||
-              !hasValidSelection() ||
-              nonMemberEmail.trim() === "" ||
-              !isPhoneValid
+                !hasValidSelection() ||
+                nonMemberEmail.trim() === "" ||
+                !isPhoneValid
                 ? "grey"
                 : "#007bff",
             color: "white",
             cursor:
               submitting ||
-              !hasValidSelection() ||
-              nonMemberEmail.trim() === "" ||
-              !isPhoneValid
+                !hasValidSelection() ||
+                nonMemberEmail.trim() === "" ||
+                !isPhoneValid
                 ? "not-allowed"
                 : "pointer",
           }}
