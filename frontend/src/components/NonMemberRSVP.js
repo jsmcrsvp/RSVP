@@ -70,8 +70,10 @@ export default function NonMemberRSVP({
               eventname: ev.eventname,
               programname: ev.programname,
               eventdate: ev.eventdate,
-              adultCount: rsvpCounts[idx] ?? 0,
-              kidCount: kidsRsvpCounts[idx] ?? 0,
+              //adultCount: rsvpCounts[idx] ?? 0,
+              //kidCount: kidsRsvpCounts[idx] ?? 0,
+              adultCount: Number(rsvpCounts[idx]) || 0,
+              kidCount: Number(kidsRsvpCounts[idx]) || 0,
             };
           })
           .filter(Boolean);
@@ -175,7 +177,8 @@ export default function NonMemberRSVP({
                         min="0"
                         value={rsvpCounts[idx] ?? 0}
                         onChange={(e) => {
-                          const val = e.target.value;
+                          //const val = e.target.value;
+                          const val = Number(e.target.value) || 0;
                           setRsvpCounts((prev) => {
                             const copy = [...prev];
                             copy[idx] = val;
@@ -196,7 +199,8 @@ export default function NonMemberRSVP({
                         min="0"
                         value={kidsRsvpCounts[idx] ?? 0}
                         onChange={(e) => {
-                          const val = e.target.value;
+                          //const val = e.target.value;
+                          const val = Number(e.target.value) || 0;
                           setKidsRsvpCounts((prev) => {
                             const copy = [...prev];
                             copy[idx] = val;

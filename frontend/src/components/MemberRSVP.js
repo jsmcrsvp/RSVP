@@ -43,8 +43,10 @@ export default function MemberRSVP({
           eventname: ev.eventname,
           programname: ev.programname,
           eventdate: ev.eventdate,
-          adultCount: rsvpCounts[idx] || 0,
-          kidCount: kidsRsvpCounts[idx] || 0,
+          //adultCount: rsvpCounts[idx] || 0,
+          //kidCount: kidsRsvpCounts[idx] || 0,
+          adultCount: Number(rsvpCounts[idx]) || 0,
+          kidCount: Number(kidsRsvpCounts[idx]) || 0,
         };
       })
       .filter(Boolean);
@@ -138,8 +140,12 @@ export default function MemberRSVP({
                             min="0"
                             value={rsvpCounts[idx] || ""}
                             onChange={(e) => {
-                              const updated = [...rsvpCounts];
+                              /*const updated = [...rsvpCounts];
                               updated[idx] = e.target.value;
+                              setRsvpCounts(updated);*/
+                              const value = e.target.value === "" ? "" : Number(e.target.value);
+                              const updated = [...rsvpCounts];
+                              updated[idx] = value;
                               setRsvpCounts(updated);
                             }}
                             placeholder="Adults"
@@ -156,9 +162,13 @@ export default function MemberRSVP({
                             min="0"
                             value={kidsRsvpCounts[idx] || ""}
                             onChange={(e) => {
+                              const value = e.target.value === "" ? "" : Number(e.target.value);
                               const updated = [...kidsRsvpCounts];
-                              updated[idx] = e.target.value;
+                              updated[idx] = value;
                               setKidsRsvpCounts(updated);
+                              /*const updated = [...kidsRsvpCounts];
+                              updated[idx] = e.target.value;
+                              setKidsRsvpCounts(updated);*/
                             }}
                             placeholder="Kids"
                             style={{ width: "60px", textAlign: "center" }}
@@ -198,7 +208,7 @@ export default function MemberRSVP({
           </button>
         </div>
 
-        {/* Submission Message */}
+        {/* Submission Message
         {submitMessage && (
           <div
             style={{
@@ -208,7 +218,7 @@ export default function MemberRSVP({
           >
             {submitMessage}
           </div>
-        )}
+        )}*/}
       </form>
     </>
   );
