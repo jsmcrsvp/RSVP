@@ -357,7 +357,7 @@ try {
       const res = await submitRSVP(payload);
       console.log("Submit response:", res);
       setConfirmation({ confNumber, ...res });
-      setSubmitMessage("RSVP submitted successfully!");
+      setSubmitMessage("RSVP submitted SUCCESSFULLY!");
       setSubmitSuccess(true);
 
       // keep success message visible then clear (as you requested previously)
