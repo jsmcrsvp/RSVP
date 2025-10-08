@@ -119,9 +119,9 @@ export default function Home() {
   // Focus the input when searchMode changes
   useEffect(() => {
     if (searchMode === "memberId") {
-      memberIdRef.current?.focus();
+      memberIdRef.current.focus();
     } else if (searchMode === "nameHouse") {
-      firstNameRef.current?.focus();
+      firstNameRef.current.focus();
     }
   }, [searchMode]);
 
@@ -630,12 +630,12 @@ export default function Home() {
                   <div className="inline-fields">
                     <span className="inline-label">Member ID:</span>
                     <input
+                      ref={memberIdRef}
                       className="small-input"
                       type="number"
                       value={memberId}
                       onChange={(e) => setMemberId(e.target.value)}
                       placeholder="Enter Member ID"
-                      ref={memberIdRef}
                     />
                     <button
                       className="button"
@@ -659,12 +659,12 @@ export default function Home() {
                   <div className="inline-fields">
                     <span className="inline-label">First Name:</span>
                     <input
+                      ref={nameRef}
                       className="small-input"
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="First Name"
-                      ref={firstNameRef}
                     />
                     <span className="inline-label">House #:</span>
                     <input
