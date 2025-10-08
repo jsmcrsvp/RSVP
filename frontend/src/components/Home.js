@@ -1,7 +1,7 @@
 // frontend/src/components/Home.js
 import React, { useEffect, useRef, useState } from "react";
 //import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP,} from "../api"; Commentd 10/1
-import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP,} from "../api";
+import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import "../styles/SubmitRSVP.css";
 import logo from "../assets/JSMCLogo.jpg";
 
@@ -112,7 +112,7 @@ export default function Home() {
     })();
   }, []);
 
-    // -------- Refs for input fields --------
+  // -------- Refs for input fields --------
   const memberIdRef = useRef(null);
   const firstNameRef = useRef(null);
 
@@ -191,7 +191,8 @@ export default function Home() {
     });
   };
 
-  const handleSubmitRSVP = async (e) => {
+  //const handleSubmitRSVP = async (e) => {
+  const handleSubmitRSVP = async (e, selectedRSVPs) => {
     e.preventDefault();
     setError("");
     setConfirmation(null);
@@ -659,7 +660,7 @@ export default function Home() {
                   <div className="inline-fields">
                     <span className="inline-label">First Name:</span>
                     <input
-                      ref={nameRef}
+                      ref={firstNameRef}
                       className="small-input"
                       type="text"
                       value={name}

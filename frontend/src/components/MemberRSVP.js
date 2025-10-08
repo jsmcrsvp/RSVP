@@ -59,7 +59,8 @@ export default function MemberRSVP({
     }
 
     setError("");
-    handleSubmitRSVP(selectedRSVPs); // <-- Send structured RSVP data
+    //handleSubmitRSVP(selectedRSVPs); // <-- Send structured RSVP data
+    handleSubmitRSVP(e, selectedRSVPs);
   };
 
   return (
