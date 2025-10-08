@@ -259,8 +259,8 @@ try {
   setConfirmation({ confNumber, ...res });
   setSubmitMessage(
     res.emailError
-      ? "RSVP submitted successfully! (Email could not be sent)"
-      : "RSVP submitted successfully!"
+      ? "RSVP submitted SUCCESSFULLY! (Email could not be sent)"
+      : "RSVP submitted SUCCESSFULLY!"
   );
   setSubmitSuccess(true);
 } catch (err) {
@@ -299,7 +299,7 @@ try {
     }
   };
 
-
+/*
   const WorkinghandleSubmitRSVP = async (e) => {
     e.preventDefault();
     setError("");
@@ -357,7 +357,7 @@ try {
       const res = await submitRSVP(payload);
       console.log("Submit response:", res);
       setConfirmation({ confNumber, ...res });
-      setSubmitMessage("RSVP submitted SUCCESSFULLY!");
+      setSubmitMessage("RSVP submitted Successfully!");
       setSubmitSuccess(true);
 
       // keep success message visible then clear (as you requested previously)
@@ -386,7 +386,7 @@ try {
     } finally {
       setSubmitting(false);
     }
-  };
+  };*/
 
   // -------- Verify handlers --------
   const handleVerifyRSVP = async (e) => {

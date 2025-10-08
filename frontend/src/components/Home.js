@@ -298,7 +298,7 @@ export default function Home() {
     }
   };
 
-  // =========== Working 091425 =======12:30am ==========
+  /* =========== Working 091425 =======12:30am ==========
   const WorkinghandleSubmitRSVP = async (e) => {
     e.preventDefault();
     setError("");
@@ -385,7 +385,7 @@ export default function Home() {
     } finally {
       setSubmitting(false);
     }
-  };
+  };*/
 
   // -------- Verify handlers --------
   const handleVerifyRSVP = async (e) => {

@@ -202,7 +202,7 @@ export default function MemberRSVP({
         {submitMessage && (
           <div
             style={{
-              color: submitSuccess ? "green" : "red",
+              color: submitSuccess ? "blue" : "red",
               marginTop: "10px",
             }}
           >
