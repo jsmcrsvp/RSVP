@@ -4,7 +4,7 @@ import "../styles/MemberRSVP.css";
 
 export default function MemberRSVP({
   events,
-  displayDate: parentDisplayDate,
+  displayDate,
   toggleEventSelection,
   selectedEvents,
   email,
@@ -18,15 +18,14 @@ export default function MemberRSVP({
 }) {
   const [error, setError] = useState("");
 
-  // Initialize RSVP counts per event (adults & kids)
+  // ---- Initialize RSVP counts per event as strings ----
   const [rsvpCounts, setRsvpCounts] = useState([]);
   const [kidsRsvpCounts, setKidsRsvpCounts] = useState([]);
 
-  // Re-initialize when events change
   useEffect(() => {
     if (events && events.length > 0) {
-      setRsvpCounts(Array(events.length).fill(0));
-      setKidsRsvpCounts(Array(events.length).fill(0));
+      setRsvpCounts(Array(events.length).fill(""));
+      setKidsRsvpCounts(Array(events.length).fill(""));
     }
   }, [events]);
 
@@ -34,7 +33,6 @@ export default function MemberRSVP({
   const onSubmit = (e) => {
     e.preventDefault();
 
-    // Gather RSVP data only for selected events
     const selectedRSVPs = events
       .map((ev, idx) => {
         if (!selectedEvents[idx]) return null;
@@ -51,9 +49,13 @@ export default function MemberRSVP({
 
     if (
       selectedRSVPs.length === 0 ||
-      email.trim() === ""
+      email.trim() === "" ||
+      selectedRSVPs.some(
+        (r) =>
+          r.adultCount < 0 || r.kidCount < 0 || isNaN(r.adultCount) || isNaN(r.kidCount)
+      )
     ) {
-      setError("Please select event(s) and enter adult, kids counts and email.");
+      setError("Please select event(s) and enter valid adult/kids counts and email.");
       return;
     }
 
@@ -61,22 +63,9 @@ export default function MemberRSVP({
     handleSubmitRSVP(e, selectedRSVPs);
   };
 
-  // Helper to parse input safely
-  const parseCount = (val) => {
-    const n = Number(val);
-    return isNaN(n) ? 0 : n;
-  };
-
-  // ---- Local date formatter ----
-  const displayDate = (dateStr) => {
-    if (!dateStr) return "";
-    const [year, month, day] = dateStr.split("-");
-    return `${month}/${day}/${year}`;
-  };
-
   return (
     <>
-      <h4 style={{ textAlign: "center", margin: "0 0 0 0", color: "#5d8cdf" }}>
+      <h4 style={{ textAlign: "center", margin: 0, color: "#5d8cdf" }}>
         Life Membership Details
       </h4>
 
@@ -104,7 +93,7 @@ export default function MemberRSVP({
         </div>
 
         {/* RSVP Event Table */}
-        <div style={{ overflowX: "auto", marginTop: "0rem", marginBottom: "0rem" }}>
+        <div style={{ overflowX: "auto", marginTop: 0, marginBottom: 0 }}>
           <h4>Select Events to RSVP</h4>
           <div className="result-table-wrapper">
             <table className="result-table" style={{ marginTop: 0 }}>
@@ -137,7 +126,22 @@ export default function MemberRSVP({
                         <input
                           type="checkbox"
                           checked={!!selectedEvents[idx]}
-                          onChange={(e) => toggleEventSelection(idx, e.target.checked)}
+                          onChange={(e) => {
+                            toggleEventSelection(idx, e.target.checked);
+                            // Reset counts if unchecked
+                            if (!e.target.checked) {
+                              setRsvpCounts((prev) => {
+                                const copy = [...prev];
+                                copy[idx] = "";
+                                return copy;
+                              });
+                              setKidsRsvpCounts((prev) => {
+                                const copy = [...prev];
+                                copy[idx] = "";
+                                return copy;
+                              });
+                            }
+                          }}
                         />
                       </td>
                       <td>
@@ -147,9 +151,13 @@ export default function MemberRSVP({
                             min="0"
                             value={rsvpCounts[idx]}
                             onChange={(e) => {
-                              const updated = [...rsvpCounts];
-                              updated[idx] = parseCount(e.target.value);
-                              setRsvpCounts(updated);
+                              const val = e.target.value;
+                              setRsvpCounts((prev) => {
+                                const copy = [...prev];
+                                copy[idx] = val;
+                                console.log(`Adult count updated for idx ${idx}:`, copy[idx]);
+                                return copy;
+                              });
                             }}
                             placeholder="Adults"
                             style={{ width: "60px", textAlign: "center" }}
@@ -165,9 +173,13 @@ export default function MemberRSVP({
                             min="0"
                             value={kidsRsvpCounts[idx]}
                             onChange={(e) => {
-                              const updated = [...kidsRsvpCounts];
-                              updated[idx] = parseCount(e.target.value);
-                              setKidsRsvpCounts(updated);
+                              const val = e.target.value;
+                              setKidsRsvpCounts((prev) => {
+                                const copy = [...prev];
+                                copy[idx] = val;
+                                console.log(`Kids count updated for idx ${idx}:`, copy[idx]);
+                                return copy;
+                              });
                             }}
                             placeholder="Kids"
                             style={{ width: "60px", textAlign: "center" }}

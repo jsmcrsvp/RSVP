@@ -1,10 +1,10 @@
 // frontend/src/components/NonMemberRSVP.js
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/NonMemberRSVP.css";
 
 export default function NonMemberRSVP({
   events,
-  displayDate: parentDisplayDate,
+  displayDate,
   toggleEventSelection,
   selectedEvents,
   nonMemberName,
@@ -18,18 +18,10 @@ export default function NonMemberRSVP({
   handleSubmitRSVP,
   submitting,
 }) {
-  // Initialize RSVP counts per event
-  const [rsvpCounts, setRsvpCounts] = useState([]);
-  const [kidsRsvpCounts, setKidsRsvpCounts] = useState([]);
+  // ---- Initialize RSVP counts per event as strings ----
+  const [rsvpCounts, setRsvpCounts] = useState(events.map(() => ""));
+  const [kidsRsvpCounts, setKidsRsvpCounts] = useState(events.map(() => ""));
   const [phoneError, setPhoneError] = useState("");
-
-  // Initialize counts when events change
-  useEffect(() => {
-    if (events && events.length > 0) {
-      setRsvpCounts(Array(events.length).fill(0));
-      setKidsRsvpCounts(Array(events.length).fill(0));
-    }
-  }, [events]);
 
   // Format phone: "(XXX) YYY-ZZZZ"
   const formatPhoneNumber = (value) => {
@@ -41,9 +33,7 @@ export default function NonMemberRSVP({
     return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
   };
 
-  const handlePhoneChange = (e) => {
-    setNonMemberPhone(formatPhoneNumber(e.target.value));
-  };
+  const handlePhoneChange = (e) => setNonMemberPhone(formatPhoneNumber(e.target.value));
 
   // Validate phone
   useEffect(() => {
@@ -55,66 +45,55 @@ export default function NonMemberRSVP({
 
   const isPhoneValid = (nonMemberPhone || "").replace(/\D/g, "").length === 10;
 
-  // Parse input safely
-  const parseCount = (val) => {
-    const n = Number(val);
-    return isNaN(n) ? 0 : n;
-  };
-
   // Check if at least one selected event has valid RSVP counts
   const hasValidSelection = () =>
     Object.keys(selectedEvents).some(
       (idx) =>
         selectedEvents[idx] &&
-        (parseCount(rsvpCounts[idx]) > 0 || parseCount(kidsRsvpCounts[idx]) > 0)
+        ((Number(rsvpCounts[idx]) || 0) > 0 || (Number(kidsRsvpCounts[idx]) || 0) > 0)
     );
 
-  // ---- Local date formatter ----
-  const displayDate = (dateStr) => {
-    if (!dateStr) return "";
-    const [year, month, day] = dateStr.split("-");
-    return `${month}/${day}/${year}`;
+  // ---- Form Submit ----
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    console.log("RSVP Counts (adults):", rsvpCounts);
+    console.log("RSVP Counts (kids):", kidsRsvpCounts);
+
+    const selectedRSVPs = events
+      .map((ev, idx) => {
+        if (!selectedEvents[idx]) return null;
+        return {
+          eventId: ev._id || idx,
+          eventname: ev.eventname,
+          programname: ev.programname,
+          eventdate: ev.eventdate,
+          adultCount: Number(rsvpCounts[idx]) || 0,
+          kidCount: Number(kidsRsvpCounts[idx]) || 0,
+        };
+      })
+      .filter(Boolean);
+
+    if (selectedRSVPs.length === 0) {
+      alert("Please select at least one event.");
+      return;
+    }
+
+    if (!nonMemberEmail.trim()) {
+      alert("Please enter an email address.");
+      return;
+    }
+
+    if (!isPhoneValid) {
+      alert("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
+    handleSubmitRSVP(e, selectedRSVPs);
   };
 
   return (
-    <form
-      className="rsvp-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-
-        const selectedRSVPs = events
-          .map((ev, idx) => {
-            if (!selectedEvents[idx]) return null;
-            return {
-              eventId: ev._id || idx,
-              eventname: ev.eventname,
-              programname: ev.programname,
-              eventdate: ev.eventdate,
-              adultCount: parseCount(rsvpCounts[idx]),
-              kidCount: parseCount(kidsRsvpCounts[idx]),
-            };
-          })
-          .filter(Boolean);
-
-        if (selectedRSVPs.length === 0) {
-          alert("Please select at least one event.");
-          return;
-        }
-
-        if (!nonMemberEmail.trim()) {
-          alert("Please enter an email address.");
-          return;
-        }
-
-        if (!isPhoneValid) {
-          alert("Please enter a valid 10-digit phone number.");
-          return;
-        }
-
-        // Pass both e and structured RSVP data to parent
-        handleSubmitRSVP(e, selectedRSVPs);
-      }}
-    >
+    <form className="rsvp-form" onSubmit={onSubmit}>
       <h3>Enter Non-Member Details</h3>
 
       <div className="rsvp-form-table">
@@ -178,14 +157,26 @@ export default function NonMemberRSVP({
                 <tr key={idx}>
                   {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
                   <td>{ev.eventname}</td>
-                  <td>
-                    {ev.eventday}, {displayDate(ev.eventdate)}
-                  </td>
+                  <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
                   <td>
                     <input
                       type="checkbox"
                       checked={!!selectedEvents[idx]}
-                      onChange={(e) => toggleEventSelection(idx, e.target.checked)}
+                      onChange={(e) => {
+                        toggleEventSelection(idx, e.target.checked);
+                        if (!e.target.checked) {
+                          setRsvpCounts((prev) => {
+                            const copy = [...prev];
+                            copy[idx] = "";
+                            return copy;
+                          });
+                          setKidsRsvpCounts((prev) => {
+                            const copy = [...prev];
+                            copy[idx] = "";
+                            return copy;
+                          });
+                        }
+                      }}
                     />
                   </td>
                   <td>
@@ -194,13 +185,14 @@ export default function NonMemberRSVP({
                         type="number"
                         min="0"
                         value={rsvpCounts[idx]}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const val = e.target.value;
                           setRsvpCounts((prev) => {
                             const copy = [...prev];
-                            copy[idx] = parseCount(e.target.value);
+                            copy[idx] = val;
                             return copy;
-                          })
-                        }
+                          });
+                        }}
                         placeholder="Adult"
                         style={{ width: "60px" }}
                       />
@@ -214,13 +206,14 @@ export default function NonMemberRSVP({
                         type="number"
                         min="0"
                         value={kidsRsvpCounts[idx]}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          const val = e.target.value;
                           setKidsRsvpCounts((prev) => {
                             const copy = [...prev];
-                            copy[idx] = parseCount(e.target.value);
+                            copy[idx] = val;
                             return copy;
-                          })
-                        }
+                          });
+                        }}
                         placeholder="Kids"
                         style={{ width: "60px" }}
                       />
@@ -267,7 +260,6 @@ export default function NonMemberRSVP({
     </form>
   );
 }
-
 
 
 
