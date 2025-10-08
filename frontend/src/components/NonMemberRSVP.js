@@ -60,13 +60,40 @@ export default function NonMemberRSVP({
         ((Number(rsvpCount[idx]) || 0) > 0 || (Number(kidsRsvpCount[idx]) || 0) > 0)
     );
 
+  // Helper for adult count
   const handleAdultCountChange = (idx, value) => {
-    setRsvpCount((prev) => ({ ...prev, [idx]: value }));
+    setRsvpCount((prev) => ({
+      ...prev,
+      [idx]: value === "" ? 0 : Number(value),
+    }));
   };
 
+  // Helper for kids count
   const handleKidsCountChange = (idx, value) => {
-    setKidsRsvpCount((prev) => ({ ...prev, [idx]: value }));
+    setKidsRsvpCount((prev) => ({
+      ...prev,
+      [idx]: value === "" ? 0 : Number(value),
+    }));
   };
+
+  // Checkbox toggle must set/remove the event in map
+  const handleToggleEvent = (idx, checked, ev) => {
+    toggleEventSelection(idx, checked);
+    if (!checked) {
+      // Clean up RSVP counts when unchecked
+      setRsvpCount((prev) => {
+        const updated = { ...prev };
+        delete updated[idx];
+        return updated;
+      });
+      setKidsRsvpCount((prev) => {
+        const updated = { ...prev };
+        delete updated[idx];
+        return updated;
+      });
+    }
+  };
+
 
   return (
     <form
@@ -160,7 +187,7 @@ export default function NonMemberRSVP({
                     <input
                       type="checkbox"
                       checked={!!selectedEvents[idx]}
-                      onChange={(e) => toggleEventSelection(idx, e.target.checked)}
+                      onChange={(e) => handleToggleEvent(idx, e.target.checked, ev)}
                     />
                   </td>
                   <td>
@@ -220,17 +247,17 @@ export default function NonMemberRSVP({
           style={{
             backgroundColor:
               submitting ||
-              !hasValidSelection() ||
-              nonMemberEmail.trim() === "" ||
-              !isPhoneValid
+                !hasValidSelection() ||
+                nonMemberEmail.trim() === "" ||
+                !isPhoneValid
                 ? "grey"
                 : "#007bff",
             color: "white",
             cursor:
               submitting ||
-              !hasValidSelection() ||
-              nonMemberEmail.trim() === "" ||
-              !isPhoneValid
+                !hasValidSelection() ||
+                nonMemberEmail.trim() === "" ||
+                !isPhoneValid
                 ? "not-allowed"
                 : "pointer",
           }}
