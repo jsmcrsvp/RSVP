@@ -119,9 +119,9 @@ export default function Home() {
   // Focus the input when searchMode changes
   useEffect(() => {
     if (searchMode === "memberId") {
-      memberIdRef.current?.focus();
+      memberIdRef.current.focus();
     } else if (searchMode === "nameHouse") {
-      firstNameRef.current?.focus();
+      firstNameRef.current.focus();
     }
   }, [searchMode]);
 
@@ -304,9 +304,6 @@ export default function Home() {
     setConfirmation(null);
     setSubmitMessage(null);
 
-    // If non-member workflow, member may be null but we still want to use the manual fields.
-    // Your request was to keep variable names; so the NonMemberRSVP component should set `member` or we will
-    // send the manual fields as memname/memaddress/etc in payload. For the member flow below, member is required.
     if (isLifeMember === "yes" && !member) {
       setError("Please search and select a member first.");
       return;
@@ -337,10 +334,6 @@ export default function Home() {
       )
       .filter(Boolean);
 
-    // If member flow, use member fields; if non-member flow, we expect NonMemberRSVP to set `member` object
-    // or provide manual fields via top-level variables. To keep compatibility, we prefer:
-    // - if member exists -> use member fields
-    // - else expect manual fields are in name/houseNumber/email etc and use them
     const memName = member ? member.name : name;
     const memAddress = member ? member.address : houseNumber; // if you store address in a different var, adjust accordingly
     const memPhone = member ? member.phone : ""; // NonMemberRSVP should set a top-level state for phone if needed
@@ -642,7 +635,6 @@ export default function Home() {
                       value={memberId}
                       onChange={(e) => setMemberId(e.target.value)}
                       placeholder="Enter Member ID"
-                      ref={memberIdRef}
                     />
                     <button
                       className="button"
@@ -671,7 +663,6 @@ export default function Home() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="First Name"
-                      ref={firstNameRef}
                     />
                     <span className="inline-label">House #:</span>
                     <input
