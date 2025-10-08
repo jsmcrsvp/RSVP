@@ -6,10 +6,10 @@ export default function NonMemberRSVP({
   displayDate,
   toggleEventSelection,
   selectedEvents,
-  rsvpCount,
-  setRsvpCount,
-  kidsRsvpCount,
-  setKidsRsvpCount,
+  rsvpCounts,
+  setRsvpCounts,
+  kidsRsvpCounts,
+  setKidsRsvpCounts,
   nonMemberName,
   setNonMemberName,
   nonMemberAddress,
@@ -57,56 +57,54 @@ export default function NonMemberRSVP({
     Object.keys(selectedEvents).some(
       (idx) =>
         selectedEvents[idx] &&
-        ((Number(rsvpCount[idx]) || 0) > 0 || (Number(kidsRsvpCount[idx]) || 0) > 0)
+        ((Number(rsvpCounts[idx]) || 0) > 0 || (Number(kidsRsvpCounts[idx]) || 0) > 0)
     );
 
   const handleAdultCountChange = (idx, value) => {
-    setRsvpCount((prev) => ({ ...prev, [idx]: value }));
+    setRsvpCounts((prev) => ({ ...prev, [idx]: value }));
   };
 
   const handleKidsCountChange = (idx, value) => {
-    setKidsRsvpCount((prev) => ({ ...prev, [idx]: value }));
+    setKidsRsvpCounts((prev) => ({ ...prev, [idx]: value }));
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    // Build selectedRSVPs array for the selected events
+    const selectedRSVPs = events
+      .map((ev, idx) => {
+        if (!selectedEvents[idx]) return null;
+        return {
+          eventId: ev._id || idx,
+          eventname: ev.eventname,
+          programname: ev.programname,
+          eventdate: ev.eventdate,
+          adultCount: Number(rsvpCounts[idx]) || 0,
+          kidCount: Number(kidsRsvpCounts[idx]) || 0,
+        };
+      })
+      .filter(Boolean);
+
+    if (selectedRSVPs.length === 0) {
+      alert("Please select at least one event and enter RSVP counts.");
+      return;
+    }
+    if (!nonMemberEmail.trim()) {
+      alert("Please enter an email address.");
+      return;
+    }
+    if (!isPhoneValid) {
+      alert("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
+    // ✅ Send data to parent handler
+    handleSubmitRSVP(e, selectedRSVPs);
   };
 
   return (
-    <form
-      className="rsvp-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-
-        // Build selectedRSVPs array for the selected events
-        const selectedRSVPs = events
-          .map((ev, idx) => {
-            if (!selectedEvents[idx]) return null;
-            return {
-              eventId: ev._id || idx,
-              eventname: ev.eventname,
-              programname: ev.programname,
-              eventdate: ev.eventdate,
-              adultCount: rsvpCounts[idx] || 0,
-              kidCount: kidsRsvpCounts[idx] || 0,
-            };
-          })
-          .filter(Boolean);
-
-        if (selectedRSVPs.length === 0) {
-          alert("Please select at least one event.");
-          return;
-        }
-        if (!nonMemberEmail.trim()) {
-          alert("Please enter an email address.");
-          return;
-        }
-        if (!isPhoneValid) {
-          alert("Please enter a valid 10-digit phone number.");
-          return;
-        }
-
-        // ✅ Pass both e and selectedRSVPs to the parent
-        handleSubmitRSVP(e, selectedRSVPs);
-      }}
-
-    >
+    <form className="rsvp-form" onSubmit={onSubmit}>
       <h3>Enter Non-Member Details</h3>
 
       <div className="rsvp-form-table">
@@ -187,7 +185,7 @@ export default function NonMemberRSVP({
                       <input
                         type="number"
                         min="0"
-                        value={rsvpCount[idx] || ""}
+                        value={rsvpCounts[idx] || ""}
                         onChange={(e) => handleAdultCountChange(idx, e.target.value)}
                         placeholder="Adult"
                         style={{ width: "60px" }}
@@ -201,7 +199,7 @@ export default function NonMemberRSVP({
                       <input
                         type="number"
                         min="0"
-                        value={kidsRsvpCount[idx] || ""}
+                        value={kidsRsvpCounts[idx] || ""}
                         onChange={(e) => handleKidsCountChange(idx, e.target.value)}
                         placeholder="Kids"
                         style={{ width: "60px" }}
@@ -239,17 +237,17 @@ export default function NonMemberRSVP({
           style={{
             backgroundColor:
               submitting ||
-                !hasValidSelection() ||
-                nonMemberEmail.trim() === "" ||
-                !isPhoneValid
+              !hasValidSelection() ||
+              nonMemberEmail.trim() === "" ||
+              !isPhoneValid
                 ? "grey"
                 : "#007bff",
             color: "white",
             cursor:
               submitting ||
-                !hasValidSelection() ||
-                nonMemberEmail.trim() === "" ||
-                !isPhoneValid
+              !hasValidSelection() ||
+              nonMemberEmail.trim() === "" ||
+              !isPhoneValid
                 ? "not-allowed"
                 : "pointer",
           }}
@@ -260,6 +258,7 @@ export default function NonMemberRSVP({
     </form>
   );
 }
+
 
 
 
