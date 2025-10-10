@@ -151,7 +151,7 @@ export default function Home() {
           : { name: name.trim(), houseNumber: houseNumber.trim() };
 
       console.log("Searching member with payload:", payload);
-      //onst result = await searchMember(payload);
+      //const result = await searchMember(payload);
       const result = await getMember(payload);
       console.log("Search result:", result);
       if (result && result.name) {
@@ -191,8 +191,128 @@ export default function Home() {
     });
   };
 
+
+const handleSubmitRSVP = async (e, selectedRSVPsFromChild) => {
+  // allow being called with (e) or without e (some callers)
+  if (e && typeof e.preventDefault === "function") e.preventDefault();
+
+  setError("");
+  setConfirmation(null);
+  setSubmitMessage(null);
+
+  // Validation: member selection when life member
+  if (isLifeMember === "yes" && !member) {
+    setError("Please search and select a member first.");
+    return;
+  }
+
+  // If child passed structured selectedRSVPs, validate that; otherwise we'll build payload below
+  let eventsPayload = [];
+
+  if (Array.isArray(selectedRSVPsFromChild) && selectedRSVPsFromChild.length > 0) {
+    console.log("DEBUG selectedRSVPsFromChild:", selectedRSVPsFromChild);
+
+    // Normalize incoming shape (support adultCount/kidCount or rsvpcount/kidsrsvpcount)
+    eventsPayload = selectedRSVPsFromChild.map((s) => ({
+      programname: s.programname ?? s.programName ?? s.program ?? "",
+      eventname: s.eventname ?? s.eventName ?? s.event ?? "",
+      eventday: s.eventday ?? s.eventDay ?? "",
+      eventdate: s.eventdate ?? s.eventDate ?? "",
+      rsvpcount: Number(s.adultCount ?? s.rsvpcount ?? s.adultcount ?? 0) || 0,
+      kidsrsvpcount: Number(s.kidCount ?? s.kidsrsvpcount ?? s.kidcount ?? 0) || 0,
+    })).filter(Boolean);
+  } else {
+    // Fallback (original logic) — uses top-level rsvpCount/kidsRsvpCount single-value fields
+    eventsPayload = events
+      .map((ev, idx) =>
+        selectedEvents[idx] !== undefined
+          ? {
+              programname: ev.programname,
+              eventname: ev.eventname,
+              eventday: ev.eventday,
+              eventdate: ev.eventdate,
+              rsvpcount: Number(rsvpCount) || 0,
+              kidsrsvpcount: Number(kidsRsvpCount) || 0,
+            }
+          : null
+      )
+      .filter(Boolean);
+  }
+
+  // Basic validation: at least one event
+  if (!Array.isArray(eventsPayload) || eventsPayload.length === 0) {
+    setError("Please select at least one event and give it an RSVP count (>0).");
+    return;
+  }
+
+  // Generate confirmation number here (same behaviour as before)
+  const confNumber = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // Build payload for member vs non-member
+  const payload =
+    isLifeMember === "yes"
+      ? {
+          memname: member?.name || "",
+          memaddress: member?.address || "",
+          memphonenumber: member?.phone || "",
+          mememail: email.trim(),
+          rsvpconfnumber: confNumber,
+          events: eventsPayload,
+        }
+      : {
+          memname: nonMemberName,
+          memaddress: nonMemberAddress,
+          memphonenumber: nonMemberPhone,
+          mememail: nonMemberEmail.trim(),
+          rsvpconfnumber: confNumber,
+          events: eventsPayload,
+        };
+
+  // DEBUG - verify counts before submit
+  console.log("DEBUG eventsPayload (to submit):", eventsPayload);
+  console.log("Submitting RSVP Payload:", payload);
+
+  setSubmitting(true);
+  try {
+    const res = await submitRSVP(payload);
+    console.log("Submit response:", res);
+    setConfirmation({ confNumber, ...res });
+    setSubmitMessage("RSVP submitted successfully!");
+    setSubmitSuccess(true);
+
+    // Reset after delay (same as your previous behaviour)
+    setTimeout(() => {
+      setSubmitMessage(null);
+      setSubmitSuccess(false);
+      setConfirmation(null);
+      setMember(null);
+      setSelectedEvents({});
+      setEmail("");
+      setNonMemberName("");
+      setNonMemberAddress("");
+      setNonMemberPhone("");
+      setNonMemberEmail("");
+      setIsLifeMember(null);
+      setSearchMode("");
+      setMemberId("");
+      setName("");
+      setHouseNumber("");
+      setRsvpCount("");
+      setKidsRsvpCount("");
+      setActiveTab("home");
+    }, 15000);
+  } catch (err) {
+    console.error("Error submitting RSVP:", err);
+    setSubmitMessage("Error submitting RSVP: " + (err.message || "Unknown"));
+    setSubmitSuccess(false);
+  } finally {
+    setSubmitting(false);
+  }
+};
+
+
   //const handleSubmitRSVP = async (e) => {
-  const handleSubmitRSVP = async (e, selectedRSVPs) => {
+  /*const handleSubmitRSVP = async (e, selectedRSVPs) => {
     e.preventDefault();
     setError("");
     setConfirmation(null);
@@ -223,7 +343,7 @@ export default function Home() {
     const confNumber = Math.floor(100000 + Math.random() * 900000).toString();
 
     // Build events array
-    const eventsPayload = events
+    //const eventsPayload = events
       .map((ev, idx) =>
         selectedEvents[idx] !== undefined && Number(rsvpCount) >= 0
           ? {
@@ -233,6 +353,21 @@ export default function Home() {
             eventdate: ev.eventdate,
             rsvpcount: Number(rsvpCount) || 0,       // adult
             kidsrsvpcount: Number(kidsRsvpCount) || 0, // 👈 add kids RSVP
+          }
+          : null
+      )
+      .filter(Boolean);//
+  
+    const eventsPayload = events
+      .map((ev, idx) =>
+        selectedEvents[idx] !== undefined
+          ? {
+            programname: ev.programname,
+            eventname: ev.eventname,
+            eventday: ev.eventday,
+            eventdate: ev.eventdate,
+            rsvpcount: Number(rsvpCount?.[idx]) || 0,       // ✅ use array
+            kidsrsvpcount: Number(kidsRsvpCount?.[idx]) || 0, // ✅ use array
           }
           : null
       )
@@ -257,7 +392,7 @@ export default function Home() {
           rsvpconfnumber: confNumber,
           events: eventsPayload,
         };
-
+        console.log("DEBUG RSVP COUNTS:", rsvpCount, kidsRsvpCount);
     console.log("Submitting RSVP Payload:", payload);
 
     setSubmitting(true);
@@ -297,7 +432,7 @@ export default function Home() {
       setSubmitting(false);
     }
   };
-
+*/
   /* =========== Working 091425 =======12:30am ==========
   const WorkinghandleSubmitRSVP = async (e) => {
     e.preventDefault();
