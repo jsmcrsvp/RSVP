@@ -77,6 +77,4 @@ router.post("/clear-rsvp", async (req, res) => {
   }
 });
 
-
-
 module.exports = router;

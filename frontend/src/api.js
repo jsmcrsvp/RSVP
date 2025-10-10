@@ -116,14 +116,6 @@ export const addAdminNewProgram = async (programName) => {
   return res.data;
 };
 
-/* ===== Member Report using Dashboard.js =====
-export const getRsvpDetails = async (programname, eventname) => {
-  console.log("➡️ Sending request to /api/dashboard/rsvps with:", { programname, eventname });
-  const res = await api.post("/api/dashboard/rsvps", { programname, eventname });
-  return res.data;
-};
-*/
-
 // ===== Member Report using Report.js =====
 export const getReportStats = async () => {
   console.log("➡️ api.js: Sending request to /api/report/report-stats with:", { programname, eventname });
@@ -139,7 +131,7 @@ export const getRsvpReports = async (programname, eventname) => {
 // Fetch completed events
 export const getCompletedEvents = async () => {
   const res = await fetch(`${SERVER_URL}/api/clearrsvp/completed-events`);
-  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+  //if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
   return res.json();
 };
 
@@ -150,11 +142,8 @@ export const clearRSVP = async (eventName) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ eventName }),
   });
-  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+  //if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
   return res.json();
 };
-
-
-
 
 export default api;
