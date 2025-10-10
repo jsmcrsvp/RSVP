@@ -40,6 +40,7 @@ export default function MemberRSVP({
           eventId: ev._id || idx,
           eventname: ev.eventname,
           programname: ev.programname,
+          eventday: ev.eventday,
           eventdate: ev.eventdate,
           adultCount: Number(rsvpCounts[idx]) || 0,
           kidCount: Number(kidsRsvpCounts[idx]) || 0,
