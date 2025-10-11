@@ -99,10 +99,10 @@ export default function Home() {
     (async () => {
       setLoadingEvents(true);
       try {
-        console.log("Loading open events...");
+        //console.log("Loading open events...");
         const data = await getOpenEvents();
         setEvents(Array.isArray(data) ? data : []);
-        console.log("Open events loaded:", Array.isArray(data) ? data.length : 0);
+        //console.log("Open events loaded:", Array.isArray(data) ? data.length : 0);
       } catch (err) {
         console.error("Failed to load open events:", err);
         setError("Failed to load open events.");
@@ -150,10 +150,10 @@ export default function Home() {
           ? { memberId: memberId.trim() }
           : { name: name.trim(), houseNumber: houseNumber.trim() };
 
-      console.log("Searching member with payload:", payload);
+      //console.log("Searching member with payload:", payload);
       //const result = await searchMember(payload);
       const result = await getMember(payload);
-      console.log("Search result:", result);
+      //console.log("Search result:", result);
       if (result && result.name) {
         setMember(result);
       } else {
@@ -210,7 +210,7 @@ export default function Home() {
     let eventsPayload = [];
 
     if (Array.isArray(selectedRSVPsFromChild) && selectedRSVPsFromChild.length > 0) {
-      console.log("DEBUG selectedRSVPsFromChild:", selectedRSVPsFromChild);
+      //console.log("DEBUG selectedRSVPsFromChild:", selectedRSVPsFromChild);
 
       // Normalize incoming shape (support adultCount/kidCount or rsvpcount/kidsrsvpcount)
       eventsPayload = selectedRSVPsFromChild.map((s) => ({
@@ -267,7 +267,7 @@ export default function Home() {
           rsvpconfnumber: confNumber,
           events: eventsPayload,
         };
-
+/*
     console.log("🔍 Verify before payload:",
       selectedRSVPsFromChild?.map(e => ({
         event: e.eventname,
@@ -275,15 +275,15 @@ export default function Home() {
         kidCount: e.kidCount,
         eventday: e.eventday
       }))
-    );
+    );*/
     // DEBUG - verify counts before submit
-    console.log("DEBUG eventsPayload (to submit):", eventsPayload);
-    console.log("Submitting RSVP Payload:", payload);
+    //console.log("DEBUG eventsPayload (to submit):", eventsPayload);
+    //console.log("Submitting RSVP Payload:", payload);
 
     setSubmitting(true);
     try {
       const res = await submitRSVP(payload);
-      console.log("Submit response:", res);
+      //console.log("Submit response:", res);
       setConfirmation({ confNumber, ...res });
       setSubmitMessage("RSVP submitted successfully!");
       setSubmitSuccess(true);

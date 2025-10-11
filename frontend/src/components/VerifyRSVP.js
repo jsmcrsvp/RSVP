@@ -1,6 +1,6 @@
 
 // frontend/src/components/VerifyRSVP.js
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { verifyRSVP, updateRSVP, verifyRSVPByNameHouse } from "../api"; // ✅ only using existing functions
 import "../styles/SubmitRSVP.css";
 
@@ -25,6 +25,19 @@ export default function VerifyRSVP() {
   const [modifiedKidsCount, setModifiedKidsCount] = useState("");
   const [updateMessage, setUpdateMessage] = useState(null);
   const [updateError, setUpdateError] = useState(null);
+
+  // -------- Refs for input fields --------
+  const confNumberRef = useRef(null);
+  const firstNameRef = useRef(null);
+
+  // Focus the input when searchMode changes
+  useEffect(() => {
+    if (searchMode === "confNumber") {
+      confNumberRef.current.focus();
+    } else if (searchMode === "nameHouse") {
+      firstNameRef.current.focus();
+    }
+  }, [searchMode]);
 
   const handleVerifyRSVP = async (e) => {
     if (e && e.preventDefault) e.preventDefault();
@@ -54,7 +67,6 @@ export default function VerifyRSVP() {
         data = await verifyRSVP(verifyConfNumber.trim());
       } else {
         // Search by Name + House
-        // Backend expects memname and memaddress to query RSVPs
         data = await verifyRSVPByNameHouse(name.trim(), houseNumber.trim());
       }
 
@@ -151,6 +163,7 @@ export default function VerifyRSVP() {
           {searchMode === "confNumber" && (
             <div className="inline-fields">
               <input
+                ref={confNumberRef}
                 className="small-input"
                 type="text"
                 value={verifyConfNumber}
@@ -167,6 +180,7 @@ export default function VerifyRSVP() {
             <div className="inline-fields">
               <span className="inline-label">First Name:</span>
               <input
+                ref={firstNameRef}
                 className="small-input"
                 type="text"
                 value={name}
@@ -258,7 +272,7 @@ export default function VerifyRSVP() {
                           min="0"
                           value={modifiedKidsCount}
                           onChange={(e) => setModifiedKidsCount(e.target.value)}
-                          style={{ width: "60px", textAlign: "center"}} 
+                          style={{ width: "60px", textAlign: "center" }}
                         />
                       ) : (
                         ev.kidsrsvpcount

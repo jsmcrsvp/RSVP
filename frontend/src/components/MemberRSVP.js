@@ -156,7 +156,7 @@ export default function MemberRSVP({
                               setRsvpCounts((prev) => {
                                 const copy = [...prev];
                                 copy[idx] = val;
-                                console.log(`Adult count updated for idx ${idx}:`, copy[idx]);
+                                //console.log(`Adult count updated for idx ${idx}:`, copy[idx]);
                                 return copy;
                               });
                             }}
@@ -178,7 +178,7 @@ export default function MemberRSVP({
                               setKidsRsvpCounts((prev) => {
                                 const copy = [...prev];
                                 copy[idx] = val;
-                                console.log(`Kids count updated for idx ${idx}:`, copy[idx]);
+                                //console.log(`Kids count updated for idx ${idx}:`, copy[idx]);
                                 return copy;
                               });
                             }}

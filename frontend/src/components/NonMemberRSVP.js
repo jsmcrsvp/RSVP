@@ -57,8 +57,8 @@ export default function NonMemberRSVP({
   const onSubmit = (e) => {
     e.preventDefault();
 
-    console.log("RSVP Counts (adults):", rsvpCounts);
-    console.log("RSVP Counts (kids):", kidsRsvpCounts);
+    //console.log("RSVP Counts (adults):", rsvpCounts);
+    //console.log("RSVP Counts (kids):", kidsRsvpCounts);
 
     const selectedRSVPs = events
       .map((ev, idx) => {

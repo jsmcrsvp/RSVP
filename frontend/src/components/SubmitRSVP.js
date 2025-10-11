@@ -97,10 +97,10 @@ export default function SubmitRSVP() {
     (async () => {
       setLoadingEvents(true);
       try {
-        console.log("Loading open events...");
+        //console.log("Loading open events...");
         const data = await getOpenEvents();
         setEvents(Array.isArray(data) ? data : []);
-        console.log("Open events loaded:", Array.isArray(data) ? data.length : 0);
+        //console.log("Open events loaded:", Array.isArray(data) ? data.length : 0);
       } catch (err) {
         console.error("Failed to load open events:", err);
         setError("Failed to load open events.");
@@ -135,10 +135,10 @@ export default function SubmitRSVP() {
           ? { memberId: memberId.trim() }
           : { name: name.trim(), houseNumber: houseNumber.trim() };
 
-      console.log("Searching member with payload:", payload);
+      //console.log("Searching member with payload:", payload);
       //const result = await searchMember(payload); Commented 10/1
       const result = await getMember(payload);
-      console.log("Search result:", result);
+      //console.log("Search result:", result);
       if (result && result.name) {
         setMember(result);
       } else {
@@ -240,7 +240,7 @@ export default function SubmitRSVP() {
           events: eventsPayload,
         };
 
-    console.log("Submitting RSVP Payload:", payload);
+    //console.log("Submitting RSVP Payload:", payload);
 
     setSubmitting(true);
     try {
@@ -254,7 +254,7 @@ export default function SubmitRSVP() {
       /* ==== Added due to mail issue ======*/
 try {
   const res = await submitRSVP(payload);
-  console.log("Submit response:", res);
+  //console.log("Submit response:", res);
 
   setConfirmation({ confNumber, ...res });
   setSubmitMessage(
@@ -314,9 +314,9 @@ try {
 
     setVerifying(true);
     try {
-      console.log("Calling verifyRSVP for:", verifyConfNumber.trim());
+      //console.log("Calling verifyRSVP for:", verifyConfNumber.trim());
       const data = await verifyRSVP(verifyConfNumber.trim());
-      console.log("Verify response:", data);
+      //console.log("Verify response:", data);
       // normalize shape: ensure object with rsvps array
       const normalized = data && Array.isArray(data.rsvps) ? data : { rsvps: [] };
       setVerifyResult(normalized);
@@ -332,9 +332,9 @@ try {
 
   const handleUpdateRSVP = async (rsvpId, newCount) => {
     try {
-      console.log("🔧 Sending update for RSVP:", rsvpId, "→", newCount);
+      //console.log("🔧 Sending update for RSVP:", rsvpId, "→", newCount);
       const result = await updateRSVP(rsvpId, parseInt(newCount, 10));
-      console.log("✅ RSVP updated:", result);
+      //console.log("✅ RSVP updated:", result);
 
       const successMsg = "RSVP updated successfully!";
 
