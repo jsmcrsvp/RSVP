@@ -65,8 +65,7 @@ export const verifyRSVP = async (confNumber) => {
 // Verify RSVP by name and house number
 export const verifyRSVPByNameHouse = async (name, houseNumber) => {
   //console.log("➡️ api.js: Sending request to /api/rsvp/search with:", { name, houseNumber });
-  const res = await axios.get(`${SERVER_URL}/api/rsvp_response/search`, {
-    params: { name, houseNumber },
+  const res = await axios.get(`${SERVER_URL}/api/rsvp_response/search`, {params: { name, houseNumber },
   });
   return res.data;
 };
@@ -86,9 +85,7 @@ export const getDashboardStats = async () => {
 // Update event status
 export const updateEventStatus = async (progId, evId, newStatus) => {
   //console.log("➡️ Sending request to /api/updateEventStatus/ with:", { progId, evId, newStatus });
-  const res = await api.put(`/api/programs/${progId}/events/${evId}/status`, {
-    eventstatus: newStatus,
-  });
+  const res = await api.put(`/api/programs/${progId}/events/${evId}/status`, {eventstatus: newStatus,});
   return res.data;
 };
 

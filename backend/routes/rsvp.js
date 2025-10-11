@@ -191,7 +191,96 @@ router.post("/", async (req, res) => {
 });
 */
 
+// GET RSVP by Name + House #
+router.get("/search", async (req, res) => {
+  const { name, houseNumber } = req.query;
+  if (!name || !houseNumber) {
+    return res.status(400).json({ message: "Name and House # required." });
+  }
 
+  try {
+    const rsvps = await RsvpResponse.find({
+      memname: { $regex: new RegExp(name, "i") },
+      memaddress: { $regex: new RegExp(houseNumber, "i") },
+    });
+
+    console.log("rsvp.js/search: Member", name, houseNumber);
+
+    // ✅ 200 even if empty, so frontend shows “No RSVP records found”
+    if (!rsvps || rsvps.length === 0) {
+      return res.status(200).json({ rsvps: [] });
+    }
+
+    // Enrich with event status from Program collection
+    const enrichedRsvps = await Promise.all(
+      rsvps.map(async (rsvp) => {
+        const program = await Program.findOne(
+          { progname: rsvp.programname },
+          { progevent: 1 }
+        );
+        let status = "Unknown";
+        if (program) {
+          const ev = program.progevent.find(
+            (e) =>
+              e.eventname === rsvp.eventname &&
+              e.eventdate === rsvp.eventdate &&
+              e.eventday === rsvp.eventday
+          );
+          if (ev) status = ev.eventstatus;
+        }
+        return { ...rsvp.toObject(), eventstatus: status };
+      })
+    );
+
+    res.json({ rsvps: enrichedRsvps });
+  } catch (err) {
+    console.error("Error fetching RSVP by Name + House:", err);
+    res.status(500).json({ message: "Server error fetching RSVP by Name + House" });
+  }
+});
+
+// GET RSVP by confirmation number
+router.get("/:confNumber", async (req, res) => {
+  try {
+    const { confNumber } = req.params;
+
+    const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
+
+    // ✅ 200 with empty array instead of 404
+    if (!rsvps || rsvps.length === 0) {
+      return res.status(200).json({ rsvps: [] });
+    }
+
+    const enrichedRsvps = await Promise.all(
+      rsvps.map(async (rsvp) => {
+        const program = await Program.findOne(
+          { progname: rsvp.programname },
+          { progevent: 1 }
+        );
+
+        let status = "Unknown";
+        if (program) {
+          const ev = program.progevent.find(
+            (e) =>
+              e.eventname === rsvp.eventname &&
+              e.eventdate === rsvp.eventdate &&
+              e.eventday === rsvp.eventday
+          );
+          if (ev) status = ev.eventstatus;
+        }
+
+        return { ...rsvp.toObject(), eventstatus: status };
+      })
+    );
+
+    res.json({ rsvps: enrichedRsvps });
+  } catch (err) {
+    console.error("Error fetching RSVP:", err);
+    res.status(500).json({ message: "Server error fetching RSVP" });
+  }
+});
+
+/*
 // GET RSVP by Name + House #
 router.get("/search", async (req, res) => {
     const { name, houseNumber } = req.query;
@@ -280,6 +369,7 @@ router.get("/:confNumber", async (req, res) => {
         res.status(500).json({ error: "Server error fetching RSVP" });
     }
 });
+*/
 
 // ✨ Update RSVP (Adults + Kids)
 router.put("/update_rsvp/:id", async (req, res) => {
