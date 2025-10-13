@@ -226,13 +226,13 @@ export default function ActivateEventForm() {
           return (
             safeString(ev.eventname) === eventname &&
             safeString(ev.eventdate) === eventdate &&
-            safeString(ev.eventstatus) === eventstatus
+            //safeString(ev.eventstatus) === eventstatus
           );
         });
       });
 
       if (duplicateFound) {
-        setError(`⚠️ Event "${eventname}" on "${displayDate(eventdate)}" with status as "${eventstatus}" for program "${progname}" already exist.`);
+        setError(`⚠️ Event "${eventname}" on "${displayDate(eventdate)}" for program "${progname}" already exist.`);
         return; // stop here, do not create duplicate
       }
 
