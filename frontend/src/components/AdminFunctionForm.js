@@ -1,3 +1,4 @@
+// frontend/src/components/AdminFunctionForm.js
 import React, { useState } from "react";
 import AdminAddEvent from "./AdminAddEventForm";
 import AdminAddProgram from "./AdminAddProgramForm";

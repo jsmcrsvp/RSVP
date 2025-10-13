@@ -162,46 +162,6 @@ export default function ActivateEventForm() {
     fetchProgramsAndEvents();
   }, []);
 
-  /*
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
-
-    if (!progname || !eventname || !eventdate || !eventday || !rsvpClosedate) {
-      setError("All fields are required.");
-      return;
-    }
-
-    try {
-      await addProgram({
-        progname,
-        progevent: [
-          {
-            eventname,
-            eventdate,
-            eventday,
-            eventstatus,
-            closersvp: rsvpClosedate,
-          },
-        ],
-      });
-
-      setSuccess("✅ Program & Event activated successfully!");
-      setProgname("");
-      setEventname("");
-      setEventdate("");
-      setEventday("");
-      setEventstatus("Open");
-      setRsvpClosedate("");
-      await fetchProgramsAndEvents();
-    } catch (err) {
-      console.error("Error activating event:", err);
-      setError("❌ Failed to activate event.");
-    }
-  };
-*/
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -226,7 +186,6 @@ export default function ActivateEventForm() {
           return (
             safeString(ev.eventname) === eventname &&
             safeString(ev.eventdate) === eventdate
-            //safeString(ev.eventstatus) === eventstatus
           );
         });
       });

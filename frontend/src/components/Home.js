@@ -5,11 +5,9 @@ import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP, } from ".
 import "../styles/SubmitRSVP.css";
 import logo from "../assets/JSMCLogo.jpg";
 
-// IMPORTANT: adjust these imports if your files are located somewhere else
 import MemberRSVP from "./MemberRSVP";
 import NonMemberRSVP from "./NonMemberRSVP";
 import VerifyRSVP from "./VerifyRSVP";
-
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home"); // "home" | "submit" | "verify"
@@ -42,7 +40,7 @@ export default function Home() {
 
   // Verify states
   const [verifyConfNumber, setVerifyConfNumber] = useState("");
-  const [verifyResult, setVerifyResult] = useState({ rsvps: [] }); // always an object with rsvps array
+  const [verifyResult, setVerifyResult] = useState({ rsvps: [] });
   const [verifying, setVerifying] = useState(false);
 
   // Modify RSVP
@@ -99,10 +97,8 @@ export default function Home() {
     (async () => {
       setLoadingEvents(true);
       try {
-        //console.log("Loading open events...");
         const data = await getOpenEvents();
         setEvents(Array.isArray(data) ? data : []);
-        //console.log("Open events loaded:", Array.isArray(data) ? data.length : 0);
       } catch (err) {
         console.error("Failed to load open events:", err);
         setError("Failed to load open events.");
@@ -150,10 +146,9 @@ export default function Home() {
           ? { memberId: memberId.trim() }
           : { name: name.trim(), houseNumber: houseNumber.trim() };
 
-      //console.log("Searching member with payload:", payload);
       //const result = await searchMember(payload);
       const result = await getMember(payload);
-      //console.log("Search result:", result);
+
       if (result && result.name) {
         setMember(result);
       } else {
@@ -210,7 +205,6 @@ export default function Home() {
     let eventsPayload = [];
 
     if (Array.isArray(selectedRSVPsFromChild) && selectedRSVPsFromChild.length > 0) {
-      //console.log("DEBUG selectedRSVPsFromChild:", selectedRSVPsFromChild);
 
       // Normalize incoming shape (support adultCount/kidCount or rsvpcount/kidsrsvpcount)
       eventsPayload = selectedRSVPsFromChild.map((s) => ({
@@ -268,22 +262,10 @@ export default function Home() {
           events: eventsPayload,
         };
 
-    /*console.log("🔍 Verify before payload:",
-      selectedRSVPsFromChild?.map(e => ({
-        event: e.eventname,
-        adultCount: e.adultCount,
-        kidCount: e.kidCount,
-        eventday: e.eventday
-      }))
-    );*/
-    // DEBUG - verify counts before submit
-    //console.log("DEBUG eventsPayload (to submit):", eventsPayload);
-    //console.log("Submitting RSVP Payload:", payload);
-
     setSubmitting(true);
     try {
       const res = await submitRSVP(payload);
-      //console.log("Submit response:", res);
+
       setConfirmation({ confNumber, ...res });
       setSubmitMessage("RSVP submitted successfully!");
       setSubmitSuccess(true);
@@ -544,9 +526,7 @@ export default function Home() {
 
     setVerifying(true);
     try {
-      //console.log("Calling verifyRSVP for:", verifyConfNumber.trim());
       const data = await verifyRSVP(verifyConfNumber.trim());
-      //console.log("Verify response:", data);
       // normalize shape: ensure object with rsvps array
       const normalized = data && Array.isArray(data.rsvps) ? data : { rsvps: [] };
       setVerifyResult(normalized);
@@ -562,9 +542,7 @@ export default function Home() {
 
   const handleUpdateRSVP = async (rsvpId, newCount) => {
     try {
-      //console.log("🔧 Sending update for RSVP:", rsvpId, "→", newCount);
       const result = await updateRSVP(rsvpId, parseInt(newCount, 10));
-      //console.log("✅ RSVP updated:", result);
 
       const successMsg = "RSVP updated successfully!";
 
@@ -689,19 +667,6 @@ export default function Home() {
             </button>
           )}
         </div>
-
-        {/* Tabs
-        <div className="tab-header">
-          <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => handleTabChange("home")}>
-            Home
-          </button>
-          <button className={activeTab === "submit" ? "tab active" : "tab"} onClick={() => handleTabChange("submit")}>
-            Submit RSVP
-          </button>
-          <button className={activeTab === "verify" ? "tab active" : "tab"} onClick={() => handleTabChange("verify")}>
-            Verify / Modify RSVP
-          </button>
-        </div>*/}
 
         {/* SUBMIT */}
         {activeTab === "submit" && (

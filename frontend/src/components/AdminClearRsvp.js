@@ -1,12 +1,12 @@
 // frontend/src/components/AdminClearRsvp.js
 import React, { useState, useEffect } from "react";
-import { getCompletedEvents, clearRSVP } from "../api"; // use your clearrsvp API
+import { getCompletedEvents, clearRSVP } from "../api";
 import "../styles/SubmitRSVP.css";
 
 export default function AdminClearRsvp() {
     const [completedEvents, setCompletedEvents] = useState([]);
     const [selectedEvents, setSelectedEvents] = useState({});
-    const [loadingEvents, setLoadingEvents] = useState({}); // per-row loading
+    const [loadingEvents, setLoadingEvents] = useState({});
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
 
@@ -60,8 +60,6 @@ export default function AdminClearRsvp() {
             setLoadingEvents((prev) => ({ ...prev, [eventId]: false }));
         }
     };
-
-
 
     return (
         <div style={{ padding: "1rem" }}>

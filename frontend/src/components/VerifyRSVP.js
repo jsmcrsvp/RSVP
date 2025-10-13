@@ -1,4 +1,3 @@
-
 // frontend/src/components/VerifyRSVP.js
 import React, { useEffect, useRef, useState } from "react";
 import { verifyRSVP, updateRSVP, verifyRSVPByNameHouse } from "../api"; // ✅ only using existing functions
@@ -30,7 +29,6 @@ export default function VerifyRSVP() {
   const confNumberRef = useRef(null);
   const firstNameRef = useRef(null);
 
-  // Focus the input when searchMode changes
   useEffect(() => {
     if (searchMode === "confNumber") {
       confNumberRef.current.focus();
@@ -63,15 +61,12 @@ export default function VerifyRSVP() {
       let data;
 
       if (searchMode === "confNumber") {
-        // Search by confirmation number
         data = await verifyRSVP(verifyConfNumber.trim());
       } else {
-        // Search by Name + House
         data = await verifyRSVPByNameHouse(name.trim(), houseNumber.trim());
       }
 
-      const normalized =
-        data && Array.isArray(data.rsvps) ? { ...data, checked: true } : { rsvps: [], checked: true };
+      const normalized = data && Array.isArray(data.rsvps) ? { ...data, checked: true } : { rsvps: [], checked: true };
       setVerifyResult(normalized);
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Error verifying RSVP.");

@@ -1,3 +1,4 @@
+// frontend/src/components/AdminAddEventForm.js
 import React, { useState, useEffect } from "react";
 import { getAllEvents, addNewEvent } from "../api";
 import "../styles/Admin.css";

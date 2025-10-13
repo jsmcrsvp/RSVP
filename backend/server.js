@@ -3,7 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
 const app = express();
 app.use(express.json());
 
@@ -52,7 +51,7 @@ app.get("/", (req, res) => {
   res.send("Backend is running ✅");
 });
 
-//=================== Search Member ===================
+/*========== Search Member =========== Not used anymore from here ======
 app.post("/search_member", async (req, res) => {
   const { memberId, name, houseNumber } = req.body;
   console.log("server.js/search_member: Member ", memberId, name, houseNumber);
@@ -85,12 +84,13 @@ app.post("/search_member", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+*/
 
-{/* =======Troubleshooting module ============
+/* =======Troubleshooting module ============
 app.use((req, res, next) => {
   console.log(`➡️ Incoming: ${req.method} ${req.url}`);
   next();
-});*/}
+});*/
 
 //=================== Program Routes ===================
 // Import routes
@@ -102,7 +102,6 @@ const addEventsRoutes = require("./routes/addEvents");
 const addProgramsRoutes = require("./routes/addPrograms");
 const reportRoutes = require("./routes/report");
 const clearRSVPRoutes = require("./routes/clearrsvp");
-
 
 // Mount routes
 app.use("/api/searchMember", searchMemberRoute);
@@ -144,7 +143,6 @@ app.get("/server-keep-alive", async (req, res) => {
   //await logEvent('Keep-Alive', `Server`);
   res.status(200).json({ success: true, message: "Server is alive!" });
 });
-
 
 app.get("/test-db-write", async (req, res) => {
   try {

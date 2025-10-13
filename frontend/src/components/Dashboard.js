@@ -68,7 +68,7 @@ export default function Dashboard() {
         }
         return prev - 1;
       });
-    }, 1000); // tick every second
+    }, 1000);
 
     return () => clearInterval(timer);
   }, [loadDashboardData]);

@@ -1,3 +1,4 @@
+// frontend/src/components/Admin.js
 import React, { useState, useEffect } from "react";
 import ActivateEventForm from "./ActivateEventForm";
 import Dashboard from "./Dashboard";

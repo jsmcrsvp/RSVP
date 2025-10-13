@@ -76,7 +76,7 @@ export const updateRSVP = async (id, payload) => {
   return res.data; // includes { message, updated }
 };
 
-// Dashboard
+// Dashboard Stats
 export const getDashboardStats = async () => {
   const res = await api.get("/api/dashboard/stats");
   return res.data;
@@ -84,12 +84,10 @@ export const getDashboardStats = async () => {
 
 // Update event status
 export const updateEventStatus = async (progId, evId, newStatus) => {
-  //console.log("➡️ Sending request to /api/updateEventStatus/ with:", { progId, evId, newStatus });
   const res = await api.put(`/api/programs/${progId}/events/${evId}/status`, {eventstatus: newStatus,});
   return res.data;
 };
 
-// ===== Events =====
 // Get all events
 export const getAllEvents = async () => {
   const res = await api.get("/api/add_events");
@@ -102,25 +100,26 @@ export const addNewEvent = async (eventName) => {
   return res.data;
 };
 
-// ===== Programs =====
+// Get all programs
 export const getAdminAllPrograms = async () => {
   const res = await api.get("/api/add_programs");
   return res.data;
 };
 
+// Add new program
 export const addAdminNewProgram = async (programName) => {
   const res = await api.post("/api/add_programs", { program_name: programName });
   return res.data;
 };
 
-// ===== Member Report using Report.js =====
+// Get member report stats
 export const getReportStats = async () => {
-  console.log("➡️ api.js: Sending request to /api/report/report-stats with:", { programname, eventname });
   const res = await api.get("/api/report/report-stats");
   return res.data;
 };
+
+// Get RSVP reports
 export const getRsvpReports = async (programname, eventname) => {
-  console.log("➡️ api.js: Sending request to /api/report/report-rsvps with:", { programname, eventname });
   const res = await api.post("/api/report/report-rsvps", { programname, eventname });
   return res.data;
 };
