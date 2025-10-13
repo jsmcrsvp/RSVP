@@ -225,7 +225,7 @@ export default function ActivateEventForm() {
         return progevents.some((ev) => {
           return (
             safeString(ev.eventname) === eventname &&
-            safeString(ev.eventdate) === eventdate &&
+            safeString(ev.eventdate) === eventdate
             //safeString(ev.eventstatus) === eventstatus
           );
         });
