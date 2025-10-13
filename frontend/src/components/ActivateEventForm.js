@@ -162,6 +162,7 @@ export default function ActivateEventForm() {
     fetchProgramsAndEvents();
   }, []);
 
+  /*
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -173,6 +174,69 @@ export default function ActivateEventForm() {
     }
 
     try {
+      await addProgram({
+        progname,
+        progevent: [
+          {
+            eventname,
+            eventdate,
+            eventday,
+            eventstatus,
+            closersvp: rsvpClosedate,
+          },
+        ],
+      });
+
+      setSuccess("✅ Program & Event activated successfully!");
+      setProgname("");
+      setEventname("");
+      setEventdate("");
+      setEventday("");
+      setEventstatus("Open");
+      setRsvpClosedate("");
+      await fetchProgramsAndEvents();
+    } catch (err) {
+      console.error("Error activating event:", err);
+      setError("❌ Failed to activate event.");
+    }
+  };
+*/
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (!progname || !eventname || !eventdate || !eventday || !rsvpClosedate) {
+      setError("All fields are required.");
+      return;
+    }
+
+    try {
+      // ✅ Step 1: Check existing events before adding
+      const allPrograms = await getAllPrograms(); // reusing your existing API call
+      const normalizedPrograms = Array.isArray(allPrograms) ? allPrograms : [];
+
+      const duplicateFound = normalizedPrograms.some((program) => {
+        if (extractProgramName(program) !== progname) return false;
+        const progevents = Array.isArray(program.progevent)
+          ? program.progevent
+          : [];
+        return progevents.some((ev) => {
+          return (
+            safeString(ev.eventname) === eventname &&
+            safeString(ev.eventdate) === eventdate &&
+            safeString(ev.eventstatus) === eventstatus
+          );
+        });
+      });
+
+      if (duplicateFound) {
+        setError(`⚠️ Event "${eventname}" on "${displayDate(eventdate)}" with status as "${eventstatus}" for program "${progname}" already exist.`);
+        return; // stop here, do not create duplicate
+      }
+
+      // ✅ Step 2: Proceed with activation
       await addProgram({
         progname,
         progevent: [
@@ -454,10 +518,10 @@ export default function ActivateEventForm() {
               </tbody>
             </table>
           </div>
-          </div>
-          )}
         </div>
-      );
+      )}
+    </div>
+  );
 }
 
 /* frontend/src/components/ActivateEventForm.js
