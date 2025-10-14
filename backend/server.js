@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const app = express();
 app.use(express.json());
 
+const Program = require ("./models/Programs_DB_Schema");
 //=================== CORS Configuration ===================
 const corsOptions = {
   origin: [
@@ -142,6 +143,46 @@ app.get("/server-keep-alive", async (req, res) => {
   console.log("✅ Server auto keep-alive triggered", timestamp);
   //await logEvent('Keep-Alive', `Server`);
   res.status(200).json({ success: true, message: "Server is alive!" });
+});
+
+app.get("/auto-close-rsvp", async (req, res) => {
+  const timestamp = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+  console.log("⏰ Auto-close RSVP check triggered:", timestamp);
+
+  try {
+    const today = new Date();
+    const programs = await Program.find();
+
+    let totalClosed = 0;
+
+    for (const program of programs) {
+      let updated = false;
+
+      program.progevent.forEach((ev) => {
+        if (!ev.closersvp) return; // skip if no close date
+        const closeDate = new Date(ev.closersvp);
+
+        if (closeDate < today && ev.eventstatus !== "Closed") {
+          console.log(`🔒 Closing event "${ev.eventname}" (${ev.eventdate}) for program "${program.progname}"`);
+          ev.eventstatus = "Closed";
+          updated = true;
+          totalClosed++;
+        }
+      });
+
+      if (updated) await program.save();
+    }
+
+    console.log(`✅ Auto-close complete — ${totalClosed} event(s) closed.`);
+    res.status(200).json({
+      success: true,
+      message: `Auto-close completed. ${totalClosed} event(s) closed.`,
+      timestamp,
+    });
+  } catch (err) {
+    console.error("❌ Error in auto-close:", err);
+    res.status(500).json({ success: false, message: "Error during auto-close.", error: err.message });
+  }
 });
 
 app.get("/test-db-write", async (req, res) => {
