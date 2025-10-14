@@ -22,7 +22,7 @@ export default function Admin() {
           <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
         </div>
         <h2>JSMC RSVP Admin Portal</h2>
-        <h4>Welcome to JSMC RSVP Admin Portal</h4>
+        <h4>Select a tab to manage RSVP programs and events</h4>
 
         {/* Tabs */}
         <div className="tab-header">
@@ -46,7 +46,7 @@ export default function Admin() {
         {/* HOME */}
         {activeTab === "home" && (
           <div className="home">
-            <p>Select a tab to manage RSVP programs and events.</p>
+            {/*<p>Select a tab to manage RSVP programs and events.</p>*/}
           </div>
         )}
 
