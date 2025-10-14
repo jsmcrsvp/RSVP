@@ -237,3 +237,119 @@ button:hover,
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+/* ======================================
+   📱 Responsive Layout Enhancements
+   ====================================== */
+
+/* Tablet view (landscape phones & small tablets) */
+@media (max-width: 900px) {
+  .rsvp-container {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  .form-row {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .small-input,
+  input[type="text"],
+  input[type="number"],
+  select {
+    max-width: 180px;
+  }
+
+  button {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .tab {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 600px) {
+  .page-wrapper {
+    align-items: flex-start;
+    padding-top: 1rem;
+  }
+
+  .rsvp-container {
+    width: 100%;
+    padding: 1rem;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .form-row,
+  .inline-fields {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .small-input,
+  input[type="text"],
+  input[type="number"],
+  select {
+    max-width: 100%;
+  }
+
+  button {
+    width: 100%;
+    font-size: 0.95rem;
+  }
+
+  .result-table td,
+  .result-table th {
+    font-size: 0.85rem;
+    padding: 6px;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  h3,
+  h4 {
+    font-size: 1rem;
+  }
+
+  .tab-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .rsvp-logo {
+    max-width: 100px;
+  }
+}
+
+/* Ultra small devices (narrow phones <380px) */
+@media (max-width: 380px) {
+  h2 {
+    font-size: 1rem;
+  }
+
+  .rsvp-container {
+    padding: 0.8rem;
+  }
+
+  button {
+    font-size: 0.85rem;
+  }
+}
