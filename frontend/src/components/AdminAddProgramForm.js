@@ -80,7 +80,7 @@ const AdminAddProgram = () => {
                         {Array.isArray(programs) && programs.length > 0 ? (
                             programs.map((p) => (
                                 <tr key={p._id || Math.random()}>
-                                    <td>{p.program_name}</td>
+                                    <td style={{ textAlign: "center" }}>{p.program_name}</td>
                                 </tr>
                             ))
                         ) : (

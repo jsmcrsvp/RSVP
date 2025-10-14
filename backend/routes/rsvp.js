@@ -1,11 +1,11 @@
-// backend/routes/rsvp.js
+//backend/routes/rsvp.js
 const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
 const RsvpResponse = require("../models/Rsvp_Response_DB_Schema");
-const Program = require("../models/Programs_DB_Schema"); // 👈 import Program schema
+const Program = require("../models/Programs_DB_Schema");
 
-// POST RSVP (works for both members and non-members)
+//POST RSVP (works for both members and non-members)
 router.post("/", async (req, res) => {
   try {
     const {
@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "Missing required RSVP data." });
     }
 
-    // Save RSVP entries
+    //Save RSVP entries
     const savedResponses = await Promise.all(
       events.map(async (ev) => {
         const newRSVP = new RsvpResponse({
@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
       })
     );
 
-    // Build email content (for when SMTP works)
+    //Build email content (for when SMTP works)
     let eventDetails = events
       .map(
         (ev) =>
@@ -64,13 +64,13 @@ router.post("/", async (req, res) => {
       JSMC RSVP Team
     `;
 
-    // Always send response first
+    //Always send response first
     res.status(201).json({
       message: "RSVP submitted",
       confNumber: rsvpconfnumber
     });
 
-    // Try sending email in background (non-blocking)
+    //Try sending email in background (non-blocking)
     const transporter = nodemailer.createTransport({
       host: "smtp.ionos.com",
       port: 587,
@@ -191,7 +191,7 @@ router.post("/", async (req, res) => {
 });
 */
 
-// GET RSVP by Name + House #
+//GET RSVP by Name + House #
 router.get("/search", async (req, res) => {
   const { name, houseNumber } = req.query;
   if (!name || !houseNumber) {
@@ -206,12 +206,12 @@ router.get("/search", async (req, res) => {
 
     console.log("rsvp.js/search: Member", name, houseNumber);
 
-    // ✅ 200 even if empty, so frontend shows “No RSVP records found”
+    //✅ 200 even if empty, so frontend shows “No RSVP records found”
     if (!rsvps || rsvps.length === 0) {
       return res.status(200).json({ rsvps: [] });
     }
 
-    // Enrich with event status from Program collection
+    //Enrich with event status from Program collection
     const enrichedRsvps = await Promise.all(
       rsvps.map(async (rsvp) => {
         const program = await Program.findOne(
@@ -239,14 +239,14 @@ router.get("/search", async (req, res) => {
   }
 });
 
-// GET RSVP by confirmation number
+//GET RSVP by confirmation number
 router.get("/:confNumber", async (req, res) => {
   try {
     const { confNumber } = req.params;
 
     const rsvps = await RsvpResponse.find({ rsvpconfnumber: confNumber });
 
-    // ✅ 200 with empty array instead of 404
+    //✅ 200 with empty array instead of 404
     if (!rsvps || rsvps.length === 0) {
       return res.status(200).json({ rsvps: [] });
     }
@@ -371,7 +371,7 @@ router.get("/:confNumber", async (req, res) => {
 });
 */
 
-// ✨ Update RSVP (Adults + Kids)
+//✨ Update RSVP (Adults + Kids)
 router.put("/update_rsvp/:id", async (req, res) => {
     const { id } = req.params;
     const { rsvpcount, kidsrsvpcount } = req.body;

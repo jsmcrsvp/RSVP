@@ -33,7 +33,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-
 // Get all open events across programs
 router.get("/open", async (req, res) => {
   try {
@@ -135,4 +134,3 @@ router.put("/:progId/events/:evId/status", async (req, res) => {
 });
 
 module.exports = router;
-

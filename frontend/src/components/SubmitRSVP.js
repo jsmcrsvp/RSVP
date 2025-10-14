@@ -1,6 +1,5 @@
 // frontend/src/components/SubmitRSVP.js
 import React, { useEffect, useState } from "react";
-//import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP,} from "../api"; Commented 10/1
 import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import "../styles/SubmitRSVP.css";
 import logo from "../assets/JSMCLogo.jpg";

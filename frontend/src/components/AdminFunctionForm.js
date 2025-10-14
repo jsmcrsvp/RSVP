@@ -67,4 +67,3 @@ const AdminFunctions = () => {
 };
 
 export default AdminFunctions;
-

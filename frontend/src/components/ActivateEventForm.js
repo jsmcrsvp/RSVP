@@ -235,7 +235,6 @@ export default function ActivateEventForm() {
     }
   };
 
-  // Split into Open & Closed events (like Dashboard)
   const openEvents = [];
   const closedEvents = [];
   activePrograms.forEach((program) => {
@@ -395,7 +394,7 @@ export default function ActivateEventForm() {
                             onChange={() => {
                               setEditRow(rowKey);
                               //setNewStatus(ev.status);
-                              setNewStatus("");  // force user to pick a new status
+                              setNewStatus("");
                             }}
                           />
                         )}
@@ -466,7 +465,7 @@ export default function ActivateEventForm() {
                             onChange={() => {
                               setEditRow(rowKey);
                               //setNewStatus(ev.status);
-                              setNewStatus("");  // force user to pick a new status
+                              setNewStatus("");
                             }}
                           />
                         )}

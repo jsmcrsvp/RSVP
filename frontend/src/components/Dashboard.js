@@ -134,8 +134,8 @@ export default function Dashboard() {
                         <td>{row.programname}</td>
                         <td>{row.eventname}</td>
                         <td>{row.eventday}, {displayDate(row.eventdate)}</td>
-                        <td>{row.totalRSVPs}</td>
-                        <td>{row.totalKidsRSVPs}</td>
+                        <td style={{ textAlign: "center" }}>{row.totalRSVPs}</td>
+                        <td style={{ textAlign: "center" }}>{row.totalKidsRSVPs}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -169,8 +169,8 @@ export default function Dashboard() {
                         <td>{row.programname}</td>
                         <td>{row.eventname}</td>
                         <td>{row.eventday}, {displayDate(row.eventdate)}</td>
-                        <td>{row.totalRSVPs}</td>
-                        <td>{row.totalKidsRSVPs}</td>
+                        <td style={{ textAlign: "center" }}>{row.totalRSVPs}</td>
+                        <td style={{ textAlign: "center" }}>{row.totalKidsRSVPs}</td>
                       </tr>
                     ))}
                   </tbody>

@@ -80,7 +80,7 @@ const AdminAddEvent = () => {
                         {Array.isArray(events) && events.length > 0 ? (
                             events.map((e) => (
                                 <tr key={e._id || Math.random()}>
-                                    <td>{e.event_name}</td>
+                                    <td style={{ textAlign: "center" }}>{e.event_name}</td>
                                 </tr>
                             ))
                         ) : (

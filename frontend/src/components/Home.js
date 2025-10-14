@@ -1,6 +1,5 @@
 // frontend/src/components/Home.js
 import React, { useEffect, useRef, useState } from "react";
-//import { getOpenEvents, searchMember, submitRSVP, verifyRSVP, updateRSVP,} from "../api"; Commentd 10/1
 import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
 import "../styles/SubmitRSVP.css";
 import logo from "../assets/JSMCLogo.jpg";
@@ -605,7 +604,7 @@ export default function Home() {
         {activeTab === "home" && (
           <div className="home">
             <h2>JSMC RSVP Portal</h2>
-            <h4>Current open events to Submit or View/Modify RSVP</h4>
+            <h4>Current open events to Submit / Verify / Modify RSVP</h4>
 
             {/* Open Events Table */}
             <div style={{ overflowX: "auto", marginTop: "1rem", marginBottom: "1rem" }}>
