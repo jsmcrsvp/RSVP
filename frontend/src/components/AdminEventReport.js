@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllPrograms, getOpenEvents, getClosedEvents, getRsvpReports } from "../api";
-import "../styles/Dashboard.css";
+//import "../styles/Dashboard.css";
+import "../styles/Admin.css";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
@@ -103,7 +104,7 @@ export default function AdminEventReport() {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="admin-container">
       {loading ? (
         <p>Loading programs...</p>
       ) : error ? (
