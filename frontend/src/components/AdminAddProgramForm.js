@@ -52,7 +52,7 @@ const AdminAddProgram = () => {
     return (
         <div style={{ padding: "1rem" }}>
             <form onSubmit={handleSubmit} style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-                <span className="inline-label">Program Name:</span>
+                <span className="inline-label">Add New Program Name:</span>
                 <input
                     type="text"
                     value={programName}

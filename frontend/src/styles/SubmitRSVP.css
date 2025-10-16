@@ -128,11 +128,11 @@ button:hover,
 }
 
 /* Results Table */
-.result-table-wrapper
-{
+.result-table-wrapper {
   margin-top: 0rem;
   overflow-x: auto;
-  background: #f9f9f9e4;
+  /*background: #f9f9f9e4;  Grey background */
+  background: #ffffff;
   padding: 0.1rem;
   border-radius: 6px;
 }
@@ -150,7 +150,7 @@ button:hover,
   width: 100%;
 }
 
-/* Mobile adjustments */
+/* Mobile adjustments
 @media (max-width: 480px) {
   .inline-fields {
     flex-direction: column;
@@ -164,6 +164,7 @@ button:hover,
     width: 100%;
   }
 }
+*/
 
 /* make membership table title sit closer and match confirmation */
 .last-rsvp h4,

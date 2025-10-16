@@ -1,7 +1,8 @@
 // frontend/src/components/AdminClearRsvp.js
 import React, { useState, useEffect } from "react";
 import { getCompletedEvents, clearRSVP } from "../api";
-import "../styles/SubmitRSVP.css";
+//import "../styles/SubmitRSVP.css";
+import "../styles/Admin.css";
 
 export default function AdminClearRsvp() {
     const [completedEvents, setCompletedEvents] = useState([]);
