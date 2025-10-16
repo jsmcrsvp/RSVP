@@ -1,6 +1,6 @@
 /* frontend/src/styles/SubmitRSVP.css
 /* Full page wrapper for vertical + horizontal centering */
-.page-wrapper {
+/*.page-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,7 +9,7 @@
   padding: 1rem;
   margin: 0;
   font-family: Arial, sans-serif;
-}
+}*/
 
 /* Main RSVP container */
 .rsvp-container {

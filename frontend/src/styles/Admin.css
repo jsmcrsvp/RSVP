@@ -1,13 +1,13 @@
-.page-wrapper {
+/*.page-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #d6f2cb;
+  background-color: #e8f3f9;
   padding: 1rem;
   margin: 0;
   font-family: Arial, sans-serif;
-}
+}*/
 
 .admin-container {
   background: #ffffff;

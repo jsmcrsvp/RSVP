@@ -1,7 +1,8 @@
 // frontend/src/components/Home.js
 import React, { useEffect, useRef, useState } from "react";
 import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
-import "../styles/SubmitRSVP.css";
+//import "../styles/SubmitRSVP.css";
+import "../styles/Home.css";
 import logo from "../assets/JSMCLogo.jpg";
 
 import MemberRSVP from "./MemberRSVP";
@@ -9,7 +10,7 @@ import NonMemberRSVP from "./NonMemberRSVP";
 import VerifyRSVP from "./VerifyRSVP";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState("home"); // "home" | "submit" | "verify"
+  const [activeTab, setActiveTab] = useState("home");
 
   // Shared
   const [events, setEvents] = useState([]);
@@ -23,10 +24,10 @@ export default function Home() {
   const [houseNumber, setHouseNumber] = useState("");
   const [member, setMember] = useState(null);
 
-  const [selectedEvents, setSelectedEvents] = useState({}); // { idx: count/flag }
+  const [selectedEvents, setSelectedEvents] = useState({});
   const [email, setEmail] = useState("");
-  const [rsvpCount, setRsvpCount] = useState(""); // RSVP count (single field as in your code)
-  const [kidsRsvpCount, setKidsRsvpCount] = useState(""); // ← important
+  const [rsvpCount, setRsvpCount] = useState("");
+  const [kidsRsvpCount, setKidsRsvpCount] = useState("");
   const [confirmation, setConfirmation] = useState(null);
 
   const [loadingEvents, setLoadingEvents] = useState(true);
@@ -299,218 +300,6 @@ export default function Home() {
     }
   };
 
-
-  //const handleSubmitRSVP = async (e) => {
-  /*const handleSubmitRSVP = async (e, selectedRSVPs) => {
-    e.preventDefault();
-    setError("");
-    setConfirmation(null);
-    setSubmitMessage(null);
-
-    // Validation
-    if (isLifeMember === "yes" && !member) {
-      setError("Please search and select a member first.");
-      return;
-    }
-    if (!hasValidSelection()) {
-      setError("Please select at least one event and give it an RSVP count (>0).");
-      return;
-    }
-
-    // Non-member email check
-    if (isLifeMember === "no" && !nonMemberEmail.trim()) {
-      setError("Please enter an email address.");
-      return;
-    }
-
-    // Member email check
-    if (isLifeMember === "yes" && !email.trim()) {
-      setError("Please enter an email address.");
-      return;
-    }
-
-    const confNumber = Math.floor(100000 + Math.random() * 900000).toString();
-
-    // Build events array
-    //const eventsPayload = events
-      .map((ev, idx) =>
-        selectedEvents[idx] !== undefined && Number(rsvpCount) >= 0
-          ? {
-            programname: ev.programname,
-            eventname: ev.eventname,
-            eventday: ev.eventday,
-            eventdate: ev.eventdate,
-            rsvpcount: Number(rsvpCount) || 0,       // adult
-            kidsrsvpcount: Number(kidsRsvpCount) || 0, // 👈 add kids RSVP
-          }
-          : null
-      )
-      .filter(Boolean);//
-  
-    const eventsPayload = events
-      .map((ev, idx) =>
-        selectedEvents[idx] !== undefined
-          ? {
-            programname: ev.programname,
-            eventname: ev.eventname,
-            eventday: ev.eventday,
-            eventdate: ev.eventdate,
-            rsvpcount: Number(rsvpCount?.[idx]) || 0,       // ✅ use array
-            kidsrsvpcount: Number(kidsRsvpCount?.[idx]) || 0, // ✅ use array
-          }
-          : null
-      )
-      .filter(Boolean);
-
-    // Pick correct fields depending on member vs non-member
-    const payload =
-      isLifeMember === "yes"
-        ? {
-          memname: member?.name || "",
-          memaddress: member?.address || "",
-          memphonenumber: member?.phone || "",
-          mememail: email.trim(),
-          rsvpconfnumber: confNumber,
-          events: eventsPayload,
-        }
-        : {
-          memname: nonMemberName,
-          memaddress: nonMemberAddress,
-          memphonenumber: nonMemberPhone,
-          mememail: nonMemberEmail.trim(),
-          rsvpconfnumber: confNumber,
-          events: eventsPayload,
-        };
-        console.log("DEBUG RSVP COUNTS:", rsvpCount, kidsRsvpCount);
-    console.log("Submitting RSVP Payload:", payload);
-
-    setSubmitting(true);
-    try {
-      const res = await submitRSVP(payload);
-      console.log("Submit response:", res);
-      setConfirmation({ confNumber, ...res });
-      setSubmitMessage("RSVP submitted successfully!");
-      setSubmitSuccess(true);
-
-      // Reset after delay
-      setTimeout(() => {
-        setSubmitMessage(null);
-        setSubmitSuccess(false);
-        setConfirmation(null);
-        setMember(null);
-        setSelectedEvents({});
-        setEmail("");
-        setNonMemberName("");
-        setNonMemberAddress("");
-        setNonMemberPhone("");
-        setNonMemberEmail("");
-        setIsLifeMember(null);
-        setSearchMode("");
-        setMemberId("");
-        setName("");
-        setHouseNumber("");
-        setRsvpCount("");
-        setKidsRsvpCount("");
-        setActiveTab("home");
-      }, 15000);
-    } catch (err) {
-      console.error("Error submitting RSVP:", err);
-      setSubmitMessage("Error submitting RSVP: " + (err.message || "Unknown"));
-      setSubmitSuccess(false);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-*/
-  /* =========== Working 091425 =======12:30am ==========
-  const WorkinghandleSubmitRSVP = async (e) => {
-    e.preventDefault();
-    setError("");
-    setConfirmation(null);
-    setSubmitMessage(null);
-
-    if (isLifeMember === "yes" && !member) {
-      setError("Please search and select a member first.");
-      return;
-    }
-    if (!hasValidSelection()) {
-      setError("Please select at least one event and give it an RSVP count (>0).");
-      return;
-    }
-    if (!email.trim()) {
-      setError("Please enter an email address.");
-      return;
-    }
-
-    const confNumber = Math.floor(100000 + Math.random() * 900000).toString();
-
-    // Build events array using selectedEvents (same behavior as before)
-    const eventsPayload = events
-      .map((ev, idx) =>
-        selectedEvents[idx] !== undefined && Number(rsvpCount) >= 0
-          ? {
-            programname: ev.programname,
-            eventname: ev.eventname,
-            eventday: ev.eventday,
-            eventdate: ev.eventdate,
-            rsvpcount: Number(rsvpCount),
-          }
-          : null
-      )
-      .filter(Boolean);
-
-    const memName = member ? member.name : name;
-    const memAddress = member ? member.address : houseNumber; // if you store address in a different var, adjust accordingly
-    const memPhone = member ? member.phone : ""; // NonMemberRSVP should set a top-level state for phone if needed
-
-    // Build unified payload
-    const payload = {
-      memname: memName,
-      memaddress: memAddress,
-      memphonenumber: memPhone,
-      mememail: email.trim(),
-      rsvpconfnumber: confNumber,
-      events: eventsPayload,
-    };
-
-    console.log("Submitting RSVP Payload:", payload);
-
-    setSubmitting(true);
-    try {
-      const res = await submitRSVP(payload);
-      console.log("Submit response:", res);
-      setConfirmation({ confNumber, ...res });
-      setSubmitMessage("RSVP submitted successfully!");
-      setSubmitSuccess(true);
-
-      // keep success message visible then clear (as you requested previously)
-      setTimeout(() => {
-        // Reset all submit tab states
-        setSubmitMessage(null);
-        setSubmitSuccess(false);
-        setConfirmation(null);
-        setMember(null);
-        setSelectedEvents({});
-        setEmail("");
-        setIsLifeMember(null);
-        setSearchMode("");
-        setMemberId("");
-        setName("");
-        setHouseNumber("");
-        setRsvpCount("");
-
-        // Switch to Home
-        setActiveTab("home");
-      }, 15000);
-    } catch (err) {
-      console.error("Error submitting RSVP:", err);
-      setSubmitMessage("Error submitting RSVP: " + (err.message || "Unknown"));
-      setSubmitSuccess(false);
-    } finally {
-      setSubmitting(false);
-    }
-  };*/
-
   // -------- Verify handlers --------
   const handleVerifyRSVP = async (e) => {
     if (e && e.preventDefault) e.preventDefault();
@@ -542,7 +331,6 @@ export default function Home() {
   const handleUpdateRSVP = async (rsvpId, newCount) => {
     try {
       const result = await updateRSVP(rsvpId, parseInt(newCount, 10));
-
       const successMsg = "RSVP updated successfully!";
 
       // Refresh verify results
@@ -594,7 +382,7 @@ export default function Home() {
   // -------- UI --------
   return (
     <div className="page-wrapper">
-      <div className="rsvp-container">
+      <div className="home-container">
         {/* ✅ Logo at the top */}
         <div className="logo-wrapper">
           <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
