@@ -6,6 +6,9 @@
   margin: 0 auto;
   padding: 1rem;
   font-family: Arial, sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 10px;
 }
 
 /* Form styles */
@@ -20,15 +23,18 @@
 .form-row {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap; /* responsive wrapping on small screens */
+  flex-wrap: wrap;
+  /* responsive wrapping on small screens */
 }
 
 /* Each form group (label + input/select) */
 .form-group {
   display: flex;
   flex-direction: column;
-  flex: 1 1 30%; /* takes equal space, min 30% width */
-  min-width: 200px; /* prevent shrinking too much */
+  flex: 1 1 30%;
+  /* takes equal space, min 30% width */
+  min-width: 200px;
+  /* prevent shrinking too much */
 }
 
 /* Labels */
@@ -57,7 +63,8 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  align-self: center; /* center horizontally */
+  align-self: center;
+  /* center horizontally */
 }
 
 .form-row button.btn-submit:hover {
