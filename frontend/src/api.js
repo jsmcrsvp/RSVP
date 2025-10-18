@@ -142,4 +142,14 @@ export const clearRSVP = async (eventName) => {
   return res.json();
 };
 
+// upload member excel file
+export const uploadMemberExcel = async (formData) => {
+  const res = await fetch(`${SERVER_URL}/api/updatedatabase`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};
+
 export default api;

@@ -81,7 +81,6 @@ h4 {
 .result-table-wrapper {
   display: flex;
   justify-content: center;
-  /* centers the table horizontally */
   /*margin-top: 1rem;*/
   margin-top: 0rem;
   overflow-x: auto;
@@ -93,9 +92,7 @@ h4 {
 .result-table {
   border-collapse: collapse;
   width: auto;
-  /* auto width based on content */
   min-width: 200px;
-  /* optional: ensures table isn't too narrow */
 }
 
 .result-table th,
@@ -104,7 +101,6 @@ h4 {
   padding: 0.5rem 1rem;
   text-align: center; /* left to center */
   white-space: nowrap;
-  /* prevents text from wrapping */
 }
 
 .result-table th {

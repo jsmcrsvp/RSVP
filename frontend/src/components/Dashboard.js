@@ -110,7 +110,6 @@ export default function Dashboard() {
       {/* Open Events Table */}
       {!loading && !loadingEvents && !error && (
         <>
-
           {openStats.length === 0 ? (
             <p style={{ fontStyle: "italic", color: "#666" }}>
               No RSVP responses for open events.

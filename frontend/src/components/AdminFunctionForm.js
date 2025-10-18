@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import AdminAddEvent from "./AdminAddEventForm";
 import AdminAddProgram from "./AdminAddProgramForm";
 import AdminClearRsvp from "./AdminClearRsvp";
+import AdminUpdateDatabase from "./AdminUpdateDatabase";
 
 const AdminFunctions = () => {
   const [activeTab, setActiveTab] = useState("programs");
@@ -54,6 +55,22 @@ const AdminFunctions = () => {
         >
           Clear RSVP
         </button>
+
+        <button
+          style={{
+            padding: "0.5rem 1rem",
+            backgroundColor: activeTab === "updatedb" ? "#4c6daf" : "#ccc",
+            color: activeTab === "updatedb" ? "white" : "black",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            marginLeft: "0.5rem"
+          }}
+          onClick={() => setActiveTab("updatedb")}
+        >
+          Update Database
+        </button>
+
       </div>
 
       {/* Active Tab Content */}
@@ -61,6 +78,7 @@ const AdminFunctions = () => {
         {activeTab === "programs" && <AdminAddProgram />}
         {activeTab === "events" && <AdminAddEvent />}
         {activeTab === "clearrsvp" && <AdminClearRsvp />}
+        {activeTab === "updatedb" && <AdminUpdateDatabase />}
       </div>
     </div>
   );

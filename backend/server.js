@@ -103,6 +103,8 @@ const addEventsRoutes = require("./routes/addEvents");
 const addProgramsRoutes = require("./routes/addPrograms");
 const reportRoutes = require("./routes/report");
 const clearRSVPRoutes = require("./routes/clearrsvp");
+const updateDatabaseRoutes = require("./routes/updateDatabase");
+
 
 // Mount routes
 app.use("/api/searchMember", searchMemberRoute);
@@ -113,6 +115,7 @@ app.use("/api/add_events", addEventsRoutes);
 app.use("/api/add_programs", addProgramsRoutes);
 app.use("/api/report", reportRoutes);
 app.use("/api/clearrsvp", clearRSVPRoutes);
+app.use("/api/updateDatabase", updateDatabaseRoutes);
 
 // =================== Global JSON Error Handler ===================
 app.use((err, req, res, next) => {
