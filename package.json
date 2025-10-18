@@ -9,6 +9,7 @@
     "file-saver": "^2.0.5",
     "mongodb": "^6.19.0",
     "mongoose": "^8.x.x",
+    "multer": "^2.0.2",
     "nodemailer": "^7.0.6",
     "react-router-dom": "^7.9.1",
     "react-scripts": "^5.0.1",
