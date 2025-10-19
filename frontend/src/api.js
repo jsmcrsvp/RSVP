@@ -142,7 +142,6 @@ export const clearRSVP = async (eventName) => {
   return res.json();
 };
 
-// upload member excel file
 export const uploadMemberExcel = async (formData) => {
   const res = await fetch(`${SERVER_URL}/api/updateDatabase`, {
     method: "POST",
@@ -152,4 +151,10 @@ export const uploadMemberExcel = async (formData) => {
   return res.json();
 };
 
-export default api;
+export const deleteAllMembers = async () => {
+  const res = await fetch(`${SERVER_URL}/api/updateDatabase/delete-all`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+};

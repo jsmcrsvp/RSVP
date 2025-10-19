@@ -123,10 +123,11 @@ const AdminDatabaseUpdate = () => {
 export default AdminDatabaseUpdate;
 */
 
+// frontend/src/components/AdminDatabaseUpdate.js
 import React, { useState } from "react";
-import axios from "axios";
+import { uploadMemberExcel, deleteAllMembers } from "../api";
 
-const AdminDatabaseUpdate = () => {
+export default function AdminDatabaseUpdate() {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState("");
@@ -154,23 +155,23 @@ const AdminDatabaseUpdate = () => {
 
     try {
       setUploading(true);
+      setError("");
+      setSuccess("");
 
-      // Step 1: Delete all existing members
-      await axios.delete("/update-database/delete-all");
+      // delete existing members
+      const del = await deleteAllMembers();
+      console.log("Delete response:", del);
 
-      // Step 2: Import new members
+      // upload file
       const formData = new FormData();
       formData.append("file", file);
+      const res = await uploadMemberExcel(formData);
+      console.log("Import response:", res);
 
-      const res = await axios.post("/update-database", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      setSuccess(res.data.message || "✅ Members updated successfully.");
-      setError("");
+      setSuccess(res.message || "Members updated successfully.");
     } catch (err) {
-      console.error("Upload & Import failed:", err);
-      setError(err.response?.data?.message || "Error during import.");
+      console.error("Upload/import error:", err);
+      setError(err.message || err.toString() || "Error during import.");
     } finally {
       setUploading(false);
     }
@@ -203,16 +204,15 @@ const AdminDatabaseUpdate = () => {
           cursor: "pointer",
         }}
       >
-        {uploading ? "Uploading..." : "Delete & Import"}
+        {uploading ? "Processing..." : "Delete & Import"}
       </button>
 
       {success && <p style={{ color: "green" }}>{success}</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
-};
+}
 
-export default AdminDatabaseUpdate;
 
 /* frontend/src/components/AdminUpdateDatabase.js ====Working ===
 import React, { useState } from "react";
