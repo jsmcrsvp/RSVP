@@ -19,42 +19,41 @@ const AdminDatabaseUpdate = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
+    const confirmDelete = window.confirm(
+      "⚠️ This will delete ALL existing members before importing new ones.\nDo you want to continue?"
+    );
+    if (!confirmDelete) {
+      setError("Import cancelled by user.");
+      return;
+    }
 
     try {
       setUploading(true);
+
+      // Step 1: Delete all existing members
+      await axios.delete("/update-database/delete-all");
+
+      // Step 2: Import new members
+      const formData = new FormData();
+      formData.append("file", file);
+
       const res = await axios.post("/update-database", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      setSuccess(res.data.message);
+
+      setSuccess(res.data.message || "✅ Members updated successfully.");
       setError("");
     } catch (err) {
-      setError(err.response?.data?.message || "Upload failed.");
+      console.error("Upload & Import failed:", err);
+      setError(err.response?.data?.message || "Error during import.");
     } finally {
       setUploading(false);
     }
   };
 
-  const handleDeleteAll = async () => {
-    const confirmed = window.confirm(
-      "⚠️ Are you sure you want to delete ALL members from the database?\nThis action cannot be undone."
-    );
-    if (!confirmed) return; // abort if user selects "No"
-
-    try {
-      const res = await axios.delete("/update-database/delete-all");
-      setSuccess(res.data.message);
-      setError("");
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to delete members.");
-    }
-  };
-
   return (
     <div style={{ padding: "1rem" }}>
-      <h3>Update Member Database</h3>
-      <p>Select member list Excel file (.xlsx)</p>
+      <p>Select a new member list Excel (.xlsx) file to replace the database</p>
 
       <div style={{ marginBottom: "1rem" }}>
         <input
@@ -63,35 +62,24 @@ const AdminDatabaseUpdate = () => {
           onChange={handleFileChange}
           style={{
             fontSize: "1rem",
-            padding: "0.4rem",
+            padding: "0.5rem",
             width: "100%",
             cursor: "pointer",
           }}
         />
       </div>
 
-      <div>
-        <button
-          onClick={handleUpload}
-          disabled={uploading}
-          style={{ padding: "0.6rem 1.2rem", fontSize: "1rem", marginRight: "1rem" }}
-        >
-          {uploading ? "Uploading..." : "Upload & Import"}
-        </button>
-
-        <button
-          onClick={handleDeleteAll}
-          style={{
-            padding: "0.6rem 1.2rem",
-            fontSize: "1rem",
-            backgroundColor: "#cc0000",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
-          Delete All Members
-        </button>
-      </div>
+      <button
+        onClick={handleUpload}
+        disabled={uploading}
+        style={{
+          padding: "0.6rem 1.2rem",
+          fontSize: "1rem",
+          cursor: "pointer",
+        }}
+      >
+        {uploading ? "Uploading..." : "Delete & Import"}
+      </button>
 
       {success && <p style={{ color: "green" }}>{success}</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
