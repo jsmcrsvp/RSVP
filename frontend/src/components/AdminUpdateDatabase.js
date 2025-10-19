@@ -1,3 +1,4 @@
+/*
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -95,7 +96,7 @@ const AdminDatabaseUpdate = () => {
             {success && <p style={{ color: "green" }}>{success}</p>}
             {error && <p style={{ color: "red" }}>{error}</p>}
 
-            {/* Progress Log */}
+            {/* Progress Log
             {log.length > 0 && (
                 <div
                     style={{
@@ -120,7 +121,7 @@ const AdminDatabaseUpdate = () => {
 };
 
 export default AdminDatabaseUpdate;
-
+*/
 
 /*
 import React, { useState } from "react";
@@ -215,7 +216,7 @@ const AdminDatabaseUpdate = () => {
 export default AdminDatabaseUpdate;
 */
 
-/* frontend/src/components/AdminUpdateDatabase.js
+// frontend/src/components/AdminUpdateDatabase.js
 import React, { useState } from "react";
 import { uploadMemberExcel } from "../api";
 import "../styles/Admin.css";
@@ -291,4 +292,3 @@ export default function AdminUpdateDatabase() {
         </div>
     );
 }
-*/
