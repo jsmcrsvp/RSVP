@@ -63,7 +63,7 @@ export default function AdminClearRsvp() {
     };
 
     return (
-        <div style={{ padding: "1rem" }}>
+        <div style={{ padding: "0.5rem" }}>
             <h3>Clear RSVP for Completed Events</h3>
 
             {error && <div className="error-message">{error}</div>}
