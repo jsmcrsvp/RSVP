@@ -1,4 +1,4 @@
-/*
+/* ==== With Logging =====
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -123,7 +123,6 @@ const AdminDatabaseUpdate = () => {
 export default AdminDatabaseUpdate;
 */
 
-/*
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -214,9 +213,8 @@ const AdminDatabaseUpdate = () => {
 };
 
 export default AdminDatabaseUpdate;
-*/
 
-// frontend/src/components/AdminUpdateDatabase.js
+/* frontend/src/components/AdminUpdateDatabase.js ====Working ===
 import React, { useState } from "react";
 import { uploadMemberExcel } from "../api";
 import "../styles/Admin.css";
@@ -292,3 +290,4 @@ export default function AdminUpdateDatabase() {
         </div>
     );
 }
+*/
