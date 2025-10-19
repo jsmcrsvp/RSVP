@@ -156,7 +156,11 @@ export default function Home() {
       }
     } catch (err) {
       console.error("Error searching member:", err);
-      setError(err.message || "Error searching member.");
+      if (err.response?.status === 404) {
+        setError("Member Not Found");
+      } else {
+        setError("Error searching member.");
+      }
     } finally {
       setSearching(false);
     }
@@ -387,7 +391,7 @@ export default function Home() {
         <div className="logo-wrapper">
           <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
         </div>
-        {error && <div className="error-message">{error}</div>}
+        {/*{error && <div className="error-message">{error}</div>}*/}
         {/* HOME */}
         {activeTab === "home" && (
           <div className="home">
@@ -640,6 +644,11 @@ export default function Home() {
 
         {/* VERIFY */}
         {activeTab === "verify" && <VerifyRSVP />}
+        {error && (
+          <div className="error-message" style={{ color: "red", marginTop: "20px", textAlign: "center" }}>
+            {error}
+          </div>
+        )}
       </div>
     </div>
   );
