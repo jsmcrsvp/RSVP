@@ -4,6 +4,70 @@ const multer = require("multer");
 const xlsx = require("xlsx");
 const Member = require("../models/Members_DB_Schema");
 
+// Configure Multer for file upload
+const upload = multer({ dest: "uploads/" });
+
+// 🗑️ Delete all members
+router.delete("/delete-all", async (req, res) => {
+  try {
+    const result = await Member.deleteMany({});
+    console.log(`🗑️ Deleted ${result.deletedCount} existing member records.`);
+    return res.json({
+      message: `🗑️ ${result.deletedCount} members deleted successfully.`,
+    });
+  } catch (error) {
+    console.error("❌ Error deleting members:", error);
+    return res.status(500).json({ message: "Failed to delete members." });
+  }
+});
+
+// 📤 Upload and import Excel file
+router.post("/", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded." });
+    }
+
+    console.log(`📂 Importing data from file: ${req.file.originalname}`);
+    const workbook = xlsx.readFile(req.file.path);
+    const sheetName = workbook.SheetNames[0];
+    const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+    const members = data.map((row) => ({
+      memberId: row["Member ID"],
+      fullName: row["Full Name"],
+      address: row["Address"],
+      phoneNumber: row["Phone Number"],
+      email: row["Email"],
+    }));
+
+    if (members.length === 0) {
+      console.log("⚠️ No records found in Excel file.");
+      return res.status(400).json({ message: "No records found in Excel file." });
+    }
+
+    const result = await Member.insertMany(members);
+    console.log(`✅ Imported ${result.length} new member records successfully.`);
+
+    return res.json({
+      message: `✅ Imported ${result.length} member records successfully.`,
+    });
+  } catch (error) {
+    console.error("❌ Error importing members:", error);
+    return res.status(500).json({ message: "Error importing members." });
+  }
+});
+
+module.exports = router;
+
+
+/*
+const express = require("express");
+const router = express.Router();
+const multer = require("multer");
+const xlsx = require("xlsx");
+const Member = require("../models/Members_DB_Schema");
+
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Existing upload route
@@ -41,7 +105,7 @@ router.delete("/delete-all", async (req, res) => {
 });
 
 module.exports = router;
-
+*/
 
 /* backend/routes/updateDatabase.js
 const express = require("express");
