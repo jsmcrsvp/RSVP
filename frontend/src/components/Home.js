@@ -86,7 +86,6 @@ export default function Home() {
 
   const handleTabChange = (tab) => {
     setError("");
-    setSuccess("");
     if (tab === "home") {
       resetAll();
     }
@@ -117,7 +116,6 @@ export default function Home() {
   // Focus the input when searchMode changes
   useEffect(() => {
     setError("");
-    setSuccess("");
     if (searchMode === "memberId") {
       memberIdRef.current.focus();
     } else if (searchMode === "nameHouse") {

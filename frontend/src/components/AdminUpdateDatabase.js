@@ -46,8 +46,7 @@ export default function AdminUpdateDatabase() {
 
     return (
         <div style={{ padding: "0.5rem" }}>
-            <h3>Update Member Database</h3>
-            <p>Select member list Excel file (.xlsx)</p>
+            <p>Select a member list Excel (.xlsx) file to update database</p>
             <div style={{ marginBottom: "1rem" }}>
                 <input
                     type="file"
