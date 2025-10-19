@@ -1,56 +1,4 @@
-// frontend/src/components/AdminFunctionForm.js
-import React, { useState } from "react";
-import AdminAddEvent from "./AdminAddEventForm";
-import AdminAddProgram from "./AdminAddProgramForm";
-import AdminClearRsvp from "./AdminClearRsvp";
-import AdminUpdateDatabase from "./AdminUpdateDatabase"; // 👈 NEW IMPORT
-
-const AdminFunctions = () => {
-  const [activeTab, setActiveTab] = useState("programs");
-
-  const buttonStyle = (tab) => ({
-    padding: "0.5rem 1rem",
-    marginRight: "0.5rem",
-    backgroundColor: activeTab === tab ? "#4c6daf" : "#ccc",
-    color: activeTab === tab ? "white" : "black",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  });
-
-  return (
-    <div style={{ padding: "1rem" }}>
-      {/* Tabs */}
-      <div style={{ display: "flex", marginBottom: "1rem", flexWrap: "wrap" }}>
-        <button style={buttonStyle("programs")} onClick={() => setActiveTab("programs")}>
-          Programs
-        </button>
-        <button style={buttonStyle("events")} onClick={() => setActiveTab("events")}>
-          Events
-        </button>
-        <button style={buttonStyle("clearrsvp")} onClick={() => setActiveTab("clearrsvp")}>
-          Clear RSVP
-        </button>
-        <button style={buttonStyle("updatedb")} onClick={() => setActiveTab("updatedb")}>
-          Update Database
-        </button>
-      </div>
-
-      {/* Active Tab Content */}
-      <div style={{ border: "1px solid #ccc", padding: "1rem", borderRadius: "4px" }}>
-        {activeTab === "programs" && <AdminAddProgram />}
-        {activeTab === "events" && <AdminAddEvent />}
-        {activeTab === "clearrsvp" && <AdminClearRsvp />}
-        {activeTab === "updatedb" && <AdminUpdateDatabase />} {/* 👈 NEW TAB CONTENT */}
-      </div>
-    </div>
-  );
-};
-
-export default AdminFunctions;
-
-
-/* frontend/src/components/Admin.js
+// frontend/src/components/Admin.js
 import React, { useState, useEffect } from "react";
 import ActivateEventForm from "./ActivateEventForm";
 import Dashboard from "./Dashboard";
@@ -76,7 +24,7 @@ export default function Admin() {
         <h2>JSMC RSVP Admin Portal</h2>
         <h4>Select a tab to manage RSVP programs and events</h4>
 
-        {/* Tabs
+        {/* Tabs */}
         <div className="tab-header">
           <button className={activeTab === "home" ? "tab active" : "tab"} onClick={() => setActiveTab("home")}>
             Home
@@ -95,26 +43,25 @@ export default function Admin() {
           </button>
         </div>
 
-        {/* HOME
+        {/* HOME */}
         {activeTab === "home" && (
           <div className="home">
-            {/*<p>Select a tab to manage RSVP programs and events.</p>
+            {/*<p>Select a tab to manage RSVP programs and events.</p>*/}
           </div>
         )}
 
-        {/* DASHBOARD
+        {/* DASHBOARD */}
         {activeTab === "dashboard" && <Dashboard />}
 
-        {/* ACTIVATE EVENT
+        {/* ACTIVATE EVENT */}
         {activeTab === "activateEvent" && <ActivateEventForm />}
 
-        {/* REPORT
+        {/* REPORT */}
         {activeTab === "report" && <AdminEventReport />}
 
-        {/* ADMIN FUNCTIONS
+        {/* ADMIN FUNCTIONS */}
         {activeTab === "adminFunction" && <AdminFunctions />}
       </div>
     </div>
   );
 }
-*/
