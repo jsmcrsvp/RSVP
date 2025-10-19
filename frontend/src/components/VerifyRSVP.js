@@ -305,7 +305,7 @@ export default function VerifyRSVP() {
       )}
 
       {verifyResult.checked && Array.isArray(verifyResult.rsvps) && verifyResult.rsvps.length === 0 && (
-        <div style={{ textAlign: "center", color: "#888", fontStyle: "italic", marginTop: "10px" }}>
+        <div style={{ textAlign: "center", color: "red", fontStyle: "italic", marginTop: "10px" }}>
           No RSVP records found for this search or Event RSVP may be closed.
         </div>
       )}

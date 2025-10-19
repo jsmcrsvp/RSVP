@@ -1,4 +1,49 @@
-// backend/routes/updateDatabase.js
+const express = require("express");
+const router = express.Router();
+const multer = require("multer");
+const xlsx = require("xlsx");
+const Member = require("../models/Members_DB_Schema");
+
+const upload = multer({ storage: multer.memoryStorage() });
+
+// Existing upload route
+router.post("/", upload.single("file"), async (req, res) => {
+  try {
+    const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const data = xlsx.utils.sheet_to_json(sheet);
+
+    if (!data || data.length === 0) {
+      return res.status(400).json({ message: "Excel file is empty." });
+    }
+
+    await Member.deleteMany({});
+    await Member.insertMany(data);
+
+    return res.json({ message: `✅ ${data.length} members imported successfully.` });
+  } catch (error) {
+    console.error("Error importing members:", error);
+    return res.status(500).json({ message: "Error importing members." });
+  }
+});
+
+// NEW: Delete all members
+router.delete("/delete-all", async (req, res) => {
+  try {
+    const result = await Member.deleteMany({});
+    return res.json({
+      message: `🗑️ All members deleted successfully (${result.deletedCount} records removed).`,
+    });
+  } catch (error) {
+    console.error("Error deleting members:", error);
+    return res.status(500).json({ message: "Failed to delete all members." });
+  }
+});
+
+module.exports = router;
+
+
+/* backend/routes/updateDatabase.js
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
@@ -53,3 +98,4 @@ router.post("/", upload.single("file"), async (req, res) => {
 });
 
 module.exports = router;
+*/

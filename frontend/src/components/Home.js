@@ -647,7 +647,7 @@ export default function Home() {
         {/* VERIFY */}
         {activeTab === "verify" && <VerifyRSVP />}
         {error && (
-          <div className="error-message" style={{ color: "red", marginTop: "20px", textAlign: "center" }}>
+          <div className="error-message" style={{ color: "red", fontStyle: "italic", marginTop: "20px", textAlign: "center" }}>
             {error}
           </div>
         )}
