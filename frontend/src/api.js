@@ -144,7 +144,7 @@ export const clearRSVP = async (eventName) => {
 
 // upload member excel file
 export const uploadMemberExcel = async (formData) => {
-  const res = await fetch(`${SERVER_URL}/api/updatedatabase`, {
+  const res = await fetch(`${SERVER_URL}/api/updateDatabase`, {
     method: "POST",
     body: formData,
   });
