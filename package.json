@@ -12,7 +12,7 @@
     "multer": "^2.0.2",
     "nodemailer": "^7.0.6",
     "react-router-dom": "^7.9.1",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "^0.0.0",
     "xlsx": "^0.18.5"
   },
   "scripts": {
@@ -32,5 +32,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/multer": "^2.0.0"
   }
 }

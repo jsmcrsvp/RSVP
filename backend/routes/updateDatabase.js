@@ -3,41 +3,32 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const xlsx = require("xlsx");
-const fs = require("fs");
-const path = require("path");
-const Member = require("../models/Members_DB_Schema"); // ✅ reuse existing schema model
+const Member = require("../models/Members_DB_Schema");
 
-// Configure multer to store uploaded Excel files temporarily
-const upload = multer({
-  dest: "uploads/",
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
-  fileFilter: (req, file, cb) => {
-    if (!file.originalname.match(/\.(xlsx|xls)$/i)) {
-      return cb(new Error("Only Excel files (.xlsx/.xls) are allowed."));
-    }
-    cb(null, true);
-  },
-});
+// Configure Multer for file upload
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-// POST /api/updatedatabase
-router.post("/", upload.single("excelFile"), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ success: false, message: "No file uploaded." });
-  }
-
-  console.log(`📂 Received file: ${req.file.originalname}`);
-
+// POST route to upload Excel file and update database
+router.post("/", upload.single("file"), async (req, res) => {
   try {
-    // Read and parse Excel file
-    const workbook = xlsx.readFile(req.file.path);
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    console.log("✅ Received file:", req.file.originalname);
+
+    // Read Excel file from buffer
+    const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
     const sheetName = workbook.SheetNames[0];
-    const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    const sheet = workbook.Sheets[sheetName];
+    const data = xlsx.utils.sheet_to_json(sheet);
 
     if (!data || data.length === 0) {
-      return res.status(400).json({ success: false, message: "Excel file is empty or invalid." });
+      return res.status(400).json({ message: "Excel file is empty or invalid" });
     }
 
-    // Map Excel rows to schema fields
+    // Map Excel data to your schema
     const members = data.map((row) => ({
       memberId: row["Member ID"],
       fullName: row["Full Name"],
@@ -46,26 +37,18 @@ router.post("/", upload.single("excelFile"), async (req, res) => {
       email: row["Email"],
     }));
 
-    // Optional: clear existing collection before reimporting
-    // await Member.deleteMany({});
-    console.log(`📋 ${members.length} records found in Excel.`);
+    // Optional: clear existing records before inserting new ones
+    await Member.deleteMany({});
+    const inserted = await Member.insertMany(members);
 
-    // Bulk insert
-    const result = await Member.insertMany(members);
-    console.log(`✅ Successfully imported ${result.length} members.`);
-
-    res.status(200).json({
+    console.log(`✅ ${inserted.length} members imported successfully.`);
+    return res.status(200).json({
       success: true,
-      message: `${result.length} members imported successfully.`,
+      message: `✅ ${inserted.length} members imported successfully.`,
     });
-  } catch (error) {
-    console.error("❌ Error processing Excel upload:", error);
-    res.status(500).json({ success: false, message: "Server error during import." });
-  } finally {
-    // Clean up uploaded file
-    fs.unlink(req.file.path, (err) => {
-      if (err) console.warn("⚠️ Could not delete uploaded file:", err.message);
-    });
+  } catch (err) {
+    console.error("❌ Error importing members:", err.message);
+    return res.status(500).json({ message: "Server error importing members" });
   }
 });
 
