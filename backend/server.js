@@ -52,7 +52,7 @@ app.get("/", (req, res) => {
   res.send("Backend is running ✅");
 });
 
-/*========== Search Member =========== Not used anymore from here ======
+/*========== Search Member =========== Not used anymore from here, 10/1 ======
 app.post("/search_member", async (req, res) => {
   const { memberId, name, houseNumber } = req.body;
   console.log("server.js/search_member: Member ", memberId, name, houseNumber);
@@ -105,7 +105,6 @@ const reportRoutes = require("./routes/report");
 const clearRSVPRoutes = require("./routes/clearrsvp");
 const updateDatabaseRoutes = require("./routes/updateDatabase");
 
-
 // Mount routes
 app.use("/api/searchMember", searchMemberRoute);
 app.use("/api/programs", programRoutes);
@@ -117,7 +116,7 @@ app.use("/api/report", reportRoutes);
 app.use("/api/clearrsvp", clearRSVPRoutes);
 app.use("/api/updateDatabase", updateDatabaseRoutes);
 
-// =================== Global JSON Error Handler ===================
+// Global JSON Error Handler
 app.use((err, req, res, next) => {
   console.error("🔥 Uncaught error:", err);
   res.status(500).json({ error: err.message || "Internal server error" });
@@ -126,7 +125,7 @@ app.use((err, req, res, next) => {
 // Health check
 app.get("/", (req, res) => res.send("Backend is running ✅"));
 
-//=================== Server Init ===================
+// Server Init 
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, "0.0.0.0", () => {
@@ -134,23 +133,16 @@ app.listen(PORT, "0.0.0.0", () => {
 });
 
 //=====================================================================================================
-/*async function logEvent(action, details = '') {
-  const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
-  console.log ();
-  //const logMessage = `[${timestamp}] ${action} - ${details}`;
-  await EventLog.create({ logEntry: logMessage });
-}*/
-//=====================================================================================================
 app.get("/server-keep-alive", async (req, res) => {
   const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
   console.log("✅ Server auto keep-alive triggered", timestamp);
   //await logEvent('Keep-Alive', `Server`);
   res.status(200).json({ success: true, message: "Server is alive!" });
 });
-
-app.get("/auto-close-rsvp", async (req, res) => {
+//=====================================================================================================
+app.get("/auto-close-event", async (req, res) => {
   const timestamp = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
-  console.log("⏰ Auto-close RSVP check triggered:", timestamp);
+  console.log("⏰ Event Auto-close check triggered:", timestamp);
 
   try {
     const today = new Date();
@@ -176,18 +168,19 @@ app.get("/auto-close-rsvp", async (req, res) => {
       if (updated) await program.save();
     }
 
-    console.log(`✅ Auto-close complete — ${totalClosed} event(s) closed.`);
+    console.log(`✅ Event Auto-close performed — ${totalClosed} event(s) closed.`);
     res.status(200).json({
       success: true,
-      message: `Auto-close completed. ${totalClosed} event(s) closed.`,
+      message: `Event Auto-close performed. ${totalClosed} event(s) closed.`,
       timestamp,
     });
   } catch (err) {
-    console.error("❌ Error in auto-close:", err);
-    res.status(500).json({ success: false, message: "Error during auto-close.", error: err.message });
+    console.error("❌ Error in event auto-close:", err);
+    res.status(500).json({ success: false, message: "Error during event auto-close.", error: err.message });
   }
 });
-
+//=====================================================================================================
+/*
 app.get("/test-db-write", async (req, res) => {
   try {
     const EventsList = require("./models/Events_List_DB_Schema");
@@ -200,3 +193,11 @@ app.get("/test-db-write", async (req, res) => {
     res.status(500).json({ error: "DB write failed" });
   }
 });
+*/
+//=====================================================================================================
+/*async function logEvent(action, details = '') {
+  const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
+  console.log ();
+  //const logMessage = `[${timestamp}] ${action} - ${details}`;
+  await EventLog.create({ logEntry: logMessage });
+}*/

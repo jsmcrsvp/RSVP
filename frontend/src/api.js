@@ -64,7 +64,6 @@ export const verifyRSVP = async (confNumber) => {
 
 // Verify RSVP by name and house number
 export const verifyRSVPByNameHouse = async (name, houseNumber) => {
-  //console.log("➡️ api.js: Sending request to /api/rsvp/search with:", { name, houseNumber });
   const res = await axios.get(`${SERVER_URL}/api/rsvp_response/search`, {params: { name, houseNumber },
   });
   return res.data;
@@ -127,7 +126,6 @@ export const getRsvpReports = async (programname, eventname) => {
 // Fetch completed events
 export const getCompletedEvents = async () => {
   const res = await fetch(`${SERVER_URL}/api/clearrsvp/completed-events`);
-  //if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
   return res.json();
 };
 
@@ -138,7 +136,6 @@ export const clearRSVP = async (eventName) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ eventName }),
   });
-  //if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
   return res.json();
 };
 
