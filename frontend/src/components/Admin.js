@@ -10,9 +10,8 @@ import "../styles/Admin.css";
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("home");
 
-  // set browser tab title
   useEffect(() => {
-    document.title = "JSMC RSVP Admin Portal";
+    document.title = "JSMC Admin Portal";
   }, []);
 
   return (
