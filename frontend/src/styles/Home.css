@@ -100,3 +100,114 @@ h4 {
   color: white;
   border-color: #007bff;
 }
+
+/* ========== Responsive Adjustments ========== */
+
+/* For tablets and small desktops */
+@media (max-width: 992px) {
+  .home-container {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  h4 {
+    font-size: 1rem;
+  }
+
+  .tab-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tab {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 600px) {
+  .page-wrapper {
+    flex-direction: column;
+    padding: 0.5rem;
+    align-items: stretch;
+  }
+
+  .home-container {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 1rem;
+  }
+
+  .logo-wrapper {
+    margin-bottom: 15px;
+  }
+
+  .rsvp-logo {
+    max-width: 80px;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  h3, h4 {
+    font-size: 1rem;
+  }
+
+  .tab-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .tab {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+
+  /* Make table scroll horizontally */
+  .result-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .result-table th,
+  .result-table td {
+    padding: 6px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  /* Improve spacing for form elements */
+  input, select, button {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0.5rem;
+  }
+
+  .inline-fields {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inline-label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+  }
+
+  .small-input {
+    width: 100%;
+  }
+}

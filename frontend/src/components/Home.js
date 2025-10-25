@@ -101,6 +101,12 @@ export default function Home() {
   };
   // ------------------------------------------------------------
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.body.style.zoom = "100%"; // prevent iOS zooming quirks
+  }, []);
+
+
   // Load open events once
   useEffect(() => {
     (async () => {
