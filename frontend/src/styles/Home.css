@@ -167,20 +167,24 @@ h4 {
     font-size: 1rem;
   }
 
-  /* ✅ Buttons: allow two per row */
+
+  /* ✅ Buttons: two per row */
   .tab-header {
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
   }
 
   .tab {
-    flex: 0 0 45%; /* Two buttons per row */
+    flex: 0 0 45%;
+    /* Two buttons per row */
     max-width: 45%;
     padding: 10px;
     font-size: 0.95rem;
     text-align: center;
   }
+
 
   /* ✅ Stacked Card Layout for Table */
   .result-table {
@@ -200,35 +204,28 @@ h4 {
   }
 
   .result-table tr {
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background: #fff;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    /* Align text inside card */
+    padding: 12px;
   }
 
-  /* ✅ Left-align table content with gap */
   .result-table td {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    gap: 8px; /* Small gap between label and value */
-    border: none !important;
-    font-size: 0.95rem;
-    min-height: 30px;
-    padding: 6px 0;
-    word-break: break-word;
+    gap: 12px;
+    /* More gap between label and value */
     text-align: left;
+    font-size: 0.95rem;
+    word-break: break-word;
   }
 
   .result-table td::before {
     content: attr(data-label);
     font-weight: bold;
     color: #5d8cdf;
-    flex: 0 0 auto; /* Label takes only needed space */
-    margin-right: 6px;
-    white-space: nowrap;
+    flex: 0 0 auto;
+    margin-right: 8px;
   }
 
   /* ✅ Radio buttons inline */
