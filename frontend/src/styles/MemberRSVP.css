@@ -119,6 +119,7 @@ button:hover,
   /* Headings */
   h2 {
     font-size: 1.2rem;
+    text-align: center;
   }
 
   h3,
@@ -127,15 +128,24 @@ button:hover,
     text-align: center;
   }
 
-  /* ✅ Buttons: allow two per row */
+  /* ✅ Buttons: two per row */
   .button,
   button {
-    flex: 0 0 45%; /* Two buttons per row */
-    max-width: 45%;
+    flex: 0 0 48%; /* Two buttons per row */
+    max-width: 48%;
     padding: 10px;
     font-size: 0.95rem;
     text-align: center;
     margin-bottom: 0.5rem;
+  }
+
+  /* ✅ Wrap buttons in a flex container */
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
   }
 
   /* ✅ Form layout */
@@ -151,7 +161,7 @@ button:hover,
     margin-bottom: 0.5rem;
   }
 
-  /* ✅ Member Info Table (stacked card) */
+  /* ✅ Stacked Card Layout for Tables */
   .result-table {
     border: none !important;
     border-collapse: separate !important;
@@ -170,11 +180,12 @@ button:hover,
   }
 
   .result-table tr {
+    text-align: left;
     margin-bottom: 1rem;
     border: 1px solid #ccc;
     border-radius: 6px;
     background: #fff;
-    padding: 10px;
+    padding: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
@@ -184,7 +195,7 @@ button:hover,
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    gap: 8px;
+    gap: 12px;
     border: none !important;
     font-size: 0.95rem;
     padding: 6px 0;
@@ -196,8 +207,8 @@ button:hover,
     content: attr(data-label);
     font-weight: bold;
     color: #5d8cdf;
-    flex: 0 0 40%;
-    margin-right: 6px;
+    flex: 0 0 auto;
+    margin-right: 8px;
     white-space: normal;
   }
 }

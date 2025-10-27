@@ -135,7 +135,6 @@ h4 {
   }
 }
 
-/* For Mobile devices */
 @media (max-width: 600px) {
   .page-wrapper {
     flex-direction: column;
@@ -148,9 +147,11 @@ h4 {
     border-radius: 0;
     box-shadow: none;
     padding: 1rem;
+    text-align: left; /* ✅ Override center alignment */
   }
 
   .logo-wrapper {
+    text-align: center; /* Keep logo centered */
     margin-bottom: 15px;
   }
 
@@ -160,31 +161,37 @@ h4 {
 
   h2 {
     font-size: 1.2rem;
+    text-align: center;
   }
 
   h3,
   h4 {
     font-size: 1rem;
+    text-align: center;
   }
-
 
   /* ✅ Buttons: two per row */
   .tab-header {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     gap: 10px;
+    width: 100%;
   }
 
-  .tab {
-    flex: 0 0 45%;
-    /* Two buttons per row */
-    max-width: 45%;
+  .tab-header .tab {
+    flex: 0 0 48%; /* Two buttons per row */
+    max-width: 48%;
     padding: 10px;
     font-size: 0.95rem;
     text-align: center;
+    width: auto; /* ✅ Override global button width */
   }
 
+  /* ✅ Keep other buttons full width */
+  .inline-fields button {
+    width: 100%;
+  }
 
   /* ✅ Stacked Card Layout for Table */
   .result-table {
@@ -205,8 +212,12 @@ h4 {
 
   .result-table tr {
     text-align: left;
-    /* Align text inside card */
     padding: 12px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .result-table td {
@@ -214,10 +225,10 @@ h4 {
     flex-direction: row;
     justify-content: flex-start;
     gap: 12px;
-    /* More gap between label and value */
     text-align: left;
     font-size: 0.95rem;
     word-break: break-word;
+    padding: 6px 0;
   }
 
   .result-table td::before {
@@ -243,25 +254,9 @@ h4 {
 
   /* ✅ Form elements full width */
   input,
-  select,
-  button {
+  select {
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 0.5rem;
-  }
-
-  .inline-fields {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .inline-label {
-    display: block;
-    margin-bottom: 0.3rem;
-    font-weight: 500;
-  }
-
-  .small-input {
-    width: 100%;
   }
 }
