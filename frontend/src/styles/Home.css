@@ -179,9 +179,6 @@ h4 {
     font-size: 0.95rem;
   }
 
-
-  
-/* Make table elements block */
   .result-table,
   .result-table thead,
   .result-table tbody,
@@ -192,17 +189,15 @@ h4 {
     width: 100%;
   }
 
-  /* Hide table headers completely */
   .result-table thead {
     display: none;
   }
 
-  /* Remove table borders */
   .result-table {
-    border: none;
+    border: none !important;
+    border-collapse: separate !important;
   }
 
-  /* Each row becomes a card */
   .result-table tr {
     margin-bottom: 1rem;
     border: 1px solid #ccc;
@@ -212,10 +207,9 @@ h4 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
-  /* Style individual cells */
   .result-table td {
     position: relative;
-    padding-left: 50%; /* Space for label */
+    padding-left: 50%;
     text-align: left;
     border: none;
     display: block;
@@ -223,7 +217,6 @@ h4 {
     min-height: 30px;
   }
 
-  /* Add labels before each cell */
   .result-table td::before {
     content: attr(data-label);
     position: absolute;
