@@ -77,7 +77,10 @@ export default function MemberRSVP({
         <div className="result-table-wrapper">
           <table className="result-table" style={{ marginBottom: 10 }}>
             <tbody>
-              <tr>
+              <tr><td data-label="Name">{member.name}</td></tr>
+              <tr><td data-label="Address">{member.address}</td></tr>
+              <tr><td data-label="Phone">{member.phone}</td></tr>
+              {/*<tr>
                 <th>Name</th>
                 <td>{member.name}</td>
               </tr>
@@ -88,7 +91,7 @@ export default function MemberRSVP({
               <tr>
                 <th>Phone</th>
                 <td>{member.phone}</td>
-              </tr>
+              </tr>*/}
             </tbody>
           </table>
         </div>
@@ -118,75 +121,57 @@ export default function MemberRSVP({
 
                   return (
                     <tr key={idx}>
-                      {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
-                      <td>{ev.eventname}</td>
-                      <td>
-                        {ev.eventday}, {displayDate(ev.eventdate)}
+                      {isFirst && <td rowSpan={programCount} data-label="Program">{ev.programname}</td>}
+                      <td data-label="Event Name">{ev.eventname}</td>
+                      <td data-label="Event Date">{ev.eventday}, {displayDate(ev.eventdate)}</td>
+                      <td data-label="Select"><input type="checkbox" checked={!!selectedEvents[idx]} onChange={(e) => {
+                        toggleEventSelection(idx, e.target.checked);
+                        // Reset counts if unchecked
+                        if (!e.target.checked) {
+                          setRsvpCounts((prev) => {
+                            const copy = [...prev];
+                            copy[idx] = "";
+                            return copy;
+                          });
+                          setKidsRsvpCounts((prev) => {
+                            const copy = [...prev];
+                            copy[idx] = "";
+                            return copy;
+                          });
+                        }
+                      }}
+                      />
                       </td>
-                      <td>
-                        <input
-                          type="checkbox"
-                          checked={!!selectedEvents[idx]}
-                          onChange={(e) => {
-                            toggleEventSelection(idx, e.target.checked);
-                            // Reset counts if unchecked
-                            if (!e.target.checked) {
-                              setRsvpCounts((prev) => {
-                                const copy = [...prev];
-                                copy[idx] = "";
-                                return copy;
-                              });
-                              setKidsRsvpCounts((prev) => {
-                                const copy = [...prev];
-                                copy[idx] = "";
-                                return copy;
-                              });
-                            }
-                          }}
-                        />
+                      <td data-label="Adult RSVP">{selectedEvents[idx] ? (<input type="number" min="0" value={rsvpCounts[idx]} onChange={(e) => {
+                        const val = e.target.value;
+                        setRsvpCounts((prev) => {
+                          const copy = [...prev];
+                          copy[idx] = val;
+                          return copy;
+                        });
+                      }}
+                        placeholder="Adults"
+                        style={{ width: "60px", textAlign: "center" }}
+                      />
+                      ) : (
+                        "-"
+                      )}
                       </td>
-                      <td>
-                        {selectedEvents[idx] ? (
-                          <input
-                            type="number"
-                            min="0"
-                            value={rsvpCounts[idx]}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              setRsvpCounts((prev) => {
-                                const copy = [...prev];
-                                copy[idx] = val;
-                                return copy;
-                              });
-                            }}
-                            placeholder="Adults"
-                            style={{ width: "60px", textAlign: "center" }}
-                          />
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-                      <td>
-                        {selectedEvents[idx] ? (
-                          <input
-                            type="number"
-                            min="0"
-                            value={kidsRsvpCounts[idx]}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              setKidsRsvpCounts((prev) => {
-                                const copy = [...prev];
-                                copy[idx] = val;
-                                //console.log(`Kids count updated for idx ${idx}:`, copy[idx]);
-                                return copy;
-                              });
-                            }}
-                            placeholder="Kids"
-                            style={{ width: "60px", textAlign: "center" }}
-                          />
-                        ) : (
-                          "-"
-                        )}
+                      <td data-label="Kids RSVP">{selectedEvents[idx] ? (<input type="number" min="0" value={kidsRsvpCounts[idx]} onChange={(e) => {
+                        const val = e.target.value;
+                        setKidsRsvpCounts((prev) => {
+                          const copy = [...prev];
+                          copy[idx] = val;
+                          //console.log(`Kids count updated for idx ${idx}:`, copy[idx]);
+                          return copy;
+                        });
+                      }}
+                        placeholder="Kids"
+                        style={{ width: "60px", textAlign: "center" }}
+                      />
+                      ) : (
+                        "-"
+                      )}
                       </td>
                     </tr>
                   );

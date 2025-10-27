@@ -543,24 +543,12 @@ export default function Home() {
               <form className="search-form" onSubmit={handleSearch}>
                 <h4>Retrieve membership using</h4>
 
-                <div className="form-row">
-                  <label>
-                    <input
-                      type="radio"
-                      value="memberId"
-                      checked={searchMode === "memberId"}
-                      onChange={() => setSearchMode("memberId")}
-                    />
+                <div className="form-section">
+                  <label> <input type="radio" value="memberId" checked={searchMode === "memberId"} onChange={() => setSearchMode("memberId")}/>
                     Member ID
                   </label>
                   <label style={{ marginLeft: "1rem" }}> OR </label>
-                  <label style={{ marginLeft: "1rem" }}>
-                    <input
-                      type="radio"
-                      value="nameHouse"
-                      checked={searchMode === "nameHouse"}
-                      onChange={() => setSearchMode("nameHouse")}
-                    />
+                  <label style={{ marginLeft: "1rem" }}> <input type="radio" value="nameHouse" checked={searchMode === "nameHouse"} onChange={() => setSearchMode("nameHouse")}/>
                     First Name &amp; House #
                   </label>
                 </div>

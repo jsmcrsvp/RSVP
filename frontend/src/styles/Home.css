@@ -135,6 +135,7 @@ h4 {
   }
 }
 
+/* For Mobile devices */
 @media (max-width: 600px) {
   .page-wrapper {
     flex-direction: column;
@@ -166,16 +167,19 @@ h4 {
     font-size: 1rem;
   }
 
+  /* ✅ Buttons: allow two per row */
   .tab-header {
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
   }
 
   .tab {
-    width: 100%;
+    flex: 0 0 45%; /* Two buttons per row */
+    max-width: 45%;
     padding: 10px;
     font-size: 0.95rem;
+    text-align: center;
   }
 
   /* ✅ Stacked Card Layout for Table */
@@ -204,26 +208,27 @@ h4 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
-  /* ✅ Fix overlap using flex layout */
+  /* ✅ Left-align table content with gap */
   .result-table td {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    gap: 10px;
+    gap: 8px; /* Small gap between label and value */
     border: none !important;
     font-size: 0.95rem;
     min-height: 30px;
     padding: 6px 0;
-    word-break: break-word; /* Wrap long text */
+    word-break: break-word;
+    text-align: left;
   }
 
   .result-table td::before {
     content: attr(data-label);
     font-weight: bold;
     color: #5d8cdf;
-    flex: 0 0 40%; /* Label takes 40% width */
-    text-align: left;
-    white-space: normal;
+    flex: 0 0 auto; /* Label takes only needed space */
+    margin-right: 6px;
+    white-space: nowrap;
   }
 
   /* ✅ Radio buttons inline */
@@ -243,7 +248,7 @@ h4 {
   input,
   select,
   button {
-    width: 70%;
+    width: 100%;
     box-sizing: border-box;
     margin-bottom: 0.5rem;
   }

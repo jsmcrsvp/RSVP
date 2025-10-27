@@ -113,3 +113,91 @@ button:hover,
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+/* ================ */
+@media (max-width: 600px) {
+  /* Headings */
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  h3,
+  h4 {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  /* ✅ Buttons: allow two per row */
+  .button,
+  button {
+    flex: 0 0 45%; /* Two buttons per row */
+    max-width: 45%;
+    padding: 10px;
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ✅ Form layout */
+  .inline-fields {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  input,
+  select {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ✅ Member Info Table (stacked card) */
+  .result-table {
+    border: none !important;
+    border-collapse: separate !important;
+  }
+
+  .result-table thead {
+    display: none !important;
+  }
+
+  .result-table,
+  .result-table tr,
+  .result-table td,
+  .result-table th {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .result-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* ✅ Flex layout for label/value */
+  .result-table td,
+  .result-table th {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 8px;
+    border: none !important;
+    font-size: 0.95rem;
+    padding: 6px 0;
+    word-break: break-word;
+    text-align: left;
+  }
+
+  .result-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #5d8cdf;
+    flex: 0 0 40%;
+    margin-right: 6px;
+    white-space: normal;
+  }
+}
