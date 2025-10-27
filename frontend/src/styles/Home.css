@@ -135,7 +135,6 @@ h4 {
   }
 }
 
-/* For mobile devices */
 @media (max-width: 600px) {
   .page-wrapper {
     flex-direction: column;
@@ -179,23 +178,21 @@ h4 {
     font-size: 0.95rem;
   }
 
-  .result-table,
-  .result-table thead,
-  .result-table tbody,
-  .result-table th,
-  .result-table td,
-  .result-table tr {
-    display: block;
-    width: 100%;
-  }
-
-  .result-table thead {
-    display: none;
-  }
-
+  /* ✅ Stacked Card Layout for Table */
   .result-table {
     border: none !important;
     border-collapse: separate !important;
+  }
+
+  .result-table thead {
+    display: none !important;
+  }
+
+  .result-table,
+  .result-table tr,
+  .result-table td {
+    display: block !important;
+    width: 100% !important;
   }
 
   .result-table tr {
@@ -211,8 +208,7 @@ h4 {
     position: relative;
     padding-left: 50%;
     text-align: left;
-    border: none;
-    display: block;
+    border: none !important;
     font-size: 0.95rem;
     min-height: 30px;
   }
@@ -226,27 +222,27 @@ h4 {
     white-space: nowrap;
   }
 
-/* Improve spacing for form elements */
-input,
-select,
-button {
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 0.5rem;
-}
+  /* ✅ Form elements */
+  input,
+  select,
+  button {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0.5rem;
+  }
 
-.inline-fields {
-  flex-direction: column;
-  align-items: stretch;
-}
+  .inline-fields {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-.inline-label {
-  display: block;
-  margin-bottom: 0.3rem;
-  font-weight: 500;
-}
+  .inline-label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+  }
 
-.small-input {
-  width: 100%;
-}
+  .small-input {
+    width: 100%;
+  }
 }
