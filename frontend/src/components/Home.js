@@ -439,12 +439,26 @@ export default function Home() {
                         const programCount = events.filter((e) => e.programname === ev.programname).length;
 
                         return (
+
                           <tr key={ev._id || idx}>
+                            {isFirst && (
+                              <td rowSpan={programCount} data-label="Program">
+                                {ev.programname}
+                              </td>
+                            )}
+                            <td data-label="Event Name">{ev.eventname}</td>
+                            <td data-label="Event Date">
+                              {ev.eventday}, {displayDate(ev.eventdate)}
+                            </td>
+                            <td data-label="RSVP By">{displayDate(ev.closersvp)}</td>
+                          </tr>
+
+                          /*<tr key={ev._id || idx}>
                             {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
                             <td>{ev.eventname}</td>
                             <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
                             <td>{displayDate(ev.closersvp)}</td>
-                          </tr>
+                          </tr>*/
                         );
                       })}
                     </tbody>
