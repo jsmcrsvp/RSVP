@@ -204,29 +204,46 @@ h4 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
+  /* ✅ Fix overlap using flex layout */
   .result-table td {
-    position: relative;
-    padding-left: 50%;
-    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
     border: none !important;
     font-size: 0.95rem;
     min-height: 30px;
+    padding: 6px 0;
+    word-break: break-word; /* Wrap long text */
   }
 
   .result-table td::before {
     content: attr(data-label);
-    position: absolute;
-    left: 10px;
     font-weight: bold;
     color: #5d8cdf;
-    white-space: nowrap;
+    flex: 0 0 40%; /* Label takes 40% width */
+    text-align: left;
+    white-space: normal;
   }
 
-  /* ✅ Form elements */
+  /* ✅ Radio buttons inline */
+  .form-section label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 1rem;
+    font-size: 1rem;
+  }
+
+  .form-section input[type="radio"] {
+    margin: 0;
+  }
+
+  /* ✅ Form elements full width */
   input,
   select,
   button {
-    width: 100%;
+    width: 70%;
     box-sizing: border-box;
     margin-bottom: 0.5rem;
   }

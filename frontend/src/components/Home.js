@@ -442,14 +442,10 @@ export default function Home() {
 
                           <tr key={ev._id || idx}>
                             {isFirst && (
-                              <td rowSpan={programCount} data-label="Program">
-                                {ev.programname}
-                              </td>
+                              <td rowSpan={programCount} data-label="Program">{ev.programname}</td>
                             )}
                             <td data-label="Event Name">{ev.eventname}</td>
-                            <td data-label="Event Date">
-                              {ev.eventday}, {displayDate(ev.eventdate)}
-                            </td>
+                            <td data-label="Event Date">{ev.eventday}, {displayDate(ev.eventdate)}</td>
                             <td data-label="RSVP By">{displayDate(ev.closersvp)}</td>
                           </tr>
 
