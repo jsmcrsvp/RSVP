@@ -181,7 +181,7 @@ h4 {
 
 
   
-  /* Make table elements block */
+/* Make table elements block */
   .result-table,
   .result-table thead,
   .result-table tbody,
@@ -195,6 +195,11 @@ h4 {
   /* Hide table headers completely */
   .result-table thead {
     display: none;
+  }
+
+  /* Remove table borders */
+  .result-table {
+    border: none;
   }
 
   /* Each row becomes a card */
@@ -213,7 +218,7 @@ h4 {
     padding-left: 50%; /* Space for label */
     text-align: left;
     border: none;
-    display: block; /* Important: block, not flex */
+    display: block;
     font-size: 0.95rem;
     min-height: 30px;
   }
