@@ -180,7 +180,8 @@ h4 {
   }
 
 
-  /* Convert table into block layout */
+  
+  /* Make table elements block */
   .result-table,
   .result-table thead,
   .result-table tbody,
@@ -191,7 +192,7 @@ h4 {
     width: 100%;
   }
 
-  /* Hide table headers */
+  /* Hide table headers completely */
   .result-table thead {
     display: none;
   }
@@ -209,11 +210,10 @@ h4 {
   /* Style individual cells */
   .result-table td {
     position: relative;
-    padding-left: 50%;
+    padding-left: 50%; /* Space for label */
     text-align: left;
     border: none;
-    display: flex;
-    align-items: center;
+    display: block; /* Important: block, not flex */
     font-size: 0.95rem;
     min-height: 30px;
   }
@@ -221,7 +221,6 @@ h4 {
   /* Add labels before each cell */
   .result-table td::before {
     content: attr(data-label);
-    /* Pull column name from data-label */
     position: absolute;
     left: 10px;
     font-weight: bold;
