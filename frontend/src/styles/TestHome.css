@@ -1,196 +1,134 @@
-.page-wrapper {
+/* =============== Overall Layout =============== */
+.home {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   min-height: 100vh;
   background-color: #e8f3f9;
   padding: 1rem;
+  box-sizing: border-box;
 }
 
-/* Ensure the main content aligns left */
 .home-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Left-align content */
-  justify-content: flex-start;
   width: 100%;
   max-width: 900px;
-  margin: 0 auto;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-/* Logo centering only at top */
-.logo-wrapper {
+/* Centered headings, messages, etc. */
+.home-container h1,
+.home-container h2,
+.home-container p {
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+/* =============== Tabs (Button Group) =============== */
+.tab-header {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: nowrap; /* keep buttons in one line */
   width: 100%;
+  margin-top: 1rem;
 }
 
-/* Headings neatly spaced */
-.home h2,
-.home h4 {
-  margin: 0.4rem 0;
-  text-align: left;
+.tab {
+  flex: 0 1 auto;
+  padding: 8px 16px;
+  background-color: #4c6daf;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  white-space: nowrap; /* prevent text wrap */
+  transition: background-color 0.2s ease;
 }
 
-/* Table styling */
+.tab:hover {
+  background-color: #3a5a99;
+}
+
+.tab.active {
+  background-color: #324c82;
+}
+
+/* Make sure buttons shrink but stay on one line on small screens */
+@media (max-width: 480px) {
+  .tab {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+}
+
+/* =============== Table Styling =============== */
+.result-table-wrapper {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-start; /* align table to left */
+}
+
 .result-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 0.5rem;
-  text-align: left;
+  background-color: white;
+  border-radius: 6px;
+  text-align: left; /* keep content left-aligned */
+  overflow: hidden;
 }
 
 .result-table th,
 .result-table td {
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  font-size: 0.95rem;
+  padding: 10px 12px;
+  border-bottom: 1px solid #ddd;
+  font-size: 1rem;
 }
 
-/* Button section layout */
-.tab-header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 1rem;
-  justify-content: flex-start; /* Left-align buttons */
-}
-
-/* Tab button formatting */
-.tab {
+.result-table th {
   background-color: #4c6daf;
   color: white;
-  border: none;
-  padding: 0.4rem 0.8rem; /* Compact size */
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  white-space: nowrap; /* Keep text on single line */
-  transition: background-color 0.2s ease-in-out;
+  font-weight: 600;
 }
 
-.tab:hover {
-  background-color: #365c9a;
+.result-table tr:hover {
+  background-color: #f3f6fa;
 }
 
-/* Ensure form buttons also stay compact */
-button.button {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.95rem;
-  white-space: nowrap;
-  width: auto;
-  max-width: fit-content;
-}
-
-/* Mobile adjustments */
+/* Make table scroll horizontally on small screens */
 @media (max-width: 600px) {
-  .home-container {
-    padding: 0.8rem;
-  }
-
-  .tab-header {
-    gap: 0.4rem;
-  }
-
-  .tab {
-    font-size: 0.9rem;
-    padding: 0.35rem 0.7rem;
+  .result-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .result-table th,
   .result-table td {
     font-size: 0.9rem;
-    padding: 6px 8px;
-  }
-}
-/* ===========================
-   Patch: left-align table only
-   =========================== */
-
-/* Keep the rest of the home content centered */
-.home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;    /* headings, logo, and general content stay centered */
-  width: 100%;
-}
-
-/* Make the result table wrapper stretch full width but keep its content left-aligned */
-.result-table-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start; /* left-align the table inside the wrapper */
-  box-sizing: border-box;
-  padding: 0; /* keep your existing padding if you prefer */
-}
-
-/* Ensure the inner scroll container doesn't center the table */
-.result-table-wrapper > .result-table,
-.result-table-wrapper table,
-.result-table {
-  margin: 0;              /* remove auto centering margin */
-  text-align: left;       /* table cells left-aligned */
-}
-
-/* If you want the table to have a maximum width while keeping left alignment,
-   uncomment and adjust the line below:
-.result-table { max-width: 900px; }
-*/
-
-/* ===========================
-   Patch: keep tab buttons single-line
-   =========================== */
-
-/* Put buttons in one horizontal line and allow horizontal scroll on small screens */
-.tab-header {
-  display: flex;
-  flex-wrap: nowrap;       /* prevent wrapping to multiple lines */
-  gap: 0.5rem;
-  justify-content: center; /* still center the row as a whole */
-  overflow-x: auto;        /* allow horizontal scroll if necessary */
-  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
-  padding-bottom: 6px;     /* small breathing space so scroll bar doesn't overlap */
-}
-
-/* Make each tab slightly more compact so they fit better on small screens */
-.tab {
-  padding: 6px 10px;       /* compact padding */
-  font-size: 0.9rem;       /* slightly smaller font */
-  white-space: nowrap;     /* force single line inside each button */
-  flex: 0 0 auto;          /* no stretching; size to content */
-  max-width: none;
-}
-
-/* Reduce long label size on very narrow screens so it's less likely to wrap */
-@media (max-width: 420px) {
-  .tab {
-    padding: 5px 8px;
-    font-size: 0.85rem;
+    padding: 8px 10px;
   }
 }
 
-/* Ensure form search buttons (buttons with class "button") follow same compact style */
-button.button {
-  padding: 6px 10px;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  width: auto;
+/* =============== General Buttons =============== */
+button {
+  padding: 8px 14px;
+  font-size: 1rem;
+  background-color: #4c6daf;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap; /* keep single line */
+  transition: background-color 0.2s ease;
 }
 
-/* Optional: subtle fade on left/right when overflowed (visual hint) */
-.tab-header {
-  position: relative;
+button:hover {
+  background-color: #3a5a99;
 }
-.tab-header::after,
-.tab-header::before {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 24px;
-  z-index: 2;
-  display: none; /* enable if you add a gradient */
-}
-/* To enable left/right gradients when table scrolls, set display:block and add backgrounds */
