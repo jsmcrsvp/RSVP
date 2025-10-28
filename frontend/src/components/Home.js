@@ -405,10 +405,9 @@ export default function Home() {
 
   // -------- UI --------
   return (
-
     <div className="page-wrapper">
       <div className="home-container">
-        {/* Logo */}
+        {/* ✅ Logo at the top */}
         <div className="logo-wrapper">
           <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
         </div>
@@ -420,53 +419,58 @@ export default function Home() {
             <h4>Current open events to Submit / Verify / Modify RSVP</h4>
 
             {/* Open Events Table */}
-            <div className="result-table-wrapper">
-              {Array.isArray(events) && events.length > 0 ? (
-                <table className="result-table">
-                  <thead>
-                    <tr>
-                      <th>Program</th>
-                      <th>Event Name</th>
-                      <th>Event Date</th>
-                      <th>RSVP By</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {events.map((ev, idx) => {
-                      const isFirst =
-                        idx === 0 || ev.programname !== events[idx - 1].programname;
-                      const programCount = events.filter(
-                        (e) => e.programname === ev.programname
-                      ).length;
+            <div style={{ overflowX: "auto", marginTop: "1rem", marginBottom: "1rem" }}>
+              <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
+                {Array.isArray(events) && events.length > 0 ? (
+                  <table className="result-table" style={{ marginBottom: "20px" }}>
+                    <thead>
+                      <tr>
+                        <th>Program</th>
+                        <th>Event Name</th>
+                        <th>Event Date</th>
+                        <th>RSVP By</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {events.map((ev, idx) => {
+                        // Check if this is the first event for this program
+                        const isFirst = idx === 0 || ev.programname !== events[idx - 1].programname;
+                        // Count how many events belong to this program
+                        const programCount = events.filter((e) => e.programname === ev.programname).length;
 
-                      return (
-                        <tr key={ev._id || idx}>
-                          {isFirst && (
-                            <td data-label="Program" rowSpan={programCount}>
-                              {ev.programname}
-                            </td>
-                          )}
-                          <td data-label="Event Name">{ev.eventname}</td>
-                          <td data-label="Event Date">
-                            {ev.eventday}, {displayDate(ev.eventdate)}
-                          </td>
-                          <td data-label="RSVP By">{displayDate(ev.closersvp)}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              ) : (
-                <p style={{ fontStyle: "italic", color: "#666" }}>
-                  No open events available for RSVP at this time.
-                </p>
+                        return (
+
+                          <tr key={ev._id || idx}>
+                            {isFirst && (
+                              <td rowSpan={programCount} data-label="Program">{ev.programname}</td>
+                            )}
+                            <td data-label="Event Name">{ev.eventname}</td>
+                            <td data-label="Event Date">{ev.eventday}, {displayDate(ev.eventdate)}</td>
+                            <td data-label="RSVP By">{displayDate(ev.closersvp)}</td>
+                          </tr>
+
+                          /*<tr key={ev._id || idx}>
+                            {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
+                            <td>{ev.eventname}</td>
+                            <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
+                            <td>{displayDate(ev.closersvp)}</td>
+                          </tr>*/
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p style={{ fontStyle: "italic", color: "#666" }}>
+                    No open events available for RSVP at this time.
+                  </p>
+                )}
+              </div>
+
+              {/* Show this message only if events exist */}
+              {Array.isArray(events) && events.length > 0 && (
+                <h4>Please select Submit RSVP or Verify/Modify RSVP</h4>
               )}
             </div>
-
-            {/* Show message only if events exist */}
-            {Array.isArray(events) && events.length > 0 && (
-              <h4>Please select Submit RSVP or Verify/Modify RSVP</h4>
-            )}
           </div>
         )}
 
@@ -478,6 +482,7 @@ export default function Home() {
             </button>
           )}
 
+          {/* Only render Submit/Verify if there are open events */}
           {Array.isArray(events) && events.length > 0 && (
             <>
               {activeTab !== "submit" && (
@@ -501,27 +506,15 @@ export default function Home() {
               <div className="form-section">
                 <h3>Are you JSMC Life Member?</h3>
                 <label>
-                  <input
-                    type="radio"
-                    name="lifeMember"
-                    value="yes"
-                    onChange={() => setIsLifeMember("yes")}
-                  />{" "}
-                  Yes
+                  <input type="radio" name="lifeMember" value="yes" onChange={() => setIsLifeMember("yes")} /> Yes
                 </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="lifeMember"
-                    value="no"
-                    onChange={() => setIsLifeMember("no")}
-                  />{" "}
-                  No
+                <label style={{ marginLeft: "1rem" }}>
+                  <input type="radio" name="lifeMember" value="no" onChange={() => setIsLifeMember("no")} /> No
                 </label>
               </div>
             )}
 
-            {/* Non-member flow */}
+            {/* Non-member flow: render NonMemberRSVP component */}
             {isLifeMember === "no" && (
               <NonMemberRSVP
                 events={events}
@@ -545,33 +538,22 @@ export default function Home() {
               />
             )}
 
-            {/* Member search */}
+            {/* Member search UI (keeps your existing search behavior) */}
             {isLifeMember === "yes" && !member && (
               <form className="search-form" onSubmit={handleSearch}>
                 <h4>Retrieve membership using</h4>
+
                 <div className="form-section">
-                  <label>
-                    <input
-                      type="radio"
-                      value="memberId"
-                      checked={searchMode === "memberId"}
-                      onChange={() => setSearchMode("memberId")}
-                    />
+                  <label> <input type="radio" value="memberId" checked={searchMode === "memberId"} onChange={() => setSearchMode("memberId")}/>
                     Member ID
                   </label>
-                  <label>OR</label>
-                  <label>
-                    <input
-                      type="radio"
-                      value="nameHouse"
-                      checked={searchMode === "nameHouse"}
-                      onChange={() => setSearchMode("nameHouse")}
-                    />
+                  <label style={{ marginLeft: "1rem" }}> OR </label>
+                  <label style={{ marginLeft: "1rem" }}> <input type="radio" value="nameHouse" checked={searchMode === "nameHouse"} onChange={() => setSearchMode("nameHouse")}/>
                     First Name &amp; House #
                   </label>
                 </div>
 
-                {/* Member ID Search */}
+                {/* ---- Member ID Search ---- */}
                 {searchMode === "memberId" && (
                   <div className="inline-fields">
                     <span className="inline-label">Member ID:</span>
@@ -587,44 +569,20 @@ export default function Home() {
                       className="button"
                       type="submit"
                       disabled={searching || memberId.trim() === ""}
+                      style={{
+                        backgroundColor:
+                          searching || memberId.trim() === "" ? "lightgray" : "#007bff",
+                        color: searching || memberId.trim() === "" ? "#666" : "white",
+                        cursor:
+                          searching || memberId.trim() === "" ? "not-allowed" : "pointer",
+                      }}
                     >
                       {searching ? "Searching..." : "Search"}
                     </button>
                   </div>
                 )}
 
-                {/* Name + House Search */}
-                {searchMode === "nameHouse" && (
-                  <div className="inline-fields">
-                    <span className="inline-label">First Name:</span>
-                    <input
-                      ref={firstNameRef}
-                      className="small-input"
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="First Name"
-                    />
-                    <span className="inline-label">House #:</span>
-                    <input
-                      className="small-input"
-                      type="text"
-                      value={houseNumber}
-                      onChange={(e) => setHouseNumber(e.target.value)}
-                      placeholder="e.g. 123"
-                    />
-                    <button
-                      className="button"
-                      type="submit"
-                      disabled={
-                        searching || name.trim() === "" || houseNumber.trim() === ""
-                      }
-                    >
-                      {searching ? "Searching..." : "Search"}
-                    </button>
-                  </div>
-                )}
-
+                {/* ---- Name + House Search ---- */}
                 {searchMode === "nameHouse" && (
                   <div className="inline-fields">
                     <span className="inline-label">First Name:</span>
@@ -671,6 +629,7 @@ export default function Home() {
                 )}
               </form>
             )}
+
             {/* Member found: render MemberRSVP component (keeps your RSVP UI) */}
             {member && (
               <MemberRSVP
@@ -724,284 +683,3 @@ export default function Home() {
     </div>
   );
 }
-
-/*
-<div className="page-wrapper">
-  <div className="home-container">
-    {/* ✅ Logo at the top
-    <div className="logo-wrapper">
-      <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
-    </div>
-
-    {/* HOME
-    {activeTab === "home" && (
-      <div className="home">
-        <h2>JSMC RSVP Portal</h2>
-        <h4>Current open events to Submit / Verify / Modify RSVP</h4>
-
-        {/* Open Events Table
-        <div style={{ overflowX: "auto", marginTop: "1rem", marginBottom: "1rem" }}>
-          <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
-            {Array.isArray(events) && events.length > 0 ? (
-              <table className="result-table" style={{ marginBottom: "20px" }}>
-                <thead>
-                  <tr>
-                    <th>Program</th>
-                    <th>Event Name</th>
-                    <th>Event Date</th>
-                    <th>RSVP By</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {events.map((ev, idx) => {
-                    // Check if this is the first event for this program
-                    const isFirst = idx === 0 || ev.programname !== events[idx - 1].programname;
-                    // Count how many events belong to this program
-                    const programCount = events.filter((e) => e.programname === ev.programname).length;
-
-                    return (
-
-                      <tr key={ev._id || idx}>
-                        {isFirst && (
-                          <td rowSpan={programCount} data-label="Program">{ev.programname}</td>
-                        )}
-                        <td data-label="Event Name">{ev.eventname}</td>
-                        <td data-label="Event Date">{ev.eventday}, {displayDate(ev.eventdate)}</td>
-                        <td data-label="RSVP By">{displayDate(ev.closersvp)}</td>
-                      </tr>
-
-                      /*<tr key={ev._id || idx}>
-                        {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
-                        <td>{ev.eventname}</td>
-                        <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
-                        <td>{displayDate(ev.closersvp)}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            ) : (
-              <p style={{ fontStyle: "italic", color: "#666" }}>
-                No open events available for RSVP at this time.
-              </p>
-            )}
-          </div>
-
-          {/* Show this message only if events exist
-          {Array.isArray(events) && events.length > 0 && (
-            <h4>Please select Submit RSVP or Verify/Modify RSVP</h4>
-          )}
-        </div>
-      </div>
-    )}
-
-    {/* Tabs
-    <div className="tab-header">
-      {activeTab !== "home" && (
-        <button className="tab" onClick={() => handleTabChange("home")}>
-          Home
-        </button>
-      )}
-
-      {/* Only render Submit/Verify if there are open events
-      {Array.isArray(events) && events.length > 0 && (
-        <>
-          {activeTab !== "submit" && (
-            <button className="tab" onClick={() => handleTabChange("submit")}>
-              Submit RSVP
-            </button>
-          )}
-          {activeTab !== "verify" && (
-            <button className="tab" onClick={() => handleTabChange("verify")}>
-              Verify / Modify RSVP
-            </button>
-          )}
-        </>
-      )}
-    </div>
-
-    {/* SUBMIT
-    {activeTab === "submit" && (
-      <>
-        {isLifeMember === null && (
-          <div className="form-section">
-            <h3>Are you JSMC Life Member?</h3>
-            <label>
-              <input type="radio" name="lifeMember" value="yes" onChange={() => setIsLifeMember("yes")} /> Yes
-            </label>
-            <label style={{ marginLeft: "1rem" }}>
-              <input type="radio" name="lifeMember" value="no" onChange={() => setIsLifeMember("no")} /> No
-            </label>
-          </div>
-        )}
-
-        {/* Non-member flow: render NonMemberRSVP component
-        {isLifeMember === "no" && (
-          <NonMemberRSVP
-            events={events}
-            displayDate={displayDate}
-            toggleEventSelection={toggleEventSelection}
-            selectedEvents={selectedEvents}
-            rsvpCount={rsvpCount}
-            setRsvpCount={setRsvpCount}
-            kidsRsvpCount={kidsRsvpCount}
-            setKidsRsvpCount={setKidsRsvpCount}
-            nonMemberName={nonMemberName}
-            setNonMemberName={setNonMemberName}
-            nonMemberAddress={nonMemberAddress}
-            setNonMemberAddress={setNonMemberAddress}
-            nonMemberPhone={nonMemberPhone}
-            setNonMemberPhone={setNonMemberPhone}
-            nonMemberEmail={nonMemberEmail}
-            setNonMemberEmail={setNonMemberEmail}
-            handleSubmitRSVP={handleSubmitRSVP}
-            submitting={submitting}
-          />
-        )}
-
-        {/* Member search UI (keeps your existing search behavior)
-        {isLifeMember === "yes" && !member && (
-          <form className="search-form" onSubmit={handleSearch}>
-            <h4>Retrieve membership using</h4>
-
-            <div className="form-section">
-              <label> <input type="radio" value="memberId" checked={searchMode === "memberId"} onChange={() => setSearchMode("memberId")}/>
-                Member ID
-              </label>
-              <label style={{ marginLeft: "1rem" }}> OR </label>
-              <label style={{ marginLeft: "1rem" }}> <input type="radio" value="nameHouse" checked={searchMode === "nameHouse"} onChange={() => setSearchMode("nameHouse")}/>
-                First Name &amp; House #
-              </label>
-            </div>
-
-            {/* ---- Member ID Search ----
-            {searchMode === "memberId" && (
-              <div className="inline-fields">
-                <span className="inline-label">Member ID:</span>
-                <input
-                  ref={memberIdRef}
-                  className="small-input"
-                  type="number"
-                  value={memberId}
-                  onChange={(e) => setMemberId(e.target.value)}
-                  placeholder="Enter Member ID"
-                />
-                <button
-                  className="button"
-                  type="submit"
-                  disabled={searching || memberId.trim() === ""}
-                  style={{
-                    backgroundColor:
-                      searching || memberId.trim() === "" ? "lightgray" : "#007bff",
-                    color: searching || memberId.trim() === "" ? "#666" : "white",
-                    cursor:
-                      searching || memberId.trim() === "" ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {searching ? "Searching..." : "Search"}
-                </button>
-              </div>
-            )}
-
-            /* ---- Name + House Search ----
-            {searchMode === "nameHouse" && (
-              <div className="inline-fields">
-                <span className="inline-label">First Name:</span>
-                <input
-                  ref={firstNameRef}
-                  className="small-input"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="First Name"
-                />
-                <span className="inline-label">House #:</span>
-                <input
-                  className="small-input"
-                  type="text"
-                  value={houseNumber}
-                  onChange={(e) => setHouseNumber(e.target.value)}
-                  placeholder="e.g. 123"
-                />
-                <button
-                  className="button"
-                  type="submit"
-                  disabled={
-                    searching || name.trim() === "" || houseNumber.trim() === ""
-                  }
-                  style={{
-                    backgroundColor:
-                      searching || name.trim() === "" || houseNumber.trim() === ""
-                        ? "lightgray"
-                        : "#007bff",
-                    color:
-                      searching || name.trim() === "" || houseNumber.trim() === ""
-                        ? "#666"
-                        : "white",
-                    cursor:
-                      searching || name.trim() === "" || houseNumber.trim() === ""
-                        ? "not-allowed"
-                        : "pointer",
-                  }}
-                >
-                  {searching ? "Searching..." : "Search"}
-                </button>
-              </div>
-            )}
-          </form>
-        )}
-
-        {/* Member found: render MemberRSVP component (keeps your RSVP UI)
-        {member && (
-          <MemberRSVP
-            events={events}
-            displayDate={displayDate}
-            toggleEventSelection={toggleEventSelection}
-            selectedEvents={selectedEvents}
-            rsvpCount={rsvpCount}
-            setRsvpCount={setRsvpCount}
-            kidsRsvpCount={kidsRsvpCount}
-            setKidsRsvpCount={setKidsRsvpCount}
-            email={email}
-            setEmail={setEmail}
-            member={member}
-            setMember={setMember}
-            handleSubmitRSVP={handleSubmitRSVP}
-            submitting={submitting}
-            submitMessage={submitMessage}
-            submitSuccess={submitSuccess}
-          />
-        )}
-
-        {/* Success / error messages at bottom
-        {submitSuccess && submitMessage && (
-          <div style={{ color: "green", marginTop: "10px" }}>
-            ✅ {submitMessage}
-            {confirmation && (
-              <div>Confirmation #: {confirmation.confNumber || confirmation?.confNumber}</div>
-            )}
-          </div>
-        )}
-
-        {!submitSuccess && submitMessage && (
-          <div style={{ color: "red", marginTop: "10px" }}>
-            ❌ {submitMessage}
-          </div>
-        )}
-      </>
-    )}
-
-    {/* VERIFY
-    {activeTab === "verify" && <VerifyRSVP />}
-
-    {/* Final error message (kept bottom as you prefer)
-    {error && (
-      <div className="error-message" style={{ color: "red", fontStyle: "italic", marginTop: "20px", textAlign: "center" }}>
-        {error}
-      </div>
-    )}
-  </div>
-</div>
-);
-}
-*/
