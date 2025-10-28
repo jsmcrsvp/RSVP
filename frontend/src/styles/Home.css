@@ -1,3 +1,180 @@
+/* Base Styles (Mobile First) */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #e8f3f9;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.home-container {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+/* Headings */
+h2 {
+  font-size: 1.3rem;
+  color: #df7b5d;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+h3,
+h4 {
+  font-size: 1rem;
+  color: #5d8cdf;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+/* Logo */
+.logo-wrapper {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.rsvp-logo {
+  max-width: 80px;
+  height: auto;
+}
+
+/* Buttons */
+.tab-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 0 0 48%;
+  max-width: 48%;
+  padding: 10px;
+  background-color: #75bbf8;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.tab.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* Table as Cards */
+.result-table {
+  border: none;
+  width: 100%;
+}
+
+.result-table thead {
+  display: none;
+}
+
+.result-table tr {
+  display: block;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  padding: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.result-table td {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  font-size: 0.95rem;
+  padding: 6px 0;
+  word-break: break-word;
+}
+
+.result-table td::before {
+  content: attr(data-label);
+  font-weight: bold;
+  color: #5d8cdf;
+}
+
+/* Form Elements */
+input,
+select,
+button {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0.5rem;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.form-section label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 1rem;
+}
+
+/* Tablet and Desktop Enhancements */
+@media (min-width: 768px) {
+  .home-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .tab-header {
+    justify-content: center;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+    min-width: 150px;
+  }
+
+  .result-table {
+    display: table;
+    border-collapse: collapse;
+  }
+
+  .result-table thead {
+    display: table-header-group;
+  }
+
+  .result-table tr {
+    display: table-row;
+    border: none;
+    box-shadow: none;
+    margin-bottom: 0;
+  }
+
+  .result-table td,
+  .result-table th {
+    display: table-cell;
+    padding: 8px;
+    border: 1px solid #ccc;
+  }
+
+  .result-table td::before {
+    content: none;
+  }
+}
+
+/*
 .page-wrapper {
   display: flex;
   justify-content: center;
@@ -19,7 +196,7 @@
   text-align: center;
 }
 
-/* Headings */
+/* Headings
 h2 {
   margin-bottom: 0.5rem;
   font-size: 1.5rem;
@@ -39,7 +216,7 @@ h4 {
   color: #5d8cdf;
 }
 
-/* Results Table */
+/* Results Table
 .result-table-wrapper {
   margin-top: 0rem;
   overflow-x: auto;
@@ -61,7 +238,7 @@ h4 {
   width: 100%;
 }
 
-/* Logo Style guide */
+/* Logo Style guide
 .logo-wrapper {
   text-align: center;
   margin-bottom: 20px;
@@ -69,16 +246,16 @@ h4 {
 
 .rsvp-logo {
   max-width: 125px;
-  /* adjust size */
+  /* adjust size
   height: auto;
 }
 
 .tab-header {
   display: flex;
   justify-content: center;
-  /* Centers the buttons horizontally */
+  /* Centers the buttons horizontally
   gap: 10px;
-  /* Adds spacing between buttons */
+  /* Adds spacing between buttons
   margin-bottom: 20px;
 }
 
@@ -105,7 +282,7 @@ h4 {
 
 /* ========== Responsive Adjustments ========== */
 
-/* For tablets and small desktops */
+/* For tablets and small desktops
 @media (max-width: 992px) {
   .home-container {
     width: 90%;
@@ -135,6 +312,7 @@ h4 {
   }
 }
 
+/* ======== 600px ==========
 @media (max-width: 600px) {
   .page-wrapper {
     flex-direction: column;
@@ -143,15 +321,15 @@ h4 {
   }
 
   .home-container {
-    width: 100%;
+    width: 90%;
     border-radius: 0;
     box-shadow: none;
     padding: 1rem;
-    text-align: left; /* ✅ Override center alignment */
+    text-align: left; /* ✅ Override center alignment
   }
 
   .logo-wrapper {
-    text-align: center; /* Keep logo centered */
+    text-align: center; /* Keep logo centered
     margin-bottom: 15px;
   }
 
@@ -170,7 +348,7 @@ h4 {
     text-align: center;
   }
 
-  /* ✅ Buttons: two per row */
+  /* ✅ Buttons: two per row
   .tab-header {
     display: flex;
     flex-wrap: wrap;
@@ -180,20 +358,20 @@ h4 {
   }
 
   .tab-header .tab {
-    flex: 0 0 48%; /* Two buttons per row */
+    flex: 0 0 48%; /* Two buttons per row
     max-width: 48%;
     padding: 10px;
     font-size: 0.95rem;
     text-align: center;
-    width: auto; /* ✅ Override global button width */
+    width: auto; /* ✅ Override global button width
   }
 
-  /* ✅ Keep other buttons full width */
+  /* ✅ Keep other buttons full width
   .inline-fields button {
     width: 100%;
   }
 
-  /* ✅ Stacked Card Layout for Table */
+  /* ✅ Stacked Card Layout for Table
   .result-table {
     border: none !important;
     border-collapse: separate !important;
@@ -239,7 +417,7 @@ h4 {
     margin-right: 8px;
   }
 
-  /* ✅ Radio buttons inline */
+  /* ✅ Radio buttons inline
   .form-section label {
     display: inline-flex;
     align-items: center;
@@ -252,7 +430,7 @@ h4 {
     margin: 0;
   }
 
-  /* ✅ Form elements full width */
+  /* ✅ Form elements full width
   input,
   select {
     width: 100%;
@@ -260,3 +438,4 @@ h4 {
     margin-bottom: 0.5rem;
   }
 }
+*/
