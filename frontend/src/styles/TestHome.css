@@ -1,4 +1,6 @@
-/* Overall Page Layout */
+/* =========================
+   PAGE WRAPPER
+   ========================= */
 .page-wrapper {
   display: flex;
   justify-content: center;
@@ -8,106 +10,137 @@
   padding: 1rem;
 }
 
-/* Main Container */
+/* =========================
+   HOME CONTAINER
+   ========================= */
 .home-container {
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* center everything except table */
   width: 100%;
-  max-width: 900px;
-  text-align: center;
+  max-width: 900px;     /* optional: limits width */
+  box-sizing: border-box;
+  padding: 1rem;
 }
 
-/* Logo */
+/* =========================
+   LOGO
+   ========================= */
 .logo-wrapper {
-  text-align: center;
   margin-bottom: 1rem;
 }
 
 .rsvp-logo {
-  max-width: 150px;
+  max-width: 200px;
   height: auto;
 }
 
-/* Headings */
-.home h2,
-.home h4 {
-  margin: 0.5rem 0;
-  text-align: center;
-}
-
-/* ✅ Table Section - Left aligned only */
+/* =========================
+   HOME TABLE
+   ========================= */
 .result-table-wrapper {
-  text-align: left;
   width: 100%;
-  max-width: 850px;
-  margin: 1rem auto;
-  padding-left: 1rem; /* gentle left indent */
+  overflow-x: auto;
 }
 
+/* table left-aligned */
 .result-table {
+  width: auto;            /* shrink to content */
+  min-width: 100%;        /* ensure table fills container if needed */
   border-collapse: collapse;
-  width: 100%;
+  text-align: left;       /* left-align text */
+  margin: 0;              /* remove auto-centering */
 }
 
+/* table header & cells */
 .result-table th,
 .result-table td {
+  padding: 0.5rem 0.75rem;
   border: 1px solid #ccc;
-  padding: 8px 12px;
-  text-align: left;
 }
 
+/* table header background */
 .result-table th {
   background-color: #4c6daf;
   color: white;
 }
 
-/* ✅ Tabs / Buttons Row */
+/* =========================
+   TAB BUTTONS
+   ========================= */
 .tab-header {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.8rem;
-  flex-wrap: nowrap;
-  margin-top: 1.5rem;
+  justify-content: center;  /* center tabs */
+  flex-wrap: wrap;          /* wrap if screen is very small */
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .tab-header .tab {
+  white-space: nowrap;      /* prevent text wrap */
+  padding: 0.4rem 0.8rem;   /* shrink padding */
+  font-size: 0.9rem;
+  cursor: pointer;
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1.2rem;
-  font-size: 1rem;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background-color 0.3s ease;
-  display: inline-block;
+  border-radius: 4px;
+
+  flex: 0 0 auto;           /* do not stretch */
+  width: auto;              /* fit text only */
+  min-width: 0;
+  text-align: center;
 }
 
 .tab-header .tab:hover {
   background-color: #0056b3;
 }
 
-/* ✅ Responsive adjustments */
-@media (max-width: 700px) {
-  .home-container {
-    padding: 1rem;
-  }
+/* =========================
+   MISC TEXT / HEADINGS
+   ========================= */
+.home h2, .home h4 {
+  text-align: center;
+  margin: 0.5rem 0;
+}
 
-  .result-table-wrapper {
-    padding-left: 0.5rem;
-    overflow-x: auto;
+.inline-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inline-label {
+  font-weight: bold;
+}
+
+.small-input {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.button {
+  flex: 0 0 auto;
+  width: auto;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 600px) {
+  .inline-fields {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .tab-header {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .tab-header .tab {
-    font-size: 0.9rem;
-    padding: 0.4rem 0.8rem;
+    justify-content: flex-start;
   }
 }
