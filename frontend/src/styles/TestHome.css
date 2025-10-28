@@ -1,134 +1,113 @@
-/* =============== Overall Layout =============== */
-.home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  background-color: #e8f3f9;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-.home-container {
-  width: 100%;
-  max-width: 900px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-/* Centered headings, messages, etc. */
-.home-container h1,
-.home-container h2,
-.home-container p {
-  text-align: center;
-  margin: 0.5rem 0;
-}
-
-/* =============== Tabs (Button Group) =============== */
-.tab-header {
+/* Overall Page Layout */
+.page-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.6rem;
-  flex-wrap: nowrap; /* keep buttons in one line */
-  width: 100%;
-  margin-top: 1rem;
+  min-height: 100vh;
+  background-color: #e8f3f9;
+  padding: 1rem;
 }
 
-.tab {
-  flex: 0 1 auto;
-  padding: 8px 16px;
-  background-color: #4c6daf;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  white-space: nowrap; /* prevent text wrap */
-  transition: background-color 0.2s ease;
-}
-
-.tab:hover {
-  background-color: #3a5a99;
-}
-
-.tab.active {
-  background-color: #324c82;
-}
-
-/* Make sure buttons shrink but stay on one line on small screens */
-@media (max-width: 480px) {
-  .tab {
-    padding: 6px 10px;
-    font-size: 0.9rem;
-  }
-}
-
-/* =============== Table Styling =============== */
-.result-table-wrapper {
+/* Main Container */
+.home-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
   width: 100%;
   max-width: 900px;
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: flex-start; /* align table to left */
+  text-align: center;
+}
+
+/* Logo */
+.logo-wrapper {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.rsvp-logo {
+  max-width: 150px;
+  height: auto;
+}
+
+/* Headings */
+.home h2,
+.home h4 {
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+/* ✅ Table Section - Left aligned only */
+.result-table-wrapper {
+  text-align: left;
+  width: 100%;
+  max-width: 850px;
+  margin: 1rem auto;
+  padding-left: 1rem; /* gentle left indent */
 }
 
 .result-table {
-  width: 100%;
   border-collapse: collapse;
-  background-color: white;
-  border-radius: 6px;
-  text-align: left; /* keep content left-aligned */
-  overflow: hidden;
+  width: 100%;
 }
 
 .result-table th,
 .result-table td {
-  padding: 10px 12px;
-  border-bottom: 1px solid #ddd;
-  font-size: 1rem;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
 }
 
 .result-table th {
   background-color: #4c6daf;
   color: white;
-  font-weight: 600;
 }
 
-.result-table tr:hover {
-  background-color: #f3f6fa;
+/* ✅ Tabs / Buttons Row */
+.tab-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: nowrap;
+  margin-top: 1.5rem;
 }
 
-/* Make table scroll horizontally on small screens */
-@media (max-width: 600px) {
-  .result-table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .result-table th,
-  .result-table td {
-    font-size: 0.9rem;
-    padding: 8px 10px;
-  }
-}
-
-/* =============== General Buttons =============== */
-button {
-  padding: 8px 14px;
-  font-size: 1rem;
-  background-color: #4c6daf;
+.tab-header .tab {
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
   cursor: pointer;
-  white-space: nowrap; /* keep single line */
-  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  transition: background-color 0.3s ease;
+  display: inline-block;
 }
 
-button:hover {
-  background-color: #3a5a99;
+.tab-header .tab:hover {
+  background-color: #0056b3;
+}
+
+/* ✅ Responsive adjustments */
+@media (max-width: 700px) {
+  .home-container {
+    padding: 1rem;
+  }
+
+  .result-table-wrapper {
+    padding-left: 0.5rem;
+    overflow-x: auto;
+  }
+
+  .tab-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tab-header .tab {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
 }
