@@ -465,7 +465,7 @@ export default function Home() {
                   </p>
                 )}
               </div>
-
+              <p></p><p></p>
               {/* Show this message only if events exist */}
               {Array.isArray(events) && events.length > 0 && (
                 <h4>Please select Submit RSVP or Verify/Modify RSVP</h4>
@@ -544,11 +544,11 @@ export default function Home() {
                 <h4>Retrieve membership using</h4>
 
                 <div className="form-section">
-                  <label> <input type="radio" value="memberId" checked={searchMode === "memberId"} onChange={() => setSearchMode("memberId")}/>
+                  <label> <input type="radio" value="memberId" checked={searchMode === "memberId"} onChange={() => setSearchMode("memberId")} />
                     Member ID
                   </label>
                   <label style={{ marginLeft: "1rem" }}> OR </label>
-                  <label style={{ marginLeft: "1rem" }}> <input type="radio" value="nameHouse" checked={searchMode === "nameHouse"} onChange={() => setSearchMode("nameHouse")}/>
+                  <label style={{ marginLeft: "1rem" }}> <input type="radio" value="nameHouse" checked={searchMode === "nameHouse"} onChange={() => setSearchMode("nameHouse")} />
                     First Name &amp; House #
                   </label>
                 </div>
