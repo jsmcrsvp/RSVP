@@ -130,9 +130,10 @@ export default function NonMemberRSVP({
         </div>
       </div>
 
-      <h3 style={{ textAlign: "center", margin: "0.5rem 0", color: "#5d8cdf" }}>
+      {/*<h3 style={{ textAlign: "center", margin: "0.5rem 0", color: "#5d8cdf" }}>
         Select Events to RSVP
-      </h3>
+      </h3>*/}
+      <h4>Select Events to RSVP</h4>
 
       <div className="result-table-wrapper">
         <table className="result-table">

@@ -422,7 +422,7 @@ export default function Home() {
             <div style={{ overflowX: "auto", marginTop: "1rem", marginBottom: "1rem" }}>
               <div className="result-table-wrapper" style={{ marginTop: "10px" }}>
                 {Array.isArray(events) && events.length > 0 ? (
-                  <table className="result-table" style={{ marginBottom: "20px" }}>
+                  <table className="result-table" style={{ marginBottom: "5px" }}>
                     <thead>
                       <tr>
                         <th>Program</th>

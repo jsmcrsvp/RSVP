@@ -19,6 +19,11 @@ h4 {
   color: #5d8cdf;
 }
 
+form.rsvp-form {
+  margin: 0;
+  padding: 0;
+}
+
 .rsvp-form-table {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -26,7 +31,7 @@ h4 {
   align-items: center;  /* vertically center label/input */
   width: 100%;          /* use full width */
   justify-content: start; /* align to left, not center */
-  margin: 1rem 0;
+  /*margin: 1rem 0;*/
 }
 
 .rsvp-form-table .form-row {
