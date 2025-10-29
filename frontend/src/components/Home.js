@@ -416,7 +416,7 @@ export default function Home() {
         {activeTab === "home" && (
           <div className="home">
             <h2>JSMC RSVP Portal</h2>
-            <h4>Current open events to Submit / Verify / Modify RSVP</h4>
+            <h3>Current open events to Submit / Verify / Modify RSVP</h3>
 
             {/* Open Events Table */}
             <div style={{ overflowX: "auto", marginTop: "1rem", marginBottom: "1rem" }}>
