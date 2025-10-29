@@ -1,161 +1,204 @@
-/* =========================
-   PAGE WRAPPER
-   ========================= */
+/* ===== Base Layout ===== */
 .page-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
-  background-color: #e8f3f9;
+  background: #e8f3f9;
   padding: 1rem;
+  font-family: Arial, sans-serif;
 }
 
-/* =========================
-   HOME CONTAINER
-   ========================= */
 .home-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
-  max-width: 900px;
-  box-sizing: border-box;
-  padding: 1rem;
+  max-width: 600px;
+  background: #fff;
+  padding: 1.2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* =========================
-   LOGO
-   ========================= */
+/* ===== Logo & Headings ===== */
 .logo-wrapper {
+  text-align: center;
   margin-bottom: 1rem;
 }
 
 .rsvp-logo {
-  max-width: 200px;
+  width: 90px;
   height: auto;
+  border-radius: 8px;
 }
 
-/* =========================
-   HOME TABLE
-   ========================= */
-/* Force the table itself to align left visually */
-.result-table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  display: block;
-  text-align: left;
+h2 {
+  font-size: 1.4rem;
+  color: #df7b5d;
+  text-align: center;
+  margin-bottom: 0.4rem;
 }
 
-.result-table {
-  margin-left: 0;          /* ensures no centering */
-  margin-right: auto;      /* align left within wrapper */
-  width: auto;             /* fits to content width */
-  border-collapse: collapse;
-  text-align: left;
+h3, h4 {
+  text-align: center;
+  color: #5d8cdf;
+  font-size: 1.05rem;
+  margin-bottom: 0.8rem;
 }
 
-
-.result-table th,
-.result-table td {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #ccc;
-}
-
-.result-table th {
-  background-color: #4c6daf;
-  color: white;
-}
-
-/* =========================
-   TAB BUTTONS
-   ========================= */
+/* ===== Tabs (Home / Submit / Verify) ===== */
 .tab-header {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 10px;
+  margin: 1rem 0;
+}
+
+.tab {
+  flex: 0 0 48%;
+  padding: 10px;
+  font-size: 1rem;
+  background: #75bbf8;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.tab:hover { background: #4e94e6; }
+.tab.active { background: #007bff; }
+
+/* ===== Open Events Table ===== */
+.result-table-wrapper {
   margin-top: 1rem;
 }
 
-/* Tab buttons: shrink to text and stay on one line */
-.tab-header .tab {
-  display: inline-block;
-  padding: 0.4rem 0.9rem;
-  font-size: 0.9rem;
-  white-space: nowrap;     /* keep single line */
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: auto;             /* shrink to text */
-  flex: none;              /* prevent stretch */
-  line-height: 1.2;
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f9f9f9;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-.tab-header {
-  display: flex;
-  justify-content: center;
+/* Desktop look */
+.result-table th,
+.result-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+/* Mobile cards */
+@media (max-width: 700px) {
+  .result-table,
+  .result-table thead,
+  .result-table tbody,
+  .result-table th,
+  .result-table td,
+  .result-table tr {
+    display: block;
+  }
+
+  .result-table thead {
+    display: none;
+  }
+
+  .result-table tr {
+    margin-bottom: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px 12px;
+  }
+
+  .result-table td {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+  }
+
+  .result-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #5d8cdf;
+    flex: 1;
+    text-align: left;
+  }
+
+  .result-table td:last-child {
+    border-bottom: none;
+  }
+}
+
+/* ===== Forms ===== */
+.form-section {
+  margin: 1rem 0;
+}
+
+label {
+  font-size: 1rem;
+  display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  margin-right: 1rem;
 }
 
-.tab-header .tab:hover {
-  background-color: #0056b3;
+input[type="radio"],
+input[type="text"],
+input[type="number"],
+input[type="email"],
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 0.8rem;
 }
 
-/* =========================
-   INLINE FIELDS (Search & Input)
-   ========================= */
 .inline-fields {
   display: flex;
   flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
-  gap: 0.5rem;
 }
 
 .inline-label {
-  font-weight: bold;
+  font-weight: 600;
+  min-width: 90px;
 }
 
-.small-input {
-  padding: 0.3rem 0.5rem;
-  font-size: 0.9rem;
+.inline-fields input {
+  flex: 1;
 }
 
-/* buttons inside inline forms */
 .button {
-  flex: 0 0 auto;
-  width: auto;
-  padding: 0.35rem 0.8rem;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
 }
 
-/* =========================
-   HEADINGS
-   ========================= */
-.home h2,
-.home h4 {
-  text-align: center;
-  margin: 0.5rem 0;
+.button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-/* =========================
-   RESPONSIVE
-   ========================= */
-@media (max-width: 600px) {
-  .inline-fields {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+/* ===== Confirmation & Error ===== */
+.success-message {
+  color: green;
+  font-weight: 600;
+  text-align: center;
+  margin: 1rem 0;
+}
 
-  .tab-header {
-    justify-content: center;
-  }
+.error-message {
+  color: red;
+  font-weight: 600;
+  text-align: center;
+  margin: 1rem 0;
 }

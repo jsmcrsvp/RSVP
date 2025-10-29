@@ -1,8 +1,8 @@
 // frontend/src/components/Home.js
 import React, { useEffect, useRef, useState } from "react";
 import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP, } from "../api";
-import "../styles/Home.css";
-//import "../styles/TestHome.css";
+//import "../styles/Home.css";
+import "../styles/TestHome.css";
 import logo from "../assets/JSMCLogo.jpg";
 
 import MemberRSVP from "./MemberRSVP";
