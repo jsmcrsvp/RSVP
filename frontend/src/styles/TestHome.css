@@ -1,204 +1,127 @@
-/* ===== Base Layout ===== */
+/* Home.css */
 .page-wrapper {
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100vh;
-  background: #e8f3f9;
-  padding: 1rem;
-  font-family: Arial, sans-serif;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .home-container {
   width: 100%;
-  max-width: 600px;
-  background: #fff;
-  padding: 1.2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* ===== Logo & Headings ===== */
 .logo-wrapper {
   text-align: center;
   margin-bottom: 1rem;
 }
 
 .rsvp-logo {
-  width: 90px;
+  max-width: 200px;
   height: auto;
-  border-radius: 8px;
 }
 
-h2 {
-  font-size: 1.4rem;
-  color: #df7b5d;
+.home h2, .home h3, .home h4 {
+  margin: 0.5rem 0;
   text-align: center;
-  margin-bottom: 0.4rem;
 }
 
-h3, h4 {
-  text-align: center;
-  color: #5d8cdf;
-  font-size: 1.05rem;
-  margin-bottom: 0.8rem;
-}
-
-/* ===== Tabs (Home / Submit / Verify) ===== */
-.tab-header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin: 1rem 0;
-}
-
-.tab {
-  flex: 0 0 48%;
-  padding: 10px;
-  font-size: 1rem;
-  background: #75bbf8;
-  border: none;
-  border-radius: 6px;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.tab:hover { background: #4e94e6; }
-.tab.active { background: #007bff; }
-
-/* ===== Open Events Table ===== */
 .result-table-wrapper {
-  margin-top: 1rem;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .result-table {
   width: 100%;
   border-collapse: collapse;
-  background: #f9f9f9;
-  border-radius: 6px;
-  overflow: hidden;
 }
 
-/* Desktop look */
-.result-table th,
-.result-table td {
+.result-table th, .result-table td {
   border: 1px solid #ccc;
-  padding: 8px;
-  text-align: center;
+  padding: 8px 10px;
+  text-align: left;
 }
 
-/* Mobile cards */
-@media (max-width: 700px) {
-  .result-table,
-  .result-table thead,
-  .result-table tbody,
-  .result-table th,
-  .result-table td,
-  .result-table tr {
-    display: block;
-  }
-
-  .result-table thead {
-    display: none;
-  }
-
-  .result-table tr {
-    margin-bottom: 1rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 10px 12px;
-  }
-
-  .result-table td {
-    border: none;
-    display: flex;
-    justify-content: space-between;
-    padding: 6px 0;
-  }
-
-  .result-table td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: #5d8cdf;
-    flex: 1;
-    text-align: left;
-  }
-
-  .result-table td:last-child {
-    border-bottom: none;
-  }
+.tab-header {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-/* ===== Forms ===== */
+.tab {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.tab:hover {
+  background-color: #0056b3;
+}
+
 .form-section {
-  margin: 1rem 0;
-}
-
-label {
-  font-size: 1rem;
-  display: inline-flex;
-  align-items: center;
-  margin-right: 1rem;
-}
-
-input[type="radio"],
-input[type="text"],
-input[type="number"],
-input[type="email"],
-select {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-bottom: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
 }
 
 .inline-fields {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
   align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .inline-label {
-  font-weight: 600;
   min-width: 90px;
 }
 
-.inline-fields input {
-  flex: 1;
+.small-input {
+  padding: 6px;
+  width: 120px;
 }
 
 .button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
+  padding: 6px 12px;
   cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
 }
 
 .button:disabled {
-  background-color: #ccc;
+  background-color: lightgray;
+  color: #666;
   cursor: not-allowed;
-}
-
-/* ===== Confirmation & Error ===== */
-.success-message {
-  color: green;
-  font-weight: 600;
-  text-align: center;
-  margin: 1rem 0;
 }
 
 .error-message {
   color: red;
-  font-weight: 600;
+  font-style: italic;
+  margin-top: 20px;
   text-align: center;
-  margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+  .inline-fields {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .inline-label {
+    min-width: auto;
+  }
 }
