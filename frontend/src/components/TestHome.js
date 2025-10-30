@@ -1,6 +1,6 @@
 import React from "react";
-import "./TestHome.css";
-import logo from "./logo.png"; // adjust path if needed
+import "../styles/TestHome.css";
+import logo from "../assets/JSMCLogo.jpg";
 
 const TestHome = () => {
   return (
