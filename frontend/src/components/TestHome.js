@@ -8,7 +8,7 @@ import MemberRSVP from "./MemberRSVP";
 import NonMemberRSVP from "./NonMemberRSVP";
 import VerifyRSVP from "./VerifyRSVP";
 
-export default function Home() {
+export default function TestHome() {
   const [activeTab, setActiveTab] = useState("home");
   const [events, setEvents] = useState([]);
   const [error, setError] = useState("");
