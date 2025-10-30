@@ -1,14 +1,14 @@
 // TestHome.js
 import React, { useEffect, useRef, useState } from "react";
 import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP } from "../api";
-import "../styles/TestHome.css";
+import "../styles/Home.css";
 import logo from "../assets/JSMCLogo.jpg";
 
 import MemberRSVP from "./MemberRSVP";
 import NonMemberRSVP from "./NonMemberRSVP";
 import VerifyRSVP from "./VerifyRSVP";
 
-export default function TestHome() {
+export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
   const [events, setEvents] = useState([]);
   const [error, setError] = useState("");
