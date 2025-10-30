@@ -1,191 +1,127 @@
-/* Home.css - responsive, mobile-first, events rendered as cards on small screens,
-   grid on large screens. Replace or merge with your existing styles carefully. */
-
-/* ---- Base / mobile-first ---- */
-:root {
-  --bg: #e8f3f9;
-  --card: #ffffff;
-  --accent: #5d8cdf;
-  --primary: #007bff;
-  --muted: #666;
-}
-
-* { box-sizing: border-box; }
-
+/* Home.css */
 .page-wrapper {
   width: 100%;
   min-height: 100vh;
-  background: var(--bg);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 12px;
-  font-family: Arial, sans-serif;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .home-container {
   width: 100%;
-  max-width: 720px; /* comfortable max for tablets/desktops */
-  background: transparent;
+  max-width: 1100px;
+  margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
 }
 
-/* header */
-.home-header {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  align-items: center;
-  background: var(--card);
-  padding: 12px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+.logo-wrapper {
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
-.logo-wrapper { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
-.rsvp-logo { width: 64px; height: auto; border-radius: 8px; }
+.rsvp-logo {
+  max-width: 200px;
+  height: auto;
+}
 
-.titles { flex: 1 1 auto; }
-.titles h2 { margin: 0 0 4px 0; font-size: 1.25rem; color: #111; }
-.titles h3 { margin: 0; font-size: 0.95rem; color: var(--muted); font-weight: 500; }
+.home h2, .home h3, .home h4 {
+  margin: 0.5rem 0;
+  text-align: center;
+}
 
-/* tabs */
+.result-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result-table th, .result-table td {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  text-align: left;
+}
+
 .tab-header {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 6px;
+  margin-bottom: 20px;
 }
 
 .tab {
-  flex: 0 0 48%;
-  padding: 10px;
-  background: var(--primary);
+  padding: 8px 16px;
+  background-color: #007bff;
   color: #fff;
-  border-radius: 8px;
   border: none;
-  font-weight: 600;
   cursor: pointer;
+  border-radius: 5px;
+}
+
+.tab:hover {
+  background-color: #0056b3;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.inline-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.inline-label {
+  min-width: 90px;
+}
+
+.small-input {
+  padding: 6px;
+  width: 120px;
+}
+
+.button {
+  padding: 6px 12px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+}
+
+.button:disabled {
+  background-color: lightgray;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  font-style: italic;
+  margin-top: 20px;
   text-align: center;
 }
 
-.tab:hover { opacity: 0.95; }
-
-/* events area (mobile cards) */
-.home-tab {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.open-events-title {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #111;
-}
-
-.events-area { width: 100%; }
-
-.loading, .no-events {
-  background: var(--card);
-  padding: 12px;
-  border-radius: 8px;
-  color: var(--muted);
-}
-
-/* card list for mobile */
-.events-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.event-card {
-  background: var(--card);
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  display: block;
-}
-
-/* inside card */
-.event-card-row {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-
-.event-card-left { width: 34%; min-width: 90px; }
-.event-program {
-  font-weight: 700;
-  color: var(--accent);
-  font-size: 0.95rem;
-}
-.event-program-spacer {
-  height: 1em;
-}
-
-/* right content */
-.event-card-right { flex: 1 1 auto; display: flex; flex-direction: column; gap: 6px; }
-.event-name { font-weight: 700; font-size: 1rem; color: #111; }
-.event-date, .event-rsvpby { font-size: 0.9rem; color: var(--muted); }
-
-/* select action instruction */
-.select-action { margin-top: 8px; color: var(--muted); font-weight: 600; }
-
-/* forms */
-.form-section { background: var(--card); padding: 10px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; }
-.radio-group { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.inline-fields { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.inline-label { font-weight: 700; min-width: 90px; }
-
-/* inputs/buttons */
-.small-input { padding: 8px; border-radius: 6px; border: 1px solid #d0d7df; min-width: 120px; }
-.button { padding: 10px 14px; border-radius: 8px; border: none; background: var(--primary); color: #fff; cursor: pointer; font-weight: 700; }
-
-/* messages */
-.message { padding: 10px; border-radius: 8px; margin-top: 6px; }
-.message.success { background: #e6f6ea; color: #1f7a3a; font-weight: 700; }
-.message.error { background: #ffecec; color: #9b2b2b; font-weight: 700; }
-
-.error-message { color: #b00020; font-style: italic; margin-top: 6px; }
-
-/* ---- Larger screens: grid/table-like appearance ---- */
-@media (min-width: 900px) {
-  .home-container { max-width: 1100px; }
-  .home-header { padding: 18px; gap: 18px; }
-  .rsvp-logo { width: 90px; }
-
-  .tab-header { justify-content: flex-start; gap: 12px; }
-
-  /* display events as 2-column grid that looks table-like */
-  .events-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+@media (max-width: 768px) {
+  .inline-fields {
+    flex-direction: column;
+    align-items: flex-start;
   }
-
-  .event-card {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    gap: 12px;
-    align-items: center;
-    padding: 14px;
+  .inline-label {
+    min-width: auto;
   }
-
-  .event-card-left { width: auto; min-width: auto; }
-  .event-program { font-size: 1.05rem; }
-  .event-card-right { gap: 4px; }
-
-  /* make header area and "table" feel more like your original desktop table */
-  .open-events-title { font-size: 1.2rem; }
-  .select-action { font-size: 1rem; }
-}
-
-@media (min-width: 1200px) {
-  /* Wider desktop improvements */
-  .events-grid { grid-template-columns: repeat(3, 1fr); }
 }

@@ -1,7 +1,7 @@
 // TestHome.js
 import React, { useEffect, useRef, useState } from "react";
 import { getOpenEvents, getMember, submitRSVP, verifyRSVP, updateRSVP } from "../api";
-import "../styles/Home.css"; // your filename — you said you'll manage naming
+import "../styles/TestHome.css";
 import logo from "../assets/JSMCLogo.jpg";
 
 import MemberRSVP from "./MemberRSVP";
@@ -43,7 +43,6 @@ export default function Home() {
   const memberIdRef = useRef(null);
   const firstNameRef = useRef(null);
 
-  // preserve the reset logic
   const resetAll = () => {
     setIsLifeMember(null);
     setSearchMode("");
@@ -103,7 +102,7 @@ export default function Home() {
   }, [searchMode]);
 
   const handleSearch = async (e) => {
-    if (e && e.preventDefault) e.preventDefault();
+    e.preventDefault();
     setError("");
     setMember(null);
     if (searchMode !== "memberId" && searchMode !== "nameHouse") return setError("Choose a search mode first.");
@@ -225,90 +224,78 @@ export default function Home() {
 
   const displayDate = (d) => {
     if (!d) return "";
-    // If date is YYYY-MM-DD convert; otherwise let Date parse
-    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) {
-      const [y, m, day] = d.split("-");
-      return `${m}/${day}/${y}`;
-    }
     const dt = new Date(d);
-    if (isNaN(dt)) return d;
     return dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   };
 
   return (
     <div className="page-wrapper">
       <div className="home-container">
-        {/* header */}
-        <div className="home-header">
-          <div className="logo-wrapper">
-            <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
-          </div>
-          <div className="titles">
-            <h2>JSMC RSVP Portal</h2>
-            {activeTab === "home" && <h3>Current open events to Submit / Verify / Modify RSVP</h3>}
-          </div>
+        <div className="logo-wrapper">
+          <img src={logo} alt="JSMC Logo" className="rsvp-logo" />
         </div>
 
-        {/* tabs */}
-        <nav className="tab-header">
-          {activeTab !== "home" && (
-            <button className="tab" onClick={() => handleTabChange("home")}>Home</button>
-          )}
+        {activeTab === "home" && (
+          <div className="home">
+            <h2>JSMC RSVP Portal</h2>
+            <h3>Current open events to Submit / Verify / Modify RSVP</h3>
+            <div className="result-table-wrapper">
+              {loadingEvents ? (
+                <p style={{ fontStyle: "italic" }}>Loading events...</p>
+              ) : Array.isArray(events) && events.length > 0 ? (
+                <div style={{ overflowX: "auto" }}>
+                  <table className="result-table">
+                    <thead>
+                      <tr>
+                        <th>Program</th>
+                        <th>Event Name</th>
+                        <th>Event Date</th>
+                        <th>RSVP By</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {events.map((ev, idx) => {
+                        const isFirst = idx === 0 || ev.programname !== events[idx - 1].programname;
+                        const programCount = events.filter((e) => e.programname === ev.programname).length;
+                        return (
+                          <tr key={ev._id || idx}>
+                            {isFirst && <td rowSpan={programCount}>{ev.programname}</td>}
+                            <td>{ev.eventname}</td>
+                            <td>{ev.eventday}, {displayDate(ev.eventdate)}</td>
+                            <td>{displayDate(ev.closersvp)}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p style={{ fontStyle: "italic", color: "#666" }}>No open events available for RSVP at this time.</p>
+              )}
+            </div>
+            {Array.isArray(events) && events.length > 0 && (
+              <h4>Please select Submit RSVP or Verify/Modify RSVP</h4>
+            )}
+          </div>
+        )}
+
+        <div className="tab-header">
+          {activeTab !== "home" && <button className="tab" onClick={() => handleTabChange("home")}>Home</button>}
           {Array.isArray(events) && events.length > 0 && (
             <>
               {activeTab !== "submit" && <button className="tab" onClick={() => handleTabChange("submit")}>Submit RSVP</button>}
               {activeTab !== "verify" && <button className="tab" onClick={() => handleTabChange("verify")}>Verify / Modify RSVP</button>}
             </>
           )}
-        </nav>
+        </div>
 
-        {/* HOME - uses cards/grid (no table) */}
-        {activeTab === "home" && (
-          <section className="home-tab">
-            <div className="open-events-title">Open Events</div>
-
-            <div className="events-area">
-              {loadingEvents ? (
-                <div className="loading">Loading events...</div>
-              ) : Array.isArray(events) && events.length > 0 ? (
-                <div className="events-grid">
-                  {events.map((ev, idx) => {
-                    const isFirst = idx === 0 || ev.programname !== events[idx - 1].programname;
-                    return (
-                      <article className="event-card" key={ev._id || idx}>
-                        <div className="event-card-row">
-                          <div className="event-card-left">
-                            {isFirst ? <div className="event-program">{ev.programname}</div> : <div className="event-program-spacer" />}
-                          </div>
-                          <div className="event-card-right">
-                            <div className="event-name">{ev.eventname}</div>
-                            <div className="event-date">{ev.eventday}, {displayDate(ev.eventdate)}</div>
-                            <div className="event-rsvpby">RSVP By: {displayDate(ev.closersvp)}</div>
-                          </div>
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="no-events">No open events available for RSVP at this time.</div>
-              )}
-            </div>
-
-            {Array.isArray(events) && events.length > 0 && <h4 className="select-action">Please select Submit RSVP or Verify/Modify RSVP</h4>}
-          </section>
-        )}
-
-        {/* SUBMIT */}
         {activeTab === "submit" && (
-          <section className="submit-tab">
+          <>
             {isLifeMember === null && (
               <div className="form-section">
                 <h3>Are you JSMC Life Member?</h3>
-                <div className="radio-group">
-                  <label><input type="radio" name="lifeMember" value="yes" onChange={() => setIsLifeMember("yes")} /> Yes</label>
-                  <label><input type="radio" name="lifeMember" value="no" onChange={() => setIsLifeMember("no")} /> No</label>
-                </div>
+                <label><input type="radio" name="lifeMember" value="yes" onChange={() => setIsLifeMember("yes")} /> Yes</label>
+                <label style={{ marginLeft: "1rem" }}><input type="radio" name="lifeMember" value="no" onChange={() => setIsLifeMember("no")} /> No</label>
               </div>
             )}
 
@@ -338,27 +325,31 @@ export default function Home() {
             {isLifeMember === "yes" && !member && (
               <form className="search-form" onSubmit={handleSearch}>
                 <h4>Retrieve membership using</h4>
-                <div className="radio-group">
+                <div className="form-section">
                   <label><input type="radio" value="memberId" checked={searchMode === "memberId"} onChange={() => setSearchMode("memberId")} /> Member ID</label>
-                  <label>OR</label>
-                  <label><input type="radio" value="nameHouse" checked={searchMode === "nameHouse"} onChange={() => setSearchMode("nameHouse")} /> First Name &amp; House #</label>
+                  <label style={{ marginLeft: "1rem" }}>OR</label>
+                  <label style={{ marginLeft: "1rem" }}><input type="radio" value="nameHouse" checked={searchMode === "nameHouse"} onChange={() => setSearchMode("nameHouse")} /> First Name & House #</label>
                 </div>
 
                 {searchMode === "memberId" && (
                   <div className="inline-fields">
-                    <label className="inline-label">Member ID:</label>
+                    <span className="inline-label">Member ID:</span>
                     <input ref={memberIdRef} className="small-input" type="number" value={memberId} onChange={(e) => setMemberId(e.target.value)} placeholder="Enter Member ID" />
-                    <button className="button" type="submit" disabled={searching || memberId.trim() === ""}>{searching ? "Searching..." : "Search"}</button>
+                    <button className="button" type="submit" disabled={searching || memberId.trim() === ""}>
+                      {searching ? "Searching..." : "Search"}
+                    </button>
                   </div>
                 )}
 
                 {searchMode === "nameHouse" && (
                   <div className="inline-fields">
-                    <label className="inline-label">First Name:</label>
+                    <span className="inline-label">First Name:</span>
                     <input ref={firstNameRef} className="small-input" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="First Name" />
-                    <label className="inline-label">House #:</label>
+                    <span className="inline-label">House #:</span>
                     <input className="small-input" type="text" value={houseNumber} onChange={(e) => setHouseNumber(e.target.value)} placeholder="e.g. 123" />
-                    <button className="button" type="submit" disabled={searching || name.trim() === "" || houseNumber.trim() === ""}>{searching ? "Searching..." : "Search"}</button>
+                    <button className="button" type="submit" disabled={searching || name.trim() === "" || houseNumber.trim() === ""}>
+                      {searching ? "Searching..." : "Search"}
+                    </button>
                   </div>
                 )}
               </form>
@@ -386,22 +377,19 @@ export default function Home() {
             )}
 
             {submitMessage && (
-              <div className={`message ${submitSuccess ? "success" : "error"}`}>
-                {submitSuccess ? "✅ " : "❌ "}{submitMessage}
-                {confirmation && submitSuccess && <div>Confirmation #: {confirmation.confNumber || confirmation?.confNumber}</div>}
+              <div style={{ color: submitSuccess ? "green" : "red", marginTop: "10px" }}>
+                {submitSuccess ? "✅ " : "❌ "} {submitMessage}
+                {confirmation && <div>Confirmation #: {confirmation.confNumber || confirmation?.confNumber}</div>}
               </div>
             )}
-          </section>
+          </>
         )}
 
-        {/* VERIFY */}
-        {activeTab === "verify" && (
-          <section className="verify-tab">
-            <VerifyRSVP />
-          </section>
-        )}
+        {activeTab === "verify" && <VerifyRSVP />}
 
-        {error && <div className="error-message">{error}</div>}
+        {error && (
+          <div className="error-message">{error}</div>
+        )}
       </div>
     </div>
   );
