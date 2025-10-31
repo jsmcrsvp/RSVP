@@ -179,7 +179,6 @@ export default function Dashboard() {
             </>
           )}
 
-          {/* 🔄 Manual Refresh Button */}
           <div style={{ textAlign: "center", marginTop: "2rem" }}>
             <button
               className="btn-refresh"

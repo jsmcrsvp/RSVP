@@ -1,14 +1,3 @@
-/*.page-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #e8f3f9;
-  padding: 1rem;
-  margin: 0;
-  font-family: Arial, sans-serif;
-}*/
-
 .admin-container {
   background: #ffffff;
   padding: 2rem;
@@ -19,9 +8,7 @@
   text-align: center;
 }
 
-/* Headings */
 h2 {
-
   margin-top: 0rem;
   margin-bottom: 1rem;
   font-size: 1.5rem;
@@ -50,9 +37,7 @@ h4 {
 .tab-header {
   display: flex;
   justify-content: center;
-  /* Centers the buttons horizontally */
   gap: 10px;
-  /* Adds spacing between buttons */
   margin-bottom: 20px;
 }
 
@@ -77,11 +62,9 @@ h4 {
   border-color: #007bff;
 }
 
-/* Results Table */
 .result-table-wrapper {
   display: flex;
   justify-content: center;
-  /*margin-top: 1rem;*/
   margin-top: 0rem;
   overflow-x: auto;
   background: #f9f9f9e4;
@@ -99,7 +82,7 @@ h4 {
 .result-table td {
   border: 1px solid #ccc;
   padding: 0.5rem 1rem;
-  text-align: center; /* left to center */
+  text-align: center;
   white-space: nowrap;
 }
 
@@ -131,7 +114,6 @@ button:hover,
     background: #1e8ae5;
 }
 
-/* Messages */
 .message {
     text-align: center;
     color: green;
@@ -144,7 +126,6 @@ button:hover,
     margin-bottom: 1rem;
 }
 
-/* Logo Style guide */
 .logo-wrapper {
     text-align: center;
     margin-bottom: 20px;
