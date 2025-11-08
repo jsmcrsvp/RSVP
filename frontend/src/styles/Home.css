@@ -46,6 +46,7 @@ h4 {
   background: #f9f9f9e4;
   padding: 0.1rem;
   border-radius: 6px;
+  text-align: left;
 }
 
 
@@ -178,6 +179,7 @@ h4 {
     justify-content: space-between;
     gap: 10px;
     width: 100%;
+    text-align: center;
   }
 
   .tab-header .tab {
