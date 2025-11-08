@@ -46,7 +46,6 @@ h4 {
   background: #f9f9f9e4;
   padding: 0.1rem;
   border-radius: 6px;
-  text-align: left;
 }
 
 
@@ -179,7 +178,6 @@ h4 {
     justify-content: space-between;
     gap: 10px;
     width: 100%;
-    text-align: center;
   }
 
   .tab-header .tab {
@@ -262,44 +260,4 @@ h4 {
     box-sizing: border-box;
     margin-bottom: 0.5rem;
   }
-
-  /* ============================================
-  === START: Added for Mobile Responsiveness ===
-  ============================================
-  */
-
-  /* This forces the search field containers to stack vertically */
-  .inline-fields {
-    display: flex;
-    flex-direction: column; /* Stack all children vertically */
-    gap: 0.5rem; /* Add spacing between all items */
-    width: 100%; /* Ensure the container itself is full-width */
-  }
-
-  /* Style the labels for clarity */
-  .inline-fields .inline-label {
-    font-weight: bold;
-    color: #333;
-    text-align: left; /* Align label text to the left */
-    margin-bottom: -0.25rem; /* Pull the input slightly closer */
-  }
-
-  /* Ensure inputs are full-width and have some space */
-  .inline-fields .small-input {
-    width: 100%;
-    box-sizing: border-box; /* Include padding in width */
-    margin-bottom: 0.5rem; /* Add space *after* inputs */
-  }
-
-  /* Ensure button is full-width and has space */
-  .inline-fields button {
-    width: 100%;
-    margin-top: 0.5rem; /* Add some space before the button */
-  }
-
-  /*
-  ==========================================
-  === END: Added for Mobile Responsiveness ===
-  ==========================================
-  */
 }
